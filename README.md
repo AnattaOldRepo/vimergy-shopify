@@ -1,4 +1,4 @@
-# suburbanriot.com
+# vimergy.com
 Shopify theme development.
 
 
@@ -23,14 +23,14 @@ You can create as many as feature branches you want, but merge them in `staging`
 After installing all the dependencies follow these steps:
 
 * Go to shopify admin and create new theme from "Anattadesign"
-* run `npm install` in the root of the folder
+* run `npm install` or  `yarn install` in the root of the folder
 * make copy of `shopifyconfig.sample.js` and rename to `shopifyconfig.js`
 * update all the information shopifyconfig is required.
 * run `gulp` - It will upload all the to your shopify theme
 
 ### Frontend source directory
 
-* source files: `Src`
+* source files: `src`
 * build files: `dist`
 
 

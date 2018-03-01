@@ -1,0 +1,52 @@
+<!-- /templates/customers/register.liquid -->
+
+<div class="c-account c-account--register page account register">
+
+    <div class="c-account__noticeBox">
+        <p class="c-account__noticeText">WE’VE UPGRADED SO WE NEED YOU TO CREATE A NEW ACCOUNT AND START YOUR OWN PERSONAL RIOT.</p>
+    </div>
+
+  <div class="c-account__sectionsContainer">
+    <div class="c-account__sectionMain">
+        <div class="c-account__section c-account__section--one">
+            <div class="signInPage__box">
+                <h1 class="c-account__title" style="white-space:nowrap;">Create An Account</h1>
+
+                {% form 'create_customer' %}
+
+                    {{ form.errors | default_errors }}
+
+                    <input type="text" name="customer[first_name]" id="FirstName" class="c-input input-full" placeholder="{{ 'customer.register.first_name' | t }}" {% if form.first_name %}value="{{ form.first_name }}"{% endif %} autocapitalize="words" autofocus>
+
+                    <input type="text" name="customer[last_name]" id="LastName" class="c-input input-full" placeholder="{{ 'customer.register.last_name' | t }}" {% if form.last_name %}value="{{ form.last_name }}"{% endif %} autocapitalize="words">
+
+                    <input type="email" name="customer[email]" id="Email" class="c-input input-full{% if form.errors contains 'email' %} error{% endif %}" placeholder="{{ 'customer.register.email' | t }}" {% if form.email %} value="{{ form.email }}"{% endif %} autocorrect="off" autocapitalize="off">
+
+                    <input type="password" name="customer[password]" id="CreatePassword" class="c-input input-full{% if form.errors contains 'password' %} error{% endif %}" placeholder="{{ 'customer.register.password' | t }}">
+
+                    <div class="c-checkbox__wrapper">
+
+                        <input class="c-input c-input--checkbox" type="checkbox" id="checkbox1" name="customer[accepts_marketing]" checked="checked" />
+
+                        <label for="checkbox1">
+                            <span class="c-input__checkboxText">Subscribe to stay updated with new products and offers!</span>  
+                        </label>
+                    </div>
+
+                      <input class="c-btn c-btn--large-new" type="submit" value="Submit" class="c-btn c-btn--black c-account__button">
+                {% endform %}
+            </div>    
+        </div>    
+        <div class="c-account__section c-account__section--two">
+            <div class="signInPage__box">
+                <h1 class="c-account__title">Already Have An Account?</h1>
+                <a href="/account/login" class="c-btn c-btn--large-new">Sign in</a>
+            </div>    
+        </div>
+    </div>
+  </div>
+
+</div>
+<script>
+fbq('track', 'CompleteRegistration'); 
+</script>

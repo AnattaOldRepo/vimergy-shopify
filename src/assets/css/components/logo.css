@@ -1,0 +1,11 @@
+/*================ Logo Component ================*/
+
+.c-logo {
+    line-height: 0;
+}
+
+.c-logo svg {
+    width: 170px;
+    height: 33px;
+    fill: $color-blue;
+}

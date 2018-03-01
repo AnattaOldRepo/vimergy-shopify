@@ -1,0 +1,207 @@
+{% comment %}
+    * defined in indv collection section  and passed in *
+    parent_collection - parent collection
+    parent_collection_url
+    parent_collection_title
+    use_hero_image
+    collection_hero_image_mobile
+    collection_hero_image
+    collection_info_box_content
+    collection_sub_collection_list
+{% endcomment %}
+
+
+{% if request.path == parent_collection_url %}
+    {% assign is_sub_collection = false %}
+    {% assign not_sub_collection = true %}
+{% else %}
+    {% assign is_sub_collection = true %}
+    {% assign not_sub_collection = false %}
+{% endif %}
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+<script>
+    var collectionUrl = '{{ shop.secure_url }}{{ collection.url }}';
+</script>
+
+<div id="vue-collection" class="{% unless use_hero_image and not_sub_collection %}no-hero-image{% endunless %}">
+    <div class="c-colMain__upperWrap">
+        {% if is_sub_collection %}
+            <a class="c-colMain__breadcrumb" href="{{ shop.secure_url }}{{parent_collection_url}}">
+            <svg class="c-colMain__breadcrumbArrow" width="25px" height="12px" viewBox="0 0 25 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                    <g id="Category-Banner" transform="translate(0.000000, -6.000000)" stroke="#FF0000">
+                        <g id="breadcrumbs">
+                            <g transform="translate(0.000000, 2.000000)">
+                                <g id="arrow" transform="translate(12.500000, 10.000000) rotate(-90.000000) translate(-12.500000, -10.000000) translate(7.000000, -2.000000)">
+                                    <path d="M5.20127143,23.6102857 L5.20127143,2" id="Stroke-420"></path>
+                                    <polyline id="Stroke-421" transform="translate(5.201429, 3.009414) rotate(-180.000000) translate(-5.201429, -3.009414) " points="10.4028571 0.4087 5.20142857 5.61012857 0 0.4087"></polyline>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </svg>            
+            {{ parent_collection_title }}</a>
+        {% endif %}
+
+        <div class="c-colHero o-wrapper">
+            {% if request.path != parent_collection_url %}
+                {% assign collection_display_title = collection.title | split: ' - ' %}
+                {% assign collection_display_title = collection_display_title[1] %}
+            {% else %}
+                {% assign collection_display_title = collection.title %}
+            {% endif %}
+
+            <div class="c-colHero__container u-hideTabletUp" id="js-collection-animation">
+                <div class="c-colHero__titleSection c-colHero__titleSection--top">
+                    <h1 class="c-colHero__title c-colHero__title--top">{{ collection_display_title }}</h1>
+                </div>                
+
+                {% if use_hero_image and not_sub_collection %}
+                    <div class="c-colHero__imageContainer">
+                        <h1 class="c-colHero__title c-colHero__title--bottom">{{ collection_display_title }}</h1>
+                                      
+                        <img class="c-colHero__image u-hideMobileLargeUp" src="{{ collection_hero_image_mobile.src | img_url: 'master' }}" alt="{{collection_hero_image_mobile.alt }}">
+
+                        <img class="c-colHero__image u-showMobileLargeUp" src="{{ collection_hero_image.src | img_url: 'master' }}" alt="{{collection_hero_image_mobile.alt }}">
+                        {% if section.settings.hero-text %}
+                            <span class="c-colHero__text">{{ section.settings.hero-text }}</span>
+                        {% endif %}                        
+                    </div>                
+                {% endif %}
+            </div>            
+
+            <div class="c-colHero__container u-showTabletUp">
+                {% if use_hero_image and not_sub_collection %}
+                    <div class="c-colHero__imageContainer">
+                        <img class="c-colHero__image" src="{{ collection_hero_image.src | img_url: 'master' }}" alt="{{collection_hero_image.alt }}">
+                        {% if section.settings.hero-text %}
+                            <span class="c-colHero__text">{{ section.settings.hero-text }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <div class="c-colHero__contentContainer">
+                    <div class="c-colHero__titleSection c-colHero__titleSection--left">
+                        <h1 class="js-animElement__colHeroText c-colHero__title c-colHero__title--left">{{ collection_display_title }}</h1>
+                    </div>
+
+                    {% if use_hero_image and not_sub_collection %}
+                        <div class="c-colHero__titleSection c-colHero__titleSection--right">
+                            <h1 class="js-animElement__colHeroText c-colHero__title c-colHero__title--right">{{ collection_display_title }}</h1>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="u-hideTabletUp c-colToolbarMobile o-wrapper">
+        <a class="c-colToolbarMobile__button js-modal" href="#" aria-controls="content" data-modal-src="#category-filter-mobile">Filter</a>
+
+        <a class="c-colToolbarMobile__button js-modal" href="#" aria-controls="content" data-modal-src="#category-sort-mobile">Sort</a>
+    </div>
+ 
+    {% include 'collection-active-filters-mobile' %}
+
+    <section class="c-colMain__lowerWrap o-wrapper">
+
+        <div class="c-colMain__lowerSidebarWrap u-showTabletUp">
+            {% include 'collection-sidebar' %}
+        </div>
+
+        <div class="c-colMain__lowerGridWrap js-animElement__collectionLowerWrap">
+            
+            {% include 'collection-toolbar' %}
+
+            <span class="u-hide">${sortOrder}</span>
+            <div class="c-colGrid"
+                :class="{'c-colGrid--panel' : panelLayout}"
+            >
+                <a class="c-colGrid__item" 
+                    v-cloak
+                    :href="`{{ shop.secure_url }}{{ collection.url }}/products/${product.handle}`"
+                    v-for="(product, index) in filteredProducts"
+                    v-if="index < visibleProducts"
+                    :key="index"
+                >
+                    <img v-if="product.images[0]"
+                    class="c-colGrid__itemImage c-colGrid__itemImage--main" :src="product.images[0].src" :alt="product.images[0].alt">
+
+                    <img v-if="product.images[1]" class="c-colGrid__itemImage c-colGrid__itemImage--hover" :src="product.images[1].src" alt="product.images[1].alt">
+
+                    <div class="c-colGrid__itemContent">
+                        <span class="c-colGrid__itemTitle">${product.title}</span>
+
+                        <span class="c-colGrid__priceSection">
+                            <span v-if="!productAvailable(product)" class="c-colGrid__itemPrice c-colGrid__itemPrice--soldOut"
+                            >Sold Out</span>   
+
+                            <s class="c-colGrid__itemPrice c-colGrid__itemPrice--offSale"
+                                v-if="productAvailable(product) && compareAtPrice(product) > productPrice(product)"
+                            >$${ compareAtPrice(product) }</s>
+
+                            <span class="c-colGrid__itemPrice c-colGrid__itemPrice"
+                                v-if="productAvailable(product)"
+                            >$${productPrice(product)}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <div v-if="filteredProducts.length == 0 && (sizeFilters.length || colorFilters.length)" v-cloak>
+                    <p>
+                        Please expand your results by changing filters in the sidebar, or, you can <a class="c-link c-link--red" @click.prevent="clearAllFilters" href=#"">clear all filters</a>.
+                    </p>
+                </div>          
+            </div>     
+        </div>    
+    </section>
+
+    <div class="o-wrapper">
+        <a class="c-colMain__seeMoreButton c-btn--alt c-btn"
+            @click.prevent="seeMoreProducts()"
+            v-if="filteredProducts.length > visibleProducts"
+        >See More Products</a>
+
+        <h1 style="display: none;">{{collection.metafields.c_f['Collection Info Text']}}</h1>
+
+        {% if not_sub_collection %}
+        {% comment %} Parent Collection {% endcomment %}
+            {% if collection_info_box_content %}
+                <div class="c-colInfoSection">
+                    <div class="c-colInfo__titleBlock">
+                        <h3 class="c-colInfo__title">{{ parent_collection_title }}</h3>
+                    </div>
+                    <div class="c-colInfo__contentBlock">
+                        {{ collection_info_box_content }}
+                    </div>
+                </div>   
+            {% endif %}
+        {% else %}
+        {% comment %} Sub Collection {% endcomment %}
+            {% if collection.metafields.c_f['Collection Info Text'] %}
+                {% assign collection_info_box_content = collection.metafields.c_f['Collection Info Text'] %}
+
+                <div class="c-colInfoSection">
+                    <div class="c-colInfo__titleBlock">
+                        <h3 class="c-colInfo__title">{{ collection_display_title }}</h3>
+                    </div>
+                    <div class="c-colInfo__contentBlock">
+                        {{ collection_info_box_content }}
+                    </div>
+                </div>                  
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% include 'modal-collection-mobile-filter' %}
+
+    {% include 'modal-collection-mobile-sort' %}
+    
+</div>

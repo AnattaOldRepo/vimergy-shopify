@@ -1,0 +1,15 @@
+/*================ Typography Variables ================*/
+
+$font-family-base: 'Apercu';
+$font-family-primary: 'Apercu';
+$font-family-display: 'Sub Urban';
+$font-family-secondary: 'Sub Urban';
+$font-size-base: 19px;
+$font-line-height-base: 1.5;
+
+$font-family-primary-medium: 'Apercu Medium';
+$font-family-primary-bold: 'Apercu Bold';
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;

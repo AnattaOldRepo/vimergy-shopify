@@ -1,0 +1,110 @@
+<div class="c-sizeGuide modal-default-popup u-hide" aria-labelledby="modal-title" aria-describedby="Size Guide" aria-hidden="true" role="dialog" id="size-guide">
+
+    <h2 class="c-sizeGuide__title">{{ section.settings.title }}</h2>
+
+    <div class="c-sizeGuide__typeSelect">
+        <span class="c-sizeGuide__typeSelectOption js-size-type-select is-active" data-type-select="womens">Women</span>
+        <span class="c-sizeGuide__typeSelectOption js-size-type-select" data-type-select="mens">Men</span>
+        <span class="c-sizeGuide__typeSelectOption js-size-type-select" data-type-select="tweens">Tween</span>
+        <span class="c-sizeGuide__typeSelectOption js-size-type-select" data-type-select="unisex">Unisex</span>
+    </div>
+
+    <div class="c-sizeGuide__typeSection c-sizeGuide__typeSection--womens js-size-type-section is-visible" data-type-section="womens">
+        {% for block in section.blocks %}
+            {% if block.settings.chart-section-type == "Women's" %}
+                {% include 'chart-section-inner' %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="c-sizeGuide__typeSection c-sizeGuide__typeSection--mens js-size-type-section" data-type-section="mens">
+        {% for block in section.blocks %}
+            {% if block.settings.chart-section-type == "Men's" %}
+                {% include 'chart-section-inner' %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="c-sizeGuide__typeSection c-sizeGuide__typeSection--tweens js-size-type-section" data-type-section="tweens">
+        {% for block in section.blocks %}
+            {% if block.settings.chart-section-type == "Tween's" %}
+                {% include 'chart-section-inner' %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="c-sizeGuide__typeSection c-sizeGuide__typeSection--unisex js-size-type-section" data-type-section="unisex">
+        {% for block in section.blocks %}
+            {% if block.settings.chart-section-type == "Unisex" %}
+                {% include 'chart-section-inner' %}
+            {% endif %}
+        {% endfor %}
+    </div>            
+
+    <div class="c-sizeGuide__close">
+        <span class="c-sizeGuide__closeText js-modal-close">Continue Shopping</span>
+        
+        <svg class="c-sizeGuide__closeArrow" width="25px" height="12px" viewBox="0 0 25 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                <g id="Category-Banner" transform="translate(0.000000, -6.000000)" stroke="#FF0000">
+                    <g id="breadcrumbs">
+                        <g transform="translate(0.000000, 2.000000)">
+                            <g id="arrow" transform="translate(12.500000, 10.000000) rotate(-90.000000) translate(-12.500000, -10.000000) translate(7.000000, -2.000000)">
+                                <path d="M5.20127143,23.6102857 L5.20127143,2" id="Stroke-420"></path>
+                                <polyline id="Stroke-421" transform="translate(5.201429, 3.009414) rotate(-180.000000) translate(-5.201429, -3.009414) " points="10.4028571 0.4087 5.20142857 5.61012857 0 0.4087"></polyline>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </svg>  
+    </div>
+</div>  
+
+
+{% schema %}
+{
+    "name": "Size Guide",
+    "settings": [
+        {
+            "type": "text",
+            "label": "Title",
+            "id": "title"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "size-section",
+            "name": "Chart Section",
+            "settings": [
+                {
+                    "type": "radio",
+                    "label": "Chart Section Type",
+                    "id": "chart-section-type",
+                    "options": [
+                        { "value": "Women's", "label": "Women's"},
+                        { "value": "Men's", "label": "Men's"},
+                        { "value": "Tween's", "label": "Tweens"},
+                        { "value": "Unisex", "label": "Unisex"}
+                    ]
+                },              
+                {
+                    "type": "text",
+                    "label": "Chart Section Title",
+                    "id": "chart-section-title"
+                },
+                {
+                    "type": "image_picker",
+                    "label": "Chart Section Image",
+                    "id": "chart-section-image"
+                },
+                {
+                    "type": "html",
+                    "label": "Table",
+                    "id": "chart-table"
+                }
+            ]
+        }
+    ]   
+}
+{% endschema %}

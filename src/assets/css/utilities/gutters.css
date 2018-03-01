@@ -1,0 +1,10 @@
+/*================ Site gutters ================*/
+
+.u-wrapperGutter {
+    padding-left: $gutter-wrapper - 15px;
+    padding-right: $gutter-wrapper - 15px;
+
+    @media(--tablet) {
+        padding: * $gutter-wrapper;
+    }
+}

@@ -1,0 +1,95 @@
+.c-colGrid {
+    width: 100%;
+    lost-utility: clearfix;
+
+    @media (--tablet) {
+        min-height: 800px;
+    }
+}
+
+    .c-colGrid__item {
+        display: block;
+        position: relative;
+        margin-bottom: 20px;
+        /* max-width: 400px; */
+        margin: 0 auto;
+
+        @media (--tablet) {
+            lost-column: 1/4 4 6px;
+            margin-bottom: 71px;
+        }
+
+        .c-colGrid--panel & {
+            @media (--tablet) {
+                lost-column: 1/2 2 6px;
+            }
+        }
+
+        &:--enter {
+            color: $color-black;
+
+            .c-colGrid__itemImage--main {
+                opacity: 0;
+            }
+
+            .c-colGrid__itemImage--hover {
+                opacity: 1;
+            }
+
+        }
+    }
+
+        .c-colGrid__itemImage {
+
+        }
+
+            .c-colGrid__itemImage--main {
+
+            }
+
+            .c-colGrid__itemImage--hover {
+                opacity: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+        .c-colGrid__itemContent {
+            padding-left: 14px;
+            padding-top: 8px;
+            margin-bottom: 40px;
+
+            @media (--tablet) {
+                padding-left: 0;
+                margin-bottom: 0;
+            }
+        }
+
+            .c-colGrid__itemTitle {
+                display: block;
+                font-family: $font-family-primary-bold;
+                font-weight: $font-weight-bold;
+                font-size: 16px;
+                letter-spacing: -.4px;
+                line-height: 18px;
+            }
+
+            .c-colGrid__priceSection {
+                display: block;
+                line-height: 1;
+            }
+
+                .c-colGrid__itemPrice {
+                    font-family: $font-family-primary;
+                    font-weight: $font-weight-normal;
+                    font-size: 13px;
+                    line-height: 1;
+                }
+
+                    .c-colGrid__itemPrice--offSale {
+                        color: $color-crimson;
+                    }
+
+                    /* .c-colGrid__itemPrice--soldOut {
+
+                    } */

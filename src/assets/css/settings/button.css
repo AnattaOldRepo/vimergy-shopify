@@ -1,0 +1,28 @@
+/*================ Button Variables ================*/
+
+$button-display: inline-block !default;
+$button-margin: 0 !default;
+$button-padding: 8px 15px !default;
+$button-width: auto !default;
+$button-font-family: $font-family-primary-bold !default;
+$button-font-weight: $font-weight-bold !default;
+$button-font-size: 16px !default;
+$button-line-height: $font-size-new + 2 !default;
+$button-color: $color-white !default;
+$button-background: $color-black !default;
+$button-border: $color-white !default;
+$button-cursor: pointer !default;
+$button-transition: all 0.250s ease-in-out !default;
+
+/* Hover */
+$button-color-hover: $color-black !default;
+$button-background-hover: $color-white !default;
+$button-border-hover: $color-black !default;
+
+/* Focus and Active */
+$button-color-active: $color-black !default;
+$button-background-active: $color-white !default;
+$button-border-active: $color-black !default;
+
+/* Disabled */
+$button-disabled-opacity: 0.5 !default;

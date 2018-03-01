@@ -1,0 +1,133 @@
+.c-hpIGridSection {
+    margin-bottom: 49px;
+    padding-top: 21px;
+
+    @media (--mobile-max) {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    @media (--tablet) {
+        margin-bottom: 61px;
+        padding-top: 48px;
+    }
+
+    .fs-wrapper {
+        @media (--tablet-large) {
+            width: calc(100% + 6px);
+            margin-left: -3px;
+            margin-right: -3px;            
+        }
+    }
+
+    .c-hpIGrid__title {
+        margin-bottom: 20px;
+        margin-left: 39px;       
+        line-height: 44px;
+        letter-spacing: -2.78px;
+        font-family: $font-family-primary-bold;
+        font-weight: $font-weight-bold;
+        font-size: 42px;
+
+        @media (min-width: 360px) {
+            font-size: 48px;
+        }
+
+        @media (--tablet) {
+            margin-left: 0;
+        }
+
+        @media (--tablet-large) {
+            margin-bottom: 21px;
+            margin-left: 0;
+            font-size: 69px;
+            line-height: 67px;
+            letter-spacing: -4px;            
+        }
+    }
+
+    /* stylelint-disable */
+    /* fortySixty overrides */
+    .slick-slide {
+        width: calc(100vw - 92px) !important;
+        padding-top: calc(100vw - 100px) !important;
+    }
+
+    .fs-entry-container,
+    .fs-entry-timeline {
+        &:--enter {
+            outline: none;
+        }
+    }
+
+    .fs-wrapper .fs-timeline-entry {
+        margin: 0 3px;
+
+        @media (--tablet) {
+            margin: 3px;
+        }
+    }
+    .fs-desktop .fs-timeline-entry:--enter .fs-text-container {
+        background-color: transparent;
+    }
+
+    .fs-desktop .fs-timeline-entry .fs-text-container {
+        background-color: transparent;
+    }
+
+    .fs-text-container {
+        background-color: transparent;
+        &:--enter {
+            background-color: transparent;
+        }
+    }
+
+    .fs-has-links::after {
+        padding: 9px 13px 4px;
+        width: 189px;
+        flex: 1 1 0%;
+        text-align: center;
+        margin-left: -1px;
+        font-size: 23px;
+        font-family: $font-family-primary-bold;
+        font-weight: $font-weight-bold;
+        letter-spacing: 0;
+        line-height: 22px;
+        vertical-align: middle;
+        background-color: $color-black;
+        border: 5px solid $color-white;
+        color: $color-white;
+        transition: all 250ms ease-in-out;
+
+        @media (--tablet) {
+            padding: 7px 13px 3px;
+            width: 140px;
+            font-size: 16px;
+            line-height: 17px;            
+        }
+
+        @media (--tablet-large) {
+            padding: 9px 13px 4px;
+            width: 189px;
+            font-size: 23px;
+            line-height: 22px;
+        }
+    }
+
+    .fs-has-links:hover::after {
+        color: $color-black;
+        background-color: $color-white;
+        border-color: $color-black;
+    }
+
+    .fs-next-page {
+        display: none;
+    }
+
+    .fs-wide-timeline .fs-entry-container,
+    .fs-small-timeline .fs-entry-container {
+        width: 25%;
+        padding-top: 25%;
+    }    
+    /* stylelint-enable */    
+}

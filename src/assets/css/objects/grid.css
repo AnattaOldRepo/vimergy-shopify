@@ -1,0 +1,11 @@
+/*================ Site wrappers ================*/
+
+.o-page{
+    max-width: $width-wrapper-base;
+    margin: 0px auto;
+    background-color: $color-white;
+}
+
+.o-page--fluid{
+    width: $width-wrapper-fluid;
+}

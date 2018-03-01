@@ -1,0 +1,75 @@
+.c-btn {
+    display: $button-display;
+    width: $button-width;
+    margin: $button-margin;
+    padding: $button-padding;
+    font-family: $button-font-family;
+    font-weight: $button-font-weight;
+    font-size: $button-font-size;
+    text-transform: uppercase;
+    line-height: $button-line-height;
+    color: $button-color;
+    letter-spacing: 2px;
+    background-image: none; /* Reset unusual Firefox-on-Android default style */
+    background-color: $button-background;
+    border: 5px solid $color-white;
+    border-radius: 0;
+    cursor: $button-cursor;
+    vertical-align: middle;
+    transition: $button-transition;
+    outline: none;
+
+    @media(--mobile-large) {
+        font-size: 14px;
+    }
+
+    @media(--tablet-large) {
+        padding: 20px;
+        font-size: 16px;
+    }
+
+    &.disabled,
+    &[disabled] {
+        opacity: 0.5;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    &:--enter {
+        outline: none;
+        color: $color-black;
+        background-color: $color-white;
+        border-color: $color-black;
+    }
+}
+
+.c-btn--black {
+    border-color: $color-black;
+}
+
+.c-btn--alt {
+    color: $color-black;
+    background-color: $color-white;
+    border-color: $color-black;
+
+    &:--enter {
+        color: $color-white;
+        background-color: $color-black;
+        border-color: $color-white;
+    }
+}
+
+.c-btn--large {
+    font-size: 23px;
+}
+
+/* Temp - have to refactor this component */
+.c-btn--large-new {
+    padding: 5px 32px 0;
+    font-family: $font-family-primary-bold;
+    text-align: center;
+    font-size: 23px;
+    line-height: 1;
+    letter-spacing: 0;
+    border-color: $color-black;
+}

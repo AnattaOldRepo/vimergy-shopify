@@ -1,0 +1,46 @@
+button {
+    display: $button-display;
+    width: $button-width;
+    margin: $button-margin;
+    padding: $button-padding;
+    font-family: $button-font-family;
+    font-weight: $button-font-weight;
+    font-size: $button-font-size;
+    text-transform: uppercase;
+    line-height: $button-line-height;
+    color: $button-color;
+    letter-spacing: 2px;
+    background-image: none; /* Reset unusual Firefox-on-Android default style */
+    background-color: $button-background;
+    border: 1px solid $button-border;
+    border-radius: 0;
+    cursor: $button-cursor;
+    vertical-align: middle;
+    transition: $button-transition;
+
+    &::-moz-focus-inner {
+        padding: 0;
+        border: 0;
+    }
+
+    &:focus,
+    &:active {
+        color: $button-color-active;
+        background-color: $button-background-active;
+        border-color: $button-border-active;
+    }
+
+    &:hover {
+        color: $button-color-hover;
+        background-color: $button-background-hover;
+        border-color: $button-border-hover;
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+        opacity: $button-disabled-opacity;
+        cursor: default;
+        pointer-events: none; /* Disabling of clicks */
+    }
+}

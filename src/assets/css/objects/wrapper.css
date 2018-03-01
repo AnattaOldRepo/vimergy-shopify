@@ -1,0 +1,14 @@
+/*================ Site wrappers ================*/
+
+.o-wrapper {
+    padding: 0 6px;
+
+    @media (--tablet) {
+        padding: 0 40px;
+        max-width: 1920px;
+    }
+
+    @media (--tablet-large) {
+        padding: 0 50px;
+    }
+}

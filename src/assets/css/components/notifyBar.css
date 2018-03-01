@@ -1,0 +1,25 @@
+.c-notifyBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    background-color: $color-black;
+}
+
+    .c-notifyBar__text {
+        text-align: center;
+        font-family: $font-family-primary-bold;
+        font-weight: $font-weight-bold;
+        font-size: 14px;
+        letter-spacing: -.5px;
+        line-height: 13px;
+        color: $color-white;
+
+        @media (min-width: 340px) {
+            font-size: 16px;
+        }
+
+        @media (--tablet) {
+            margin-left: 0;
+        }
+    }

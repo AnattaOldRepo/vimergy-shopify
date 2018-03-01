@@ -1,0 +1,24 @@
+.c-pagination {
+    padding: 40px 0;
+    font-family: $font-family-primary-medium;
+    font-weight: $font-weight-medium;
+    text-align: center;
+
+    .page {
+        padding: 0 6px;
+
+        &.current {
+            color: $color-crimson;
+        }
+    }
+
+    .c-pagination__arrow {
+        stroke: $color-black;
+    }
+
+    a:--enter {
+        .c-pagination__arrow {
+                stroke: $color-crimson;
+        }
+    }
+}

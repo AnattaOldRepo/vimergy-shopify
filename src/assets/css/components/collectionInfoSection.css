@@ -1,0 +1,56 @@
+.c-colInfoSection {
+    lost-utility: clearfix;
+    padding: 31px 37px 37px 33px;
+    margin-bottom: 50px;    
+    background-color: $color-pampas;
+
+    @media (--tablet) {
+        padding: 40px 20px 40px 50px;
+    }
+
+    @media (--desktop) {
+        padding: 53px 81px 48px 81px;
+    }
+}
+
+    .c-colInfo__titleBlock {
+
+        @media (--tablet) {
+            float: left;
+            width: 16%;
+        }
+    }
+
+        .c-colInfo__title {
+            margin-bottom: 10px;
+            padding-right: 20px;
+            font-size: 28px;
+            font-family: $font-family-primary-bold;
+            letter-spacing: -1px;
+
+            @media (--tablet) {
+                margin-bottom: 7px;
+            }
+        }
+
+    .c-colInfo__contentBlock {
+
+        @media (--tablet) {
+            width: 84%;
+            float: left;
+            margin-top: -3px;
+            padding-right: 34px;            
+            padding-left: 32px;
+        }
+
+        @media (--desktop) {
+            padding-left: 0;
+        }
+
+        p {
+            font-family: $font-family-primary;
+            font-size: 11px;
+            line-height: 16px;
+            margin-bottom: 8px;
+        }
+    }

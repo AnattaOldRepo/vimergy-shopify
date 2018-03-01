@@ -1,0 +1,59 @@
+
+
+{% assign parent_collection = collections[section.settings.parent-collection] %}
+
+{% assign parent_collection_url = parent_collection.url %}
+{% assign parent_collection_title = parent_collection.title %}
+
+{% assign use_hero_image = section.settings.use-hero-image %}
+{% assign collection_hero_image = section.settings.hero-image %}
+{% assign collection_hero_image_mobile = section.settings.hero-image-mobile %}
+{% assign collection_info_box_content = section.settings.info-box-content %}
+{% assign collection_sub_collection_list = section.settings.sub-collection-list %}
+
+
+{% include 'collection-template-inner' %}
+
+{% schema %}
+{
+    "name": "Sale Collection",
+    "settings": [
+        {
+           "type":      "collection",
+           "id":        "parent-collection",
+           "label":     "Parent Collection"
+        },
+        {
+            "type": "checkbox",
+            "id": "use-hero-image",
+            "label": "Use Hero Image",
+            "default": true
+        },              
+        {
+            "type": "image_picker",
+            "label": "Hero Image Desktop",
+            "id": "hero-image"         
+        },  
+        {
+            "type": "image_picker",
+            "label": "Hero Image Mobile",
+            "id": "hero-image-mobile"         
+        },          
+        {
+            "type": "html",
+            "label": "Hero Text",
+            "id": "hero-text"         
+        },            
+        {
+            "type": "html",
+            "label": "Info Box Content",
+            "id": "info-box-content"            
+        },
+        {
+            "type": "link_list",
+            "label": "Sub Collection List",
+            "id": "sub-collection-list"
+        }
+    ]
+}
+{% endschema %}

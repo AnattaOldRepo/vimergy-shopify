@@ -1,0 +1,25 @@
+{% section 'notification-bar' %}
+
+<div class="c-header o-wrapper">
+
+    <div class="c-hamburger js-offcanvas" data-offcanvas-src="#offcanvas-left">
+        <span class="c-hamburgerPatty c-hamburgerPatty--top"></span>
+        <span class="c-hamburgerPatty c-hamburgerPatty--middle"></span>
+        <span class="c-hamburgerPatty c-hamburgerPatty--bottom"></span>
+    </div>
+    {% if template != 'index' %}
+        <a class="c-headerLogoLink" href="{{ shop.secure_url }}">
+            {% include 'header-logo' %}
+        </a>
+    {% else %}
+        {% include 'header-logo' %}
+    {% endif %}
+
+    <nav class="c-headerNav c-headerNav--primary">
+        {% for link in linklists.main-menu.links %}
+            <a class="c-headerMenuLink {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+    </nav>
+ 
+    {% include 'header-account-menu' %}
+</div>

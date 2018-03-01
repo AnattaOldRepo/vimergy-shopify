@@ -1,0 +1,210 @@
+$modal-zindex: 100 !default;
+$modal-background-color: rgba(0, 0, 0, 0.8) !default;
+$modal-box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) !default;
+
+/* Overlay */
+.c-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $modal-zindex;
+    width: 100%;
+    height: 100%;
+    background-color: $modal-background-color;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: 300ms visibility ease, 300ms opacity ease;
+
+    &.modal-open {
+        opacity: 1;
+        visibility: visible;
+        transition: 300ms visibility ease, 300ms opacity ease;
+    }
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Modal */
+.c-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $modal-zindex + 1;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-backface-visibility: hidden;
+    transition: 300ms visibility ease, 300ms opacity ease;
+
+    &.modal-open {
+        opacity: 1;
+        visibility: visible;
+        transition: 300ms visibility ease, 300ms opacity ease;
+    }
+}
+
+/* Modal wrap */
+.c-modal__wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    text-align: center;
+
+    /* Vertical align */
+    &:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+}
+
+/* Modal inner */
+.c-modal__inner {
+    position: relative;
+    z-index: $modal-zindex + 2;
+    display: inline-block;
+    width: 100%;
+    margin: 0 auto;
+    vertical-align: middle;
+    text-align: left;
+
+    height: 100%;
+    /* position: fixed; */
+    top: 0;
+    left: 0;    
+}
+
+/* Close button */
+.c-modal__close {
+    position: absolute;
+    top: 32px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: 0;
+    line-height: 44px;
+    text-align: center;
+    font-size: 28px;
+    color: #000;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Iframe */
+.c-modal--iframe {
+    .c-modal__wrap {
+        padding-top: 44px;
+        padding-bottom: 44px;
+    }
+
+    .c-modal__inner {
+        max-width: 1200px;
+    }
+
+    .c-modal__close {
+        top: -44px;
+        color: #fff;
+    }
+}
+
+/* Iframe wrap */
+.c-modal__iframeWrap {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    padding-top: 56.25%;
+
+    iframe {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-shadow: $modal-box-shadow;
+        background: #000;
+    }
+}
+
+/* Standard popup styles */
+.modal-default-popup {
+    position: relative;
+    margin: 40px auto;
+    padding: 20px 30px;
+    max-width: 800px;
+    background-color: #fff;
+}
+
+.c-fullModal--mobile {
+    &.modal-default-popup {
+        height: 100%;
+        margin: auto;
+        padding: 60px 0 60px 29px;
+    }
+}
+
+.c-colModalClose {
+    position: absolute;
+    bottom: 82px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -2px;
+}
+
+    .c-colSide__title--mobile {
+        margin: 0 0 31px;
+        font-family: $font-family-primary-bold;
+        font-weight: $font-weight-bold;
+        font-size: 19px;
+        line-height: 23px;
+        letter-spacing: -.68px;   
+    }
+
+        .c-colModalClose__text {
+            font-family: $font-family-primary-medium;
+            font-weight: $font-weight-medium;
+            font-size: 13px;
+            line-height: 22px;
+            letter-spacing: 1px;
+            color: $color-crimson;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .c-colModalClose__arrow {
+            cursor: pointer;
+        }
+
+#category-filter-mobile {
+    &.c-fullModal--mobile.modal-default-popup {
+        height: auto;
+    }
+
+    .c-colModalClose {
+        position: static;
+        margin-left: 45%;
+
+        @media (--mobile-max) {
+            transform: translateX(-50%);
+        }
+    }
+}
+
+

@@ -1,0 +1,244 @@
+/* Typography reset */
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: $font-family-base;
+    font-style: normal;
+    font-weight: $font-weight-normal;
+    line-height: $font-line-height-base;
+    font-size: $font-size-base;
+    color: $color-body-text;
+    background-color: $color-body-background;
+}
+
+p {
+    margin-top: (16px / 2);
+    margin-bottom: (16px / 2);
+}
+
+/* Abbreviations and acronyms */
+abbr[title] {
+    cursor: help;
+    border-bottom: 1px dotted #f6f6f6;
+}
+
+b,
+strong {
+    font-weight: 700;
+}
+
+em,
+i {
+    font-style: italic;
+}
+
+mark {
+    background: #f6f6f6;
+    color: $color-black;
+}
+
+small,
+.small {
+    font-size: 12px;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #f6f6f6;
+}
+
+sub,
+sup {
+    position: relative;
+    font-size: (11px / 16px) * 100%;
+    line-height: 0;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -10px;
+}
+
+sub {
+    bottom: -5px;
+}
+
+dfn {
+    font-style: italic;
+}
+
+/* Headings */
+:--headings {
+    margin-top: 7px;
+    margin-bottom: 7px;
+    font-family: inherit;
+    font-style: inherit;
+    font-weight: 700;
+    line-height: 1.1;
+    color: inherit;
+}
+
+h1 {
+    font-size: calc(16px * 1.85);
+}
+
+h2 {
+    font-size: calc(16px * 1.85);
+}
+
+h3 {
+    font-size: calc(16px * 1.28);
+}
+
+h4 {
+    font-size: 16px;
+}
+
+h5 {
+    font-size: calc(16px * 0.85);
+}
+
+h6 {
+    font-size: calc(16px * 0.7);
+}
+
+/* Links */
+a {
+    color: $color-blue;
+    text-decoration: none;
+
+    &:--enter {
+        color: $color-blue;
+        text-decoration: none;
+    }
+}
+
+/* Lists */
+dl {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+dt {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+dd {
+    margin-top: 0;
+    margin-bottom: 10px;
+    margin-left: 0;
+}
+
+/* Code */
+code,
+kbd,
+pre,
+samp {
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Inline code */
+code {
+    padding: 2px 4px;
+    font-size: 12px;
+    color: $color-black;
+    background: #f6f6f6;
+    white-space: nowrap;
+}
+
+/* User input typically entered via keyboard */
+kbd {
+    padding: 2px 4px;
+    font-size: 12px;
+    color: $color-black;
+    background: #f6f6f6;
+}
+
+/* Blocks of code */
+pre {
+    display: block;
+    margin: 0 0 10px;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: $color-black;
+    background: #f6f6f6;
+    border: 1px solid #ddd;
+    word-wrap: break-word;
+
+    code {
+        padding: 0;
+        font-size: inherit;
+        color: inherit;
+        background-color: transparent;
+        border-radius: 0;
+        white-space: pre-wrap;
+    }
+}
+
+/* Undo browser default styling */
+cite {
+    font-style: normal;
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 0 0 20px 40px;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: $color-black;
+    border-left: 1px solid #f6f6f6;
+
+    p,
+    ul,
+    ol {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    footer,
+    small,
+    .small {
+        display: block;
+        font-size: 11px;
+        line-height: 1.5;
+        color: $color-black;
+
+        &:before {
+            content: '\2014 \00A0';
+        }
+    }
+
+    cite {
+        font-style: normal;
+    }
+}
+
+/* Quotes */
+blockquote:before,
+blockquote:after {
+    content: '';
+}
+
+q {
+    quotes: none;
+}
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}

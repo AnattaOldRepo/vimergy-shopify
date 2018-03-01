@@ -1,0 +1,23 @@
+.slick-slide {
+    background-color: $color-white;
+}
+
+.slick-slide:not(.slick-current):not(.slick-current-override) {
+    opacity: .15;
+}
+
+.c-sliderArrow {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+    .c-sliderArrow--left {
+        left: 13px;
+    }
+
+    .c-sliderArrow--right {
+        right: 13px;
+    }

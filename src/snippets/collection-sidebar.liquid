@@ -1,0 +1,171 @@
+<aside class="c-colSide js-animTrigger__collectionSidebarSection">
+
+    <h3 class="c-colSide__title--mobile u-hideTabletUp">Filter by</h3>
+    <div v-if="colorFilters.length > 0 || sizeFilters.length > 0" class="c-colSide__activeFilters u-showTabletUp" v-cloak>
+        <span class="c-colSideActiveFilters__title">Filtered By</span>
+
+        <ul class="c-colSide__activeFiltersList">
+            <li class="c-colSide__activeFiltersListItem"
+                v-for="filter in colorFilters"
+            >
+                <a class="c-colSide__activeFiltersItemLink"
+                    @click.prevent="toggleColorFilter(filter)"
+                >
+                    <svg class="c-colSide__activeFiltersItemX" width="10px" height="8px" viewBox="0 0 10 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g id="category" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                            <g id="1440-04-category-default@2x" transform="translate(-51.000000, -605.000000)" stroke="#FF0000">
+                                <g id="filtered-by" transform="translate(50.000000, 540.000000)">
+                                    <g id="Line" transform="translate(2.000000, 65.000000)">
+                                        <path d="M0,0 L8,8"></path>
+                                        <path d="M0,0 L8,8" id="Line-Copy" transform="translate(4.000000, 4.000000) scale(-1, 1) translate(-4.000000, -4.000000) "></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>              
+                    <span class="c-colSide__activeFiltersItemText"
+                     v-text="filter"></span>
+                </a>
+            </li>
+
+            <li class="c-colSide__activeFiltersListItem"
+                v-for="filter in sizeFilters"
+            >
+                <a class="c-colSide__activeFiltersItemLink"
+                    @click.prevent="toggleSizeFilter(filter)"
+                >
+                    <svg class="c-colSide__activeFiltersItemX" width="10px" height="8px" viewBox="0 0 10 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g id="category" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                            <g id="1440-04-category-default@2x" transform="translate(-51.000000, -605.000000)" stroke="#FF0000">
+                                <g id="filtered-by" transform="translate(50.000000, 540.000000)">
+                                    <g id="Line" transform="translate(2.000000, 65.000000)">
+                                        <path d="M0,0 L8,8"></path>
+                                        <path d="M0,0 L8,8" id="Line-Copy" transform="translate(4.000000, 4.000000) scale(-1, 1) translate(-4.000000, -4.000000) "></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>       
+                    <span class="c-colSide__activeFiltersItemText"
+                     v-text="sizeTitle(filter)"></span>
+                </a>         
+            </li>
+        </ul>
+    </div>
+
+    <div class="c-colSide__tagFilters">
+        <span class="c-colSideVarFilters__title u-hideTabletUp">Categories</span>
+        <ul class="c-colSide__tagFiltersList">       
+            {% for link in linklists[collection_sub_collection_list].links %}
+                <li class="c-colSide__tagFiltersItem">
+                    <a class="c-colSide__tagFiltersLink" href="{{ link.url}}">
+                        {{ link.title }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {% if linklists[collection_sub_collection_list].links.size > 0 %}
+                <li class="c-colSide__tagFiltersItem c-colSide__tagFiltersItem--viewAll">
+                    <a class="c-colSide__tagFiltersLink" href="{{ parent_collection_url }}">
+                        VIEW ALL
+                    </a>
+                </li>                
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="c-colSideVarFilters__wrapper">
+        <div class="c-colSideVarFiltersType c-colSideVarFiltersType--color">
+            <span class="c-colSideVarFilters__title">Color</span>
+            <div class="c-colSideVarFilter__grid">
+                <div class="c-colSideVarFilter__gridItem c-colSideVarFilter__gridItem--black"
+                    :class="{'is-active' : isActiveFilter('color', 'black')}"
+                    @click="toggleColorFilter('black')"
+                ></div>
+                <div class="c-colSideVarFilter__gridItem c-colSideVarFilter__gridItem--red"
+                    :class="{'is-active' : isActiveFilter('color', 'red')}"
+                    @click="toggleColorFilter('red')"
+                ></div>
+                <div class="c-colSideVarFilter__gridItem c-colSideVarFilter__gridItem--gray"
+                    :class="{'is-active' : isActiveFilter('color', 'gray')}"
+                    @click="toggleColorFilter('gray')"
+                ></div>
+                <div class="c-colSideVarFilter__gridItem c-colSideVarFilter__gridItem--blue"
+                    :class="{'is-active' : isActiveFilter('color', 'blue')}"
+                    @click="toggleColorFilter('blue')"
+                ></div>
+                <div class="c-colSideVarFilter__gridItem c-colSideVarFilter__gridItem--brown"
+                    :class="{'is-active' : isActiveFilter('color', 'brown')}"
+                    @click="toggleColorFilter('brown')"
+                ></div>
+                <div class="c-colSideVarFilter__gridItem c-colSideVarFilter__gridItem--white"
+                    :class="{'is-active' : isActiveFilter('color', 'white')}"
+                    @click="toggleColorFilter('white')"
+                ></div>
+                <div class="c-colSideVarFilter__gridItem c-colSideVarFilter__gridItem--green"
+                    :class="{'is-active' : isActiveFilter('color', 'green')}"
+                    @click="toggleColorFilter('green')"
+                ></div>
+            </div>
+        </div>
+
+        {% unless collection.handle contains 'general-store' %}
+            <div class="c-colSideVarFiltersType c-colSideVarFiltersType--size">
+                <span class="c-colSideVarFilters__title">Size</span>
+                <div class="c-colSideVarFilter__grid">
+
+                    {% unless collection.handle contains 'plus' %}
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('XS')"
+                            :class="{'is-active' : isActiveFilter('size', 'XS')}"
+                        >XS</div>
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('S')"
+                            :class="{'is-active' : isActiveFilter('size', 'S')}"
+                        >S</div>
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('M')"
+                            :class="{'is-active' : isActiveFilter('size', 'M')}"
+                        >M</div>
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('L')"
+                            :class="{'is-active' : isActiveFilter('size', 'L')}"
+                        >L</div>
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('XL')"
+                            :class="{'is-active' : isActiveFilter('size', 'XL')}"
+                        >XL</div>
+                    {% endunless %}
+
+                    {% if collection.handle contains 'men' or collection.handle == 'sale' or collection.handle contains 'new' %}
+                        {% unless collection.handle contains 'women' or collection.handle contains 'tween' %}
+                            <div class="c-colSideVarFilter__gridItem"
+                                @click="toggleSizeFilter('XXL')"
+                                :class="{'is-active' : isActiveFilter('size', 'XXL')}"
+                            >XXL</div>
+                        {% endunless %}
+                    {% endif %}
+
+                    {% if collection.handle contains 'women' or collection.handle == 'sale' or collection.handle contains 'tween' or collection.handle contains 'new' or collection.handle contains 'plus' %}
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('0X')"
+                            :class="{'is-active' : isActiveFilter('size', '0X')}"
+                        >0X</div>
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('1X')"
+                            :class="{'is-active' : isActiveFilter('size', '1X')}"
+                        >1X</div>
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('2X')"
+                            :class="{'is-active' : isActiveFilter('size', '2X')}"
+                        >2X</div>
+                        <div class="c-colSideVarFilter__gridItem"
+                            @click="toggleSizeFilter('3X')"
+                            :class="{'is-active' : isActiveFilter('size', '3X')}"
+                        >3X</div>
+                    {% endif %}
+                </div>
+            </div>    
+        {% endunless %}        
+    </div>
+</aside>

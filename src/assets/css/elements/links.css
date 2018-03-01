@@ -1,0 +1,7 @@
+a {
+    color: $color-body-text;
+
+    &:--enter {
+        color: $color-crimson;
+    }
+}

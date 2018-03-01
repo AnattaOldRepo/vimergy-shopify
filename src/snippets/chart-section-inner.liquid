@@ -1,0 +1,80 @@
+<div class="c-sizeGuide__chart js-chart-section">
+    <div class="c-sizeGuide__chartOpener js-toggle-chart-dropdown
+        {% if forloop.first %}
+            is-open
+        {% endif %}
+    ">
+        {{ block.settings.chart-section-type }} {{ block.settings.chart-section-title}}
+        <svg class="c-sizeGuide__chartOpenerArrow" width="14px" height="6px" viewBox="0 0 14 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="product" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                <g id="375-04-product-default@2x" transform="translate(-323.000000, -143.000000)" stroke="#000000">
+                    <g id="size-chart" transform="translate(6.000000, 128.000000)">
+                        <polyline id="arrow" transform="translate(324.000000, 18.000000) rotate(-180.000000) translate(-324.000000, -18.000000) " points="330 15 324 21 318 15"></polyline>
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </div>
+    <div class="c-sizeGuide__chartSection js-chart-dropdown 
+        {% if forloop.first %}
+            is-open
+        {% endif %}
+    ">
+        <div class="c-sizeGuide__chartImageSection">
+            <img class="c-sizeGuide__chartImage lazy-load" src="{{ block.settings.chart-section-image | img_url: 'master' }}')">
+        </div>
+
+        <div class="c-sizeGuide__chartContent">
+            <div class="c-sizeGuide__chartContentIntro">
+                <span class="c-sizeGuide__chartTypeText">
+                    {{ block.settings.chart-section-type }}
+                </span>
+                <span class="c-sizeGuide__chartTypeStyleText">{{ block.settings.chart-section-title}} Size Chart</span>
+            </div>
+
+            <div class="c-sizeGuide__chartTable">
+                {{ block.settings.chart-table }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% comment %}            
+<table>
+    <thead>
+        <tr>
+            <th>Size</th>
+            <th>Chest</th>
+            <th>Bottom Hem</th>
+            <th>Length From Shoulder</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>X-Small</td>
+            <td>34"</td>
+            <td>38"</td>
+            <td>24"</td>
+        </tr>
+        <tr>
+            <td>Small</td>
+            <td>36"</td>
+            <td>40"</td>
+            <td>25"</td>
+        </tr>
+        <tr>
+            <td>Med</td>
+            <td>40"</td>
+            <td>44"</td>
+            <td>27"</td>
+        </tr>
+        <tr>
+            <td>Large</td>
+            <td>40"</td>
+            <td>44"</td>
+            <td>27"</td>
+        </tr>                      
+    </tbody>
+</table>
+{% endcomment %}

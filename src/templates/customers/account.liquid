@@ -1,0 +1,99 @@
+<!-- /templates/customers/account.liquid -->
+{% comment %}
+
+  For all available customer liquid tags:
+    - http://docs.shopify.com/themes/liquid-variables/customer
+
+{% endcomment %}
+
+<div class="c-account c-account--account account-dashboard o-wrapper">
+    <div class="c-account__sectionsContainer">
+        <div class="c-account__sectionIntro">
+            <h1 class="c-account__title">My Account</h1>
+
+            {% if customer %}
+                <a class="c-account__logoutLink account-dashboard__logout" href="account/logout">Log Out</a>
+            {% endif %}
+        </div>
+
+        <div class="c-account__sectionMain">
+            <div class="c-account__section c-account__section--one">
+                <div class="account-dashboard__block order-history">
+
+                    <h2 class="c-account__subtitle account-dashboard__subtitle">Order History</h2>
+                
+                    {% comment %}
+                      If we have past orders, loop through each one
+                    {% endcomment %}
+                    {% paginate customer.orders by 20 %}
+                      {% if customer.orders.size != 0 %}
+
+                        <ul class="c-account__orderList">
+                            {% for order in customer.orders %}
+                                <li>
+                                    <a href="{{ order.customer_url }}">
+                                        {{ order.name }} - {{ order.created_at | date: format: 'month_day_year' }} 
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                      {% else %}
+
+                        <p class="c-account__infoText">You haven't placed any orders yet.</p>
+
+                      {% endif %}
+                      {% if paginate.pages > 1 %}
+                        <hr>
+                        <div class="pagination">
+                          {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
+                        </div>
+                      {% endif %}
+                    {% endpaginate %}
+                </div>
+            </div>
+
+
+            <div class="c-account__section c-account__section--two">
+                <div class="account-dashboard__block address">
+                
+                    <h2 class="c-account__subtitle account-dashboard__subtitle">Your Addresses</h2>
+
+                    <p class="account-details__name c-account__infoText">{{ customer.name }}</p>
+
+                    {% if customer.default_address != nil %}
+                        <p class="c-account__infoText">
+                        {{ customer.default_address.address1 }}
+
+                        {% if customer.default_address.address2 != "" %}
+                          {{ customer.default_address.address2 }}
+                        {% endif %}
+
+                        {% if customer.default_address.city != "" %}
+                          {{ customer.default_address.city }}
+                        {% endif %}
+
+                        {% if customer.default_address.province_code != "" %}
+                          {{ customer.default_address.province_code | upcase }}
+                        {% endif %}
+
+                        {% if customer.default_address.zip != "" %}
+                          {{ customer.default_address.zip | upcase }}<br>
+                        {% endif %}
+
+                        {% if customer.default_address.country != "" %}
+                          {{ customer.default_address.country }}<br>
+                        {% endif %}
+
+                        {% if customer.default_address.phone != "" %}
+                          {{ customer.default_address.phone }}
+                        {% endif %}
+                        </p>
+
+                    {% endif %}
+
+                    <p><a class="c-account__link--normal" href="/account/addresses">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

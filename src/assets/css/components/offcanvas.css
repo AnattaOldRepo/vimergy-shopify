@@ -1,0 +1,94 @@
+$offcanvas-zindex: 100 !default;
+$offcanvas-width: 300px !default;
+$offcanvas-overlay-background: rgba(#000, 0.5) !default;
+
+/* Panel */
+.c-offcanvas {
+    position: fixed;
+    top: 0;
+    z-index: $offcanvas-zindex;
+    width: 100%;
+    max-width: 380px;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    visibility: hidden;
+    background-color: $color-spring-wood;
+    backface-visibility: hidden;
+    transition: transform 0.5s ease, visibility 0.5s ease;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+
+    &.offcanvas-open {
+        visibility: visible;
+        transform: translate(0, 0);
+    }
+}
+
+/* Close button */
+.c-offcanvas__close {
+    position: absolute;
+    top: 14px;
+    right: 19px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: 0;
+    line-height: 44px;
+    text-align: center;
+    font-size: 28px;
+    color: #000;
+    cursor: pointer;
+
+    &:--enter {
+        background-color: transparent;
+        outline: none;
+    }
+}
+
+.c-offcanvas--left {
+    left: 0;
+    padding: 32px;
+    transform: translateX(-$offcanvas-width);
+}
+
+.c-offcanvas--right {
+    right: 0;
+    transform: translateX(390px);
+    max-width: 390px;
+
+    .c-offcanvas__close {
+        right: auto;
+        left: 0;
+    }
+}
+
+/* Overlay */
+.c-offcanvas-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding: 32px;
+    background-color: $color-black;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    cursor: pointer;
+    backface-visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    .offcanvas-open & {
+        opacity: .5;
+        visibility: visible;
+    }
+}
+
+body.offcanvas-open {
+    overflow: hidden;
+}

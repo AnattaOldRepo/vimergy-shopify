@@ -1,0 +1,69 @@
+<div class="c-newsletter o-wrapper">
+    <div class="c-newsletter__inner">
+        {% if section.settings.small-cta-text %}
+            <span class="c-newsletter__ctaSmall">{{ section.settings.small-cta-text }}</span>
+        {% endif %}
+
+        {% if section.settings.large-cta-text %}
+            <span class="c-newsletter__ctaLarge">{{ section.settings.large-cta-text }}</span>
+        {% endif %}
+
+        <div class="c-newsletter__form">
+            {% form 'customer' %}
+              {{ form.errors | default_errors }}
+              {% if form.posted_successfully? %}
+                <p class="c-form__successMessage">Thank You!</p>
+              {% else %}
+                <div class="c-newsletter__inputGroup">
+                  <input type="hidden" name="contact[tags]" value="newsletter">
+                  <input type="email"
+                    name="contact[email]"
+                    id="Email"
+                    class="c-newsletter__input"
+                    value="{% if customer %}{{ customer.email }}{% endif %}"
+                    {% if section.settings.placeholder-text %}
+                        placeholder="{{ section.settings.placeholder-text }}"
+                    {% else %}
+                        Enter Email
+                    {% endif %}
+                    autocorrect="off"
+                    autocapitalize="off">
+                    <span class="c-newsletter__inputGroupButton">
+                        <button type="submit" class="c-btn c-newsletter__submit" name="commit" id="Subscribe">
+                            {% if section.settings.submit-text %}{{ section.settings.submit-text }}{% else %}Submit{% endif %}
+                        </button>
+                    </span>
+                </div>
+              {% endif %}
+            {% endform %}
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Newsletter Signup Section",
+    "settings": [
+        {
+            "type": "text",
+            "label": "Small CTA Text",
+            "id": "small-cta-text"            
+        },
+        {
+            "type": "text",
+            "label": "Large CTA Text",
+            "id": "large-cta-text"            
+        },
+        {
+            "type": "text",
+            "label": "Placeholder Text",
+            "id": "placeholder-text"
+        },
+        {
+            "type": "text",
+            "label": "Submit Text",
+            "id": "submit-text"
+        }                        
+    ]
+}
+{% endschema %}

@@ -1,0 +1,10 @@
+@import "../settings/index";
+
+html {
+    background-color: $color-gray-20;
+}
+
+body {
+    max-width: 1920px;
+    margin: 0 auto;
+}

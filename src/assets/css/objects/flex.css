@@ -1,0 +1,20 @@
+/*================ Flex ================*/
+
+.o-flex {
+    box: horizontal row;
+}
+
+.o-flex__item {
+    flex: 1;
+}
+
+.o-flex--verticalMobile {
+
+    @media(--mobile-max) {
+        box: vertical;
+    }
+}
+
+.o-flex__item--middle {
+    box-item: center;
+}

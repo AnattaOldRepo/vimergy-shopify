@@ -1,0 +1,103 @@
+<div class="c-abtDblImgSection o-wrapper">
+    <div class="c-abtDblImg__contentSection">
+        {% if section.settings.intro-text %}
+            <h3 class="c-abtDblImg__introText c-abtDblImg__introText--two">{{ section.settings.intro-text}}</h3>
+        {% endif %}
+
+        <div class="c-abtDblImg__contentInner c-abtDblImg__contentInner--two">
+            {% if section.settings.title %}
+                <h2 class="c-abtDblImg__title">{{ section.settings.title }}</h2>
+            {% endif %}
+
+            {% if section.settings.content %}
+                <div class="c-abtDblImg__content">
+                    {{ section.settings.content }}
+                </div>
+            {% endif %}
+        </div>           
+    </div>
+
+    <div class="c-abtDblImg__imageSection c-abtDblImg__imageSection">
+        {% if section.settings.image-one-mobile %}
+            <img class="c-abtDblImg__imageMobile lazy-load" src="{{ section.settings.image-one-mobile | img_url: 'master' }}" />
+        {% endif %}
+
+        {% if section.settings.image-two-mobile %}
+            <img class="c-abtDblImg__imageMobile lazy-load" src="{{ section.settings.image-two-mobile | img_url: 'master' }}" />
+        {% endif %}        
+
+        {% if section.settings.image-one-desktop %}
+            <div class="c-abtDblImg__imageBox c-abtDblImg__imageBox--one">
+                <img class="c-abtDblImg__imageDesktop lazy-load" src="{{ section.settings.image-one-desktop | img_url: 'master' }}" />
+                {% if section.settings.image-one-caption %}
+                    <span class="c-abtDblImg__caption">{{ section.settings.image-one-caption}}</span>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if section.settings.image-two-desktop %}
+            <div class="c-abtDblImg__imageBox c-abtDblImg__imageBox--two">
+                <img class="c-abtDblImg__imageDesktop lazy-load" src="{{ section.settings.image-two-desktop | img_url: 'master' }}" />
+                {% if section.settings.image-one-caption %}
+                    <span class="c-abtDblImg__caption">{{ section.settings.image-one-caption}}</span>
+                {% endif %}
+            </div>
+        {% endif %}        
+    </div>
+</div>
+
+
+{% schema %}
+{
+    "name": "About Double Image One",
+    "settings": [
+        {
+            "type": "html",
+            "label": "Intro Text",
+            "id": "intro-text",
+            "info": "Place line breaks with '<br>'"
+        },     
+        {
+            "type": "html",
+            "label": "Title",
+            "id": "title",
+            "info": "Place line breaks with '<br>'"
+        },      
+        {
+            "type": "html",
+            "label": "Content",
+            "id": "content"
+        },               
+        {
+            "type": "image_picker",
+            "label": "Image One Mobile",
+            "id": "image-one-mobile"
+        },
+        {
+            "type": "image_picker",
+            "label": "Image One Deskto",
+            "id": "image-one-desktop"
+        },
+        {
+            "type": "text",
+            "label": "Image One Caption",
+            "id": "image-one-caption"
+        },         
+        {
+            "type": "image_picker",
+            "label": "Image Two Mobile",
+            "id": "image-two-mobile"
+        },
+        {
+            "type": "image_picker",
+            "label": "Image Two Deskto",
+            "id": "image-two-desktop"
+        },
+        {
+            "type": "text",
+            "label": "Image Two Caption",
+            "id": "image-two-caption"
+        }             
+    ]
+}
+{% endschema %}

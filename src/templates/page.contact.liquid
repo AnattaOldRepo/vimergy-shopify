@@ -1,0 +1,96 @@
+<div class="o-wrapper">
+    <div class="c-shopifyPageHero u-textCenter">
+        <h1 class="c-headingHero">{{ page.title }}</h1>
+    </div>
+    <div class="c-shopifyPageContent">
+        <div class="o-flex o-flex--verticalMobile">
+            <div class="o-flex__item">
+                {{ page.content }}
+            </div>
+            <div class="o-flex__item">
+                {% form 'contact' %}
+                  {% if form.posted_successfully? %}
+                    <p class="form-success">
+                      {{ 'contact.form.post_success' | t }}
+                    </p>
+                  {% endif %}
+                  {{ form.errors | default_errors }}
+                  <input type="text"
+                    name="contact[name]"
+                    id="ContactFormName"
+                    placeholder="{{ 'contact.form.name' | t }}"
+                    required
+                    class="required"
+                    value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+                  <input type="email"
+                    name="contact[email]"
+                    id="ContactFormEmail"
+                    placeholder="{{ 'contact.form.email' | t }}"
+                    value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                    spellcheck="false"
+                    autocomplete="off"
+                    required
+                    class="required"
+                    autocapitalize="off">
+                  <input type="tel"
+                    name="contact[phone]"
+                    id="ContactFormPhone"
+                    placeholder="Phone Number (optional)"
+                    value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                    pattern="[0-9\-]*">
+                  <textarea rows="10"
+                    name="contact[body]"
+                    id="ContactFormMessage"
+                    required
+                    class="required"
+                    placeholder="{{ 'contact.form.message' | t }}">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+                  <input type="submit" class="c-btn c-btn--large-new" value="{{ 'contact.form.send' | t }}">
+                {% endform %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webshim/1.16.0/dev/polyfiller.js"></script> 
+
+<script> 
+    webshim.activeLang('en');
+    webshims.polyfill('forms');
+    webshims.cfg.no$Switch = true;
+
+    $('#contact_form').validate({
+        errorClass: 'error',
+        errorPlacement: function(error, element) {
+
+            // console.log(element)
+
+            if ($(element).is('#contactFormSubject')) {
+                // error.appendTo( $('.js-form-error-container') );
+                console.log(error)
+                console.log(element)
+            } else {
+                return true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            var errors = validator.numberOfInvalids();
+            if (errors) {
+              var message = errors == 1
+                ? 'You missed 1 field. It has been highlighted'
+                : 'You missed ' + errors + ' fields. They have been highlighted';
+              console.log(message);
+            } else {
+              console.log('no errors')
+            }
+        }        
+    });
+    
+</script>
+
+<style>
+input.error, select.error, textarea.error {
+  border-color: #ed1c24;
+}
+</style>

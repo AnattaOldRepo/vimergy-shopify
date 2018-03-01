@@ -1,0 +1,26 @@
+{% if section.settings.notification-is-active %}
+    <div class="c-notifyBar">
+        {% if section.settings.text %}
+            <span class="c-notifyBar__text">{{ section.settings.text }}</span>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Notification Bar",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "notification-is-active",
+            "label": "Notification Bar",
+            "default": false
+        },
+        {
+            "type": "text",
+            "id": "text",
+            "label": "Text"
+        }
+    ]
+}
+{% endschema %}

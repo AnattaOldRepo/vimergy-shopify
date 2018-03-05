@@ -1,8 +1,0 @@
-.c-shopifyPageHero {
-    background-color: $color-pampas;
-    padding: 50px;
-
-    @media (--tablet) {
-        padding: 100px;
-    }
-}

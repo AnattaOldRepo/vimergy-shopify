@@ -1,9 +1,0 @@
-/*================ Dividers Component ================*/
-
-.c-divider {
-    padding: * 13px;
-}
-
-.c-divider--gray {
-    color: $color-gray-30 ;
-}

@@ -1,9 +1,0 @@
-.c-grid {
-    lost-utility: clearfix;
-}
-
-    .c-grid__item--oneHalf {
-        @media (--tablet) {
-            lost-column: 1/2;
-        }
-    }

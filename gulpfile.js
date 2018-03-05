@@ -100,11 +100,7 @@ gulp.task('theme', function() {
 // Css
 gulp.task('css', function() {
     var processors = [
-        cssImport({
-            plugins: [
-                require("stylelint")
-            ]
-        }),
+        cssImport(),
         cssUrl(),
         cssNext(),
         preCss(),

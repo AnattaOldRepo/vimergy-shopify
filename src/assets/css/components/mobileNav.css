@@ -15,10 +15,6 @@
             font-weight:700;
             line-height: 1;
             color: #393D4E;
-
-            &:--enter { 
-                color: $color-off-white;
-            }
         }
 .c-mobileNavContainer.c-menu{
     display:block;

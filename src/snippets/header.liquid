@@ -18,8 +18,8 @@
 
     </div>
 
-     <div class="o-header__menu" style="position: static;">
-        <nav class="c-menu c-primary c-megamenu js-megamenu" style="position: static;">
+     <div class="o-header__menu o-dropdown-static">
+        <nav class="c-menu c-primary c-megamenu js-megamenu o-dropdown-static">
         <ul>
             {% for link in linklists.main-menu.links %}
             <li class="c-megamenu__navitem c-nav-links c-primary-link"> <a class="c-menu__item {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>

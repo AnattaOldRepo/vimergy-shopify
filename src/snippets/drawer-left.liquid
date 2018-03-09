@@ -23,6 +23,12 @@
                     <li class="c-mobileNav__item">
                         <a class="c-mobileNav__itemLink {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
                     </li>
+                    {% assign child_list_handle = link.title | handle %}
+                        {% for child_link in linklists[child_list_handle].links %}
+                        <li class="c-mobileNav__item">
+                            <a class="c-mobileNav__itemLink {% if child_link.active %} is-active {% endif %}" href="{{ child_link.url }}">{{ child_link.title }}</a>
+                        </li>
+                        {% endfor %}    
                 {% endfor %}  
                 <li class="c-mobileNav__item">
                         <a class="c-mobileNav__itemLink c-menu_item__quiker-links c-menu__item--can">CAN</a>

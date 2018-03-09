@@ -14,7 +14,6 @@
     }
 }
 
-
 .o-header__logo {
     @media (--tablet-max) {
     display: block;
@@ -68,4 +67,11 @@
     .o-header__menu {
         height:auto !important
     }
+}
+.o-dropdown-static {
+    position: absolute !important;
+    
+    @media (--tablet-large) {
+        position: static !important;
+}
 }

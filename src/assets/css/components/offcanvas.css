@@ -10,8 +10,6 @@ $offcanvas-overlay-background: rgba(#000, 0.5) !default;
     width: 100%;
     max-width: 380px;
     height: 100%;
-    /* overflow-x: hidden;
-    overflow-y: auto; */
     visibility: hidden;  
     background-color: $color-white;
     backface-visibility: hidden;

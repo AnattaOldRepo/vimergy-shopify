@@ -3,3 +3,9 @@
 @import "wrapper";
 
 @import "flex";
+
+@import "header";
+
+@import "grid";
+
+@import "footer";

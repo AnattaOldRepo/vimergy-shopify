@@ -10,16 +10,17 @@ $offcanvas-overlay-background: rgba(#000, 0.5) !default;
     width: 100%;
     max-width: 380px;
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    visibility: hidden;
-    background-color: $color-spring-wood;
+    /* overflow-x: hidden;
+    overflow-y: auto; */
+    visibility: hidden;  
+    background-color: $color-white;
     backface-visibility: hidden;
     transition: transform 0.5s ease, visibility 0.5s ease;
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: -ms-autohiding-scrollbar;
 
     &.offcanvas-open {
+        overflow-x: hidden;
         visibility: visible;
         transform: translate(0, 0);
     }

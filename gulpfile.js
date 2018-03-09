@@ -114,6 +114,7 @@ gulp.task('css', function() {
         colorFunction(),
         lost()
     ];
+    console.log('the css task executing')
     return gulp.src(paths.css.input)
         .pipe(plumber())
         .pipe(gulpIf(!argv.production, sourcemaps.init()))
@@ -284,7 +285,7 @@ gulp.task('watch:templates', function() {
 gulp.task('default', ['theme', 'css', 'jsApp', 'jsComponents', 'jsVue', 'fonts', 'images', 'templates', 'static']);
 
 // Watch all the files but would not deploy on shopify
-gulp.task('watch', ['watch:css', 'watch:js:components', 'watch:js:app','watch:js:vue', 'watch:fonts', 'watch:images', 'watch:templates', 'watch:static']);
+gulp.task('watch', ['watch:css', 'watch:js:components', 'watch:js:app','watch:js:vue', 'watch:fonts', 'watch:templates', 'watch:static', 'watch:images']);
 
 // Watch and deploy on shopify development theme
 gulp.task('dev', ['theme', 'watch']);

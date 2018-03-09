@@ -1,4 +1,4 @@
-<nav class="c-headerNav c-headerNav--secondary">
+{% comment %} <nav class="c-headerNav c-headerNav--secondary">
 
 
     <div class="c-header__search">
@@ -16,7 +16,7 @@
                 <input type="hidden" name="type" value="product">
                 <input class="c-searchForm__input" type="text" placeholder="Search Something" name="q" value="{{ search.terms | escape }}"  />
                 <span class="c-searchForm__inputGroupButton">
-                    <button type="submit" class="c-btn c-searchForm__submit" name="commit" id="Subscribe">GO</button>
+                    <button type="submit" class="c-btn c-searchForm__submit" name="commit" id="Subscribe">GO...</button>
                 </span>
             </div>
         </form>
@@ -85,4 +85,93 @@
             </g>
         </svg>
     </a>
+</nav> {% endcomment %}
+
+
+<header id="header" class="header site-header">
+	<div class="row column">
+		<button class="primary-nav-link"><span>toggle menu</span></button>
+
+        <a class="logo" href="http://vimergy.com/">
+			<svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 353.214 66.125" enable-background="new 0 0 353.214 66.125" xml:space="preserve"><g><polygon fill="#393D4E" points="25.058,59.516 37.407,59.516 58.309,5.31 45.195,5.31 32.345,44.905 30.829,44.905 30.644,44.342 17.894,5.31 4.54,5.31   "></polygon><polygon fill="#393D4E" points="138.915,59.516 150.517,59.516 150.517,5.31 132.419,5.31 120.255,41.126 118.769,41.126 106.053,5.31 88.269,5.31 88.269,59.516 99.318,59.516 98.998,20 100.641,20 114.762,59.516 123.073,59.516 137.588,20 139.221,20 "></polygon><polygon fill="#393D4E" points="156.022,59.516 193.338,59.516 193.338,49.641 167.39,49.641 167.39,36.407 190.581,36.407 190.581,27.24 167.39,27.24 167.39,15.029 191.923,15.029 191.923,5.31 156.022,5.31   "></polygon><path fill="#393D4E" d="M226.487,59.272h13.826l-14.381-23.559l1.011-0.31c3.45-1.051,6.182-2.812,8.121-5.24c1.916-2.415,2.895-5.461,2.895-9.039c0-3.042-0.576-5.615-1.716-7.639c-1.138-2.035-2.682-3.692-4.579-4.92c-1.933-1.252-4.144-2.155-6.586-2.69c-2.484-0.535-5.061-0.809-7.67-0.809h-20.48v54.205h11.527V37.106h5.911L226.487,59.272zM215.618,28.969h-7.237V14.311h8.031c1.044,0,2.145,0.083,3.247,0.245c1.173,0.177,2.242,0.509,3.186,0.994c0.995,0.503,1.816,1.227,2.45,2.159c0.646,0.947,0.974,2.179,0.974,3.657c0,1.578-0.355,2.9-1.053,3.935c-0.684,1.005-1.571,1.783-2.65,2.32c-1.02,0.51-2.166,0.862-3.413,1.059C217.95,28.876,216.759,28.969,215.618,28.969z"></path><path fill="#393D4E" d="M271.258,3.815c-4.144,0-8.054,0.672-11.621,1.998c-3.557,1.324-6.699,3.231-9.346,5.707c-2.645,2.466-4.74,5.489-6.24,8.994c-1.494,3.509-2.256,7.489-2.256,11.823c0,4.296,0.751,8.23,2.221,11.701c1.475,3.49,3.551,6.513,6.159,9c2.614,2.484,5.778,4.444,9.429,5.826c3.643,1.371,7.701,2.066,12.054,2.066c4.225,0,8.179-0.442,11.749-1.314c3.383-0.829,6.388-1.891,8.952-3.175V28.19h-21.385v9.244h10.653v11.531l-0.498,0.213c-1.267,0.555-2.655,0.958-4.136,1.199c-1.454,0.244-3.011,0.367-4.635,0.367c-2.826,0-5.383-0.459-7.599-1.365c-2.236-0.902-4.139-2.194-5.66-3.82c-1.514-1.631-2.675-3.599-3.443-5.859c-0.77-2.223-1.15-4.702-1.15-7.363c0-2.606,0.428-5.058,1.279-7.276c0.847-2.215,2.062-4.168,3.598-5.794c1.542-1.623,3.378-2.903,5.477-3.812c2.092-0.913,4.399-1.376,6.873-1.376c2.835,0,5.414,0.52,7.674,1.539c1.926,0.868,3.55,1.967,4.852,3.266l7.383-8.409c-2.194-1.928-5.001-3.507-8.351-4.691C279.607,4.477,275.557,3.815,271.258,3.815z"></path><polygon fill="#393D4E" points="314.475,59.516 326.312,59.516 326.312,36.422 326.451,36.215 347.057,5.31 333.293,5.31 320.908,26.803 308.523,5.31 294.189,5.31 314.475,36.427  "></polygon><rect x="64.203" y="5.852" fill="#393D4E" width="12.939" height="54.487"></rect></g></svg>
+        </a>
+
+		<a href="http://vimergy.com/checkout/cart/" class="header-cart-link header-cart-link--one  no-count">
+			<span class="icon"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 135.8 115" enable-background="new 0 0 135.8 115" xml:space="preserve"><path d="M113.8,84h-72c-2.6,0-4.9-1.9-5.4-4.4L22.7,11H0V0h27.2c2.6,0,4.9,1.9,5.4,4.4L36.1,22h94.1c1.8,0,3.4,0.8,4.4,2.3c1,1.4,1.3,3.3,0.8,4.9l-16.5,51C118.3,82.5,116.2,84,113.8,84z M46.3,73h63.5l12.9-40H38.3L46.3,73z"></path><circle cx="50" cy="103.9" r="11"></circle><circle cx="104.5" cy="103.9" r="11"></circle></svg></span>
+		    <span class="count">0</span>
+		</a>
+
+		<div class="header__cart">
+			
+
+<a href="http://vimergy.com/checkout/cart/" data-target-element="#header-cart" class="header-cart-link header-cart-link--two js-header-panel  no-count">
+    <span class="icon"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 135.8 115" enable-background="new 0 0 135.8 115" xml:space="preserve"><path d="M113.8,84h-72c-2.6,0-4.9-1.9-5.4-4.4L22.7,11H0V0h27.2c2.6,0,4.9,1.9,5.4,4.4L36.1,22h94.1c1.8,0,3.4,0.8,4.4,2.3c1,1.4,1.3,3.3,0.8,4.9l-16.5,51C118.3,82.5,116.2,84,113.8,84z M46.3,73h63.5l12.9-40H38.3L46.3,73z"></path><circle cx="50" cy="103.9" r="11"></circle><circle cx="104.5" cy="103.9" r="11"></circle></svg></span>
+    <span class="count">0</span>
+</a>
+
+<div id="header-cart" class="block block-cart skip-content  no-count">
+	
+<div id="minicart-error-message" class="minicart-message error"></div>
+<div id="minicart-success-message" class="minicart-message success"></div>
+
+<div class="minicart-wrapper">
+        
+    <a class="mini-cart-close" href="#" title="Close">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 71.831 71.831" enable-background="new 0 0 71.831 71.831" xml:space="preserve"><g><rect x="0.915" y="33.249" transform="matrix(0.7071 0.7071 -0.7071 0.7071 36.1513 -14.779)" width="70" height="6"></rect><rect x="0.915" y="33.249" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 86.9436 36.4848)" width="70" height="6"></rect></g></svg>
+    </a>
+
+            <ul id="cart-sidebar" class="mini-products-list mini-products-list--empty">
+            <li>
+                <div class="mini-cart-empty-img"></div>
+                <div class="mini-cart-empty-line"></div>
+                <div class="mini-cart-empty-line"></div>
+                <div class="mini-cart-empty-line"></div>
+            </li>
+        </ul>
+
+        <p class="mini-cart-empty-heading">Your cart is empty</p>
+        <p class="mini-cart-empty-desc">Items you add to cart will appear here</p>
+    </div>
+</div>		</div>
+
+		<div class="header__nav">
+			<nav class="primary-nav">
+    <ul>
+        <li class="primary-nav__item primary-nav__all level0"><a href="/catalog/shop" class="header__link">Shop All</a></li><li class="primary-nav__item level0"><a href="http://vimergy.com/kits.html" class="header__link level0 ">Kits</a>
+        {% comment %} <div class="primary-nav__panel"><div class="primary-nav__panel-inner"><div class="row"><div class="large-4 column"><a class="primary-nav__box" href="http://vimergy.com/essential-immune-support.html"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_kits1_1.png" alt=""><span> Beginner's Bundle  - <span>$70.00</span></span></a></div><div class="large-4 column"><a class="primary-nav__box" href="http://vimergy.com/advanced-immune-support.html"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_kits2_1.png" alt=""><span> Getting Started Bundle  - <span>$95.00</span></span></a></div><div class="large-4 column"><a class="primary-nav__box" href="http://vimergy.com/full-spectrum-immune-support.html"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_kits3_2.jpg" alt=""><span> Complete Bundle  - <span>$145.00</span></span></a></div></div></div></div></li><li class="primary-nav__item level0"><a href="http://vimergy.com/barleygrass-juice.html" class="header__link level0 ">Barleygrass</a><div class="primary-nav__panel"><div class="primary-nav__panel-inner"><div class="row"><div class="large-4 column"><a class="primary-nav__box" href="http://vimergy.com/alkalize-barleygrass.html"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_barleygrass_1.png" alt=""><span>Premium Organic Extract - <span>$50.00</span></span></a></div><div class="large-4 column"><a class="primary-nav__box" href="http://vimergy.com/alkalize-barleygrass-juice-250g-x-2-bags.html"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_barleygrass_2packs.png" alt=""><span> Save 5% when you buy 2  - <span>$95.00</span></span></a></div><div class="large-4 column"><a class="primary-nav__box" href="http://vimergy.com/alkalize-barleygrass-juice-250g-x-2-bags-1024.html"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_barleygrass_4packs.png" alt=""><span> Save 10% when you buy 4  - <span>$180.00</span></span></a></div></div></div></div></li><li class="primary-nav__item level0"><a href="http://vimergy.com/chaga.html" class="header__link level0 ">Chaga</a><div class="primary-nav__panel"><div class="primary-nav__panel-inner"><div class="row"><div class="large-4 column"><a class="primary-nav__box" href="http://vimergy.com/strength-chaga.html"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_chaga.png" alt=""><span>Premium Organic Extract - <span>$21.00</span></span></a></div></div></div></div></li><li class="primary-nav__item level0"><a href="http://vimergy.com/wild-blueberry-15.html" class="header__link level0 ">Wild Blueberry</a><div class="primary-nav__panel"><div class="primary-nav__panel-inner"><div class="row"><div class="large-4 column"><a class="primary-nav__box" href="http://vimergy.com/wild-blueberry.html"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_wildblueberry_2_1.png" alt=""><span>Premium Wild Powder - <span>$50.00</span></span></a></div></div></div></div> {% endcomment %}
+        
+        </li>    </ul>
+
+    <div class="primary-nav__overlay">
+        <div class="primary-nav__overlay-inner">
+            <div class="primary-nav__overlay-wrap"></div>
+        </div>
+    </div>    
 </nav>
+
+			<div class="header__quicklinks">
+			    <ul>
+			        <li>
+			        	<a class="header__link icon-can js-header-panel" href="#" data-target-element="#header-can">CAN</a>
+						<div id="header-can" class="header__dropdown">
+<div class="header__dropdown-inner">
+<h5>Shopping from Canada?</h5>
+<p>Visit our Vimergy Amazon Canada site for FREE Prime Shipping on all orders, and zero customs fees.</p>
+<a class="btn secondary extended" href="https://www.amazon.ca/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords=Vimergy&amp;rh=i%3Aaps%2Ck%3AVimergy">Take me to amazon.ca</a></div>
+</div>			        </li>
+			        <li>
+			        	<a class="header__link icon-aus js-header-panel" href="#" data-target-element="#header-aus">AUS</a>
+			        	<div id="header-aus" class="header__dropdown">
+<div class="header__dropdown-inner">
+<h5>Shopping from Australia?</h5>
+<p>Visit our Australia / NZ distributor for fast shipping and zero customs fees.</p>
+<a class="btn secondary extended" href="https://floweroflife.com.au">Australian Distributor</a></div>
+</div>			        </li>
+			        <li><a class="header__link" href="/customer-service">Help</a></li>
+
+			       				        	<li><a class="header__link" href="/customer/account/login">Sign In</a></li>
+			        			    </ul>
+			</div>
+		</div>
+	</div>
+</header>

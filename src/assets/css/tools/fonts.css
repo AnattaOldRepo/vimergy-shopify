@@ -1,30 +1,3 @@
 /*================ Fonts ================*/
 @import "../settings/index";
 
-@font-face {
-    font-family: 'Apercu';
-    font-path: 'apercu-regular-typeface';
-    font-weight: $font-weight-regular;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Apercu Medium';
-    font-path: 'apercu-medium-typeface';
-    font-weight: $font-weight-medium;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Apercu Bold';
-    font-path: 'apercu-bold-typeface';
-    font-weight: $font-weight-bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Sub Urban';
-    font-path: 'sub-urban';
-    font-weight: $font-weight-regular;
-    font-style: normal;
-}

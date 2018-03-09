@@ -1,25 +1,56 @@
-{% section 'notification-bar' %}
+ <div class="o-header o-wrapper ">
 
-<div class="c-header o-wrapper">
-
-    <div class="c-hamburger js-offcanvas" data-offcanvas-src="#offcanvas-left">
+     <div class="c-hamburger js-offcanvas" data-offcanvas-src="#offcanvas-left">
         <span class="c-hamburgerPatty c-hamburgerPatty--top"></span>
         <span class="c-hamburgerPatty c-hamburgerPatty--middle"></span>
         <span class="c-hamburgerPatty c-hamburgerPatty--bottom"></span>
-    </div>
-    {% if template != 'index' %}
-        <a class="c-headerLogoLink" href="{{ shop.secure_url }}">
-            {% include 'header-logo' %}
-        </a>
-    {% else %}
-        {% include 'header-logo' %}
-    {% endif %}
+    </div> 
 
-    <nav class="c-headerNav c-headerNav--primary">
-        {% for link in linklists.main-menu.links %}
-            <a class="c-headerMenuLink {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
-        {% endfor %}
-    </nav>
- 
-    {% include 'header-account-menu' %}
+    <div class="o-header__logo">
+
+        {% if template != 'index' %}
+            <a class="c-logo" href="{{ shop.secure_url }}">
+                {% include 'header-logo' %}
+            </a>
+        {% else %}
+            {% include 'header-logo' %}
+        {% endif %}
+
+    </div>
+
+     <div class="o-header__menu" style="position: static;">
+        <nav class="c-menu c-primary c-megamenu js-megamenu" style="position: static;">
+        <ul>
+            {% for link in linklists.main-menu.links %}
+            <li class="c-megamenu__navitem c-nav-links c-primary-link"> <a class="c-menu__item {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
+            {% assign child_list_handle = link.title | handle %}
+             {% for child_link in linklists[child_list_handle].links %}
+               <li class="c-megamenu__navitem c-nav-links"> <a class="c-menu__item {% if child_link.active %} is-active {% endif %}" href="{{ child_link.url }}">{{ child_link.title }}</a>
+            <div class="c-megamenu__subnav">
+                <div class="c-megamenu__subnavInner">    
+                    <div class="c-sub-container">
+                        <div class="o-col .o-large-2 c-dropdown-img"><a class="c-primary-nav__box" href="http://vimergy.com/catalog/product/view/id/930/category/10/"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_kits1_1.png" alt=""><span> Beginner's Bundle  - <span>$70.00</span></span></a></div>
+                        <div class="o-col .o-large-2 c-dropdown-img"><a class="c-primary-nav__box" href="http://vimergy.com/catalog/product/view/id/929/category/10/"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_kits2_1.png" alt=""><span> Getting Started Bundle  - <span>$95.00</span></span></a></div>
+                        <div class="o-col .o-large-2 c-dropdown-img"><a class="c-primary-nav__box" href="http://vimergy.com/catalog/product/view/id/927/category/10/"><img src="http://vimergy.com/media/catalog/product/cache/1/small_image/9df78eab33525d08d6e5fb8d27136e95/s/h/shop_template_kits3_2.jpg" alt=""><span> Complete Bundle  - <span>$145.00</span></span></a></div>
+                    </div>
+                </div>
+            </div>
+               </li>
+                 {% endfor %}
+            {% endfor %}
+            </ul>
+        </nav>
+    </div>
+
+    <div class="o-header__menu o-header__menu--right">
+        <nav class="c-menu">
+            <a class="c-menu__item c-menu__item--right c-menu_item__quiker-links c-menu__item--can">CAN</a>
+            <a class="c-menu__item c-menu__item--right c-menu_item__quiker-links c-menu__item--aus">AUS</a>
+            <a class="c-menu__item c-menu__item--right c-menu__item--help">Help</a>
+            <a class="c-menu__item c-menu__item--right c-menu__item--signin">Sign in</a>
+            <div class="c-menu__item c-menu__item--right c-menu_item__quiker-links c-menu__item--cart header__cart">{% include 'cart-logo' %}</div>
+        </nav>
+    </div>  
+
 </div>
+

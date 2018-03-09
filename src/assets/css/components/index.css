@@ -8,3 +8,14 @@
 
 @import "cart-table";
 
+@import "header";
+
+@import "menu";
+
+@import "hamburger";
+
+@import "mobileNav";
+
+@import "footer";
+
+@import "megamenu";

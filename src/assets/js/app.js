@@ -22,4 +22,9 @@ $('.js-offcanvas').offcanvas({
     }
 });
 
+$('.c-mobileNav--expand').click(function(e) {
+    e.preventDefault();
+    $(this).toggleClass('active');
+});
+
 $('.lazy-load').Lazy();

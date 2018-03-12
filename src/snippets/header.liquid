@@ -1,44 +1,94 @@
- <div class="o-header o-wrapper">
+ <div class="c-header">
+    <div class="c-header_container o-wrapper u-clearFix">
+        <div class="c-hamburger js-offcanvas" data-offcanvas-src="#offcanvas-left">
+            <span class="c-hamburgerPatty c-hamburgerPatty--top"></span>
+            <span class="c-hamburgerPatty c-hamburgerPatty--middle"></span>
+            <span class="c-hamburgerPatty c-hamburgerPatty--bottom"></span>
+        </div> 
 
-    <div class="c-hamburger js-offcanvas" data-offcanvas-src="#offcanvas-left">
-        <span class="c-hamburgerPatty c-hamburgerPatty--top"></span>
-        <span class="c-hamburgerPatty c-hamburgerPatty--middle"></span>
-        <span class="c-hamburgerPatty c-hamburgerPatty--bottom"></span>
-    </div> 
+        <div class="c-header__logo">
 
-    <div class="o-header__logo">
-
-        {% if template != 'index' %}
-            <a class="c-logo" href="{{ shop.secure_url }}">
+            {% if template != 'index' %}
+                <a class="c-logo" href="{{ shop.secure_url }}">
+                    {% include 'header-logo' %}
+                </a>
+            {% else %}
                 {% include 'header-logo' %}
-            </a>
-        {% else %}
-            {% include 'header-logo' %}
-        {% endif %}
+            {% endif %}
 
-    </div>
+        </div>
 
-     <div class="o-header__menu">
+         <div class="c-header__nav">
+            <menu class="c-megamenu js-megamenu" role="navigation">
+                <ul>
 
-        <menu class="c-megamenu js-megamenu o-dropdown-static">
-            <ul>
-                {% for link in linklists.main-menu.links %}
-                    <li class="c-megamenu__navitem"> <a class="{% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
-                {% endfor %}
+                    {% for link in linklists.main-menu.links %}
+
+                        <li class="c-megamenu__item c-megamenu__navitem"> 
+                            <a class="c-megamenu__link {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+
+                            {% if link.links != blank %}
+                                <div class="c-megamenu__subnav">
+                                     <div class="c-megamenu__subnavInner">  
+                                        
+
+                                            {% for child_link in link.links %}
+                                            <div class="c-megamenu__subnavGroup">
+                                             <a  class="c-megamenu__box" href="{{ child_link.url }}">
+
+                                             <img src="{{ child_link.object.featured_image }}" />
+                                             <img src="{{ child_link.object.image.src }}" />
+                                                <span>{{ child_link.title }}<span>{{ child_link.object.price | money }}</span></span></a>
+                                            </div>
+                                            {% endfor %}
+
+                                       
+                                    </div>
+                                </div>
+                            {% endif %} 
+                            
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+            </menu>
+            
+
+            <ul class="c-menu">
+                <li class="c-menu__item c-menu__item--can c-menu__item--has-dropdown">
+                    <a class="c-menu__link">CAN</a>
+                    <div id="header-can" class="c-menu__dropdown">
+                        <div class="c-menu__dropdownContent">
+                            <h5>Shopping from Canada?</h5>
+                            <p>Visit our Vimergy Amazon Canada site for FREE Prime Shipping on all orders, and zero customs fees.</p>
+                            <a class="c-btn c-btn--secondary" href="https://www.amazon.ca/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords=Vimergy&amp;rh=i%3Aaps%2Ck%3AVimergy">Take me to amazon.ca</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="c-menu__item c-menu__item--aus c-menu__item--has-dropdown">
+                    <a class="c-menu__link">AUS</a>
+                    <div id="header-aus" class="c-menu__dropdown">
+                        <div class="c-menu__dropdownContent">
+                            <h5>Shopping from Australia?</h5>
+                            <p>Visit our Australia / NZ distributor for fast shipping and zero customs fees.</p>
+                            <a class="c-btn c-btn--secondary" href="https://floweroflife.com.au">Australian Distributor</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="c-menu__item">
+                    <a class="c-menu__link">Help</a>
+                </li>
+                <li class="c-menu__item">
+                    <a class="c-menu__link">Sign in</a>
+                </li>
+                <li class="c-menu__item c-menu__item-cart">                
+
+                    {% include 'cart-logo' %}
+
+                </li>
             </ul>
-        </menu>
-
+        </div> 
     </div>
-
-    <div class="o-header__menu o-header__menu--right">
-        <nav class="c-menu">
-            <a class="c-menu__item c-menu__item--right c-menu_item__quiker-links c-menu__item--can">CAN</a>
-            <a class="c-menu__item c-menu__item--right c-menu_item__quiker-links c-menu__item--aus">AUS</a>
-            <a class="c-menu__item c-menu__item--right c-menu__item--help">Help</a>
-            <a class="c-menu__item c-menu__item--right c-menu__item--signin">Sign in</a>
-            <div class="c-menu__item c-menu__item--right c-menu_item__quiker-links c-menu__item--cart header__cart">{% include 'cart-logo' %}</div>
-        </nav>
-    </div>  
-
 </div>
 

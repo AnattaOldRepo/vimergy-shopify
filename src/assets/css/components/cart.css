@@ -371,7 +371,8 @@
 
 .header-cart-link .icon svg {
     fill: #393D4E;
-    vertical-align: top
+    vertical-align: middle;
+    margin-top: -3px;
 }
 
 .header-cart-link .count {

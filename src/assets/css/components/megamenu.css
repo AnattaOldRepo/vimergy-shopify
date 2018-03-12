@@ -1,8 +1,49 @@
 .c-megamenu {
-    position: relative;
     z-index: 99;
     text-align: center;
-    color: #393D4E;
+    color: $color-cold-grey;
+    margin: 0px;
+    float: left;
+    @util padding(0);
+}
+
+
+.c-megamenu__item {
+    padding:18px 15px;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 27px;
+
+    &:first-child {
+        position:relative;
+    }
+
+    &:first-child:after{
+        content:'';
+        size: 1px 28px;
+        background-color:$color-cold-grey;
+        position: absolute 50% 0px * *;
+        transform: translateY(-50%);
+    }
+}
+
+.c-megamenu__link {
+    position: relative;
+    color: $color-cold-grey;
+
+    &:after{
+        content: '';
+        display: block;
+        position: absolute * * -6px 0;
+        size: 100% 2px;
+        background-color: transparent;
+        transition: background-color 0.1s linear;
+    }
+
+    &:hover:after {
+        background-color:$color-cold-grey;
+    }
 }
 
 
@@ -28,7 +69,7 @@
     width: 100%;
     padding: 40px 20px;
     text-align: left;
-    color: #393D4E;
+    color: $color-cold-grey;
     background-color: #fbfbf6;
 
    
@@ -37,24 +78,47 @@
     }
 
     a {
-        color: #393D4E;
+        color: $color-cold-grey;
     }
 }
 
 
 .c-megamenu__subnavInner {
     lost-center: 1250px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 
 .c-megamenu__subnavGroup {
-    float: left;
-    width: (100% / 4);
+    /*float: left;*/
+    width: calc((100% / 4) - 16px);
     vertical-align: top;
+    order: 1;
+    margin: 0px 8px;
+
 
     li {
         display: block;
-    } 
+    }
+
+    span {
+        display: block;
+        font-weight: 700;
+        text-transform: uppercase;
+
+        span {
+
+        }
+    }
+
+    img {
+        display: inline-block;
+        max-width: 216px;
+    }
+
 }
 
 
@@ -88,4 +152,23 @@
 .c-megamenu__subnavGroup.open{
     opacity: 1;
     transform: translateY(0);
+}
+
+.c-megamenu__box{
+    display: block;
+    width: 100%;
+    min-height: 214px;
+    padding: .9375rem;
+    background-color: #fff;
+    border: 2px solid #eeeedc;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    color: #393D4E;
+    transition: border 0.1s linear;
+
+   &:--enter {
+        border-color: #bdbda0;
+        color: #393D4E;
+    }
 }

@@ -9,23 +9,26 @@
     text-transform: uppercase;
     line-height: $button-line-height;
     color: $button-color;
-    letter-spacing: 2px;
     background-image: none; /* Reset unusual Firefox-on-Android default style */
     background-color: $button-background;
-    border: 5px solid $color-white;
-    border-radius: 0;
+    white-space: nowrap;
     cursor: $button-cursor;
     vertical-align: middle;
     transition: $button-transition;
     outline: none;
+    position: relative;
+    text-align: center;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    border-radius: 2px;
 
     @media(--mobile-large) {
         font-size: 14px;
     }
 
     @media(--tablet-large) {
-        padding: 20px;
-        font-size: 16px;
+        padding: .8125rem 3rem;
+        font-size:  .9375rem;
     }
 
     &.disabled,
@@ -45,6 +48,18 @@
 
 .c-btn--black {
     border-color: $color-black;
+}
+
+.c-btn--secondary{
+    padding: .5625rem 2rem;
+    font-size: .875rem;
+    color: #fff;
+    background-color: $color-cold-grey;
+
+    &:--enter{
+        background-color:$color-cold-greylight;
+        color:$color-white;
+    }
 }
 
 .c-btn--alt {

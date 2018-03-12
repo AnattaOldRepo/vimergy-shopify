@@ -9,7 +9,7 @@ $button-font-weight: $font-weight-bold !default;
 $button-font-size: 16px !default;
 $button-line-height: $font-size-new + 2 !default;
 $button-color: $color-white !default;
-$button-background: $color-black !default;
+$button-background: $color-vimergy-orange !default;
 $button-border: $color-white !default;
 $button-cursor: pointer !default;
 $button-transition: all 0.250s ease-in-out !default;

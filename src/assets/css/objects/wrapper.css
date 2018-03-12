@@ -1,7 +1,7 @@
 /*================ Site wrappers ================*/
 
 .o-wrapper {
-    padding: 0 6px;
+    padding: 0 15px;
 
     @media (--tablet) {
         padding: 0 40px;
@@ -11,4 +11,8 @@
     @media (--tablet-large) {
         padding: 0 50px;
     }
+}
+.o-wrapper-noPadding {
+	padding-left: 0px;
+	padding-right: 0px;
 }

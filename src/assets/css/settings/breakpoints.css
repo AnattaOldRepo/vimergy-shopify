@@ -1,5 +1,6 @@
 /*================ Breakpoints Variables ================*/
 
+
 $breakpoint-mobile: 23.5625em; /* 375px */
 $breakpoint-mobile-small-max: 39.938em;/* 639 */
 $breakpoint-mobile-large: 40em; /* 640px */

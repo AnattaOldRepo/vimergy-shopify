@@ -15,3 +15,7 @@
 .u-blockCenter {
     @util center;
 }
+
+.u-clearFix{
+	  @util clearfix;
+}

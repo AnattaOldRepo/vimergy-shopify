@@ -1,6 +1,116 @@
-.c-menu{}
+.c-menu {
+    float: right;
+}
+
+.c-menu__item{
+    padding:18px 10px;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 27px;
+    position: relative;
+}
 
 
+.c-menu__link {
+    position: relative;
+    color: $color-cold-grey;
+    cursor: pointer;
+
+    &:after{
+        content: '';
+        display: block;
+        position: absolute * * -6px 0;
+        size: 100% 2px;
+        background-color: transparent;
+        transition: background-color 0.1s linear;
+    }
+
+    &:hover:after {
+        background-color:$color-cold-grey;
+    }
+}
+
+.c-menu__item--can{
+    background-image: url(../icon-can.png);
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 0 20px;
+    padding-left: 30px;
+    padding-right: 20px;
+
+    .c-menu__link{
+        &:after {
+            display:none;
+        }
+    }
+}
+
+.c-menu__item--aus{
+    @extend .c-menu__item--can;
+    background-image: url(../icon-aus.png);
+}
+
+
+@media(--tablet-large){
+    .c-menu__dropdown {
+        position: absolute 2.9375rem * * -1rem;
+        z-index: 10;
+        width: 20.625rem;
+        padding-top: .625rem;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.3s 0s, visibility 0s 0.3s;
+    }
+    .c-menu__dropdownContent{
+        border: 2px solid #b7b7a1;
+        border-radius: 4px;
+        background-color: $color-white;
+        padding:1.8125rem 1.875rem;
+        position: relative;
+
+        &:before {
+            content: '';
+            background-color: $color-white;
+            position: absolute -9px * 12% *;
+            height: 18px;
+            width: 18px;
+            border: 2px solid #b7b7a1;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            transform: rotate(45deg);
+        }
+    }
+
+    .c-menu__dropdownContent  h5 {
+        margin-bottom: .8125rem;
+        font-size:1.125rem;
+        font-weight: 700;
+    }
+
+    .c-menu__dropdownContent p {
+        margin-bottom: 1.625rem;
+        font-size: .9375rem;
+        font-weight: 600;
+    }
+}
+
+.c-menu__item--has-dropdown{
+
+     &:--enter {
+        .c-menu__dropdown{
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s 0.2s, visibility 0s 0.2s;
+        }
+    }
+}
+
+/*.c-menu__item--expand {
+
+    &:;
+}*/
+/*
 @media(--desktop) {
     .c-primary-link{
         position:relative;
@@ -9,7 +119,7 @@
         margin-right: .3375rem;
     }
 
-    .c-primary-link::after {
+    .c-primary-link:after {
         content: '';
         display: block;
         position: absolute;
@@ -17,17 +127,17 @@
         right: 0.6rem;
         width: 1px;
         height: 28px;
-        background: #e5e5e5;
+        background:transparent;
+        transition: background-color 0.1s linear;
+
+        &:hover {
+            background:$color-cold-grey;
+        }
     }
-}
-.c-nav-links{
-    display: inline-block;
-}
+}*/
+/*
 .c-menu__item{
     position: relative;
-    float: left;
-    padding-right: 1.375rem;
-    margin-right: .1rem;
     font-size: 0.87rem;
     line-height: 2;
     color: #393D4E;
@@ -52,8 +162,8 @@
     @media(--tablet-large) {
         background-color: #393D4E;
     }
-}
-
+}*/
+/*
 .c-menu__item::after {
     @media(--tablet-large) {
         content: '';
@@ -65,9 +175,9 @@
         background-color: transparent;
         transition: background-color 0.1s linear;
     }
-}
+}*/
 
-.c-menu_item__quiker-links{
+/*.c-menu_item__quiker-links{
    
     background-position: 0 3px;
     padding-left: 1.5625rem;
@@ -80,19 +190,8 @@
 }
 .c-menu_item__quiker-links:--enter::after {
     background-color: transparent;
-}
-.c-menu__item--can{
-    background-image: url(../icon-can.png);
-    background-repeat: no-repeat;
-    background-size: 20px;
-    background-position: 0 6px;
-}
-.c-menu__item--aus{
-    background-image: url(../icon-aus.png);
-    background-repeat: no-repeat;
-    background-size: 20px;
-    background-position: 0 6px;
-}
+}*/
+
 @media(--tablet-large)  {
     .c-primary-nav__box {
         display:block;

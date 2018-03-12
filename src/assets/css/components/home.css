@@ -1,0 +1,12 @@
+ .c-hero-banner{
+        text-align: center;
+        color: #fff;
+        background-image: url("../home-tour1.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 36.3125rem;
+    
+    @media(--tablet-large) {
+            height:43.4375rem;
+    }
+} 

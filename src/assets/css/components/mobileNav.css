@@ -30,7 +30,7 @@
         content:'';
         display: inline-block;
         position: relative -2px * * 16px;
-        @util triangle (6px, #393D4E, down)
+        @util triangle (6px, #393D4E, down);
         transform: rotate(0deg);
         transition: all 0.3s 0s;
 

@@ -12,7 +12,6 @@
         display: block;
         margin: 0 auto;
         width: 7.1875rem;  
-
     }
    
     @media (--tablet-large) {
@@ -88,10 +87,11 @@
         height:auto !important
     }
 }
+
 .o-dropdown-static {
     position: absolute !important;
     
     @media (--tablet-large) {
         position: static !important;
-}
+    }
 }

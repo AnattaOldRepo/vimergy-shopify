@@ -1,25 +1,26 @@
 console.log("App.js is ready now!!");
 
-$('.js-modal').modal();
+// $('.js-modal').modal();
 
-$('.js-offcanvas').offcanvas({
-    callbacks: {
-        beforeOpen: function() {
+// $('.js-offcanvas').offcanvas({
+//     callbacks: {
+//         beforeOpen: function() {
 
-        },
+//         },
 
-        open: function() {
+//         open: function() {
 
-        },
+//         },
 
-        beforeClose: function() {
+//         beforeClose: function()   {
 
-        },
+//         },
 
-        close: function() {
+//         close: function() {
 
-        }
-    }
-});
+//         }
+//     }
+// });
 
-$('.lazy-load').Lazy();
+// $('.lazy-load').Lazy();
+      

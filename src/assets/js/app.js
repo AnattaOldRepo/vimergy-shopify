@@ -22,5 +22,14 @@ console.log("App.js is ready now!!");
 //     }
 // });
 
+
 // $('.lazy-load').Lazy();
       
+
+$('.c-mobileNav--expand').click(function(e) {
+    e.preventDefault();
+    $(this).toggleClass('active');
+});
+
+$('.lazy-load').Lazy();
+

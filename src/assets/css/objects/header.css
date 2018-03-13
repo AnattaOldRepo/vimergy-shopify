@@ -1,10 +1,14 @@
 .c-header {
     position: relative;
+    padding: 10px 0px;
+
+    @media (--tablet-max) {
+        padding: 10px 0px;
+    }
 }
 
-.c-header__container {
+.c-header__container {}
 
-}
 .c-header__logo {
     @media (--tablet-max) {
         display: block;

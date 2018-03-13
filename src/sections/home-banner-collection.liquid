@@ -1,13 +1,38 @@
+
 <div class="c-banner">
   <div class="o-row">
-      <div class=" o-col o-medium-6 c-banner__img" style="background-image: url('http://vimergy.com/media/wysiwyg/bike-couple.jpg');">&nbsp;
+      <div class=" o-col o-medium-6 c-banner__img" style="background-image: url('{{ section.settings.image | img_url: '1360x' }}');">&nbsp;
       </div>
     <div class="o-col o-medium-6">
     <div class="c-banner__info">
-        <h2 class="c-banner__heading">Pure whole food nutrition your body deserves.</h2>
-        <p class="c-banner__desc">100% Pure. No fillers and preservatives</p>
+        <h2 class="c-banner__heading">{{ section.settings.heading }}</h2>
+        <p class="c-banner__desc">{{ section.settings.text }}</p>
         <p><a class="c-btn c-btn-primary" href="/catalog/shop">Shop collection</a></p>
       </div>
     </div>   
   </div>
 </div>
+
+
+{% schema %}
+    {
+        "name": "Home Banner",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "text",
+                "id": "heading",
+                "label": "Heading"
+            },
+            {
+                "type": "text",
+                "id": "text",
+                "label": "Text"
+            }
+        ]
+    }
+{% endschema %}   

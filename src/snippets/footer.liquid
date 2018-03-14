@@ -1,62 +1,74 @@
-
 <footer class="c-footer">
-  <div class="o-row">
-       <div class="o-col o-large-push-8 o-large-2">
-         {% include 'header-logo' %}
-         <p class="c-strapline-text">Nature provides us with the perfect foods for our health and wellbeing, but they’re not always convenient to get. At Vimergy, we aim to simplify your health without sacrificing the purity and nutrients your body loves. Pure USDA Organic Greens and Mushroom extracts you can rely on.</p>
-     </div>
-      <div class="o-col o-large-pull-4 o-large-10">
-        <div class="o-col o-large-3 o-small-12">
-        <nav>
-          <h5 class="c-block-title">Account</h5>
-            <ul>
-            {% for link in linklists.footer.links %}
-               <li class="c-footer-link"><a class="{% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li> 
-            {% endfor %}
-            </ul>
-        </nav>
-     </div>
-     <div class="o-col o-large-3 o-small-12">
-        <nav>
-        <h5 class="c-block-title">Products</h5>
-            <ul>
-            {% for link in linklists.products.links %}
-               <li class="c-footer-link"><a class="{% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li> 
-            {% endfor %}
-            </ul>
-        </nav>
-     </div>
-     <div class="o-col o-large-3 o-small-12">
-        <nav>
-        <h5 class="c-block-title">Our Company</h5>
-            <ul>
-            {% for link in linklists.our-company.links %}
-               <li class="c-footer-link"><a class="{% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li> 
-            {% endfor %}
-            </ul>
-        </nav>
-     </div>
-     <div class="o-col o-large-3 o-small-12 c-footer__links__connect">
-          <h5 class="c-block-title">Connect</h5>
-      <ul>
-        <li><a class="icon-instagram-dark" href="https://www.instagram.com/vimergy/">Instagram</a></li>
-        <li><a class="icon-facebook-dark" href="https://www.facebook.com/Vimergy/">Facebook</a></li>
-        <li><a class="icon-twitter-dark" href="https://twitter.com/vimergy">Twitter</a></li>
-      </ul>
-    <br>
-        <h5 class="c-block-title c-store">Store</h5>
-    <ul>
-        <li><a class="icon-can" href="https://www.amazon.ca/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords=Vimergy&amp;rh=i%3Aaps%2Ck%3AVimergy">CAN</a></li>
-        <li><a class="icon-aus" href="https://floweroflife.com.au">AUS</a></li>
-    </ul>
-     </div>
-     </div>
-  </div>
-    <div class="o-row">
-      <div class="o-col o-small-12 c-footer-disclaimer">
-          <p>Disclaimer: The health information on this site is provided as an information resource only, and is not to be used or relied on for any diagnostic or treatment purposes. This information is not intended to be patient education, does not create any patient-physician relationship, and should not be used as a substitute for professional diagnosis and treatment. The health information on this site is provided as an information resource only, and is not to be used or relied on for any diagnostic or treatment purposes. This information is not intended to be patient education, does not create any patient-physician relationship, and should not be used as a substitute for professional diagnosis and treatment.&nbsp;<span>© 2018 Vimergy LLC | ® All Rights Reserved. </span></p>
-       </div>
-    </div> 
+    <div class="c-footer__container o-wrapper u-clearFix">
+        <div class="o-flex c-footer_content">
+            <div class="o-flex__item o-flex__col-4 o-flex__item--reverse">
+
+                {% include 'header-logo' %}
+
+                <p class="c-strapline-text">Nature provides us with the perfect foods for our health and wellbeing, but they’re not always convenient to get. At Vimergy, we aim to simplify your health without sacrificing the purity and nutrients your body loves. Pure USDA Organic Greens and Mushroom extracts you can rely on.</p>   
+            </div>
+            <div class="o-flex__item o-flex__col-8 ">
+                <div class="o-flex">
+                    <div class="o-flex__item">
+                        <nav>
+                            <h5 class="c-footer__title">Account</h5>
+                            <ul>
+
+                                {% for link in linklists.footer.links %}
+
+                                <li><a class="c-footer__link {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
+
+                                {% endfor %}
+
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="o-flex__item">
+                        <nav>
+                            <h5 class="c-footer__title">Products</h5>
+                            <ul>
+
+                                {% for link in linklists.products.links %}
+
+                                <li><a class="c-footer__link {%  if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
+
+                                {% endfor %}
+
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="o-flex__item">
+                        <nav>
+                            <h5 class="c-footer__title">Our Company</h5>
+                            <ul>
+
+                                {% for link in linklists.our-company.links %}
+
+                                <li><a class="c-footer__link {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
+
+                                {% endfor %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="o-flex__item c-footer__social">
+                        <h5 class="c-footer__title">Connect</h5>
+                        <ul>
+                            <li><a class="s-icon icon-instagram-dark" href="https://www.instagram.com/vimergy/">Instagram</a></li>
+                            <li><a class="s-icon icon-facebook-dark" href="https://www.facebook.com/Vimergy/">Facebook</a></li>
+                            <li><a class="s-icon icon-twitter-dark" href="https://twitter.com/vimergy">Twitter</a></li>
+                        </ul>
+                        <br>
+                        <h5 class="c-footer__title c-store">Store</h5>
+                        <ul>
+                            <li><a class="s-icon  icon-can" href="https://www.amazon.ca/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords=Vimergy&amp;rh=i%3Aaps%2Ck%3AVimergy">CAN</a></li>
+                            <li><a class="s-icon  icon-aus" href="https://floweroflife.com.au">AUS</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="c-footer-disclaimer">
+            <p>Disclaimer: The health information on this site is provided as an information resource only, and is not to be used or relied on for any diagnostic or treatment purposes. This information is not intended to be patient education, does not create any patient-physician relationship, and should not be used as a substitute for professional diagnosis and treatment. The health information on this site is provided as an information resource only, and is not to be used or relied on for any diagnostic or treatment purposes. This information is not intended to be patient education, does not create any patient-physician relationship, and should not be used as a substitute for professional diagnosis and treatment.&nbsp;<span>© 2018 Vimergy LLC | ® All Rights Reserved. </span></p>
+        </div>
+    </div>
 </footer>
-
-

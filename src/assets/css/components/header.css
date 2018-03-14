@@ -1,13 +1,17 @@
 .c-header {
     position: relative;
+
+    @media (--tablet-large-max){
+        padding: 10px 0px;
+    }
 }
 
 .c-header__logo {
+
     @media (--tablet-max) {
         display: block;
         margin: 0 auto;
         width: 7.1875rem;  
-
     }
    
     @media (--tablet-large) {
@@ -18,9 +22,24 @@
 }
 
 .c-header__nav{
+
     @media (--tablet-large) {
         float: left;
         width:calc(100% - 165px);
+        padding-right: 40px;
+    }
+}
+
+.c-header__cart {
+    position: absolute;
+    right: 60px;
+    padding-top: 16px;
+    top: 0;
+    cursor: pointer;
+    
+    @media (--tablet-large-max){
+        padding-top: 12px;
+        right: 30px;
     }
 }
 
@@ -68,10 +87,11 @@
         height:auto !important
     }
 }
+
 .o-dropdown-static {
     position: absolute !important;
     
     @media (--tablet-large) {
         position: static !important;
-}
+    }
 }

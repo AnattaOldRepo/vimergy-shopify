@@ -1,6 +1,6 @@
 console.log("App.js is ready now!!");
 
-$('.js-modal').modal();
+// $('.js-modal').modal();
 
 $('.js-offcanvas').offcanvas({
     callbacks: {
@@ -12,7 +12,7 @@ $('.js-offcanvas').offcanvas({
 
         },
 
-        beforeClose: function() {
+        beforeClose: function()   {
 
         },
 
@@ -22,4 +22,14 @@ $('.js-offcanvas').offcanvas({
     }
 });
 
+
+// $('.lazy-load').Lazy();
+      
+
+$('.c-mobileNav--expand').click(function(e) {
+    e.preventDefault();
+    $(this).toggleClass('active');
+});
+
 $('.lazy-load').Lazy();
+

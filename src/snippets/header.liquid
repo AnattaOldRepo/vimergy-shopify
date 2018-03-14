@@ -18,7 +18,7 @@
 
         </div>
 
-         <div class="c-header__nav">
+         <div class="c-header__nav u-hideTabletLargeDown ">
             <menu class="c-megamenu js-megamenu" role="navigation">
                 <ul>
 
@@ -31,17 +31,13 @@
                                 <div class="c-megamenu__subnav">
                                      <div class="c-megamenu__subnavInner">  
                                         
-
                                             {% for child_link in link.links %}
                                             <div class="c-megamenu__subnavGroup">
                                              <a  class="c-megamenu__box" href="{{ child_link.url }}">
-
-                                             <img src="{{ child_link.object.featured_image }}" />
-                                             <img src="{{ child_link.object.image.src }}" />
+                                             <img src="{{ child_link.object.featured_image | img_url: 'medium'  }}" />
                                                 <span>{{ child_link.title }}<span>{{ child_link.object.price | money }}</span></span></a>
                                             </div>
                                             {% endfor %}
-
                                        
                                     </div>
                                 </div>
@@ -53,7 +49,7 @@
 
                 </ul>
             </menu>
-            
+
 
             <ul class="c-menu">
                 <li class="c-menu__item c-menu__item--can c-menu__item--has-dropdown">
@@ -82,13 +78,11 @@
                 <li class="c-menu__item">
                     <a class="c-menu__link">Sign in</a>
                 </li>
-                <li class="c-menu__item c-menu__item-cart">                
-
-                    {% include 'cart-logo' %}
-
-                </li>
             </ul>
-        </div> 
+        </div>
+        <div class="c-header__cart">
+            {% include 'cart-logo' %}
+        </div>
     </div>
 </div>
 

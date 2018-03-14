@@ -1,0 +1,89 @@
+<div class="c-home-products-recommend">
+
+    {% for block in section.blocks %}
+        {% case block.settings.alignment %}
+            {% when 'left' %}
+                {% assign alignment = "is-left" %}
+            {% when 'right' %}
+                {% assign alignment = "is-right" %}
+        {% endcase %}
+
+        <div class="c-recommend-inner">
+            <div class="o-row {{ alignment }}">
+                <div class="o-col o-medium-6">
+                    <div class="c-recommend__img">
+                        <img src="{{ block.settings.image | img_url: 'master'}}"  alt="">
+                    </div>
+                </div>
+
+                <div class="o-col o-medium-6">  
+                    <div class="c-recommend__info">
+                        <h2 class="c-recommend__heading">{{ block.settings.heading }}</h2>
+                        <p class="c-recommend__title">{{ block.settings.title }}</p>
+                        <p class="c-recommend__desc">{{ block.settings.paragraph-copy }}
+                            <br>{{ block.settings.author }}
+                            <br><em></em></p>
+                        <p><a class="c-btn c-btn-primary" href="/strength-chaga.html">Shop Chagfffa</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endfor %} 
+
+</div>
+
+
+{% schema %}
+  {
+    "blocks": [
+      {
+        "type": "contentcolumn",
+        "name": "Home Product",
+        "settings": [
+            {
+                "type": "text",
+                "id": "heading",
+                "label": "Heading"
+            },
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "html",
+                "id": "paragraph-copy",
+                "label": "Paragraph Copy"
+            },
+            {
+                "type": "text",
+                "id": "author",
+                "label": "Author"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "radio",
+                "id": "alignment",
+                "label": "Block Alignment",
+                "options": [
+                    {"value": "left", "label": "left"},
+                    {"value": "right", "label": "right"}
+                ],
+                "default": "left"
+            }
+        ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "Home Product",
+            "category": "Custom"
+        }
+    ]
+  }
+{% endschema %}    

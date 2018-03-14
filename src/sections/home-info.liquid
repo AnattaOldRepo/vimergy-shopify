@@ -1,0 +1,65 @@
+<div class="o-row">
+<div class="c-hero-banner">
+<div class="c-column">
+<div class="c-hero-banner__info">
+   <h1 class="c-hero-banner__heading">{{ section.settings.heading }}</h1>
+   <p class="c-hero-banner__desc">{{ section.settings.desc }}</p>
+   <p class="c-hero-banner__link"><a href="{{ section.settings.link }}" class="c-btn primary">Shop now</a></p>
+   <div class="c-hero-banner__stat">
+      <div class="c-hero-banner__icon">
+         <img src="{{ block.settings.icon-url }}" alt="">
+      </div>
+      <p>{{ block.settings.icon-title }}</p>
+   </div>
+</div>
+</div>
+</div>
+</div>
+
+{% schema %}
+  {
+      "name": "Home Info",
+      "settings": [
+            {
+                 "type": "html",
+                "id": "heading",
+                "label": "Heading"
+            },
+            {
+                "type": "html",
+                "id": "desc",
+                "label": "Description"
+            },
+             {
+                "type": "text",
+                "id": "link",
+                "label": "Link"
+            }
+
+        ],
+    "blocks": [
+      {
+        "type": "contentcolumn",
+        "name": "Home Info",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "icon-url",
+                "label": "Icon Url"
+            },
+            {
+                "type": "text",
+                "id": "icon-title",
+                "label": "Icon Title"
+            }  
+        ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "Home Info",
+            "category": "Custom"
+        }
+    ]
+  }
+{% endschema %}    

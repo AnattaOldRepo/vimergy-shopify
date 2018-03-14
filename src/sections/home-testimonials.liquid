@@ -1,0 +1,66 @@
+<div class="c-testimonials">
+   <div class="o-row">
+      <div class="c-testimonials__icon"><img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-plant.svg" alt="Plant"></div>
+      <h2 class="c-testimonials__heading">Our Vimergy Community</h2>
+   </div>
+
+   <div class="o-row c-testimonials-carousel js-testimonals-carousel">
+   {% for block in section.blocks %}
+            <div class="o-medium-6 o-large-4 o-col">
+               <div class="c-testimonial">
+                  <div class="c-testimonial__img">
+                     <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
+                  </div>
+                  <p class="c-testimonial__name">{{ block.settings.name }}</p>
+                  <p class="c-testimonial__desc">{{ block.settings.desc }}</p>
+                  <p class="c-testimonial__link">
+                     <a href="{{ block.settings.link | link: 'master'}}" tabindex="-1">{{ block.settings.link-title }}</a>
+                  </p>
+               </div>
+            </div>
+    {% endfor %} 
+   </div>
+</div>
+{% schema %}
+  {
+    "blocks": [
+      {
+        "type": "contentcolumn",
+        "name": "Testimonials",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "text",
+                "id": "name",
+                "label": "Name"
+            },
+            {
+                "type": "text",
+                "id": "desc",
+                "label": "Description"
+            },
+            {
+                "type": "text",
+                "id": "link",
+                "label": "Link"
+            },
+            {   
+                "type": "text",
+                "id": "link-title",
+                "label": "Link Title"
+            }
+        ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "Testimonials",
+            "category": "Custom"
+        }
+    ]
+  }
+{% endschema %}    

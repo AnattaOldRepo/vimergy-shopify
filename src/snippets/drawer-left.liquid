@@ -15,36 +15,41 @@
     </button>
 
     <div class="c-mobileNavContainer">
-
-        
         <nav class="c-mobileNav">
             <ul class="c-mobileNav__menu">
+
                 {% for link in linklists.main-menu.links %}
                     <li class="c-mobileNav__item">
                         <a class="c-mobileNav__itemLink {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
                     </li>
-                    {% assign child_list_handle = link.title | handle %}
-                        {% for child_link in linklists[child_list_handle].links %}
-                        <li class="c-mobileNav__item">
-                            <a class="c-mobileNav__itemLink {% if child_link.active %} is-active {% endif %}" href="{{ child_link.url }}">{{ child_link.title }}</a>
-                        </li>
-                        {% endfor %}    
-                {% endfor %}  
+                {% endfor %} 
+
                 <li class="c-mobileNav__item">
-                        <a class="c-mobileNav__itemLink c-menu_item__quiker-links c-menu__item--can">CAN</a>
-                    </li>  
-                    <li class="c-mobileNav__item">
-                                   <a class="c-mobileNav__itemLink c-menu_item__quiker-links c-menu__item--aus">AUS</a>
-                    </li> 
-                           <li class="c-mobileNav__item">
-                                  <a class="c-mobileNav__itemLink c-menu__item--help">Help</a>
-                    </li> 
-                           <li class="c-mobileNav__item">
-                                  <a class="c-mobileNav__itemLink c-menu__item--signin">Sign in</a>
-                    </li> 
-                           <li class="c-mobileNav__item">
-                                   <div class="c-mobileNav__itemLink c-menu_item__quiker-links c-menu__item--cart header__cart">{% include 'cart-logo' %}</div>
-                    </li>             
+                    <a class="c-mobileNav__itemLink c-menu__item--can c-mobileNav--expand" data-target-element="#header-can">CAN</a>
+                    <div id="header-can" class="c-menu__dropdown">
+                        <div class="c-menu__dropdownContent">
+                            <h5>Shopping from Canada?</h5>
+                            <p>Visit our Vimergy Amazon Canada site for FREE Prime Shipping on all orders, and zero customs fees.</p>
+                            <a class="c-btn c-btn--secondary" href="https://www.amazon.ca/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords=Vimergy&amp;rh=i%3Aaps%2Ck%3AVimergy">Take me to amazon.ca</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="c-mobileNav__item">
+                    <a class="c-mobileNav__itemLink c-menu__item--aus c-mobileNav--expand" data-target-element="#header-aus">AUS</a>
+                    <div id="header-aus" class="c-menu__dropdown">
+                        <div class="c-menu__dropdownContent">
+                            <h5>Shopping from Australia?</h5>
+                            <p>Visit our Australia / NZ distributor for fast shipping and zero customs fees.</p>
+                            <a class="c-btn c-btn--secondary" href="https://floweroflife.com.au">Australian Distributor</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="c-mobileNav__item">
+                    <a class="c-mobileNav__itemLink c-menu__item--help">Help</a>
+                </li>
+                <li class="c-mobileNav__item">
+                    <a class="c-mobileNav__itemLink c-menu__item--signin">Sign in</a>
+                </li>    
             </ul>
         </nav>  
     </div>

@@ -9,11 +9,11 @@
 
 
 .c-megamenu__item {
-    padding:18px 15px;
+    padding:18px 10px;
     display: inline-block;
     font-weight: 700;
-    font-size: 17px;
-    line-height: 27px;
+    font-size: 14px;
+    line-height: 24px;
 
     &:first-child {
         position:relative;
@@ -21,10 +21,19 @@
 
     &:first-child:after{
         content:'';
-        size: 1px 28px;
+        size: 1px 20px;
         background-color:$color-cold-grey;
         position: absolute 50% 0px * *;
         transform: translateY(-50%);
+
+        @media(--desktop){
+            size: 1px 28px;
+        }
+    }
+
+    @media(--desktop){
+        font-size: 17px;
+        line-height: 27px;
     }
 }
 

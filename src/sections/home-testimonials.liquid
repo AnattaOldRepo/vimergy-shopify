@@ -4,9 +4,9 @@
       <h2 class="c-testimonials__heading">Our Vimergy Community</h2>
    </div>
 
-   <div class="o-row c-testimonials-carousel js-testimonals-carousel">
+   <div class="o-flex c-testimonials-carousel js-testimonals-carousel">
    {% for block in section.blocks %}
-            <div class="o-medium-6 o-large-4 o-col">
+            <div class="o-flex__items o-flex__col-4 ">
                <div class="c-testimonial">
                   <div class="c-testimonial__img">
                      <img src="{{ block.settings.image | img_url: 'master'}}" alt="">

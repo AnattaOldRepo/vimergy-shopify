@@ -12,6 +12,10 @@
         padding: 0 50px;
     }
 }
+.o-wrapper--medium {
+    max-width: 75.9375rem;
+    margin: 0 auto;
+}
 .o-wrapper-noPadding {
 	padding-left: 0px;
 	padding-right: 0px;

@@ -1,3 +1,4 @@
+
 <div class="c-home-products-recommend">
 
     {% for block in section.blocks %}
@@ -7,31 +8,32 @@
             {% when 'right' %}
                 {% assign alignment = "is-right" %}
         {% endcase %}
-
+    <div class="c-recommend">
         <div class="c-recommend-inner">
-            <div class="o-row {{ alignment }}">
-                <div class="o-col o-medium-6">
+            <div class="o-flex">
+                <div class="o-flex__item o-flex__col-6 ">
                     <div class="c-recommend__img">
                         <img src="{{ block.settings.image | img_url: 'master'}}"  alt="">
                     </div>
                 </div>
 
-                <div class="o-col o-medium-6">  
+                <div class="o-flex__item--{{alignment}} o-flex__col-6 ">  
                     <div class="c-recommend__info">
                         <h2 class="c-recommend__heading">{{ block.settings.heading }}</h2>
                         <p class="c-recommend__title">{{ block.settings.title }}</p>
                         <p class="c-recommend__desc">{{ block.settings.paragraph-copy }}
                             <br>{{ block.settings.author }}
                             <br><em></em></p>
-                        <p><a class="c-btn c-btn-primary" href="/strength-chaga.html">Shop Chagfffa</a></p>
+                        <p><a class="c-btn c-btn-primary" href="/strength-chaga.html">Shop Chaga</a></p>
                     </div>
                 </div>
             </div>
         </div>
-
+</div>
 {% endfor %} 
 
 </div>
+
 
 
 {% schema %}

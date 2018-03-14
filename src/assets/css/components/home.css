@@ -128,7 +128,18 @@
 }
 
 /* home products recommend */
+.c-recommend {
+    padding-top: 3.625rem;
+    padding-bottom: 2.875rem;
+    border-bottom: 1px dashed #b7b7b0;
+    background-color: #fff;
 
+    @media(--tablet-large) {
+        padding:0;
+        border-bottom: 0;
+        background-color: transparent;
+    }
+}
 .c-recommend__img {
     margin: 0 auto 1rem;
     max-width: 194px;
@@ -143,6 +154,7 @@
 }
 
 .c-recommend__info {
+    padding-top: 5.125rem;
     text-align: center;
     max-width: 30.9375rem;
     margin: 0 auto;
@@ -235,15 +247,25 @@
 .c-home-products-recommend{
     color: #393D4E;
     padding: 1rem;
-}
-@media(--tablet-large) {
-    .c-recommend-inner {
-        padding-top:3.125rem;
-        padding-bottom: 3.125rem;
-        border-bottom: 1px dashed #b7b7b0;
+    background-color: #fff;
+
+    @media(--mobile-large) {
+    background-color: transparent;
     }
 }
 
+.c-recommend-inner {
+        border-bottom: 1px dashed #b7b7b0;
+
+        @media(--tablet-large) {
+        padding-top:3.125rem;
+        padding-bottom: 3.125rem;
+        
+    }
+}
+.c-recommend-inner:last-child {
+    border-bottom: 0;
+}
 @media(--mobile-large) {
     .c-recommend-inner .o-row {
         display:flex;
@@ -514,11 +536,12 @@
     }
 }
 
-.c-testimonials .o-row {
+.c-testimonials-carousel.o-flex {
     max-width: 84.6875rem;
+    margin: 0 auto;
 }
 
-.c-testimonials .o-col {
+.c-testimonials-carousel .o-flex__items {
     padding-right: .5rem;
     padding-left: .5rem;
 }
@@ -552,7 +575,7 @@
 }
 
 .c-testimonials-carousel .slick-slide {
-    display: flex;
+    display: flex !important;
     height: auto;
 }
 

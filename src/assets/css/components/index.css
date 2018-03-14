@@ -4,6 +4,8 @@
 
 @import "offcanvas";
 
+@import "slick";
+
 @import "cart";
 
 @import "cart-table";
@@ -22,4 +24,5 @@
 
 @import "home";
 
-@import "slick";
+@import "about";
+

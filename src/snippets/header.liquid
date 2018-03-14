@@ -1,13 +1,11 @@
- <div class="c-header">
+<div class="c-header">
     <div class="c-header_container o-wrapper u-clearFix">
         <div class="c-hamburger js-offcanvas" data-offcanvas-src="#offcanvas-left">
             <span class="c-hamburgerPatty c-hamburgerPatty--top"></span>
             <span class="c-hamburgerPatty c-hamburgerPatty--middle"></span>
             <span class="c-hamburgerPatty c-hamburgerPatty--bottom"></span>
         </div> 
-
         <div class="c-header__logo">
-
             {% if template != 'index' %}
                 <a class="c-logo" href="{{ shop.secure_url }}">
                     {% include 'header-logo' %}
@@ -15,18 +13,13 @@
             {% else %}
                 {% include 'header-logo' %}
             {% endif %}
-
         </div>
-
-         <div class="c-header__nav u-hideTabletLargeDown ">
+        <div class="c-header__nav u-hideTabletLargeDown ">
             <menu class="c-megamenu js-megamenu" role="navigation">
                 <ul>
-
                     {% for link in linklists.main-menu.links %}
-
                         <li class="c-megamenu__item c-megamenu__navitem"> 
                             <a class="c-megamenu__link {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
-
                             {% if link.links != blank %}
                                 <div class="c-megamenu__subnav">
                                      <div class="c-megamenu__subnavInner">  
@@ -38,19 +31,13 @@
                                                 <span>{{ child_link.title }}<span>{{ child_link.object.price | money }}</span></span></a>
                                             </div>
                                             {% endfor %}
-                                       
                                     </div>
                                 </div>
                             {% endif %} 
-                            
                         </li>
-
                     {% endfor %}
-
                 </ul>
             </menu>
-
-
             <ul class="c-menu">
                 <li class="c-menu__item c-menu__item--can c-menu__item--has-dropdown">
                     <a class="c-menu__link">CAN</a>
@@ -85,4 +72,3 @@
         </div>
     </div>
 </div>
-

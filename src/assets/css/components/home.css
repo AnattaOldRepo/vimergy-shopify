@@ -501,6 +501,7 @@
 /* testimonials */
 .c-testimonials {
     padding: 2.3125rem 0;
+    color:#393D4E;
     background-image: url("../pattern.jpg");
 
 @media(--mobile-large) { 
@@ -547,21 +548,21 @@
 }
 
 .c-testimonials-carousel .slick-track {
-    display: flex
+    display: flex;
 }
 
 .c-testimonials-carousel .slick-slide {
     display: flex;
-    height: auto
+    height: auto;
 }
 
 .slick-slide .c-testimonial {
     display: flex;
-    flex-direction: column
+    flex-direction: column;
 }
 
 .slick-slide .c-testimonial__desc {
-    flex: 1 0 auto
+    flex: 1 0 auto;
 }
 
 .c-testimonial {
@@ -640,5 +641,8 @@
 }
 
 .c-testimonial__link a {
-    text-decoration: underline
+    text-decoration: underline;
+}
+.c-testimonial__link a:hover {
+    color:#0288D1;
 }

@@ -11,13 +11,13 @@
     <div class="c-recommend">
         <div class="c-recommend-inner">
             <div class="o-flex">
-                <div class="o-flex__item o-flex__col-6 ">
+                <div class="o-flex__item--{{alignment}}  o-flex__col-6 ">
                     <div class="c-recommend__img">
                         <img src="{{ block.settings.image | img_url: 'master'}}"  alt="">
                     </div>
                 </div>
 
-                <div class="o-flex__item--{{alignment}} o-flex__col-6 ">  
+                <div class="o-flex__item o-flex__col-6 ">  
                     <div class="c-recommend__info">
                         <h2 class="c-recommend__heading">{{ block.settings.heading }}</h2>
                         <p class="c-recommend__title">{{ block.settings.title }}</p>

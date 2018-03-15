@@ -27,7 +27,7 @@
 .o-flex__item--is-right{
 	order: 1;
 	
-	@media(--tablet-large) {
+	@media(--mobile-large) {
 		order: 2;
 	}	
 }

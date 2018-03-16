@@ -1,6 +1,6 @@
 .c-content-pages {
     padding: 2.5rem 0;
-    color: #393D4E;
+    color: #393D4E; 
 }
 
 .c-content-pages .c-cs-container,.c-content-pages .col2-left-layout .main,.col2-left-layout .c-content-pages .main {
@@ -76,13 +76,13 @@
     }
 }
 
-.c-content-pages .section {
-    margin-bottom: .625rem;
+.c-page-head div {
+    margin-bottom: 2.825rem;
     padding: 1.25rem 0;
     border-bottom: 1px dashed #b7b7b0
 }
 
-.c-content-pages .section:last-child {
+.c-content-pages div:last-child {
     border: 0
 }
 

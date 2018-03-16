@@ -39,13 +39,10 @@
     }
 
     &:--enter {
-        outline: none;
-        color: $color-black;
-        background-color: $color-white;
-        border-color: $color-black;
+        color: #fff;
+        background-color: #F6741D
     }
 }
-
 .c-btn--black {
     border-color: $color-black;
 }

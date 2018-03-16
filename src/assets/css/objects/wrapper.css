@@ -12,6 +12,9 @@
         padding: 0 50px;
     }
 }
+.o-wrapper-background{
+    background-color: #fff;
+} 
 .o-wrapper--medium {
     max-width: 75.9375rem;
     margin: 0 auto;

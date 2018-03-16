@@ -154,8 +154,8 @@
      @media (--tablet-large) {
         display:inline-block;
         margin-bottom: 0;
-        margin-right: 1.4375rem;
-        padding-top: 0.3125rem;
+        margin-right: -2.5625rem;
+        padding-top: 0.7125rem;
     } 
 }
 

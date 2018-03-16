@@ -10,7 +10,7 @@
 
         <div class="c-hero-banner__stat">
             <div class="c-hero-banner__icon">
-                {{ block.settings.icon }}
+            <img src="{{ block.settings.icon | img_url}}"  alt="">
             </div>
             <p>{{ block.settings.icon-title }}</p>
         </div>
@@ -49,9 +49,9 @@
         "name": "icons",
         "settings": [
             {
-                "type": "html",
+                "type": "image_picker",
                 "id": "icon",
-                "label": "Icon Svg Code"
+                "label": "Icon"
             },
             {
                 "type": "text",

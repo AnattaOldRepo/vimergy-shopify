@@ -24,7 +24,7 @@
                         <p class="c-recommend__desc">{{ block.settings.paragraph-copy }}
                             <br>{{ block.settings.author }}
                             <br><em></em></p>
-                        <p><a class="c-btn c-btn-primary" href="/strength-chaga.html">Shop Chaga</a></p>
+                        <p><a class="c-btn c-btn-primary" href="/strength-chaga.html">{{block.settings.button-title }}</a></p>
                     </div>
                 </div>
             </div>
@@ -67,6 +67,11 @@
                 "type": "image_picker",
                 "id": "image",
                 "label": "Image"
+            },
+             {
+                "type": "text",
+                "id": "button-title",
+                "label": "Button Title "
             },
             {
                 "type": "radio",

@@ -16,13 +16,13 @@
 } 
 .c-hero-banner .c-column {
     position: relative;
-    top: 41%;
+    top: 50%;
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
     
     @media(--mobile-max) {
-        top: 30%;
+        top: 4  3%;
     }
 }
 
@@ -163,6 +163,10 @@
     text-align: center;
     max-width: 30.9375rem;
     margin: 0 auto;
+
+    @media(--tablet-large) {
+        padding-right: 1.125rem;
+    }
 }
 
 .c-recommend__heading {
@@ -643,6 +647,7 @@
     font-size: .875rem;
     font-weight: 600;
     line-height: 1.7;
+    margin-top:0;
 
     @media (--desktop-medium) {
         margin-bottom:3.125rem;

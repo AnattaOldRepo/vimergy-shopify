@@ -1,40 +1,45 @@
 <div class="c-about-certs">
-         <div class="c-about-certs__inner">
+    <div class="c-about-certs__inner">
+
+    {% for block in section.blocks %}
+
             <div class="c-about-cert">
                <div class="c-about-cert__icon">
-                  <img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-vegan-green.svg" alt="">
+                  <img src="{{ block.settings.icon | img_url}}"  alt="">
                </div>
-               <p class="c-about-cert__name">Vegan</p>
+               <p class="c-about-cert__name">{{ block.settings.icon-title }}</p>
             </div>
-           <div class="c-about-cert">
-               <div class="c-about-cert__icon">
-                  <img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-vegan-green.svg" alt="">
-               </div>
-               <p class="c-about-cert__name">Vegan</p>
-            </div>
-           <div class="c-about-cert">
-               <div class="c-about-cert__icon">
-                  <img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-vegan-green.svg" alt="">
-               </div>
-               <p class="c-about-cert__name">Vegan</p>
-            </div>
-           <div class="c-about-cert">
-               <div class="c-about-cert__icon">
-                  <img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-vegan-green.svg" alt="">
-               </div>
-               <p class="c-about-cert__name">Vegan</p>
-            </div>
-             <div class="c-about-cert">
-               <div class="c-about-cert__icon">
-                  <img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-vegan-green.svg" alt="">
-               </div>
-               <p class="c-about-cert__name">Vegan</p>
-            </div>
-            <div class="c-about-cert">
-               <div class="c-about-cert__icon">
-                  <img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-vegan-green.svg" alt="">
-               </div>
-               <p class="c-about-cert__name">Vegan</p>
-            </div>
-         </div>
+
+    {% endfor %}  
+         
+    </div>
 </div>
+{% schema %}   
+  {
+      "name": "About Cert Icon",
+    "blocks": [
+      {
+        "type": "contentcolumn",
+        "name": "icons",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "icon",
+                "label": "Icon"
+            },
+            {
+                "type": "text",
+                "id": "icon-title",
+                "label": "Icon Title"
+            }  
+        ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "About Cert Icon",
+            "category": "Custom"
+        }
+    ]
+  }
+{% endschema %}    

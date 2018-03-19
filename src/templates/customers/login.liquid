@@ -2,9 +2,9 @@
 
 <div class="c-account c-account--login o-wrapper page account login">
 
-    <div class="c-account__noticeBox">
+    {% comment %} <div class="c-account__noticeBox">
         <p class="c-account__noticeText">WE’VE UPGRADED SO WE NEED YOU TO CREATE A NEW ACCOUNT AND START YOUR OWN PERSONAL RIOT. <a class="c-account__noticeLink" href="/account/register">CREATE MY ACCOUNT</a></p>
-    </div>
+    </div> {% endcomment %}
 
     <div class="c-account__sectionsContainer form-container">
         <div class="c-account__sectionMain">
@@ -16,7 +16,7 @@
 
                     <div id="CustomerLoginForm" class="form-vertical">
                         {% form 'customer_login' %}
-                            <h1 class="c-account__title">Sign In</h1>
+                            <h2 class="c-account__title">Sign In</h2>
                             {% comment %}
                                 {{ form.errors | default_errors }}
                             {% endcomment %}    
@@ -42,11 +42,11 @@
                             {% endif %}
 
                             <div class="c-account__buttonContainer">
-                                <input type="submit" class="c-btn c-btn--large-new" value="Submit">
+                                <input type="submit" class="c-btn c-btn--large-new" value="Login">
                             </div>
                             <div class="account-links">
                                 {% if form.password_needed %}
-                                    <a class="c-account__link--normal" id="RecoverPassword" href="#recover">Forgot Password?
+                                    <a class="c-account__link--normal" id="RecoverPassword" href="#recover">Forgot Your Password?
                                     </a>
                                 {% endif %}
                             </div>
@@ -60,7 +60,7 @@
                     {% endcomment %}
                     <div id="RecoverPasswordForm" style="display: none;">
 
-                        <h1 class="c-account__title">Reset Your Password</h1>
+                        <h2 class="c-account__title">Reset Your Password</h2>
                         <p class="c-account__infoText">We will send you an email to reset your password.</p>
 
                         <div class="form-vertical">
@@ -85,18 +85,12 @@
                         </div>
                     </div>     
                 </div>
-            </div>
+            </div>  
             <div class="c-account__section c-account__section--two">
                 <div class="loginPage__box">
-                    <h1 class="c-account__title" style="white-space:nowrap;">Create An Account</h1>
-                    <a href="/account/register" class="c-btn c-btn--large-new">Register</a>
+                    <h2 class="c-account__title" style="white-space:nowrap;">Create An Account</h2>
+                    <a href="/account/register" class="c-btn c-btn--secondary">Create an Account</a>
                 </div>    
-            </div>
-            <div class="c-account__section c-account__section--three">
-                <div class="loginPage__box">
-                    <h1 class="c-account__title">Requesting A Return?</h1>
-                    <a href="https://suburban-riot.returnly.com/" class="c-btn c-btn--large-new">Returns</a>
-                </div>        
             </div>
         </div>
     </div>

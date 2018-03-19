@@ -11,7 +11,7 @@ body {
     font-weight: $font-weight-normal;
     line-height: $font-line-height-base;
     font-size: $font-size-base;
-    color: $color-body-text;
+    color: $color-cold-grey;
     background-color: $color-body-background;
 }
 

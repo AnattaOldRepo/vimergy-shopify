@@ -116,7 +116,7 @@
 
                             <div class="has--label">
                                 <div class="c-input__selectWrapper">
-                                    <select id="AddressCountry_{{ form.id }}" class="input-full" name="address[country]" data-default="{{ form.country }}">{{ country_option_tags }}</select>
+                                    <select id="AddressCountry_{{ form.id }}" class="input-full" name="address[country]" data-default="{{ form.country }}" placeholder="Country">{{ country_option_tags }}</select>
                                 </div>
                             </div>
 
@@ -141,7 +141,7 @@
                             </div>                                      
 
                             <div class="account-links">
-                                <input type="submit" class="c-account__link--normal c-account__link--normalInput" value="{{ 'customer.addresses.update' | t }}">
+                                <input type="submit" class="c-btn c-account__link--normal c-account__link--normalInput" value="{{ 'customer.addresses.update' | t }}">
 
                                 <a class="c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleForm({{ form.id }}); return false;">{{ 'customer.addresses.cancel' | t }}</a>
                             </div>
@@ -203,7 +203,7 @@
                         </div>                        
 
                         <div class="account-links">
-                            <input type="submit" class="c-account__link--normalInput" value="{{ 'customer.addresses.add' | t }}">
+                            <input type="submit" class="c-btn c-account__link--normalInput" value="{{ 'customer.addresses.add' | t }}">
 
                             <a class="c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">
                                 {{ 'customer.addresses.cancel' | t }}

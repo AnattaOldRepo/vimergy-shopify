@@ -22,7 +22,19 @@
         line-height: 18px
     }
 }
+.c-content-pages a {
+    text-decoration: underline;
+    color: #393D4E;
+    cursor: pointer
+}
 
+.c-content-pages a:hover {
+    color: #0288D1
+}
+
+.c-content-pages a:active, .c-content-pages a:focus {
+    color: inherit
+}
 .c-content-pages .link-standalone {
     @media (--mobile-max) {
         font-size:11px
@@ -77,7 +89,7 @@
 }
 
 .c-page-head div {
-    margin-bottom: 2.825rem;
+    margin-bottom: 0.625rem;
     padding: 1.25rem 0;
     border-bottom: 1px dashed #b7b7b0
 }

@@ -163,7 +163,7 @@
                 width: 100%;
                 max-width: 315px;
                 margin: 0 auto 21px;
-                padding: 6px 0 0;
+                padding: 0px 0 0;
                 height: 46px;
                 font-size: 23px;
                 font-family: $font-family-primary-bold;
@@ -240,7 +240,7 @@
         height: auto;
         width: auto;
         position: static;
-        margin-left: 50%;
+        /* margin-left: 50%; */
     }
 
         .c-cart__closeText {

@@ -256,7 +256,12 @@ select{
                 justify-content: space-around;
             }
         }
-
+        .c-account--account .c-account__sectionMain{
+            @media (--tablet) {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
             .c-account__section {
                 width: 100%;
                 margin-bottom: 27px;
@@ -530,7 +535,7 @@ select{
         padding-bottom: 3px;
         padding-bottom: 2px;
         display: inline-block;
-        vertical-align: super;
+        vertical-align: text-bottom;
 
         @media (--tablet) {
             margin-left: 33px;
@@ -643,7 +648,15 @@ select{
 .c-checkbox__wrapper input[type=checkbox] {
     opacity: 0
 }
-
+input::-webkit-input-placeholder {
+    color: #999; 
+    opacity: 1;
+    transition: opacity .25s ease-in-out;
+}
+input:focus::-webkit-input-placeholder {
+    opacity: 0;
+    transition: opacity .25s ease-in-out;
+}
 .c-checkbox__wrapper label {
     position: relative;
     display: inline-block;

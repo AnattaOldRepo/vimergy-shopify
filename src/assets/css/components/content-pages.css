@@ -54,13 +54,13 @@
 }
 
 .c-content-pages ul li {
-    font-size: 16px;
+    font-size: 1.0625rem;
     line-height: 25px;
     list-style-type: disc;
 
     @media (--mobile-max) {
-            font-size:11px;
-            line-height: 18px
+            font-size:.875rem;
+            line-height: 18px;
         }
 }
 
@@ -80,7 +80,7 @@
     font-weight: normal;
     line-height: 35px;
     margin-bottom: 4px;
-    color: #E5751A;
+    color: $color-vimergy-orange;
 
 @media (--mobile-max) {
         font-size:14px;

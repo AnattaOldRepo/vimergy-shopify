@@ -11,8 +11,8 @@ button {
     color: $button-color;
     letter-spacing: 2px;
     background-image: none; /* Reset unusual Firefox-on-Android default style */
-    background-color: $button-background;
-    border: 1px solid $button-border;
+    background-color: $color-vimergy-orange;
+    border: 1px solid $color-vimergy-orange;
     border-radius: 0;
     cursor: $button-cursor;
     vertical-align: middle;
@@ -25,15 +25,15 @@ button {
 
     &:focus,
     &:active {
-        color: $button-color-active;
-        background-color: $button-background-active;
-        border-color: $button-border-active;
+        color: $color-white;
+        background-color: $color-vimergy-orange-hover;
+        border-color: $color-vimergy-orange-hover;
     }
 
     &:hover {
-        color: $button-color-hover;
-        background-color: $button-background-hover;
-        border-color: $button-border-hover;
+        color: $color-white;
+        background-color: $color-vimergy-orange-hover;
+        border-color: $color-vimergy-orange-hover;
     }
 
     &.disabled,

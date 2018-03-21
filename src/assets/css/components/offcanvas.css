@@ -23,6 +23,10 @@ $offcanvas-overlay-background: rgba(#000, 0.5) !default;
         transform: translate(0, 0);
     }
 }
+.c-offcanvas--right{
+    color: $color-cold-grey;
+    background-color: #f3f3ea;
+}
 
 /* Close button */
 .c-offcanvas__close {

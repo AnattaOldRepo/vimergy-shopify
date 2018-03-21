@@ -269,6 +269,7 @@
 
 .c-recommend-inner {
         border-bottom: 1px dashed #b7b7b0;
+        padding-bottom: 2.875rem;
 
         @media(--tablet-large) {
         padding-top:3.125rem;

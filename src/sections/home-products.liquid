@@ -24,7 +24,7 @@
                         <p class="c-recommend__desc">{{ block.settings.paragraph-copy }}
                             <br>{{ block.settings.author }}
                             <br><em></em></p>
-                        <p><a class="c-btn c-btn-primary" href="/strength-chaga.html">{{block.settings.button-title }}</a></p>
+                        <p><a class="c-btn c-btn-primary" href="{{block.settings.button-link }}">{{block.settings.button-title }}</a></p>
                     </div>
                 </div>
             </div>
@@ -72,6 +72,11 @@
                 "type": "text",
                 "id": "button-title",
                 "label": "Button Title "
+            },
+             {
+                "type": "text",
+                "id": "button-link",
+                "label": "Button Link "
             },
             {
                 "type": "radio",

@@ -303,12 +303,17 @@
  .c-banner {
 
      @media(--mobile-large) {
+        padding-left: .9375rem;
+        padding-right: .9375rem;
         margin-bottom: 1.5rem;
      }
 
      @media(--tablet-large) {
-        margin-right: 3rem;
-        margin-left: 3rem;
+        margin: 0 auto;
+        max-width: 85.6875rem;
+        width: 100%;
+        /* margin-right: 3rem;
+        margin-left: 3rem; */
         margin-bottom: 4.6875rem;
      }
  }
@@ -381,6 +386,9 @@
     padding: 2.8125rem 0;
     background-color: #fff;
     @media(--tablet-large) {
+        margin: 0 auto;
+        max-width: 88.6875rem;
+        width: 100%;
         padding:0;
         background-color: transparent
     }
@@ -388,7 +396,7 @@
 
 @media(--tablet-large) {
     .c-instagrams__inner .o-row {
-        width: 97%;
+        width: 100%;
         margin:0 2rem;
     }
     .c-instagrams__list .o-row{

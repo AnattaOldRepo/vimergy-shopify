@@ -16,7 +16,7 @@
 
                     <div id="CustomerLoginForm" class="form-vertical">
                         {% form 'customer_login' %}
-                            <h2 class="c-account__title">Sign In</h2>
+                            <h2 class="c-account__title">Log In</h2>
                             {% comment %}
                                 {{ form.errors | default_errors }}
                             {% endcomment %}    
@@ -42,7 +42,7 @@
                             {% endif %}
 
                             <div class="c-account__buttonContainer">
-                                <input type="submit" class="c-btn c-btn--large-new" value="Login">
+                                <input type="submit" class="c-btn c-btn--large-new" value="Log in">
                             </div>
                             <div class="account-links">
                                 {% if form.password_needed %}
@@ -80,7 +80,7 @@
                                 <div class="c-account__buttonContainer">
                                     <input type="submit" class="c-btn c-btn--large-new" value="{{ 'customer.recover_password.submit' | t }}">
                                 </div>
-                                <a href="//javascript();" class="c-account__link--normal" id="HideRecoverPasswordLink">Sign In</a> 
+                                <a href="//javascript();" class="c-account__link--normal" id="HideRecoverPasswordLink">Log In</a> 
                             {% endform %}
                         </div>
                     </div>     

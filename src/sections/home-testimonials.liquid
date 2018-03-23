@@ -3,22 +3,25 @@
       <div class="c-testimonials__icon"><img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-plant.svg" alt="Plant"></div>
       <h2 class="c-testimonials__heading">Our Vimergy Community</h2>
    </div>
+    <div class="o-flex c-testimonials-carousel js-testimonals-carousel">
 
-   <div class="o-flex c-testimonials-carousel js-testimonals-carousel">
-   {% for block in section.blocks %}
+        {% for block in section.blocks %}
+
             <div class="o-flex__items o-flex__col-4 ">
-               <div class="c-testimonial">
-                  <div class="c-testimonial__img">
-                     <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
-                  </div>
-                  <p class="c-testimonial__name">{{ block.settings.name }}</p>
-                  <p class="c-testimonial__desc">{{ block.settings.desc }}</p>
-                  <p class="c-testimonial__link">
-                     <a href="{{ block.settings.link | link: 'master'}}" tabindex="-1">{{ block.settings.link-title }}</a>
-                  </p>
-               </div>
+                <div class="c-testimonial">
+                    <div class="c-testimonial__img">
+                        <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
+                    </div>
+                    <p class="c-testimonial__name">{{ block.settings.name }}</p>
+                    <p class="c-testimonial__desc">{{ block.settings.desc }}</p>
+                    <p class="c-testimonial__link">
+                        <a href="{{ block.settings.link | link: 'master'}}" tabindex="-1">{{ block.settings.link-title }}</a>
+                    </p>
+                </div>
             </div>
-    {% endfor %} 
+
+        {% endfor %} 
+        
    </div>
 </div>
 {% schema %}

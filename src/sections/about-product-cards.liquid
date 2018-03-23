@@ -3,24 +3,24 @@
    <div class="o-row">
       <h2 class="c-product-cards__heading">Our Product</h2>
    </div>
-   <div class="o-flex c-product-cards__list">
+        <div class="o-flex c-product-cards__list">
 
-     {% for block in section.blocks %}
+    {% for block in section.blocks %}
 
-      <div class=" o-flex__item o-flex__col-4 ">
-         <div class="c-product-card">
-            <div class="c-product-card__img"><img src="{{ block.settings.image | img_url: 'master'}}" alt=""></div>
-            <div class="c-product-card__info">
-               <p class="c-product-card__name">{{ block.settings.name }}</p>
-               <p class="c-product-card__desc">{{ block.settings.desc }}</p>
+        <div class=" o-flex__item o-flex__col-4 ">
+            <div class="c-product-card">
+                <div class="c-product-card__img"><img src="{{ block.settings.image | img_url: 'master'}}" alt=""></div>
+                <div class="c-product-card__info">
+                <p class="c-product-card__name">{{ block.settings.name }}</p>
+                <p class="c-product-card__desc">{{ block.settings.desc }}</p>
+                </div>
             </div>
-         </div>
-      </div>
+        </div>
 
-      {% endfor %}
+    {% endfor %}
 
-   </div>
-</div>
+        </div>
+    </div>
 </div>
 {% schema %}
   {

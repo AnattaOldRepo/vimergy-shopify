@@ -14,12 +14,12 @@
 
     @media(--mobile-large) {
         padding-top:3.625rem;
-            padding-bottom: 3.625rem;
-        } 
+        padding-bottom: 3.625rem;
+    } 
 
     @media(--tablet-large) {
-            padding-top:6rem; 
-            padding-bottom: 6rem;
+        padding-top:6rem; 
+        padding-bottom: 6rem;
         }
 }
 .c-about-banner__inner--border{
@@ -44,9 +44,9 @@
     margin: 0 auto;
 
     @media(--mobile-large) {
-            padding:0;
-            max-width: 30.9375rem;
-        }
+        padding:0;
+        max-width: 30.9375rem;
+    }
 }
 
 .c-about-banner__info--center {
@@ -59,9 +59,9 @@
     font-weight: 700;
 
     @media(--tablet-large) {
-            font-size:2.25rem;
-            margin-bottom: 2rem;
-        }
+        font-size:2.25rem;
+        margin-bottom: 2rem;
+    }
 }
 
 .c-about-banner__heading--uppercase {
@@ -74,8 +74,8 @@
     line-height: 1.7;
 
     @media(--tablet-large) {
-            font-size:1.25rem;
-        }
+        font-size:1.25rem;
+    }
 }
 /* about certi */
 .c-about-certs {
@@ -88,12 +88,12 @@
     width: 100%;
 
     @media(--mobile-large) {
-            margin-bottom:0;
+        margin-bottom:0;
     }
 
     @media(--tablet-large) {
-            border:0;
-        }
+        border:0;
+    }
 }
 
 .c-about-certs__inner {
@@ -124,8 +124,8 @@
     }
 
     @media(--tablet-large) {
-            margin-right:1.5625rem;
-            margin-left: 1.5625rem;
+        margin-right:1.5625rem;
+        margin-left: 1.5625rem;
         }
 }
 
@@ -137,9 +137,9 @@
     width: 3.5625rem;
 
     @media(--tablet-large) {
-            padding:.6875rem;
-            width: 5.4375rem
-        }
+        padding:.6875rem;
+        width: 5.4375rem
+    }
 }
 
 .c-about-cert__icon img {
@@ -152,9 +152,9 @@
     color: #64671c;
 
     @media(--tablet-large) {
-            margin-top:0.2125rem;
-            font-size: 1.1875rem
-        }
+        margin-top:0.2125rem;
+        font-size: 1.1875rem
+    }
 }
 /* about-product-cards */
 
@@ -163,8 +163,8 @@
     background-image: url("../pattern.jpg");
 
     @media(--tablet-large) {
-            padding:5.5625rem 0 5.75rem;
-        }
+        padding:5.5625rem 0 5.75rem;
+    }
 }
 .c-product-wrapper{
     max-width: 84.6875rem;
@@ -188,22 +188,22 @@
     text-align: center;
 
     @media(--tablet-large) {
-            margin-bottom:2.5rem;
-            font-size: 2.25rem;
-        }
+        margin-bottom:2.5rem;
+        font-size: 2.25rem;
+    }
 }
 .c-product-cards__list {
     @media(--mobile-large) {
-            display:flex;
-            flex-wrap: wrap;
-        }
+        display:flex;
+        flex-wrap: wrap;
+    }
 }
 
 .c-product-cards__list .o-flex__item {
 
     @media(--mobile-large) {
-            display:flex;
-        }
+        display:flex;
+    }
 } 
 
 .c-product-card {
@@ -223,7 +223,7 @@
 .c-product-card__info {
     padding: 1.125rem 1.25rem;
 
-@media(--tablet-large) {
+    @media(--tablet-large) {
         padding:1rem 1.6875rem;
     }
 }
@@ -244,7 +244,7 @@
     font-weight: 600;
     line-height: 1.7;
 
-@media(--desktop-medium) {
+    @media(--desktop-medium) {
         font-size:1.0625rem;
     }
 }

@@ -16,11 +16,11 @@
     font-size: 1.0625rem;
     margin-bottom: 1.25rem;
 
-@media (--mobile-max) {
-        font-size:.875rem;
-        font-weight: normal;
-        line-height: 18px
-    }
+    @media (--mobile-max) {
+            font-size:.875rem;
+            font-weight: normal;
+            line-height: 18px
+        }
 }
 .c-content-pages a {
     text-decoration: underline;
@@ -38,14 +38,14 @@
 .c-content-pages .link-standalone {
     @media (--mobile-max) {
         font-size:11px
-        }
+    }
 }
 .c-content-pages .link-standalone:after {
     @media (--mobile-max) {
         margin-top:5px;
         margin-left: 6px;
         border-width: 6px
-        }
+    }
 }
 
 .c-content-pages ul {
@@ -59,9 +59,9 @@
     list-style-type: disc;
 
     @media (--mobile-max) {
-            font-size:.875rem;
-            line-height: 18px;
-        }
+        font-size:.875rem;
+        line-height: 18px;
+    }
 }
 
 .c-content-pages h2 {
@@ -69,10 +69,10 @@
     font-weight: 700;
 
     @media (--mobile-max) {
-            margin-bottom:.625rem;
-            font-size: 16px;
-            line-height: 30px
-        }
+        margin-bottom:.625rem;
+        font-size: 16px;
+        line-height: 30px
+    }
 }
 
 .c-content-pages h4 {
@@ -82,7 +82,7 @@
     margin-bottom: 4px;
     color: $color-vimergy-orange;
 
-@media (--mobile-max) {
+    @media (--mobile-max) {
         font-size:14px;
         line-height: 28px;
     }
@@ -109,7 +109,7 @@
     font-weight: 600;
     color: #92278f;
 
-@media (--mobile-max) {
+    @media (--mobile-max) {
         font-size:10px
     }
 }
@@ -117,7 +117,7 @@
 .c-content-pages .table td {
     font-size: 14px;
 
-@media (--mobile-max) {
+    @media (--mobile-max) {
         font-size:11px;
     }
 }
@@ -129,7 +129,7 @@
     padding: 10px;
     line-height: normal;
 
-@media (--mobile-max) {
+    @media (--mobile-max) {
         padding:3px;
     }
 }
@@ -167,7 +167,7 @@
     height: 31px;
     padding: 0;
 
-@media (--mobile-max) {
+    @media (--mobile-max) {
         height:auto;
     }
 }

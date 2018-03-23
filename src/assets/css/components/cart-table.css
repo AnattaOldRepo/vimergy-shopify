@@ -9,7 +9,7 @@
 
 .c-cartTable {
     width: 100%;
-    border-top: 3px solid $color-cold-grey;
+    border-top: 2px solid grey;
     padding: 20px 0;
     border-spacing: 0;
     border-collapse: collapse;
@@ -22,14 +22,18 @@
     }
 
     .js-qty__num {
-        padding-top: 13px;
+        padding-top: 4px;
         font-size: 16px;
     }
 
     .js-qty__adjust {
         background-color: transparent;
-        color: $color-cold-grey;
-        border: 3px solid;
+        color: grey;
+        border: 2px solid;
+
+        &:focus {
+        outline: $color-vimergy-orange auto 5px;
+        }
     }
 
     tr {
@@ -58,7 +62,7 @@
     }
 
     .c-cartTable__row {
-        border-top: 3px solid $color-cold-grey;
+        border-top: 2px solid grey;
     }
     .c-cartTable__row a , .c-cart__itemInfoBox a{
         color:$color-vimergy-orange;
@@ -85,14 +89,14 @@
         }
 
     .c-cartTable__footer {
-        border-top: 3px solid $color-cold-grey;
+        border-top: 2px solid grey;
     }
 
         .c-cartTable__pricingBox {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid $color-cold-grey;
+            border-bottom: 2px solid grey;
             margin-bottom: 20px;
             padding: 12px 0 18px;
 

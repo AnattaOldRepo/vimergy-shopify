@@ -37,28 +37,9 @@
                     <p>{{ item.variant.title }}</p>
                   {% endunless %}
 
-                  <p>{{ item.vendor }}</p>
+                  {% comment %} <p>{{ item.vendor }}</p> {% endcomment %}
 
-                  {%- assign property_size = item.properties | size -%}
-
-                  {% if property_size > 0 %}
-                    {% for p in item.properties %}
-                      {% unless p.last == blank %}
-                      {{ p.first }}:
-
-                      {% if p.last contains '/uploads/' %}
-                        <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
-                      {% else %}
-                        {{ p.last }}
-                      {% endif %}
-
-                      {% endunless %}
-                    {% endfor %}
-                  {% endif %}
-
-                  <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
-                    <small>{{ 'cart.general.remove' | t }}</small>
-                  </a>
+                 
                 </td>
 {% comment %}                <td class="c-cartTable__td c-cartTable__cell--center" data-label="{{ 'cart.label.price' | t }}">
                   {% if item.original_line_price != item.line_price %}
@@ -80,6 +61,27 @@
                 </td>
                 <td class="c-cartTable__td c-cartTable__cell--center" data-label="{{ 'cart.label.total' | t }}">
                   {{ item.line_price | money }}
+
+                   {%- assign property_size = item.properties | size -%}
+
+                  {% if property_size > 0 %}
+                    {% for p in item.properties %}
+                      {% unless p.last == blank %}
+                      {{ p.first }}:
+
+                      {% if p.last contains '/uploads/' %}
+                        <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                      {% else %}
+                        {{ p.last }}
+                      {% endif %}
+
+                      {% endunless %}
+                    {% endfor %}
+                  {% endif %}
+
+                  <a class="c-cart-remove" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
+                    <small>{{ 'cart.general.remove' | t }}</small>
+                  </a>
                 </td>
               </tr>
 

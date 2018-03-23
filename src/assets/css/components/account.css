@@ -572,7 +572,7 @@ select{
             margin-right: 16px;
 
             &:--enter {
-                color: $color-crimson;
+                color: $color-vimergy-orange;
             }            
         }
     }

@@ -360,17 +360,6 @@
     top: 1rem
 }
 
-/* .header-cart-link--two {
-    display: none
-}
-
-@media(--tablet-large) {
-    .header-cart-link--two {
-        display:block;
-        padding: 0.2rem 0px 0.25rem;
-    }
-} */
-
 .c-menu__item--cart--two .icon {
     top: 1px;
 }

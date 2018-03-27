@@ -158,9 +158,9 @@
                         padding-right: 5rem;
                     }
                     @media (--tablet-large) { 
-                        text-align: right !important;
-                        padding-right: 10rem;  
-                    }   
+                        text-align: center !important;
+                        padding-left: 16rem;  
+                    }    
                 }
                 .c-total-header{
                     padding-right: 5.5rem;

@@ -151,3 +151,17 @@
                         margin-bottom: 6px;
                     }
                 }
+                .c-product-header{
+                   
+                    @media (--tablet-max) {
+                        text-align: right !important;
+                        padding-right: 5rem;
+                    }
+                    @media (--tablet-large) { 
+                        text-align: right !important;
+                        padding-right: 10rem;  
+                    }   
+                }
+                .c-total-header{
+                    padding-right: 6rem;
+                }

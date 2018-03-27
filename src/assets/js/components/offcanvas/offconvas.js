@@ -35,7 +35,7 @@
 
   var Offcanvas = function(element, options) {
     /**
-     * DOM offcanvas element
+     * DOM offcanvas element  
      * @type {Object}
      */
 

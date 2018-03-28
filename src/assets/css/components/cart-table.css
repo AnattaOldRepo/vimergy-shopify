@@ -79,6 +79,7 @@
 
         .c-cartTable__td {
             padding: 6px 0;
+            text-align: center;
 
             @media (--mobile-small-max) {
                 width: auto;
@@ -155,11 +156,11 @@
                    
                     @media (--tablet-max) {
                         text-align: right !important;
-                        padding-right: 5rem;
+                        padding-right: 3rem;
                     }
                     @media (--tablet-large) { 
                         text-align: center !important;
-                        padding-left: 16rem;  
+                        padding-left: 24rem;  
                     }    
                 }
                 .c-total-header{

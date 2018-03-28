@@ -18,7 +18,8 @@
     @media (--tablet-large) {
         float: left;
         margin-right: 1.5625rem;
-        padding: 16px 0px;
+        padding: 13px 0px;
+        padding-top: 19px;
     }
 }
 

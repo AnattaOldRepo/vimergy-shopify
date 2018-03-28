@@ -23,7 +23,7 @@
         content:'';
         size: 1px 20px;
         background-color:$color-cold-grey;
-        position: absolute 50% 0px * *;
+        position: absolute 50% -4px * *;
         transform: translateY(-50%);
 
         @media(--desktop){

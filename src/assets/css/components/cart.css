@@ -263,7 +263,9 @@
         }
 
 
-
+        .c-cartTable__td .js-qty__adjust{
+            padding: 0.8125rem 1rem !important;
+        }
 .ajaxcart__qty,
 .js-qty {
     display: flex;

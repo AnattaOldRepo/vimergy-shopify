@@ -2,11 +2,11 @@
 
 $button-display: inline-block !default;
 $button-margin: 0 !default;
-$button-padding: 8px 15px !default;
+$button-padding: 0.8125rem 3rem;
 $button-width: auto !default;
 $button-font-family: $font-family-primary-bold !default;
 $button-font-weight: $font-weight-bold !default;
-$button-font-size: 16px !default;
+$button-font-size: 0.935rem;
 $button-line-height: $font-size-new + 2 !default;
 $button-color: $color-white !default;
 $button-background: $color-vimergy-orange !default;

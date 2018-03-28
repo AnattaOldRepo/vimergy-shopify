@@ -13,8 +13,8 @@
 
                 <div class="c-product-item__img">
                 {% for image in product.images %}
-                 <a href="{{ image | product_img_url: 'large' }}" title="{{ product.title }}">
-                    <img class="product-single__photo" src="{{ image.src | img_url: '480x480' }}">
+                 <a href="{{ product.url }}" title="{{ product.title }}">
+                    <img class="product-single__photo" src="{{ image.src | img_url: 'master' }}">
                   </a>
                   {% endfor %}
                 </div>

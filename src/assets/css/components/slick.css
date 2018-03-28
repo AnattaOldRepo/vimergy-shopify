@@ -117,6 +117,7 @@
     box-shadow: 0px 3px 4.5px 0.5px rgba(0,0,0,0.3);
     transition: opacity 0.3s 0s;
     border: #262a39;
+    padding: 0;
 }
 
 .slick-prev:hover,.slick-prev:focus,.slick-next:hover,.slick-next:focus {

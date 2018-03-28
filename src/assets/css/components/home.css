@@ -252,10 +252,13 @@
     background-color: #f4f4ee;
 }
 .c-home-products-recommend{
+    margin: 0 auto;
+    max-width: 85.6875rem;
+    width: 100%;
     color: #393D4E;
     background-color: #fff;
     margin-bottom: 1.5rem;
-
+    
     @media(--mobile-large) {
         background-color: transparent;
     }
@@ -277,7 +280,7 @@
     border-bottom: 0;
 }
 
-@media(--mobile-large) {
+
     .c-recommend-inner .o-row {
         display:flex;
     }
@@ -289,14 +292,7 @@
         padding-left: .9375rem;
         padding-right: .9375rem;
     }
-
-    .c-recommend-inner .o-row.is-right {
-
-        .o-col:first-child {
-            order:2;
-        }
-    } 
-}
+    
 /* banner-collection section */
  .c-banner {
 

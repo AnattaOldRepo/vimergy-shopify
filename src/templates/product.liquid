@@ -1,3 +1,72 @@
+<div class="c-product">
+    <div class="c-product-view">
+        <div class="o-flex">
+            <div class="o-flex-item o-flex__col-6">
+                <div class="c-product-image">
+                    <img  src="{{ product.images[0].src | img_url: '526x526' }}">
+                </div>
+            </div>
+            <div class="o-flex-item o-flex__col-6">
+                <div class="c-product-shop">
+                 <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data">
+                    <div class="c-product-shop__top">
+                      <select id="product-select" name="id" class="no-js" data-product-select style="display:none">
+                    {% for variant in product.variants %}
+                        <option
+                            {% if variant == current_variant   %}selected="selected"{% endif %}
+                            {% unless variant.available   %}disabled="disabled"{% endunless %}
+                            value="{{ variant.id }}"
+                        >
+                            {{ variant.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+                    <h1 class="c-product-name" >{{ product.title }}</h1>
+                    </div>
+                    <div class="c-product-description">
+
+                    {{ product.metafields.c_f.desc1 }}
+
+                    </div>
+                    <div class="c-item-options">
+                    <label for="qty">Quantity</label>
+                    <input type="number"
+                         name="updates[]"
+                         id="updates_{{ cart.items[0].key }}"
+                         value="{{ cart.items[0].quantity }}"
+                         min="0"
+                         aria-label="{{ 'cart.general.item_quantity' | t }}">
+                    </div>
+                    <div class="c-product-price" data-product-price>{{ product.price | money }}</div>
+                    <div class="c-add-to-cart-buttons"> <button
+                        id="AddToCart"
+                        class="c-btn c-product__submit"
+                        type="submit"
+                        name="add"  
+                        data-add-to-cart>
+                    ADD TO CART</button></div>                       
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="c-product" ata-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
 
     {% if collection != blank %} 
@@ -19,6 +88,10 @@
         {{ collection.title }}</a>
     {% endif %}    
   
+
+
+
+
     {%- assign current_variant = product.selected_or_first_available_variant -%}
     {%- assign featured_image = current_variant.featured_image | default: product.featured_image   -%}
   
@@ -193,49 +266,40 @@
 
     {% section 'related-products' %}
 
-
+{% section 'product-detail' %}
     {% comment %}  accordian{% endcomment %}
-   {% comment %} <div class="row u-component">
+
+ <div class="row u-component">
     <dl class="c-accordion js-accordion">
         <dt id="accordion-item-1" class="c-accordion__nav is-active" aria-selected="true">Accordion One</dt>
         <dd class="c-accordion__panel is-active" aria-hidden="false" aria-labelledby="accordion-item-1">
             <h2>Panel One</h2>
-            <p>Etiam fringilla ligula ac bibendum fringilla. Cras maximus maximus tellus, convallis sollicitudin felis efficitur in. Aenean efficitur urna sit amet massa accumsan vestibulum. Suspendisse scelerisque mattis dui, in malesuada velit cursus sed.
-                Proin pellentesque augue non justo luctus, nec viverra ex pulvinar. Suspendisse fringilla auctor augue ac vehicula. Praesent porttitor efficitur sapien sed efficitur.</p>
-            <p>Pellentesque tincidunt lacus ornare gravida convallis. Fusce interdum lectus fringilla, blandit nibh ut, dignissim dui. Quisque elit est, faucibus a venenatis eu, convallis quis metus. Nullam quis dolor tellus. Donec turpis nibh, iaculis vitae
-                nisl eu, luctus dapibus erat. Nullam sit amet fringilla dolor. Morbi sagittis dictum purus, eget vulputate velit vestibulum at. Duis tristique lectus lacus, id vehicula ex placerat ut. Ut at pharetra nunc. Sed tempus molestie bibendum.
-                Cras in lacinia tellus. Integer mollis facilisis tempus.</p>
+            <p>Etiam fringilla ligula ac bibendum fringilla. Cras maximus maximus tellus, convallis sollicitudin felis efficitur in. Aenean efficitur urna sit amet massa accumsan vestibulum. Suspendisse scelerisque mattis dui, in malesuada velit cursus sed. Proin pellentesque augue non justo luctus, nec viverra ex pulvinar. Suspendisse fringilla auctor augue ac vehicula. Praesent porttitor efficitur sapien sed efficitur.</p>
+            <p>Pellentesque tincidunt lacus ornare gravida convallis. Fusce interdum lectus fringilla, blandit nibh ut, dignissim dui. Quisque elit est, faucibus a venenatis eu, convallis quis metus. Nullam quis dolor tellus. Donec turpis nibh, iaculis vitae nisl eu, luctus dapibus erat. Nullam sit amet fringilla dolor. Morbi sagittis dictum purus, eget vulputate velit vestibulum at. Duis tristique lectus lacus, id vehicula ex placerat ut. Ut at pharetra nunc. Sed tempus molestie bibendum. Cras in lacinia tellus. Integer mollis facilisis tempus.</p>        
         </dd>
 
         <dt id="accordion-item-2" class="c-accordion__nav" aria-selected="false">Accordion Two</dt>
         <dd class="c-accordion__panel" aria-hidden="true" aria-labelledby="accordion-item-2">
             <h2>Panel Two</h2>
-            <p>Sed tempor ipsum interdum mauris lacinia mollis. Duis vestibulum elit non purus luctus tempus. Ut ac porta sapien. Sed sollicitudin elementum ligula. Aliquam turpis quam, hendrerit sit amet metus in, fermentum tincidunt odio. Fusce dignissim
-                fringilla elit, sit amet tempor sem vehicula eget.</p>
-            <p>Pellentesque sollicitudin hendrerit mattis. Suspendisse potenti. Cras tincidunt id nulla vel posuere. Donec neque felis, cursus sed fermentum ut, consequat at diam. Aenean aliquet ut felis ut auctor. Suspendisse enim arcu, ullamcorper eu neque
-                et, cursus consequat augue. Etiam egestas est orci, nec ultrices enim luctus eu. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse et justo sit amet elit sollicitudin varius.</p>
+            <p>Sed tempor ipsum interdum mauris lacinia mollis. Duis vestibulum elit non purus luctus tempus. Ut ac porta sapien. Sed sollicitudin elementum ligula. Aliquam turpis quam, hendrerit sit amet metus in, fermentum tincidunt odio. Fusce dignissim fringilla elit, sit amet tempor sem vehicula eget.</p>
+            <p>Pellentesque sollicitudin hendrerit mattis. Suspendisse potenti. Cras tincidunt id nulla vel posuere. Donec neque felis, cursus sed fermentum ut, consequat at diam. Aenean aliquet ut felis ut auctor. Suspendisse enim arcu, ullamcorper eu neque et, cursus consequat augue. Etiam egestas est orci, nec ultrices enim luctus eu. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse et justo sit amet elit sollicitudin varius.</p>       
         </dd>
 
         <dt id="accordion-item-3" class="c-accordion__nav" aria-selected="false">Accordion Three</dt>
         <dd class="c-accordion__panel" aria-hidden="true" aria-labelledby="accordion-item-3">
             <h2>Panel Three</h2>
-            <p>Fusce ac dui sit amet magna suscipit eleifend eu nec ex. Proin vitae ex felis. Fusce vitae iaculis nisi. Praesent eget elit lorem. Nulla sagittis turpis vel semper rhoncus. Maecenas imperdiet dui at ante convallis, vel eleifend eros blandit.
-                Nulla a porttitor lorem. Praesent ullamcorper convallis commodo.</p>
-            <p>Pellentesque porttitor molestie sem vel tincidunt. Aliquam iaculis ex nisi. Donec rhoncus urna non accumsan condimentum. Vivamus at sagittis ante. Donec scelerisque quam accumsan iaculis sagittis. Nam vitae tincidunt neque. Pellentesque habitant
-                morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi quis ante et tortor elementum faucibus id non erat.</p>
-        </dd>
+            <p>Fusce ac dui sit amet magna suscipit eleifend eu nec ex. Proin vitae ex felis. Fusce vitae iaculis nisi. Praesent eget elit lorem. Nulla sagittis turpis vel semper rhoncus. Maecenas imperdiet dui at ante convallis, vel eleifend eros blandit. Nulla a porttitor lorem. Praesent ullamcorper convallis commodo.</p>
+            <p>Pellentesque porttitor molestie sem vel tincidunt. Aliquam iaculis ex nisi. Donec rhoncus urna non accumsan condimentum. Vivamus at sagittis ante. Donec scelerisque quam accumsan iaculis sagittis. Nam vitae tincidunt neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi quis ante et tortor elementum faucibus id non erat.</p>        
+        </dd>                        
 
         <dt id="accordion-item-4" class="c-accordion__nav" aria-selected="false">Accordion Four</dt>
         <dd class="c-accordion__panel" aria-hidden="true" aria-labelledby="accordion-item-4">
             <h2>Panel Four</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu dictum orci. Curabitur porttitor, mauris in ultrices commodo, orci est interdum diam, ut sagittis mi nisi quis justo. Donec ac lobortis ante. In dignissim vitae mi non mattis.
-                Mauris et tortor facilisis mi viverra ornare accumsan eu orci. Quisque ultricies magna at justo feugiat, et malesuada nibh pharetra. Suspendisse potenti. Vivamus sed libero id enim fringilla vehicula. Donec pharetra laoreet blandit. Cras
-                quam eros, feugiat sed imperdiet quis, finibus eget elit. Morbi ut venenatis ante, interdum venenatis arcu. Curabitur sed egestas ex. Pellentesque vehicula ac urna sit amet posuere.</p>
-            <p>Mauris maximus sapien elementum condimentum dapibus. Etiam tempus dignissim ante, vitae egestas augue dictum vel. Morbi tellus lacus, venenatis malesuada lobortis et, aliquet vitae velit. Integer sed dolor molestie, efficitur risus id, consequat
-                eros.</p>
-        </dd>
-    </dl>
-</div> {% endcomment %}
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu dictum orci. Curabitur porttitor, mauris in ultrices commodo, orci est interdum diam, ut sagittis mi nisi quis justo. Donec ac lobortis ante. In dignissim vitae mi non mattis. Mauris et tortor facilisis mi viverra ornare accumsan eu orci. Quisque ultricies magna at justo feugiat, et malesuada nibh pharetra. Suspendisse potenti. Vivamus sed libero id enim fringilla vehicula. Donec pharetra laoreet blandit. Cras quam eros, feugiat sed imperdiet quis, finibus eget elit. Morbi ut venenatis ante, interdum venenatis arcu. Curabitur sed egestas ex. Pellentesque vehicula ac urna sit amet posuere.</p>
+            <p>Mauris maximus sapien elementum condimentum dapibus. Etiam tempus dignissim ante, vitae egestas augue dictum vel. Morbi tellus lacus, venenatis malesuada lobortis et, aliquet vitae velit. Integer sed dolor molestie, efficitur risus id, consequat eros.</p>            
+        </dd>            
+    </dl>         
+</div>
     {% comment %} accordian {% endcomment %}
 </div>
 
@@ -359,7 +423,9 @@
                 .trigger('change');
         });
     });
-
+$(function() {
+  $('.js-accordion').accordion();
+});
 </script>
 
 

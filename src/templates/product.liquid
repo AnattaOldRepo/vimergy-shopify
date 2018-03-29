@@ -1,431 +1,306 @@
-<div class="c-product">
-    <div class="c-product-view">
-        <div class="o-flex">
-            <div class="o-flex-item o-flex__col-6">
-                <div class="c-product-image">
-                    <img  src="{{ product.images[0].src | img_url: '526x526' }}">
-                </div>
-            </div>
-            <div class="o-flex-item o-flex__col-6">
-                <div class="c-product-shop">
-                 <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data">
-                    <div class="c-product-shop__top">
-                      <select id="product-select" name="id" class="no-js" data-product-select style="display:none">
-                    {% for variant in product.variants %}
-                        <option
-                            {% if variant == current_variant   %}selected="selected"{% endif %}
-                            {% unless variant.available   %}disabled="disabled"{% endunless %}
-                            value="{{ variant.id }}"
-                        >
-                            {{ variant.title }}
-                        </option>
-                    {% endfor %}
-                </select>
-                    <h1 class="c-product-name" >{{ product.title }}</h1>
-                    </div>
-                    <div class="c-product-description">
-
-                    {{ product.metafields.c_f.desc1 }}
-
-                    </div>
-                    <div class="c-item-options">
-                    <label for="qty">Quantity</label>
-                    <input type="number"
-                         name="updates[]"
-                         id="updates_{{ cart.items[0].key }}"
-                         value="{{ cart.items[0].quantity }}"
-                         min="0"
-                         aria-label="{{ 'cart.general.item_quantity' | t }}">
-                    </div>
-                    <div class="c-product-price" data-product-price>{{ product.price | money }}</div>
-                    <div class="c-add-to-cart-buttons"> <button
-                        id="AddToCart"
-                        class="c-btn c-product__submit"
-                        type="submit"
-                        name="add"  
-                        data-add-to-cart>
-                    ADD TO CART</button></div>                       
-                </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign featured_image = current_variant.featured_image | default: product.featured_image   -%}
+<meta itemprop="name" content="{{ product.title   }}{% unless product.has_only_default_variant %}   - {{ current_variant.title }}{% endunless %}">
+<meta itemprop="url" content="{{ shop.url }}{{   current_variant.url }}">
+<meta itemprop="brand" content="{{   product.vendor }}">
+<meta itemprop="image" content="{{   featured_image | img_url: '600x600' }}">
+<meta itemprop="description" content="{{   product.description | strip_html | escape }}">
+<form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" style="display:none;">
+   <select id="product-select" name="id" class="no-js" data-product-select style="display:none;">
+   {% for variant in product.variants %}
+   <option
+   {% if variant == current_variant   %}selected="selected"{% endif %}
+   {% unless variant.available   %}disabled="disabled"{% endunless %}
+   value="{{ variant.id }}"
+   >
+   {{ variant.title }}
+   </option>
+   {% endfor %}
+   </select>                      
+</form>
 <div class="c-product" ata-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
-
-    {% if collection != blank %} 
-        <a class="c-product__breadcrumb" href="{{ collection.url }}">
-        <svg class="c-product__breadcrumbArrow" width="25px" height="12px" viewBox="0 0 25 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                <g id="Category-Banner" transform="translate(0.000000, -6.000000)" stroke="#FF0000">
-                    <g id="breadcrumbs">
-                        <g transform="translate(0.000000, 2.000000)">
-                            <g id="arrow" transform="translate(12.500000, 10.000000) rotate(-90.000000) translate(-12.500000, -10.000000) translate(7.000000, -2.000000)">
-                                <path d="M5.20127143,23.6102857 L5.20127143,2" id="Stroke-420"></path>
-                                <polyline id="Stroke-421" transform="translate(5.201429, 3.009414) rotate(-180.000000) translate(-5.201429, -3.009414) " points="10.4028571 0.4087 5.20142857 5.61012857 0 0.4087"></polyline>
-                            </g>
-                        </g>
-                    </g>
-                </g>
+{% if collection != blank %} 
+<a class="c-product__breadcrumb" href="{{ collection.url }}">
+   <svg class="c-product__breadcrumbArrow" width="25px" height="12px" viewBox="0 0 25 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+         <g id="Category-Banner" transform="translate(0.000000, -6.000000)" stroke="#FF0000">
+            <g id="breadcrumbs">
+               <g transform="translate(0.000000, 2.000000)">
+                  <g id="arrow" transform="translate(12.500000, 10.000000) rotate(-90.000000) translate(-12.500000, -10.000000) translate(7.000000, -2.000000)">
+                     <path d="M5.20127143,23.6102857 L5.20127143,2" id="Stroke-420"></path>
+                     <polyline id="Stroke-421" transform="translate(5.201429, 3.009414) rotate(-180.000000) translate(-5.201429, -3.009414) " points="10.4028571 0.4087 5.20142857 5.61012857 0 0.4087"></polyline>
+                  </g>
+               </g>
             </g>
-        </svg>            
-        {{ collection.title }}</a>
-    {% endif %}    
-  
-
-
-
-
-    {%- assign current_variant = product.selected_or_first_available_variant -%}
-    {%- assign featured_image = current_variant.featured_image | default: product.featured_image   -%}
-  
-    <meta itemprop="name" content="{{ product.title   }}{% unless product.has_only_default_variant %}   - {{ current_variant.title }}{% endunless %}">
-    <meta itemprop="url" content="{{ shop.url }}{{   current_variant.url }}">
-    <meta itemprop="brand" content="{{   product.vendor }}">
-    <meta itemprop="image" content="{{   featured_image | img_url: '600x600' }}">
-    <meta itemprop="description" content="{{   product.description | strip_html | escape }}">
-    
-    <div class="c-product__inner o-wrapper">
-
-        <div class="c-product__infoSection js-animElement__productInfoSection">
-            <div class="c-product__infoIntro">
-                <h1 class="c-product__title">{{ product.title }}</h1>
-                {% if product.metafields.c_f['Product Subtitle'] %}
-                    <h2 class="c-product__subtitle">{{ product.metafields.c_f['Product Subtitle']] }}</h2>                   
-                {% endif %}                
-            </div>
-
+         </g>
+      </g>
+   </svg>
+   {{ collection.title }}
+</a>
+{% endif %}    
+<div class="c-product">
+<div class="c-product-view">
+   <div class="o-flex">
+      <div class="o-flex-item o-flex__col-lg-6">
+         <div class="c-product-image">
+            <img  src="{{ product.images[0].src | img_url: 'master' }}">
+         </div>
+      </div>
+      <div class="o-flex-item o-flex__col-lg-6">
+         <div class="c-product-shop">
             <div itemprop="offers" itemscope itemtype="http:/  /schema.org/Offer">
-                <meta itemprop="priceCurrency" content="{{   shop.currency }}">
-                <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
-                 <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
-          
-                <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype=  "multipart/form-data">
-          
-                <select id="product-select" name="id" class="no-js" data-product-select style="display:block">
-                    {% for variant in product.variants %}
-                        <option
-                            {% if variant == current_variant   %}selected="selected"{% endif %}
-                            {% unless variant.available   %}disabled="disabled"{% endunless %}
-                            value="{{ variant.id }}"
-                        >
-                            {{ variant.title }}
-                        </option>
-                    {% endfor %}
-                </select>
-
-                <div class="c-product__variantSection">
-                    {% if product.variants.size %}
-                        <div class="c-product__optionSection c-product__optionSection--color">
-                            <span class="c-product__optionType">Color : 
-                                <span class="c-product__optionCurrentValue js-current-color-display"></span>
-                            </span>
-                            
-                            {% section 'product-colors' %}
+               <meta itemprop="priceCurrency" content="{{   shop.currency }}">
+               <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
+               <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
+               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype=  "multipart/form-data">
+                  <select id="product-select" name="id" class="no-js" data-product-select style="display:none">
+                  {% for variant in product.variants %}
+                  <option
+                  {% if variant == current_variant   %}selected="selected"{% endif %}
+                  {% unless variant.available   %}disabled="disabled"{% endunless %}
+                  value="{{ variant.id }}"
+                  >
+                  {{ variant.title }}
+                  </option>
+                  {% endfor %}
+                  </select>
+                  <h1 class="c-product-name">{{ product.title }}</h1>
+                  <div class="c-product-description">
+                     {{ product.metafields.c_f.desc1 }}
+                  </div>
+                  <div class="c-item-options">
+                     <label for="qty">Quantity</label>
+                     <input type="number"
+                        name="quantity"
+                        id="updates_{{ cart.items[0].key }}"
+                        value="{{ cart.items[0].quantity }}"
+                        min="0" 
+                        data-product-quantity
+                        aria-label="{{ 'cart.general.item_quantity' | t }}">
+                     <div class="product-options-bottom">
+                        <div class="amgroupcat">
+                           <div class="subscription-product product-options del-interval pdp-page">
+                              <h2 class="del-interval__heading">Pick a delivery option</h2>
+                              <ul class="options-list">
+                                 <li class="custom__radiobox">
+                                    <div class="del-interval__option">
+                                       <input type="radio" onclick="" class="radio validate-one-required-by-name change-container-classname delivery_one_time" id="delivery-option-one-time" name="delivery-option" value="one-time-delivery" checked="checked">
+                                       <label for="delivery-option-one-time">
+                                       One Time Purchase                    			                    		</label>
+                                    </div>
+                                 </li>
+                                 <li class="custom__radiobox">
+                                    <div class="del-interval__option">
+                                       <input type="radio" onclick="" class="radio validate-one-required-by-name change-container-classname " id="delivery-option-subscribe" name="delivery-option" value="subscribe">
+                                       <label for="delivery-option-subscribe">
+                                       Auto-Ship Delivery - FREE                    			                    		</label>
+                                       <a class="del-interval__info js-inline-popup" data-mfp-src="#autoship-popup" target="_blank" href="https://vimergy.com/autoship-free-shipping/">
+                                       <span class="mobile">?</span>
+                                       <span class="desktop">what's autoship?</span>
+                                       </a>
+                                    </div>
+                                    <div class="del-interval__time" for="delivery-interval" style="display: none;">
+                                       <span class="del-interval__title">Send this to me every</span>
+                                       <select onchange="" id="delivery-interval" name="delivery-interval" class="">
+                                          <option value="2 Weeks">2 Weeks</option>
+                                          <option value="1 Month">1 Month</option>
+                                          <option value="2 Months">2 Months</option>
+                                       </select>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                           <div id="autoship-popup" class="white-popup mfp-hide" style="display:none;">
+                              <h2>What’s autoship?</h2>
+                              <p>Your subscription enrolls you in a regular autoship service wherein you will receive a new order, shipped to you for free, according the time you selected.</p>
+                              <p>You can have your favorite products shipped every:</p>
+                              <ul>
+                                 <li>2 Weeks</li>
+                                 <li>1 Month</li>
+                                 <li>2 Months</li>
+                              </ul>
+                              <p>Free shipping is offered on future subscription orders, not the initial order.</p>
+                              <p>You can cancel or adjust your future subscription at anytime. Shipping will always be free.</p>
+                              <p>Note: This service is for domestic orders only.</p>
+                           </div>
+                           <script type="text/javascript">
+                              $j = jQuery;
+                                $j('input[type="radio"]').click(function(){
+                                    if($j(this).attr("value")=="one-time-delivery"){
+                                        $j(this).closest('.options-list').find(".del-interval__time").hide();
+                                    }
+                                
+                                    if($j(this).attr("value")=="subscribe"){
+                                         $j(this).closest('.options-list').find(".del-interval__time").show();
+                                    }
+                                });
+                                
+                               
+                                //]]>
+                           </script>
                         </div>
-                    {% endif %}
-
-                    {% if product.variants.size %}
-                        <div class="c-product__optionSection c-product__optionSection--size">
-                            <span class="c-product__optionType">Size : 
-                                <span class="c-product__optionCurrentValue js-current-size-display"></span>
-                            </span>
-                                                    
-                            {% include 'swatch' with 'Size' %}
-                        </div>
-                    {% endif %}                              
-                </div>
-
-                <div class="c-product__linkBox">
-                    {% comment %}<a class="c-product__linkjs-show-plus-sizes">See Plus Sizes</a>{% endcomment %}
-                    <a class="c-product__link js-modal" href="#" aria-controls="content" data-modal-src="#size-guide">Size Guide</a>
-                </div>
-         
-                    <div class="c-product__priceBox" data-price-wrapper>
-                        <span class="c-product__price" data-product-price>
-                            ${{ current_variant.price | money_without_currency }}
-                        </span>
-          
-                        {% if product.compare_at_price_max >   product.price %}
-                            <s class="c-product__price c-product__price--nosale" data-compare-price>
-                                {% if current_variant.compare_at_price > current_variant.price %}
-                                    ${{ current_variant.compare_at_price   | money_without_currency }}
-                                {% endif %}
-                            </s>
-                        {% endif %}
-                    </div>
-          
-                    <button
-                        id="AddToCart"
-                        class="c-btn c-btn--black c-product__submit"
-                        type="submit"
-                        name="add"
-                        data-add-to-cart
-                        {% unless current_variant.available   %}disabled="disabled"{% endunless %}
-                    >
-                        <span class="c-product__submitText" data-add-to-cart-text>
-                            {% if current_variant.available %}
-                                Add To Cart
-                            {% else %}
-                                Sold Out
-                            {% endif %}
-                        </span>
-                    </button>
-
-                    <span class="c-product__freeShipping">Free Shipping Orders Over $75</span>
-                </form>
+                     </div>
+                  </div>
+                  <div class="c-product__priceBox c-product-price" data-price-wrapper>
+                     <span class="c-product__price " data-product-price>
+                     ${{ current_variant.price | money_without_currency }}
+                     </span>
+                     {% if product.compare_at_price_max >   product.price %}
+                     <s class="c-product__price c-product__price--nosale" data-compare-price>
+                     {% if current_variant.compare_at_price > current_variant.price %}
+                     ${{ current_variant.compare_at_price   | money_without_currency }}
+                     {% endif %}
+                     </s>
+                     {% endif %}
+                  </div>
+                  <button
+                  id="AddToCart"
+                  class="c-btn c-add-to-cart-buttons c-product__submit"
+                  type="submit"
+                  name="add"
+                  data-add-to-cart
+                  {% unless current_variant.available   %}disabled="disabled"{% endunless %}
+                  ><span class="c-icon"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 135.8 115" enable-background="new 0 0 135.8 115" xml:space="preserve"><path d="M113.8,84h-72c-2.6,0-4.9-1.9-5.4-4.4L22.7,11H0V0h27.2c2.6,0,4.9,1.9,5.4,4.4L36.1,22h94.1c1.8,0,3.4,0.8,4.4,2.3c1,1.4,1.3,3.3,0.8,4.9l-16.5,51C118.3,82.5,116.2,84,113.8,84z M46.3,73h63.5l12.9-40H38.3L46.3,73z"></path><circle cx="50" cy="103.9" r="11"></circle><circle cx="104.5" cy="103.9" r="11"></circle></svg></span>
+                  <span class="c-product__submitText" data-add-to-cart-text>
+                  {% if current_variant.available %}
+                  Add To Cart
+                  {% else %}
+                  Sold Out
+                  {% endif %}
+                  </span>
+                  </button>
+               </form>
             </div>
-
-            <div class="c-product__detailSection">
-                <h3 class="c-product__descriptionTitle">Details</h3>
-                <div class="c-product__description rte">
-                    {{ product.description }}
-                </div>
-
-                {% assign is_women_product = false %}
-                {% assign is_plus_product = false %}
-                {% assign is_men_product = false %}
-                {% assign is_tween_product = false %}
-                {% assign is_other_product = false %}
-
-
-                {% for collection in product.collections %}
-                    {% if collection.handle contains 'plus' %}
-                        {% assign is_plus_product = true %}
-                    {% elsif collection.handle == 'women' %}
-                        {% assign is_women_product = true %}
-                    {% elsif collection.handle == 'men' %}
-                        {% assign is_men_product = true %}
-                    {% elsif collection.handle contains 'tween' %}
-                        {% assign is_tween_product = true %}
-                    {% endif %}
-                {% endfor %}                
-
-                <span class="c-product__modelSize">Model Size: 
-                    {% if is_plus_product %}
-                        <span>1X</span>
-                    {% elsif is_women_product %}
-                        <span>SMALL</span>
-                    {% elsif is_men_product %}
-                        <span>MED</span>
-                    {% elsif is_tween_product %}
-                        <span>N/A</span>
-                    {% else %}
-                        <span>N/A</span>
-                    {% endif %}
-                </span>
-
-                <span class="c-product__itemNumber">Item Number: <span class="js-item-number-display"></span></span>
-            </div>
-        </div>
-
-        <div class="c-product__imageSection js-animTrigger__productImageSection">
-            <div class="c-product__imageSection--desktop u-showTabletUp">
-                <div class="c-product__imageGrouping">
-                    {% for image in product.images limit:3 %}
-                        {% cycle '', '<div class="c-product__imageGrouping--sub">', '' %}
-                            <img class="c-product__image c-product__image--grouped 
-                                {% if forloop.first %}
-                                    c-product__image--main
-                                {% endif %}
-                            " src="{{ image.src | img_url: 'master' }}" alt="{{ image.alt | escape }}">
-                        {% cycle '', '', '</div>'%}
-                    {% endfor %}
-                </div>
-
-                {% for image in product.images offset:3 %}
-                    <img class="c-product__image" src="{{ image.src | img_url: 'master' }}" alt="{{ image.alt | escape }}">
-                {% endfor %}
-            </div>
-
-            <div class="c-product__imageSection--mobile u-hideTabletUp js-product-image-slider">
-                {% comment %} Used on mobile slider {% endcomment %}
-                {% for image in product.images %}
-                    <img class="c-product__image u-hideTabletUp" src="{{ image.src | img_url: 'master' }}" alt="{{ image.alt | escape }}">
-                {% endfor %}                  
-            </div>        
-        </div>
-    </div>
-    </div>
-
-    {% section 'related-products' %}
-
+         </div>
+      </div>
+   </div>
+</div>
 {% section 'product-detail' %}
-    {% comment %}  accordian{% endcomment %}
-
- <div class="row u-component">
-    <dl class="c-accordion js-accordion">
-        <dt id="accordion-item-1" class="c-accordion__nav is-active" aria-selected="true">Accordion One</dt>
-        <dd class="c-accordion__panel is-active" aria-hidden="false" aria-labelledby="accordion-item-1">
-            <h2>Panel One</h2>
-            <p>Etiam fringilla ligula ac bibendum fringilla. Cras maximus maximus tellus, convallis sollicitudin felis efficitur in. Aenean efficitur urna sit amet massa accumsan vestibulum. Suspendisse scelerisque mattis dui, in malesuada velit cursus sed. Proin pellentesque augue non justo luctus, nec viverra ex pulvinar. Suspendisse fringilla auctor augue ac vehicula. Praesent porttitor efficitur sapien sed efficitur.</p>
-            <p>Pellentesque tincidunt lacus ornare gravida convallis. Fusce interdum lectus fringilla, blandit nibh ut, dignissim dui. Quisque elit est, faucibus a venenatis eu, convallis quis metus. Nullam quis dolor tellus. Donec turpis nibh, iaculis vitae nisl eu, luctus dapibus erat. Nullam sit amet fringilla dolor. Morbi sagittis dictum purus, eget vulputate velit vestibulum at. Duis tristique lectus lacus, id vehicula ex placerat ut. Ut at pharetra nunc. Sed tempus molestie bibendum. Cras in lacinia tellus. Integer mollis facilisis tempus.</p>        
-        </dd>
-
-        <dt id="accordion-item-2" class="c-accordion__nav" aria-selected="false">Accordion Two</dt>
-        <dd class="c-accordion__panel" aria-hidden="true" aria-labelledby="accordion-item-2">
-            <h2>Panel Two</h2>
-            <p>Sed tempor ipsum interdum mauris lacinia mollis. Duis vestibulum elit non purus luctus tempus. Ut ac porta sapien. Sed sollicitudin elementum ligula. Aliquam turpis quam, hendrerit sit amet metus in, fermentum tincidunt odio. Fusce dignissim fringilla elit, sit amet tempor sem vehicula eget.</p>
-            <p>Pellentesque sollicitudin hendrerit mattis. Suspendisse potenti. Cras tincidunt id nulla vel posuere. Donec neque felis, cursus sed fermentum ut, consequat at diam. Aenean aliquet ut felis ut auctor. Suspendisse enim arcu, ullamcorper eu neque et, cursus consequat augue. Etiam egestas est orci, nec ultrices enim luctus eu. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse et justo sit amet elit sollicitudin varius.</p>       
-        </dd>
-
-        <dt id="accordion-item-3" class="c-accordion__nav" aria-selected="false">Accordion Three</dt>
-        <dd class="c-accordion__panel" aria-hidden="true" aria-labelledby="accordion-item-3">
-            <h2>Panel Three</h2>
-            <p>Fusce ac dui sit amet magna suscipit eleifend eu nec ex. Proin vitae ex felis. Fusce vitae iaculis nisi. Praesent eget elit lorem. Nulla sagittis turpis vel semper rhoncus. Maecenas imperdiet dui at ante convallis, vel eleifend eros blandit. Nulla a porttitor lorem. Praesent ullamcorper convallis commodo.</p>
-            <p>Pellentesque porttitor molestie sem vel tincidunt. Aliquam iaculis ex nisi. Donec rhoncus urna non accumsan condimentum. Vivamus at sagittis ante. Donec scelerisque quam accumsan iaculis sagittis. Nam vitae tincidunt neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi quis ante et tortor elementum faucibus id non erat.</p>        
-        </dd>                        
-
-        <dt id="accordion-item-4" class="c-accordion__nav" aria-selected="false">Accordion Four</dt>
-        <dd class="c-accordion__panel" aria-hidden="true" aria-labelledby="accordion-item-4">
-            <h2>Panel Four</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu dictum orci. Curabitur porttitor, mauris in ultrices commodo, orci est interdum diam, ut sagittis mi nisi quis justo. Donec ac lobortis ante. In dignissim vitae mi non mattis. Mauris et tortor facilisis mi viverra ornare accumsan eu orci. Quisque ultricies magna at justo feugiat, et malesuada nibh pharetra. Suspendisse potenti. Vivamus sed libero id enim fringilla vehicula. Donec pharetra laoreet blandit. Cras quam eros, feugiat sed imperdiet quis, finibus eget elit. Morbi ut venenatis ante, interdum venenatis arcu. Curabitur sed egestas ex. Pellentesque vehicula ac urna sit amet posuere.</p>
-            <p>Mauris maximus sapien elementum condimentum dapibus. Etiam tempus dignissim ante, vitae egestas augue dictum vel. Morbi tellus lacus, venenatis malesuada lobortis et, aliquet vitae velit. Integer sed dolor molestie, efficitur risus id, consequat eros.</p>            
-        </dd>            
-    </dl>         
-</div>
-    {% comment %} accordian {% endcomment %}
-</div>
-
-
+{% section 'related-products' %} 
 {{ 'option_selection.js' | shopify_asset_url | script_tag }}
-
 <script>
-    console.log({{ product | json}})
-
-    // replace full text name
-    var sizeTextAsc = {
-        'xs': 'Extra Small',
-        's': 'Small',
-        'm': 'Medium',
-        'l': 'Large',
-        'xl': 'Extra Large',
-        'xxl': 'XX Large',
-        '01x': '01X Large',
-        '02x': '02X Large',
-        '03x': '03X Large',
-        '04x': '04X Large',
-        '05x': '05X Large',
-        '06x': '06X Large'     
-    }
-
-    var selectCallback = function(variant, selector) {
-
-        var modelSizeDisplay = $('.js-model-size-display');
-        var itemNumberDisplay = $('.js-item-number-display');
-
-        var currentColorDisplay = $('.js-current-color-display');
-        var currentSizeDisplay = $('.js-current-size-display');        
-
-        // console.log(variant);
-
-        if (variant.option1) {
-            // console.log(variant.option1)
-            currentColorDisplay.text(variant.option1)
-        }
-
-        if (variant.option2) {
-            // console.log(variant.option2)
-            currentSizeDisplay.text(sizeTextAsc[variant.option2.toLowerCase()])
-            modelSizeDisplay.text(variant.option2)
-        }
-
-        if (variant.sku) {
-            itemNumberDisplay.text(variant.sku)
-        }
-
-        // BEGIN SWATCHES
-        if (variant) {
-            var form = jQuery('#' + selector.domIdPrefix).closest('form');
-            for (var i=0,length=variant.options.length; i<length; i++) {
-                var radioButton = form.find('.swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] +'"]');
-                if (radioButton.length) {
-                    radioButton.get(0).checked = true;
-                }
-            }
-        }
-        // END SWATCHES  
-
-        var variantOptions = variant.options
-
-        $('.swatch-element').each(function() {
-            var isActive = false
-            var swatchElement = $(this)
-            variantOptions.forEach(function(option) {
-                if (option == swatchElement.find('.swatch-input').val()) {
-                    isActive = true
-                }
-            })
-
-            if (isActive) {
-                swatchElement.addClass('is-active')
-            } else {
-                swatchElement.removeClass('is-active')
-            }
-        })
-
-        // if (('.swatch .swatch-element').hasClass('is-active')){
-        //     $('.swatch .swatch-element').removeClass('is-active');
-        //     $(this).addClass('is-active');
-        // }else{
-
-        //     $('.swatch .swatch-element').removeClass('is-active');
-        //     $(this).addClass('is-active');  
-        // }                
-    };
-
-    // jQuery(function($) {
-    new Shopify.OptionSelectors('product-select', {
-        product: {{ product | json }},
-        onVariantSelected: selectCallback,
-        enableHistoryState: true
+   console.log({{ product | json}})
+   
+   // replace full text name
+   var sizeTextAsc = {
+       'xs': 'Extra Small',
+       's': 'Small',
+       'm': 'Medium',
+       'l': 'Large',
+       'xl': 'Extra Large',
+       'xxl': 'XX Large',
+       '01x': '01X Large',
+       '02x': '02X Large',
+       '03x': '03X Large',
+       '04x': '04X Large',
+       '05x': '05X Large',
+       '06x': '06X Large'     
+   }
+   
+   var selectCallback = function(variant, selector) {
+   
+       var modelSizeDisplay = $('.js-model-size-display');
+       var itemNumberDisplay = $('.js-item-number-display');
+   
+       var currentColorDisplay = $('.js-current-color-display');
+       var currentSizeDisplay = $('.js-current-size-display');        
+   
+       // console.log(variant);
+   
+       if (variant.option1) {
+           // console.log(variant.option1)
+           currentColorDisplay.text(variant.option1)
+       }
+   
+       if (variant.option2) {
+           // console.log(variant.option2)
+           currentSizeDisplay.text(sizeTextAsc[variant.option2.toLowerCase()])
+           modelSizeDisplay.text(variant.option2)
+       }
+   
+       if (variant.sku) {
+           itemNumberDisplay.text(variant.sku)
+       }
+   
+       // BEGIN SWATCHES
+       if (variant) {
+           var form = jQuery('#' + selector.domIdPrefix).closest('form');
+           for (var i=0,length=variant.options.length; i<length; i++) {
+               var radioButton = form.find('.swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] +'"]');
+               if (radioButton.length) {
+                   radioButton.get(0).checked = true;
+               }
+           }
+       }
+       // END SWATCHES  
+   
+       var variantOptions = variant.options
+   
+       $('.swatch-element').each(function() {
+           var isActive = false
+           var swatchElement = $(this)
+           variantOptions.forEach(function(option) {
+               if (option == swatchElement.find('.swatch-input').val()) {
+                   isActive = true
+               }
+           })
+   
+           if (isActive) {
+               swatchElement.addClass('is-active')
+           } else {
+               swatchElement.removeClass('is-active')
+           }
+       })
+   
+       // if (('.swatch .swatch-element').hasClass('is-active')){
+       //     $('.swatch .swatch-element').removeClass('is-active');
+       //     $(this).addClass('is-active');
+       // }else{
+   
+       //     $('.swatch .swatch-element').removeClass('is-active');
+       //     $(this).addClass('is-active');  
+       // }                
+   };
+   
+   // jQuery(function($) {
+   new Shopify.OptionSelectors('product-select', {
+       product: {{ product | json }},
+       onVariantSelected: selectCallback,
+       enableHistoryState: true
+   });
+   
+       // // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
+   
+       // {% if product.options.size == 1 and product.options.first != 'Title' %}
+       //     $('.selector-wrapper:eq(0)').prepend('<label for="productSelect-option-0">{{ product.options.first | escape }}</label>');
+       // {% endif %}
+   
+       // // Hide selectors if we only have 1 variant and its title contains 'Default'.
+       // {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
+       //     $('.selector-wrapper').hide();
+       // {% endif %}
+   // });
+   
+   
+   
+   $(function() {
+       $('.swatch :radio').change(function() {
+           var optionIndex = $(this).closest('.swatch').attr('data-option-index');
+           var optionValue = $(this).val();
+           $(this)
+               .closest('form')
+               .find('.single-option-selector')
+               .eq(optionIndex)
+               .val(optionValue)
+               .trigger('change');
+       });
+   });
+   $(function() {
+   $('.js-accordion').accordion({
+     collapsible: true,
+    autoHeight: false,
+    navigation: true,
+    heightStyle: "content" 
     });
-
-        // // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
-
-        // {% if product.options.size == 1 and product.options.first != 'Title' %}
-        //     $('.selector-wrapper:eq(0)').prepend('<label for="productSelect-option-0">{{ product.options.first | escape }}</label>');
-        // {% endif %}
-
-        // // Hide selectors if we only have 1 variant and its title contains 'Default'.
-        // {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
-        //     $('.selector-wrapper').hide();
-        // {% endif %}
-    // });
-
-
-
-    $(function() {
-        $('.swatch :radio').change(function() {
-            var optionIndex = $(this).closest('.swatch').attr('data-option-index');
-            var optionValue = $(this).val();
-            $(this)
-                .closest('form')
-                .find('.single-option-selector')
-                .eq(optionIndex)
-                .val(optionValue)
-                .trigger('change');
-        });
-    });
-$(function() {
-  $('.js-accordion').accordion();
-});
+   });
 </script>
-
-

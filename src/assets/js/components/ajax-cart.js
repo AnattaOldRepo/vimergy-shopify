@@ -589,4 +589,4 @@ var ajaxCart = (function(module, $) {
 
 window.ajaxCart = ajaxCart
 
-})()
+})();

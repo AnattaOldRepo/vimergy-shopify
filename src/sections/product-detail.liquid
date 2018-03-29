@@ -3,7 +3,7 @@
         <h2 class="c-product-detail__heading">Learn more about this product</h2>
     </div>
     <div class="c-row">
-        <div class="accordion js-accordion ">
+        <div class="accordion js-accordion">
 
             <div class="accordion__heading">
                 Product info </div>
@@ -18,8 +18,8 @@
                 How to use </div>
 
             <div class="accordion__panel">
-                <div class="accordion__content">
-                     {{ product.metafields.c_f.usage }}
+                <div class="accordion__content">     
+                     {{ product.metafields.c-f.usage }}
             </div>
             </div>
 
@@ -30,11 +30,7 @@
                 <div class="accordion__content">
                     <div class="product-resource">
                         <p>
-                         {%- assign images = product.metafields.c_f.resources -%}
-                         {{images}}
-                        {% for img in images %}
-                        <img src={{ img | img_url: 'master'}}>
-                         {% endfor %}
+                        {{product.metafields.c_f.resources}}
                         </p>
                     </div>
                 </div>
@@ -42,3 +38,5 @@
         </div>
     </div>
 </div>
+
+

@@ -10,7 +10,8 @@
               <th class="c-cartTable__th" colspan="1" >{{ 'cart.label.product' | t }}</th>
               {% comment %}<th class="c-cartTable__th" >{{ 'cart.label.price' | t }}</th>{% endcomment %}
               <th class="c-cartTable__th" >{{ 'cart.label.quantity' | t }}</th>
-              <th class="c-cartTable__th c-total-header" >{{ 'cart.label.total' | t }}</th>
+              <th class="c-cartTable__th" >{{ 'cart.label.total' | t }}</th>
+              <th class="c-cartTable__th " ></th>
             </tr>  
           </thead>
           <tbody>
@@ -80,9 +81,11 @@
                     {% endfor %}
                   {% endif %}
 
-                  <a class="c-cart-remove" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
+                </td>
+                <td style="text-align:center;"> 
+                <a  href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
                     <small>{{ 'cart.general.remove' | t }}</small>
-                  </a>
+                </a>
                 </td>
               </tr>
 

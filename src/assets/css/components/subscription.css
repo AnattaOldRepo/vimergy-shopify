@@ -1,0 +1,139 @@
+.options-list {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+
+.del-interval__heading {
+    margin-bottom: .5rem;
+    font-size: .9375rem;
+    font-weight: 700;
+
+ @media(--tablet-large) {
+        font-size:1.0625rem
+    }
+}
+
+.del-interval .options-list {
+    background-color: #fff;
+    border: 1px solid #c4c4ae;
+    border-radius: 2px
+}
+
+.del-interval .options-list li+li {
+    border-top: 1px solid #c4c4ae
+}
+
+.del-interval__option {
+    padding: .625rem 1.9375rem
+}
+.product-options-bottom {
+    margin-top: 1.75rem;
+}
+.del-interval__time {
+    text-align: center;
+    padding: .4375rem .9375rem .9375rem;
+    background-color: #f3f3ed;
+    box-shadow: 1px 4px 9px -6px rgba(0,0,0,0.4) inset;
+
+ @media(--tablet-large) {
+        padding-top:1.5rem;
+        padding-bottom: 1.5rem
+    }
+}
+
+.del-interval__time select {
+    border: 1px solid #c4c4ae;
+    height: 40px;
+    width: 7.8125rem;
+
+ @media(--tablet-large) {
+        height:45px;
+        width: 7.5rem
+    }
+}
+
+.del-interval__title {
+    display: block;
+    margin-bottom: .25rem;
+    font-size: .875rem;
+    font-weight: 600;
+
+ @media(--tablet-large) {
+        display:inline-block;
+        height: 2.8125rem;
+        line-height: 2.8125rem;
+        font-size: 1rem;
+        vertical-align: top;
+        margin-bottom: 0;
+        margin-right: .4375rem
+    }
+}
+
+.del-interval__info {
+    float: right;
+    font-size: .875rem;
+    font-weight: 700;
+
+ @media(--mobile-large) {
+        font-weight:600;
+        text-decoration: underline;
+    }
+}
+
+.del-interval__info .desktop {
+    display: none;
+
+ @media(--mobile-large) {
+        display:inline;
+    }
+}
+.del-interval__info .mobile {
+    @media(--mobile-large) {
+        display:none
+    }
+}
+
+
+.custom__radiobox input[type=radio] {
+    opacity: 0
+}
+
+.custom__radiobox label {
+    margin: 0;
+    padding-bottom: 0;
+    font-size: .875rem;
+    line-height: 24px;
+    font-weight: 600;
+    position: relative;
+    display: inline-block;
+
+ @media(--tablet-large) {
+        font-size:1rem
+    }
+}
+
+.custom__radiobox label:before {
+    content: '';
+    background: #fff;
+    border: 2px solid #c4c4ae;
+    display: inline-block;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    padding: 3px;
+    text-align: center;
+    border-radius: 100%;
+    position: absolute;
+    left: -25px;
+    top: 1px
+}
+
+.custom__radiobox input[type=radio]:checked+label:before {
+    border-width: 5px;
+    border-color: #E5751A
+}
+
+.product-view .product-options-bottom .amgroupcat:last-of-type {
+    display: none
+}

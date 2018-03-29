@@ -1,0 +1,151 @@
+
+$modal-zindex: 100 !default;
+$modal-background-color: rgba(0, 0, 0, 0.8) !default;
+$modal-box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) !default;
+
+
+.c-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: $modal-zindex;
+	width: 100%;
+	height: 100%;
+	background-color: $modal-background-color;
+	overflow: hidden;
+	opacity: 0;
+	visibility: hidden;
+	transition: 300ms visibility ease, 300ms opacity ease;
+
+	&.modal-open {
+		opacity: 1;
+		visibility: visible;
+		transition: 300ms visibility ease, 300ms opacity ease;
+	}
+}
+
+
+.c-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: $modal-zindex + 1;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	visibility: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-backface-visibility: hidden;
+	transition: 300ms visibility ease, 300ms opacity ease;
+
+	&.modal-open {
+		opacity: 1;
+		visibility: visible;
+		transition: 300ms visibility ease, 300ms opacity ease;
+	}
+}
+
+
+.c-modal__wrap {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding: 0 20px;
+	text-align: center;
+
+
+	&:before {
+		content: '';
+		display: inline-block;
+		height: 100%;
+		vertical-align: middle;
+	}
+}
+
+
+.c-modal__inner {
+	position: relative;
+	z-index: $modal-zindex + 2;
+	display: inline-block;
+	width: 100%;
+	margin: 0 auto;
+	vertical-align: middle;
+	text-align: left;
+}
+
+
+.c-modal--iframe {
+	.c-modal__wrap {
+		padding-top: 44px;
+		padding-bottom: 44px;
+	}
+
+	.c-modal__inner {
+		max-width: 1200px;
+	}
+
+	.c-modal__close {
+		top: -44px;
+		color: #fff;
+	}
+}
+
+.c-modal__iframeWrap {
+	width: 100%;
+	height: 0;
+	overflow: hidden;
+	padding-top: 56.25%;
+
+	iframe {
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		box-shadow: $modal-box-shadow;
+		background: #000;
+	}
+}
+
+
+.c-modal__close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	margin: 0;
+	background: none;
+	border: 0;
+	line-height: 44px;
+	text-align: center;
+	font-size: 28px;
+	color: #000;
+	cursor: pointer;
+}
+
+
+.modal-default-popup {
+	position: relative;
+	margin: 40px auto;
+	padding: 20px 30px;
+	max-width: 800px;
+	background-color: #fff;
+}
+
+.c-modal.fade-and-drop {
+	top: -100%;
+	opacity: 1;
+	visibility: visible;
+	transition: 300ms top ease;
+
+	&.modal-open {
+		top: 0;
+		transition: 300ms top 300ms ease;
+	}
+}

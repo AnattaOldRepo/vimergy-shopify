@@ -67,3 +67,10 @@ $('.js-offcanvas').offcanvas({
       } 
   }
 });
+$(function() {
+  $('.js-accordion').accordion({
+    collapsible: true,
+   autoHeight: false,
+   heightStyle: "content" 
+   });
+  });

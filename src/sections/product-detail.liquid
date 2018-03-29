@@ -3,30 +3,30 @@
         <h2 class="c-product-detail__heading">Learn more about this product</h2>
     </div>
     <div class="c-row">
-        <div class="accordion js-accordion">
+        <dl class="accordion js-accordion">
 
-            <div class="accordion__heading">
-                Product info </div>
+            <dt class="accordion__heading" aria-selected="false">
+                Product info </dt>
 
-            <div class="accordion__panel" style="display: none;">
+            <dd class="accordion__panel" aria-hidden="true">
                 <div class="accordion__content">
                    {{ product.metafields.c_f.prod-info }}
                 </div>
-            </div>
+            </dd>
 
-            <div class="accordion__heading">
-                How to use </div>
+            <dt class="accordion__heading" aria-selected="false">
+                How to use </dt>
 
-            <div class="accordion__panel">
+            <dd class="accordion__panel" aria-hidden="true">
                 <div class="accordion__content">     
                      {{ product.metafields.c-f.usage }}
             </div>
-            </div>
+            </dd>
 
-            <div class="accordion__heading">
-                Resources </div>
+            <dt class="accordion__heading" aria-selected="false">
+                Resources </dt>
 
-            <div class="accordion__panel">
+            <dd class="accordion__panel" aria-hidden="true">
                 <div class="accordion__content">
                     <div class="product-resource">
                         <p>
@@ -34,9 +34,7 @@
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
+            </dd>
+        </dl>
     </div>
 </div>
-
-

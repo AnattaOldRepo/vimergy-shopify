@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <meta name="theme-color" content="{{ settings.color_primary }}">
         <link rel="canonical" href="{{ canonical_url }}">
-
+        
+    
 
       <!-- Hotjar Tracking Code for www.suburbanriot.com -->
       <script>
@@ -55,10 +56,10 @@
 
         <!-- Stylesheets -->
         {{ 'app.css' | asset_url | stylesheet_tag }}
-        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
         <script src="//code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-        <!-- It inserts the necessary Shopify scripts -->
+        <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+        <!-- It inserts the necessary Shopify scripts -->  
         {{ content_for_header }}
 
         {% comment %} <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
@@ -89,6 +90,7 @@
               {% include 'subscribe' %}  
             {% include 'footer' %}
         </div>
+
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 

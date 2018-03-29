@@ -12,10 +12,10 @@
     border-bottom: 0;
     cursor: pointer;
 
-    /* &.is-active {
-        color: $color-white;
+     &.is-active {
+        color: white;
         background-color: gray;
-    } */
+    } 
 }
 
 .c-accordion__panel {
@@ -67,7 +67,7 @@
     }
 }
 
-.accordion__heading.active::before {
+.accordion__heading.is-active::before {
     transform: rotate(180deg);
     transition: all 0.3s 0s
 }
@@ -76,10 +76,13 @@
     border: 1px solid #c4c4ae;
     border-bottom: 0
 }
-
-.js .accordion__panel {
+ .accordion__panel {
     display: none
 }
+.accordion__panel.is-active{
+    display: block; 
+} 
+ 
 
 .accordion__content {
     padding: 1.25rem .9375rem;

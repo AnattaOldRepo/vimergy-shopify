@@ -67,9 +67,9 @@
     }
 }
 
-.accordion__heading.is-active::before {
+.accordion__heading.ui-accordion-header-active::before {
     transform: rotate(180deg);
-    transition: all 0.3s 0s
+    transition: all 0.3s 0s;
 }
 
 .accordion__panel {
@@ -81,6 +81,7 @@
 }
 .accordion__panel.is-active{
     display: block; 
+    transition: all 0.3s 0s;
 } 
  
 

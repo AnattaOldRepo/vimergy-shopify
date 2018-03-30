@@ -71,6 +71,7 @@ $(function() {
   $('.js-accordion').accordion({
     collapsible: true,
    autoHeight: false,
+   navigation: true,
    heightStyle: "content" 
    });
-  });
+});

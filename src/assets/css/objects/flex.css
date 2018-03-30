@@ -17,7 +17,7 @@
 .o-flex__item--reverse {
 	order: 2;
 
-	@media(--mobile-max) {
+	@media(--tablet-max) {
 		order: 1;
 	}
 }
@@ -52,7 +52,20 @@
 		flex-basis: 66.66%;
 	}
 }
+.o-flex__col-3 {
+	flex-basis:100%;
 
+	@media(--mobile-large) {
+		flex-basis: 25%;
+	}
+}
+.o-flex__col-lg-8{
+	flex-basis:100%;
+
+	@media(--tablet-large) {
+		flex-basis: 66.66%;
+	}	
+}
 .o-flex__col-4 {
 	flex-basis:100%;
 
@@ -60,7 +73,13 @@
 		flex-basis: 33.33%;
 	}
 }
+.o-flex__col-lg-4{
+	flex-basis:100%;
 
+	@media(--tablet-large) {
+		flex-basis: 33.33%;
+	}	
+}
 .o-flex--verticalMobile {
 
     @media(--mobile-max) {

@@ -12,6 +12,18 @@
         padding: 0 50px;
     }
 }
+.o-wrapper--footer{
+    padding: 0;
+
+    @media (--tablet) {
+        padding: 0 15px;
+        max-width: 1920px;
+    }
+
+    @media (--desktop-medium) {
+        padding: 0 50px;
+    }
+}
 .o-wrapper-background{
     background-color: #fff;
 } 

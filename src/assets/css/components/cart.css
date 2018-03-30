@@ -287,7 +287,10 @@
     font-size: 13px;
   }
 }
-
+.c-cartTable__td .js-qty input{
+    display: inline-block !important;
+    width:46px !important; 
+}
 .ajaxcart__qty-adjust,
 .js-qty__qty-adjust {
   cursor: pointer;

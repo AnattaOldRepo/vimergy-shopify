@@ -307,3 +307,34 @@
         font-size: 1.75rem
     }
 }
+.c-product-certs {
+    text-align: center;
+    padding: 1.5rem 0 .3125rem;
+    background-color: #e8e8de
+}
+.c-certification__icon {
+    display: inline-block;
+    padding: .1875rem;
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    width: 2.875rem;
+
+ @media(--tablet-large) {
+        width:3.125rem;
+    }
+}
+
+.c-certification__icon img {
+    display: block
+}
+
+.c-certification__name {
+    margin-top: .125rem;
+    font-size: .9375rem;
+    font-weight: 600;
+
+ @media(--tablet-large) {
+        margin-top:.3125rem;
+        font-size: 1rem;
+    }
+}

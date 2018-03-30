@@ -94,7 +94,7 @@
                                        <input type="radio" onclick="" class="radio validate-one-required-by-name change-container-classname " id="delivery-option-subscribe" name="delivery-option" value="subscribe">
                                        <label for="delivery-option-subscribe">
                                        Auto-Ship Delivery - FREE                    			                    		</label>
-                                       <a class="del-interval__info js-inline-popup" data-mfp-src="#autoship-popup" target="_blank" href="https://vimergy.com/autoship-free-shipping/">
+                                       <a class="del-interval__info js-modal" aria-controls="autoship-popup" data-modal-src="#autoship-popup" href="https://vimergy.com/autoship-free-shipping/">
                                        <span class="mobile">?</span>
                                        <span class="desktop">what's autoship?</span>
                                        </a>
@@ -110,18 +110,8 @@
                                  </li>
                               </ul>
                            </div>
-                           <div id="autoship-popup" class="white-popup mfp-hide" style="display:none;">
-                              <h2>What’s autoship?</h2>
-                              <p>Your subscription enrolls you in a regular autoship service wherein you will receive a new order, shipped to you for free, according the time you selected.</p>
-                              <p>You can have your favorite products shipped every:</p>
-                              <ul>
-                                 <li>2 Weeks</li>
-                                 <li>1 Month</li>
-                                 <li>2 Months</li>
-                              </ul>
-                              <p>Free shipping is offered on future subscription orders, not the initial order.</p>
-                              <p>You can cancel or adjust your future subscription at anytime. Shipping will always be free.</p>
-                              <p>Note: This service is for domestic orders only.</p>
+                           <div id="autoship-popup" class="white-popup modal-default-popup u-hide" aria-labelledby="modal-title" aria-describedby="modal-desc" aria-hidden="true" role="dialog">
+                              {{ product.metafields.c_f.autoship }}
                            </div>
                            <script type="text/javascript">
                               $j = jQuery;
@@ -175,15 +165,36 @@
       </div>
    </div>
 </div>
+
+ {% if product.metafields.cert != blank %}
+
+<div class="c-product-certs">
+
+    {% for field in product.metafields.cert %}
+            <div class="c-about-cert">
+               <div class="c-certification__icon">
+               {{  field | last }}
+               </div>
+               <p class="c-certification__name">{{ field | first }}</p>
+            </div> 
+
+    {% endfor %} 
+
+</div>
+
+{% endif %}
+
 {% section 'product-detail' %}
+
 {% section 'related-products' %} 
+
 {{ 'option_selection.js' | shopify_asset_url | script_tag }}
 <script>
    console.log({{ product | json}})
    
    // replace full text name
    var sizeTextAsc = {
-       'xs': 'Extra Small',
+       'xs': 'Extra Small', 
        's': 'Small',
        'm': 'Medium',
        'l': 'Large',

@@ -3,7 +3,7 @@
  * @version 0.0.1
  * @author  Jason Alvis
  */
-
+console.log("rads");
 (function (factory) {
   /* eslint-disable */
   if (typeof define === 'function' && define.amd) {

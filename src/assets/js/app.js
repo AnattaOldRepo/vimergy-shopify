@@ -1,6 +1,6 @@
 console.log("App.js is ready now!!");
 
-// $('.js-modal').modal();
+$('.js-modal').modal();
 
 
 

@@ -188,7 +188,9 @@
         width:63%
     }
 }
-
+.accordion__content .row{
+    display: flex;
+}
 
 .accordion__content .product-resource::after {
     clear: both;

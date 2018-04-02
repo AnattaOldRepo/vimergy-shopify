@@ -8,9 +8,7 @@
   <div class="c-collection-container">
    <div class="c-collection-container__inner">
      <div class="o-flex">
-     
-      {% paginate collection.products by 5 %}
-
+    
       {% for product in collection.products %}
     
         <div class="o-flex__item o-flex__col-4">
@@ -49,7 +47,6 @@
     
        {% endfor %}
 
-      {% endpaginate %}
       </div>
       </div>
     </div>

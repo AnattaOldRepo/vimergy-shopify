@@ -7,7 +7,7 @@
     <div class="c-banner__info">
         <h2 class="c-banner__heading">{{ section.settings.heading }}</h2>
         <p class="c-banner__desc">{{ section.settings.text }}</p>
-        <p><a class="c-btn c-btn-primary" href="/catalog/shop">Shop collection</a></p>
+        <p><a class="c-btn c-btn-primary" href="{{ section.settings.link }}">{{ section.settings.button-link }}</a></p>
       </div>
     </div>   
   </div>
@@ -32,7 +32,18 @@
                 "type": "text",
                 "id": "text",
                 "label": "Text"
+            },
+             {
+                "type": "text",
+                "id": "button-link",
+                "label": "Button"
+            },
+             {
+                "type": "text",
+                "id": "link",
+                "label": "Link"
             }
+
         ]
     }
 {% endschema %}   

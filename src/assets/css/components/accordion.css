@@ -189,7 +189,10 @@
     }
 }
 .accordion__content .row{
-    display: flex;
+    @media(--mobile-large) {
+        display: flex;
+    }
+    
 }
 
 .accordion__content .product-resource::after {

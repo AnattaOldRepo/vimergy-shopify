@@ -37,7 +37,9 @@
    </svg>
    {{ collection.title }}
 </a>
-{% endif %}    
+
+{% endif %}
+
 <div class="c-product">
 <div class="c-product-view">
    <div class="o-flex">
@@ -61,10 +63,20 @@
                   value="{{ variant.id }}"
                   >
                   {{ variant.title }}
+                  
                   </option>
                   {% endfor %}
                   </select>
                   <h1 class="c-product-name">{{ product.title }}</h1>
+                   
+                {% if product.metafields.c_f.made_in_usa  %} 
+
+                  <div class="c-product-made">
+                    <span class="c-icon-usa">Made in USA</span>
+                 </div>
+
+                {% endif %} 
+
                   <div class="c-product-description">
                      {{ product.metafields.c_f.desc1 }}
                   </div>
@@ -77,6 +89,9 @@
                         min="0" 
                         data-product-quantity
                         aria-label="{{ 'cart.general.item_quantity' | t }}">
+                    
+                    {% if product.metafields.subscriptions.has_subscription  %} 
+
                      <div class="product-options-bottom">
                         <div class="amgroupcat">
                            <div class="subscription-product product-options del-interval pdp-page">
@@ -130,6 +145,9 @@
                            </script>
                         </div>
                      </div>
+
+                    {% endif %}   
+
                   </div>
                   <div class="c-product__priceBox c-product-price" data-price-wrapper>
                      <span class="c-product__price " data-product-price>
@@ -168,19 +186,7 @@
 
  {% if product.metafields.cert != blank %}
 
-<div class="c-product-certs">
-
-    {% for field in product.metafields.cert %}
-            <div class="c-about-cert">
-               <div class="c-certification__icon">
-               {{  field | last }}
-               </div>
-               <p class="c-certification__name">{{ field | first }}</p>
-            </div> 
-
-    {% endfor %} 
-
-</div>
+{% section 'product-certs' %}
 
 {% endif %}
 

@@ -29,9 +29,7 @@
     @media(--tablet-large) {
         padding:2.8125rem .9375rem
     }
-}
-.c-product-view .c-product-image,.c-product-view .c-product-shop {
-    @media(--tablet-large) {
+    @media(--desktop-medium) {
         padding:4.0625rem
     }
 } 
@@ -81,19 +79,22 @@
     font-size: .75rem;
     font-weight: 600;
     text-transform: uppercase;
+    text-align: center;
 
   @media(--tablet-large) {
-        display:inline-block;
         position: relative;
         top: -.375rem;
         margin-bottom: 0;
         margin-left: .75rem;
+        text-align: left;
     }
 }
 
 .c-product-shop .c-product-made span {
     line-height: 1.25rem;
-    padding-left: 1.6875rem
+    padding-left: 1.6875rem;
+    padding-bottom: 3px;
+    padding-top: 3px;
 }
 
 .c-product-shop .c-product-description  {
@@ -105,7 +106,12 @@
         margin: 0 0 3.3125rem
     }
 }
-
+.c-icon-usa {
+    background-image: url("../icon-usa.png");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 0 center;
+}
 .c-product-shop .c-product-description ,.c-product-shop .c-product-description  p {
     font-size: .875rem;
     font-weight: 600;
@@ -310,7 +316,8 @@
 .c-product-certs {
     text-align: center;
     padding: 1.5rem 0 .3125rem;
-    background-color: #e8e8de
+    background-color: #e8e8de;
+    display: flow-root;
 }
 .c-certification__icon {
     display: inline-block;

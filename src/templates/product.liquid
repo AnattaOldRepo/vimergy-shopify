@@ -81,18 +81,17 @@
                   <div class="c-product-description">
                      {{ product.metafields.c_f.desc1 }}
                   </div>
-               
+               {%- assign product_quantity = 1 -%}
                 {% for item in cart.items %}
-                 
+                  
                 {% if product.id ==  item.product_id %} 
                    
                      {%- assign product_quantity = item.quantity -%}
                       {% break %}
-                   {% else %}
-                     {%- assign product_quantity = 1 -%}
-
+    
                 {% endif %} 
                 {% endfor %}
+                
                   <div class="c-item-options">
                      <label for="qty">Quantity</label>
                      <input type="number"

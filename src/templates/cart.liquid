@@ -17,7 +17,7 @@
           <tbody>
 
             {% for item in cart.items %}
- 
+    
             {% comment %}
 
             Cart Item Template
@@ -68,7 +68,7 @@
 
                   {% if property_size > 0 %}
                     {% for p in item.properties %}
-                      {% unless p.last == blank %}
+                     {% unless p.last == blank or p.first == 'subscription_id' or p.first == 'shipping_interval_frequency' or p.first == 'shipping_interval_unit_type'%}
                       {{ p.first }}:
 
                       {% if p.last contains '/uploads/' %}
@@ -106,7 +106,7 @@
 
                 <div class="c-cart__subtotal c-cartTable__subtotal">
                     <span class="c-cart__subtotalText">Subtotal</span>
-                    <span class="c-cart__subtotalPrice">{{ cart.total_price | money }}</span>
+                    <span class="c-cart__subtotalPrice">{{ cart.total_price | money  }}</span>
                 </div>
 
                 {% comment %} 
@@ -133,3 +133,4 @@
 
     {% endif %}
 </div>
+{% include 'subscription-cart-footer' %}

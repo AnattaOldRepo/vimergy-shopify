@@ -345,3 +345,50 @@
         font-size: 1rem;
     }
 }
+div#rc_container{
+    background-color: #fff;
+    border: 1px solid #c4c4ae;
+    border-radius: 2px;
+}
+div.rc_block__type__autodeliver{
+    border-top: 1px solid #c4c4ae;
+    border-radius: 0px !important;
+}
+label.rc_label{
+    color: #393D4E !important;
+}
+div.rc_block__type--active{
+    color: #fff;
+}
+input[type='radio']:after {
+    
+    border: 2px solid #c4c4ae;
+    left: -25px;
+    top: 1px;
+    position: absolute;
+    background: #fff;
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    padding: 3px;
+    text-align: center;
+    border-radius: 100%;
+    visibility: visible;
+    border: 2px solid white;
+}
+
+input[type='radio']:checked:after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border-width: 5px;
+    border-color: #E5751A
+}

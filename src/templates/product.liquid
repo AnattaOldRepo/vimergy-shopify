@@ -6,7 +6,7 @@
 <meta itemprop="image" content="{{   featured_image | img_url: '600x600' }}">
 <meta itemprop="description" content="{{   product.description | strip_html | escape }}">
 <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" style="display:none;">
-   <select id="product-select" name="id" class="no-js" data-product-select style="display:none;">
+   <select id="product-select" name="id" class="no-js" data-product-select style="display:none;" data-productid="{{product.id}}">
    {% for variant in product.variants %}
    <option
    {% if variant == current_variant   %}selected="selected"{% endif %}
@@ -40,12 +40,13 @@
 
 {% endif %}
 
+
 <div class="c-product">
 <div class="c-product-view">
    <div class="o-flex">
       <div class="o-flex-item o-flex__col-lg-6">
          <div class="c-product-image">
-            <img  src="{{ product.images[0].src | img_url: '526x526' }}">
+            <img  src="{{ product.images[1].src | img_url: '526x526' }}">
          </div>
       </div>
       <div class="o-flex-item o-flex__col-lg-6">
@@ -54,8 +55,8 @@
                <meta itemprop="priceCurrency" content="{{   shop.currency }}">
                <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
                <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
-               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype=  "multipart/form-data">
-                  <select id="product-select" name="id" class="no-js" data-product-select style="display:none">
+               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype=  "multipart/form-data" data-productid="{{product.id}}">
+                  <select id="product-select" name="id" class="no-js" data-product-select style="display:none" data-productid="{{product.id}}">
                   {% for variant in product.variants %}
                   <option
                   {% if variant == current_variant   %}selected="selected"{% endif %}
@@ -80,19 +81,34 @@
                   <div class="c-product-description">
                      {{ product.metafields.c_f.desc1 }}
                   </div>
+               
+                {% for item in cart.items %}
+                 
+                {% if product.id ==  item.product_id %} 
+                   
+                     {%- assign product_quantity = item.quantity -%}
+                      {% break %}
+                   {% else %}
+                     {%- assign product_quantity = 1 -%}
+
+                {% endif %} 
+                {% endfor %}
                   <div class="c-item-options">
                      <label for="qty">Quantity</label>
                      <input type="number"
                         name="quantity"
-                        id="updates_{{ cart.items[0].key }}"
-                        value="{{ cart.items[0].quantity }}"
+                        id="updates_{{ product.id }}"
+                        value="{{ product_quantity }}"
                         min="0" 
                         data-product-quantity
                         aria-label="{{ 'cart.general.item_quantity' | t }}">
                     
                     {% if product.metafields.subscriptions.has_subscription  %} 
-
-                     <div class="product-options-bottom">
+                    <div class="product-options-bottom">
+                    <h2 class="del-interval__heading">Pick a delivery option</h2>
+                    {% if product.available %}{% include 'subscription-product' %}{% endif %}
+                    </div>
+                     {% comment %} <div class="product-options-bottom">
                         <div class="amgroupcat">
                            <div class="subscription-product product-options del-interval pdp-page">
                               <h2 class="del-interval__heading">Pick a delivery option</h2>
@@ -144,7 +160,7 @@
                                 //]]>
                            </script>
                         </div>
-                     </div>
+                     </div> {% endcomment %}
 
                     {% endif %}   
 

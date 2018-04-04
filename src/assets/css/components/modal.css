@@ -159,7 +159,7 @@ $modal-box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) !default;
 	}
 }
 
-.white-popup {
+div.rc_popup__block {
     position: relative;
     padding: 1.8125rem 1.5625rem;
     width: auto;
@@ -175,7 +175,7 @@ $modal-box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) !default;
     }
 }
 
-.white-popup h2 {
+div.rc_popup__block h2 {
     margin-bottom: .625rem;
     font-size: 1.0625rem;
 	font-weight: 700;
@@ -186,11 +186,11 @@ $modal-box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) !default;
     }
 }
 
-.white-popup ul,.white-popup ol {
+div.rc_popup__block ul,div.rc_popup__block ol {
     margin-left: 1.125rem
 }
 
-.white-popup ul,.white-popup ol,.white-popup p {
+div.rc_popup__block ul,div.rc_popup__block ol,div.rc_popup__block p {
 	margin-bottom: .5rem;
 	
  @media(--mobile-large) {
@@ -198,7 +198,7 @@ $modal-box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) !default;
     }
 }
 
-.white-popup p,.white-popup li {
+div.rc_popup__block p,div.rc_popup__block li {
     font-size: .875rem;
 	font-weight: 600;
 	
@@ -207,7 +207,7 @@ $modal-box-shadow: 0 0 8px rgba(0, 0, 0, 0.6) !default;
     }
 }
 
-.white-popup--img {
+div.rc_popup__block--img {
 	max-width: 51.25rem;
 	
 @media only screen and (min-width: 53.125em) {

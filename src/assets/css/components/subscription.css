@@ -8,6 +8,7 @@
     margin-bottom: .5rem;
     font-size: .9375rem;
     font-weight: 700;
+    clear:both;
 
  @media(--tablet-large) {
         font-size:1.0625rem
@@ -28,7 +29,8 @@
     padding: .625rem 1.9375rem
 }
 .product-options-bottom {
-    margin-top: 1.75rem;
+    /* margin-top: 1.75rem; */
+    clear:right;
 }
 .del-interval__time {
     text-align: center;

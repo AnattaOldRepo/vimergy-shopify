@@ -261,6 +261,7 @@
 }
 .c-item-options .js-qty{
     max-width:133px;
+    margin-right: 16px;
 }
 .c-item-options .js-qty__num{
     font-size: 16px;
@@ -417,9 +418,20 @@ div.rc_popup__block {
     @media(--tablet-large) {
         left: -43rem !important; 
     }
-    
+
     @media(--mobile-max) {
         width: 355px !important;
         left: -13rem !important; 
     }
+}
+.c-variant{
+    float: right;
+}
+.c-quantity{
+    display: inline-block;
+    margin-bottom: 2.75rem;
+}
+.c-variant select{
+    border-radius: 0 !important;
+    height: 45px;
 }

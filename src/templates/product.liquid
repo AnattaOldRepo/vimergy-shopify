@@ -56,18 +56,7 @@
                <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
                <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
                <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype=  "multipart/form-data" data-productid="{{product.id}}">
-                  <select id="product-select" name="id" class="no-js" data-product-select style="display:none" data-productid="{{product.id}}">
-                  {% for variant in product.variants %}
-                  <option
-                  {% if variant == current_variant   %}selected="selected"{% endif %}
-                  {% unless variant.available   %}disabled="disabled"{% endunless %}
-                  value="{{ variant.id }}"
-                  >
-                  {{ variant.title }}
-                  
-                  </option>
-                  {% endfor %}
-                  </select>
+                 
                   <h1 class="c-product-name">{{ product.title }}</h1>
                    
                 {% if product.metafields.c_f.made_in_usa  %} 
@@ -81,6 +70,7 @@
                   <div class="c-product-description">
                      {{ product.metafields.c_f.desc1 }}
                   </div>
+
                {%- assign product_quantity = 1 -%}
                 {% for item in cart.items %}
                   
@@ -93,6 +83,9 @@
                 {% endfor %}
                 
                   <div class="c-item-options">
+
+                  
+                  <div class="c-quantity">
                      <label for="qty">Quantity</label>
                      <input type="number"
                         name="quantity"
@@ -101,7 +94,26 @@
                         min="0" 
                         data-product-quantity
                         aria-label="{{ 'cart.general.item_quantity' | t }}">
-                    
+                    </div>
+
+                     {% if product.variants.size >1  %}
+                        <div class="c-variant">
+                        <label for="qty">Bag Size</label>
+                        <select id="product-select" name="id" class="no-js" data-product-select data-productid="{{product.id}}">
+                        {% for variant in product.variants %}
+                        <option
+                        {% if variant == current_variant   %}selected="selected"{% endif %}
+                        {% unless variant.available   %}disabled="disabled"{% endunless %}
+                        value="{{ variant.id }}"
+                        >
+                        {{ variant.title }}
+                        
+                        </option>
+                        {% endfor %}
+                        </select>
+                        </div>
+                  {% endif %}
+                  
                     {% if product.metafields.subscriptions.has_subscription  %} 
                     <div class="product-options-bottom">
                     <h2 class="del-interval__heading">Pick a delivery option</h2>

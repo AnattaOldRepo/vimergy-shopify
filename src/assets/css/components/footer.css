@@ -238,3 +238,7 @@
 .c-btn.green:hover,.c-btn.green:focus,.button.green:hover,.button.green:focus {
     background-color: #6d903c;
 }
+.c-footer__social a:hover{
+    text-decoration: underline;
+    color: #0288D1;
+}

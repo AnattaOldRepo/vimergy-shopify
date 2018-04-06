@@ -425,6 +425,7 @@ div.rc_popup__block {
     }
 }
 .c-variant{
+    width: 50%;
     float: right;
 }
 .c-quantity{

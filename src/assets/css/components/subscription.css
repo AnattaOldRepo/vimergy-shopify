@@ -18,7 +18,7 @@
 .del-interval .options-list {
     background-color: #fff;
     border: 1px solid #c4c4ae;
-    border-radius: 2px
+    border-radius: 2px;
 }
 
 .del-interval .options-list li+li {

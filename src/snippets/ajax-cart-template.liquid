@@ -153,7 +153,7 @@
 
 <style>
  #AjaxifyCart .additional-checkout-buttons, #ajaxifyCart .additional-checkout-buttons {
-    display:block !important;
+    display:none;
 }
 </style>
 {% if template != 'cart'  %}
@@ -167,10 +167,10 @@
             e.preventDefault(); 
             window.location.href = '/cart';
         })
-        {% comment %} rjQuery('.additional-checkout-buttons').hide()
+        rjQuery('.additional-checkout-buttons').hide()
         rjQuery(document).ready(function(){
             rjQuery('.additional-checkout-buttons').hide()
-        }) {% endcomment %}
+        })
     }
     </script>
 {% endif %}

@@ -5,7 +5,7 @@
 <meta itemprop="brand" content="{{   product.vendor }}">
 <meta itemprop="image" content="{{   featured_image | img_url: '600x600' }}">
 <meta itemprop="description" content="{{   product.description | strip_html | escape }}">
-<form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" style="display:none;">
+{% comment %} <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" style="display:none;">
    <select id="product-select" name="id" class="no-js" data-product-select style="display:none;" data-productid="{{product.id}}">
    {% for variant in product.variants %}
    <option
@@ -17,7 +17,7 @@
    </option>
    {% endfor %}
    </select>                      
-</form>
+</form> {% endcomment %}
 <div class="c-product" ata-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
 {% if collection != blank %} 
 <a class="c-product__breadcrumb" href="{{ collection.url }}">
@@ -55,8 +55,21 @@
                <meta itemprop="priceCurrency" content="{{   shop.currency }}">
                <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
                <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
-               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype=  "multipart/form-data" data-productid="{{product.id}}">
-                 
+
+              <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
+              {% comment %} <div >
+                    <select id="product-select" name='id' class="no-js" data-product-select  data-productid="{{product.id}}" style="display:none;">
+                    {% for variant in product.variants %}
+                        <option
+                        {% if variant == current_variant   %}selected="selected"{% endif %}
+                        {% unless variant.available   %}disabled="disabled"{% endunless %}
+                        value="{{ variant.id }}"
+                        >
+                        {{ variant.title }}
+                        </option>
+                        {% endfor %}
+                        </select> 
+            </div> {% endcomment %}
                   <h1 class="c-product-name">{{ product.title }}</h1>
                    
                 {% if product.metafields.c_f.made_in_usa  %} 
@@ -90,16 +103,17 @@
                      <input type="number"
                         name="quantity"
                         id="updates_{{ product.id }}"
-                        value="{{ product_quantity }}"
-                        min="0" 
+                        value="1"
+                        min="1" 
                         data-product-quantity
                         aria-label="{{ 'cart.general.item_quantity' | t }}">
                     </div>
 
                      {% if product.variants.size >1  %}
+                     
                         <div class="c-variant">
                         <label for="qty">Bag Size</label>
-                        <select id="product-select" name="id" class="no-js" data-product-select data-productid="{{product.id}}">
+                        <select id="product-select-{{product_id }}" name="id" data-product-select data-productid="{{product.id}}">
                         {% for variant in product.variants %}
                         <option
                         {% if variant == current_variant   %}selected="selected"{% endif %}
@@ -119,71 +133,18 @@
                     <h2 class="del-interval__heading">Pick a delivery option</h2>
                     {% if product.available %}{% include 'subscription-product' %}{% endif %}
                     </div>
-                     {% comment %} <div class="product-options-bottom">
-                        <div class="amgroupcat">
-                           <div class="subscription-product product-options del-interval pdp-page">
-                              <h2 class="del-interval__heading">Pick a delivery option</h2>
-                              <ul class="options-list">
-                                 <li class="custom__radiobox">
-                                    <div class="del-interval__option">
-                                       <input type="radio" onclick="" class="radio validate-one-required-by-name change-container-classname delivery_one_time" id="delivery-option-one-time" name="delivery-option" value="one-time-delivery" checked="checked">
-                                       <label for="delivery-option-one-time">
-                                       One Time Purchase                    			                    		</label>
-                                    </div>
-                                 </li>
-                                 <li class="custom__radiobox">
-                                    <div class="del-interval__option">
-                                       <input type="radio" onclick="" class="radio validate-one-required-by-name change-container-classname " id="delivery-option-subscribe" name="delivery-option" value="subscribe">
-                                       <label for="delivery-option-subscribe">
-                                       Auto-Ship Delivery - FREE                    			                    		</label>
-                                       <a class="del-interval__info js-modal" aria-controls="autoship-popup" data-modal-src="#autoship-popup" href="https://vimergy.com/autoship-free-shipping/">
-                                       <span class="mobile">?</span>
-                                       <span class="desktop">what's autoship?</span>
-                                       </a>
-                                    </div>
-                                    <div class="del-interval__time" for="delivery-interval" style="display: none;">
-                                       <span class="del-interval__title">Send this to me every</span>
-                                       <select onchange="" id="delivery-interval" name="delivery-interval" class="">
-                                          <option value="2 Weeks">2 Weeks</option>
-                                          <option value="1 Month">1 Month</option>
-                                          <option value="2 Months">2 Months</option>
-                                       </select>
-                                    </div>
-                                 </li>
-                              </ul>
-                           </div>
-                           <div id="autoship-popup" class="white-popup modal-default-popup u-hide" aria-labelledby="modal-title" aria-describedby="modal-desc" aria-hidden="true" role="dialog">
-                              {{ product.metafields.c_f.autoship }}
-                           </div>
-                           <script type="text/javascript">
-                              $j = jQuery;
-                                $j('input[type="radio"]').click(function(){
-                                    if($j(this).attr("value")=="one-time-delivery"){
-                                        $j(this).closest('.options-list').find(".del-interval__time").hide();
-                                    }
-                                
-                                    if($j(this).attr("value")=="subscribe"){
-                                         $j(this).closest('.options-list').find(".del-interval__time").show();
-                                    }
-                                });
-                                
-                               
-                                //]]>
-                           </script>
-                        </div>
-                     </div> {% endcomment %}
-
+                     
                     {% endif %}   
 
                   </div>
                   <div class="c-product__priceBox c-product-price" data-price-wrapper>
-                     <span class="c-product__price " data-product-price>
-                     ${{ current_variant.price | money_without_currency }}
+                     <span id="productPrice" class="c-product__price " data-product-price>
+                     {{ current_variant.price | money }}
                      </span>
                      {% if product.compare_at_price_max >   product.price %}
                      <s class="c-product__price c-product__price--nosale" data-compare-price>
                      {% if current_variant.compare_at_price > current_variant.price %}
-                     ${{ current_variant.compare_at_price   | money_without_currency }}
+                     {{ current_variant.compare_at_price   | money }}
                      {% endif %}
                      </s>
                      {% endif %}

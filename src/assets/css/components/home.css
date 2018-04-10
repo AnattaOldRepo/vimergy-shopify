@@ -380,7 +380,7 @@
         padding: 0;
         background-color: transparent;
         margin: 0 auto;
-        max-width: 85.6875rem;
+        max-width: 84rem;
         width: 100%;
     }
 }
@@ -690,3 +690,14 @@
     padding-left: .5rem;
     float: left;
 }
+.compensate-for-scrollbar{
+    margin: 0 auto !important;
+}
+body.fancybox-active {
+    overflow: auto;
+    overflow-y: scroll;  
+  }
+  
+  body.fancybox-active.compensate-for-scrollbar {
+    overflow: auto;
+  }

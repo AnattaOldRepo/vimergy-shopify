@@ -143,6 +143,7 @@ a {
     &:--enter {
         color: $color-blue;
         text-decoration: none;
+        outline: 0;
     }
 }
 

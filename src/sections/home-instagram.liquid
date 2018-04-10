@@ -18,7 +18,7 @@
                         </g>
                      </svg>
                      <h2 class="c-instagrams__heading">@Vimergy on Instagram</h2>
-                     <p class="c-instagrams__view instagrams__view--one"><a target="_blank" href="https://www.instagram.com/vimergy/">View all</a></p>
+                     <p class="c-instagrams__view c-instagrams__view--one"><a target="_blank" href="https://www.instagram.com/vimergy/">View all</a></p>
                   </div>
                </div>
 
@@ -56,12 +56,11 @@
                 'transitionIn'  :   'elastic',
                 'transitionOut' :   'elastic',
                 'speedIn'   :   600, 
-                'speedOut'  :   200, 
-                'overlayShow'   :   false,
-                'cyclic'    :   true,
-                'showNavArrows' :   true,
-                'closeBtn': true,
-                'titleShow': false
+                'speedOut'  :   200,
+                'scrolling': 'no',
+                'centerOnScroll': false,
+                'overlayShow': false
+                
 
             });
          },
@@ -70,23 +69,5 @@
          }
      });
  })(jQuery);  
-  $(document).ready(function() {
 
-	
-	/* Apply fancybox to multiple items */
-	
-	$(".instagallery a").fancybox({
-        'width'	: 400,
-		'height': 400,
-		'transitionIn'  :   'elastic',
-        'transitionOut' :   'elastic',
-        'speedIn'   :   600, 
-        'speedOut'  :   200, 
-        'overlayShow'   :   false,
-        'cyclic'    :   true,
-        'showNavArrows' :   true
-  
-	});
-	
-});
   </script>

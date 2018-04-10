@@ -45,6 +45,14 @@
 		flex-basis: 50%;
 	}
 }
+.o-flex__col-sm-6 {
+	flex-basis:100%;
+
+	@media(--mobile-max) {
+		flex-basis: 50%;
+		width:50%;
+	}
+}
 .o-flex__col-8 {
 	flex-basis:100%;
 
@@ -71,6 +79,7 @@
 
 	@media(--mobile-large) {
 		flex-basis: 33.33%;
+		width:33.33%;
 	}
 }
 .o-flex__col-lg-4{

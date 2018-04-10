@@ -280,6 +280,7 @@
 }
 
 .c-item-options .js-qty__adjust{
+    height: 3rem;
     border: 1px solid #c4c4ae;
     padding: 0.8125rem 1rem !important;
     background-color: #fff;

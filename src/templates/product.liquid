@@ -57,19 +57,7 @@
                <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
 
               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
-              {% comment %} <div >
-                    <select id="product-select" name='id' class="no-js" data-product-select  data-productid="{{product.id}}" style="display:none;">
-                    {% for variant in product.variants %}
-                        <option
-                        {% if variant == current_variant   %}selected="selected"{% endif %}
-                        {% unless variant.available   %}disabled="disabled"{% endunless %}
-                        value="{{ variant.id }}"
-                        >
-                        {{ variant.title }}
-                        </option>
-                        {% endfor %}
-                        </select> 
-            </div> {% endcomment %}
+              
                   <h1 class="c-product-name">{{ product.title }}</h1>
                    
                 {% if product.metafields.c_f.made_in_usa  %} 
@@ -108,12 +96,24 @@
                         data-product-quantity
                         aria-label="{{ 'cart.general.item_quantity' | t }}">
                     </div>
-
-                     {% if product.variants.size >1  %}
+                    <div class="c-variant">
+                        <select id="product-select" name='id' class="no-js" data-product-select  data-productid="{{product.id}}" style="display:block;">
+                        {% for variant in product.variants %}
+                            <option
+                            {% if variant == current_variant   %}selected="selected"{% endif %}
+                            {% unless variant.available   %}disabled="disabled"{% endunless %}
+                            value="{{ variant.id }}"
+                            >
+                            {{ variant.title }}
+                            </option>
+                            {% endfor %}
+                        </select> 
+                    </div>  
+                     {% comment %} {% if product.variants.size >1  %}
                      
                         <div class="c-variant">
                         <label for="qty">Bag Size</label>
-                        <select id="product-select-{{product_id }}" name="id" data-product-select data-productid="{{product.id}}">
+                        <select id="product-select" name="id" data-product-select data-productid="{{product.id}}" style="display:block">
                         {% for variant in product.variants %}
                         <option
                         {% if variant == current_variant   %}selected="selected"{% endif %}
@@ -126,13 +126,14 @@
                         {% endfor %}
                         </select>
                         </div>
-                  {% endif %}
+                  {% endif %} {% endcomment %}
 
                     {% if product.metafields.subscriptions.has_subscription  %} 
-                    <div class="product-options-bottom">
-                    <h2 class="del-interval__heading">Pick a delivery option</h2>
-                    {% if product.available %}{% include 'subscription-product' %}{% endif %}
-                    </div>
+
+                        <div class="product-options-bottom">
+                        <h2 class="del-interval__heading">Pick a delivery option</h2>
+                        {% if product.available %}{% include 'subscription-product' %}{% endif %}
+                        </div>
                      
                     {% endif %}   
 

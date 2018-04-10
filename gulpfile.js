@@ -26,7 +26,6 @@ const cssImport = require("postcss-import");
 const cssUrl = require("postcss-url");
 const cssNext = require("postcss-cssnext");
 const preCss = require("precss");
-const fontPath = require("postcss-fontPath");
 const at2x = require("postcss-at2x");
 const flexBox = require("postcss-flexbox");
 const utilities = require("postcss-utilities");
@@ -104,7 +103,6 @@ gulp.task('css', function() {
         cssUrl(),
         cssNext(),
         preCss(),
-        fontPath(),
         at2x(),
         flexBox(),
         utilities(),

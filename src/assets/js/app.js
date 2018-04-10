@@ -49,24 +49,9 @@ $('.c-mobileNav--expand').click(function(e) {
 $('.lazy-load').Lazy();
 
 $('.js-offcanvas').offcanvas({
-  callbacks: {
-      beforeOpen: function() {
-
-      },
-
-      open: function() {
-
-      },
-
-      beforeClose: function()   {
-
-      },
-
-      close: function() {
-
-      } 
-  }
+  showOverlay: false
 });
+
 $(function() {
   $('.js-accordion').accordion({
     collapsible: true,

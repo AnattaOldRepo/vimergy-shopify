@@ -84,8 +84,6 @@
                 {% endfor %}
                 
                   <div class="c-item-options">
-
-                  
                   <div class="c-quantity">
                      <label for="qty">Quantity</label>
                      <input type="number"
@@ -96,8 +94,9 @@
                         data-product-quantity
                         aria-label="{{ 'cart.general.item_quantity' | t }}">
                     </div>
-                    <div class="c-variant">
-                        <select id="product-select" name='id' class="no-js" data-product-select  data-productid="{{product.id}}" style="display:block;">
+                    
+                    <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
+                        <select id="product-select" name='id' class="no-js sadass" data-product-select  data-productid="{{product.id}}">
                         {% for variant in product.variants %}
                             <option
                             {% if variant == current_variant   %}selected="selected"{% endif %}
@@ -109,27 +108,8 @@
                             {% endfor %}
                         </select> 
                     </div>  
-                     {% comment %} {% if product.variants.size >1  %}
-                     
-                        <div class="c-variant">
-                        <label for="qty">Bag Size</label>
-                        <select id="product-select" name="id" data-product-select data-productid="{{product.id}}" style="display:block">
-                        {% for variant in product.variants %}
-                        <option
-                        {% if variant == current_variant   %}selected="selected"{% endif %}
-                        {% unless variant.available   %}disabled="disabled"{% endunless %}
-                        value="{{ variant.id }}"
-                        >
-                        {{ variant.title }}
-                        
-                        </option>
-                        {% endfor %}
-                        </select>
-                        </div>
-                  {% endif %} {% endcomment %}
 
                     {% if product.metafields.subscriptions.has_subscription  %} 
-
                         <div class="product-options-bottom">
                         <h2 class="del-interval__heading">Pick a delivery option</h2>
                         {% if product.available %}{% include 'subscription-product' %}{% endif %}
@@ -186,85 +166,25 @@
 <script>
    console.log({{ product | json}})
    
-   // replace full text name
-   var sizeTextAsc = {
-       'xs': 'Extra Small', 
-       's': 'Small',
-       'm': 'Medium',
-       'l': 'Large',
-       'xl': 'Extra Large',
-       'xxl': 'XX Large',
-       '01x': '01X Large',
-       '02x': '02X Large',
-       '03x': '03X Large',
-       '04x': '04X Large',
-       '05x': '05X Large',
-       '06x': '06X Large'     
-   }
-   
    var selectCallback = function(variant, selector) {
    
-       var modelSizeDisplay = $('.js-model-size-display');
-       var itemNumberDisplay = $('.js-item-number-display');
-   
-       var currentColorDisplay = $('.js-current-color-display');
-       var currentSizeDisplay = $('.js-current-size-display');        
-   
-       // console.log(variant);
-   
-       if (variant.option1) {
-           // console.log(variant.option1)
-           currentColorDisplay.text(variant.option1)
-       }
-   
-       if (variant.option2) {
-           // console.log(variant.option2)
-           currentSizeDisplay.text(sizeTextAsc[variant.option2.toLowerCase()])
-           modelSizeDisplay.text(variant.option2)
-       }
-   
-       if (variant.sku) {
-           itemNumberDisplay.text(variant.sku)
-       }
-   
-       // BEGIN SWATCHES
-       if (variant) {
-           var form = jQuery('#' + selector.domIdPrefix).closest('form');
-           for (var i=0,length=variant.options.length; i<length; i++) {
-               var radioButton = form.find('.swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] +'"]');
-               if (radioButton.length) {
-                   radioButton.get(0).checked = true;
-               }
-           }
-       }
-       // END SWATCHES  
-   
-       var variantOptions = variant.options
-   
-       $('.swatch-element').each(function() {
-           var isActive = false
-           var swatchElement = $(this)
-           variantOptions.forEach(function(option) {
-               if (option == swatchElement.find('.swatch-input').val()) {
-                   isActive = true
-               }
-           })
-   
-           if (isActive) {
-               swatchElement.addClass('is-active')
-           } else {
-               swatchElement.removeClass('is-active')
-           }
-       })
-   
-       // if (('.swatch .swatch-element').hasClass('is-active')){
-       //     $('.swatch .swatch-element').removeClass('is-active');
-       //     $(this).addClass('is-active');
-       // }else{
-   
-       //     $('.swatch .swatch-element').removeClass('is-active');
-       //     $(this).addClass('is-active');  
-       // }                
+//        console.log(variant);
+        console.log(selector);
+
+        if(selector.selectors.length == 2) {
+            if('Size' === selector.selectors[0].name && 'Bundles' === selector.selectors[1].name) {
+                var value = $(selector.selectors[0].element).val();
+                $(selector.selectors[1].element).find('option').prop('disabled', 'disabled');
+                $.each (selector.product.variants, function (key, variant) {
+        //            console.log(variant);
+                    if (variant.option1 == value) {
+                        var option2 = variant.option2;
+                        $(selector.selectors[1].element).find('option[value="'+$.escapeSelector(option2)+'"]').prop('disabled', false);
+                    }
+                })
+            }
+        }
+              
    };
    
    // jQuery(function($) {
@@ -274,31 +194,4 @@
        enableHistoryState: true
    });
    
-       // // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
-   
-       // {% if product.options.size == 1 and product.options.first != 'Title' %}
-       //     $('.selector-wrapper:eq(0)').prepend('<label for="productSelect-option-0">{{ product.options.first | escape }}</label>');
-       // {% endif %}
-   
-       // // Hide selectors if we only have 1 variant and its title contains 'Default'.
-       // {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
-       //     $('.selector-wrapper').hide();
-       // {% endif %}
-   // });
-   
-   
-   
-   $(function() {
-       $('.swatch :radio').change(function() {
-           var optionIndex = $(this).closest('.swatch').attr('data-option-index');
-           var optionValue = $(this).val();
-           $(this)
-               .closest('form')
-               .find('.single-option-selector')
-               .eq(optionIndex)
-               .val(optionValue)
-               .trigger('change');
-       });
-   });
- 
 </script>

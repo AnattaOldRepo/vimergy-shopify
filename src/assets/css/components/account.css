@@ -621,11 +621,13 @@ select{
     }    
 }
 .errors {
+    display: inline-block;
     margin-bottom: 21px;
-    padding: 8px 30px;
+    padding: 10px 0;
     font-size: 13px;
+    font-weight: 700;
     line-height: 18px;
-    border: 3px solid #ed1c24;
+    /* border: 3px solid #ed1c24; */
     color: #ed1c24;
     background-color: #fbf9f7;
     

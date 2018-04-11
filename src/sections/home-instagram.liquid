@@ -48,21 +48,8 @@
          success: function(data){
              console.log(data ,"insta");
              for( x in data.data ){
-             $('.instagallery').append('<div class="o-flex__item o-flex__col-4 o-flex__col-sm-6" ><a rel="gallery1" href="'+data.data[x].images.low_resolution.url+'" title=""> <img class="c-insta-img" src="'+data.data[x].images.low_resolution.url+'"></a></div>');  
+             $('.instagallery').append('<div class="o-flex__item o-flex__col-4 o-flex__col-sm-6" ><a rel="gallery1" target="_blank" href="'+data.data[x].link+'" title=""> <img class="c-insta-img" src="'+data.data[x].images.low_resolution.url+'"></a></div>');  
              }
-            $(".instagallery a").fancybox({
-                'width'	: 400,
-                'height': 400,
-                'transitionIn'  :   'elastic',
-                'transitionOut' :   'elastic',
-                'speedIn'   :   600, 
-                'speedOut'  :   200,
-                'scrolling': 'no',
-                'centerOnScroll': false,
-                'overlayShow': false
-                
-
-            });
          },
          error: function(data){
              console.log(data);

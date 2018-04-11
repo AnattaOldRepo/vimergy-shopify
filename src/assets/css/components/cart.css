@@ -186,6 +186,8 @@
                 &.additional_checkout_buttons {
                     .c-cart__additionalButtons {
                         display: flex;
+                        align-items: center;
+                        justify-content: center;
                     }
                 }
 

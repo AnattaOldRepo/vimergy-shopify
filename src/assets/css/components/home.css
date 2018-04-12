@@ -701,3 +701,6 @@ body.fancybox-active {
   body.fancybox-active.compensate-for-scrollbar {
     overflow: auto;
   }
+  .c-display{
+      display: block !important; 
+  }

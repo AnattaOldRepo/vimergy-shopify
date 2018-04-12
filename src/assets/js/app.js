@@ -46,7 +46,7 @@ $('.c-mobileNav--expand').click(function(e) {
     $(this).toggleClass('active');
 });
 
-$('.lazy-load').Lazy();
+//$('.lazy-load').Lazy();
 
 $('.js-offcanvas').offcanvas({
   showOverlay: false

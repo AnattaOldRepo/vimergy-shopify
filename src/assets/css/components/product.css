@@ -320,7 +320,14 @@
     text-align: center;
     padding: 1.5rem 0 .3125rem;
     background-color: #e8e8de;
-    display: flow-root;
+    display: table;
+    width:100%;
+
+    @media(--tablet-large) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
 }
 .c-certification__icon {
     display: inline-block;
@@ -428,7 +435,7 @@ div.rc_popup__block {
 
     @media(--mobile-max) {
         width: 355px !important;
-        left: -13rem !important; 
+        left: 0rem !important; 
     }
 }
 /* .c-variant{

@@ -702,5 +702,9 @@ body.fancybox-active {
     overflow: auto;
   }
   .c-display{
+    display: none;
+    @media (--mobile-max) {
       display: block !important; 
+      margin: 0 auto;
   }
+}

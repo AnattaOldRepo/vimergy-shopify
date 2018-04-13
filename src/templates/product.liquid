@@ -59,14 +59,7 @@
               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
               
                   <h1 class="c-product-name">{{ product.title }}</h1>
-                   
-                {% if product.metafields.c_f.made_in_usa  %} 
-
-                  <div class="c-product-made">
-                    <span class="c-icon-usa">Made in USA</span>
-                 </div>
-
-                {% endif %} 
+                    
 
                   <div class="c-product-description">
                      {{ product.metafields.c_f.desc1 }}
@@ -84,6 +77,8 @@
                 {% endfor %}
                 
                   <div class="c-item-options">
+                  <div>
+                   
                   <div class="c-quantity">
                      <label for="qty">Quantity</label>
                      <input type="number"
@@ -93,6 +88,14 @@
                         min="1" 
                         data-product-quantity
                         aria-label="{{ 'cart.general.item_quantity' | t }}">
+                    </div>
+                     {% if product.metafields.c_f.made_in_usa  %} 
+
+                    <div class="c-product-made">
+                        <span class="c-icon-usa">Made in USA</span>
+                    </div>
+
+                    {% endif %} 
                     </div>
                     
                     <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >

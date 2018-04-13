@@ -96,7 +96,7 @@
 
 .accordion__content,.accordion__content h2,.accordion__content p,.accordion__content li {
     font-size: .875rem;
-    font-weight: 600;
+    font-weight: normal;
 
  @media(--tablet-large) {
         font-size:1.0625rem;

@@ -150,16 +150,6 @@
  
 </script>
  {% include 'subscription-theme-footer' %}
- {% for item in cart.items %}
- {{ item.properties.subscription_id}}
-
- {% if item.product.metafields.subscriptions !={}  %}
-
-
-
-{% endif %}
-{% endfor %}
-
 
 {% if template != 'cart'  %}
     <script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>

@@ -1,0 +1,31 @@
+
+input[type="search"]{
+    background: transparent;
+    border: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+    font-size: 15px;
+    font-family: sofia-pro,sans-serif;
+    padding: 0 35px 0 0;
+    border-bottom: 1px solid #000;
+    width: 155px;
+    height: 37px;
+    outline: none;
+    transition: all .25s cubic-bezier(.23,1,.32,1);
+    font-weight: 500;
+}
+
+.search-button{
+    background: transparent;
+    padding: 2px;
+    border: 0;
+    
+    &:--enter {
+    background-color: transparent;
+    border-color: transparent;
+    outline: 0;
+    }
+}
+.search-icon{
+    width:20px
+}

@@ -30,7 +30,7 @@ textarea {
 [type='week'],
 [type='email'],
 [type='number'],
-[type='search'],
+/* [type='search'], */
 [type='tel'],
 [type='time'],
 [type='url'],

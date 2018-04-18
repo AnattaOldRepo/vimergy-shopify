@@ -15,7 +15,7 @@ $(function() {
     var input = $(this).find('input[name="q"]');
     // Adding a list for showing search results.
     var offSet = input.position().top + input.innerHeight();
-    $('<ul class="search-results"></ul>').css( { 'position': 'absolute', 'left': '0px', 'top': offSet } ).appendTo($(this)).hide();    
+    $('<ul class="search-results"></ul>').css( { 'position': 'absolute', 'left': '-12px', 'top': offSet } ).appendTo($(this)).hide();    
     // Listening to keyup and change on the text field within these search forms.
     input.attr('autocomplete', 'off').bind('keyup change', function() {
       // What's the search term?
@@ -23,13 +23,11 @@ $(function() {
       // What's the search form?
       var form = $(this).closest('form');
       // What's the search URL?
-      if(term.length !=0){
       var searchURL = '/search?type=product&q=' + term;
-      }
       // What's the search results list?
       var resultsList = form.find('.search-results');
       // If that's a new term and it contains at least 3 characters.
-      if (term.length > 3 && term != $(this).attr('data-old-term')) {
+      if (term.length > 1 && term != $(this).attr('data-old-term')) {
         // Saving old query.
         $(this).attr('data-old-term', term);
         // Killing any Ajax request that's currently being processed.

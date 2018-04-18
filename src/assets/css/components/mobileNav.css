@@ -7,6 +7,12 @@
     padding:10px 0px;
     border-bottom: 1px solid #d7d7d7;
 }
+ .c-mobileNav__item:first-child {
+    border-bottom:0;
+}
+.c-mobileNav{
+    margin-top:2rem;
+}
 .c-mobileNav__itemLink { 
     cursor: pointer;
     font-family: $font-family-base;

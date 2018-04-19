@@ -419,25 +419,26 @@
     padding-right: 0.5rem;
 }
 
-@media(--tablet-large) {
-    .c-instagrams__inner .o-row{
+.c-instagrams__inner .o-flex{
+    @media(--tablet-large) {
         display:flex;
         flex-wrap: wrap;
     }
-
-    .c-instagrams__inner .o-row .o-large-4 {
+}
+.c-instagrams__inner .o-flex__item {
+     @media(--tablet-large) {
         display:flex;
     }
 }
 
 .c-instagrams__box {
     width: 100%;
-    height: 100%;
+    height: initial;
     text-align: center;
 
     @media(--tablet-large) {
         padding:5rem 2.5rem 2.5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
         background-color: #fff
     }
     @media (--desktop-medium) {

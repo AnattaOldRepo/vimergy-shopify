@@ -56,18 +56,24 @@
             <div class="c-account__section c-account__section--two">
                 <div class="account-dashboard__block address">
                 
-                    <h2 class="c-account__subtitle account-dashboard__subtitle">Your Addresses</h2>
+                 {% if customer.metafields.subscriptions.customer_string %}
+                    <!--BeginRechargeCode-->
+                    <p class="c-manage-subs"><a href="/tools/recurring/customer/{{customer.metafields.subscriptions.customer_string}}/subscriptions/">Manage Subscriptions</a></p>
+                    <!--EndRechargeCode-->
+                    {% endif %}
 
-                    <p class="account-details__name c-account__infoText">{{ customer.name }}</p>
-
-                    {% if customer.metafields.subscriptions.customer_string %}
-<!--BeginRechargeCode-->
-<p><a href="/tools/recurring/customer/{{customer.metafields.subscriptions.customer_string}}/subscriptions/">Manage Subscriptions</a></p>
-<!--EndRechargeCode-->
-{% endif %}
-
+                    <h2 class="c-account__subtitle account-dashboard__subtitle">Your Details</h2>
+                    <div class="c-cust-info">
+                    <table style="width:100%">
+                    <tr>
+                        <th><label class="c-customer-label">Name</label></th>
+                        <td><p class="account-details__name c-account__infoText">{{ customer.name }}</p></td>
+                    </tr>
+                    
                     {% if customer.default_address != nil %}
-                        <p class="c-account__infoText">
+                    <tr>
+                        <th> <label class="c-customer-label">Address</label></th>
+                        <td><p class="c-account__infoText">
                         {{ customer.default_address.address1 }}
 
                         {% if customer.default_address.address2 != "" %}
@@ -89,13 +95,34 @@
                         {% if customer.default_address.country != "" %}
                           {{ customer.default_address.country }}<br>
                         {% endif %}
-
-                        {% if customer.default_address.phone != "" %}
-                          {{ customer.default_address.phone }}
-                        {% endif %}
                         </p>
+                        </td>
+                    </tr>
 
                     {% endif %}
+
+                    {% if customer.default_address.phone != "" %}
+                    <tr>
+                        <th><label class="c-customer-label">Phone</label></th>
+                        <td>
+                         <p class="c-account__infoText">
+                          {{ customer.default_address.phone }}
+                        </p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if customer.email != "" %}
+                      <tr>
+                        <th><label class="c-customer-label">Email</label></th>
+                        <td>
+                         <p class="c-account__infoText">
+                          {{ customer.email }}
+                        </p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    </table>
+                    </div>
 
                     <p><a class="c-account__link--normal" href="/account/addresses">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a></p>
                 </div>

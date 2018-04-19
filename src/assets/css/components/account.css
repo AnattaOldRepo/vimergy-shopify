@@ -298,8 +298,7 @@ select{
         font-size: 16px;
         line-height: 19px;
         letter-spacing: -.5px;
-        font-family: $font-family-primary-medium;
-        font-weight: $font-weight-medium;
+        font-weight: 600;
 
         @media (--tablet) {
             margin-bottom: 12px;
@@ -381,6 +380,8 @@ select{
 
     .c-account__addressInfo {
         margin-bottom: 15px;
+        border: 1px solid grey;
+        padding: 8px;
 
         @media (--tablet) {
             margin-bottom: 13px;
@@ -726,3 +727,20 @@ input:focus::-webkit-input-placeholder {
     width: 16px;
     height: 16px
 }
+.c-cust-info table, .c-cust-info th, .c-cust-info td {
+    padding: 0.8rem;
+    border-collapse: collapse;
+    border: 1px solid grey;
+   
+ }
+.c-cust-info table label{
+ color: #393D4E;
+font-size: 15px;
+font-weight: 600;
+}
+.c-manage-subs a{
+color: #E5751A;
+font-weight: 600;
+text-decoration: none;
+}
+    

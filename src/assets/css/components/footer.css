@@ -143,9 +143,9 @@
     text-align: center;
     background-color: #393D4E;
 
-@media (--tablet-large) {
+/* @media (--tablet-large) {
         margin-top:4.375rem;
-    }
+    } */
 
 /* @media (--desktop) {
         padding:2.375rem 0 2.625rem;

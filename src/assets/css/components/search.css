@@ -61,10 +61,11 @@ input[type="search"]{
     font-weight:700;
 }
 .c-search-close{
-    display: contents;
+    display: inline-block;
     cursor: pointer;
     opacity: 1;
     pointer-events: all;
-    position:absolute;
-    right: 30px;
+    position: absolute;
+    right: 4px;
+    top: 3px;
 }

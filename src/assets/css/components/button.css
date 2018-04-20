@@ -1,4 +1,4 @@
-.c-btn {
+.c-btn , .shopify-challenge__button{
     display: $button-display;
     width: $button-width;
     margin: $button-margin;
@@ -83,4 +83,7 @@
     line-height: 1;
     letter-spacing: 0;
     border-color: $color-black;
+}
+.shopify-challenge__button{
+    margin-bottom:2rem !important;
 }

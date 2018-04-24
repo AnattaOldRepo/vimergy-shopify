@@ -65,6 +65,14 @@
                      {{ product.metafields.c_f.desc1 }}
                   </div>
 
+                {% if product.metafields.sub_description  %} 
+
+                  <div class="c-product-description">
+                     {{ product.metafields.c_f.sub_description }}
+                  </div>
+
+                 {% endif %}   
+
                {%- assign product_quantity = 1 -%}
                 {% for item in cart.items %}
                   
@@ -158,6 +166,7 @@
       </div>
    </div>
 </div>
+
  {% if product.metafields.cert != blank ||  if product.metafields.cert == true %}
 
 {% section 'product-certs' %}

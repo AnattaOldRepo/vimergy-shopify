@@ -79,6 +79,15 @@
         {{/items}}
 
       </div>
+         <div class="c-cart__footer">
+            <div class="c-cart__footerPriceBox">
+            {{#if totalCartDiscount}}
+              <p>Discount</p>
+                    <p class="c-cart__discounts">
+                        <em>{{{totalCartDiscount}}}</em>
+                    </p>
+                {{/if}}
+        </div>
         <div class="c-cart__footer">
             <div class="c-cart__footerPriceBox">
                 <div class="c-cart__subtotal">
@@ -88,13 +97,7 @@
                 <div class="c-cart__total">
                     <p>{{{totalPrice}}}</p>
                 </div>
-
-                {{#if totalCartDiscount}}
-                    <p class="c-cart__discounts">
-                        <em>{{{totalCartDiscount}}}</em>
-                    </p>
-                {{/if}}
-            </div>
+        </div>
 
             <button type="submit" class="c-btn c-cart__checkout cart__checkout" name="checkout" style="display:block !important;">
               Checkout

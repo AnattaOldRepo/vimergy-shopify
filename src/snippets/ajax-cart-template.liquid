@@ -58,7 +58,7 @@
                         <div class="c-cart__itemPriceBox">
                             {{#if discountsApplied}}
                                 <small class="c-cart__itemPrice--noSale"><s>{{{originalLinePrice}}}</s></small>
-                                <br><span class="c-cart__itemPrice">{{{linePrice}}}</span>
+                               <span class="c-cart__itemPrice">{{{linePrice}}}</span>
                             {{else}}
                                 <span class="c-cart__itemPrice">{{{linePrice}}}</span>
                             {{/if}}
@@ -79,14 +79,15 @@
         {{/items}}
 
       </div>
-         <div class="c-cart__footer">
-            <div class="c-cart__footerPriceBox">
+         <div class="">
+            <div class="c-cart__footerPriceBox c-discount">
             {{#if totalCartDiscount}}
               <p>Discount</p>
                     <p class="c-cart__discounts">
                         <em>{{{totalCartDiscount}}}</em>
                     </p>
                 {{/if}}
+        </div>
         </div>
         <div class="c-cart__footer">
             <div class="c-cart__footerPriceBox">

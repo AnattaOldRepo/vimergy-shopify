@@ -38,7 +38,7 @@
 }
 
 .c-cart__itemImageBox {
-    padding-top: 1rem;
+    padding-top: 3rem;
     lost-column: 2/5 2 6px;
     flex: 49;
 }
@@ -47,6 +47,8 @@
 
 .c-cart__itemImage {
     display: block;
+    max-width: 140%;
+    margin-left: -25px;
 }
 
 .c-cart__itemInfoBox {
@@ -121,18 +123,19 @@
 
 .c-cart__itemDiscoutBox {}
 
-.c-cart__itemDiscount {}
+.c-cart__itemDiscount {
+    font-size: 10px;
+}
 
 .c-cart__footer {
     lost-utility: clearfix;
     padding: 9px 0;
-    margin-bottom: 35px;
+    /* margin-bottom: 35px; */
 }
 
 .c-cart__footerPriceBox {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 18px;
     padding: 0 10px;
     font-family: $font-family-primary-bold;
     font-weight: $font-weight-bold;
@@ -579,4 +582,9 @@
     font-size: .875rem;
     font-weight: 500;
     line-height: 1.5
+}
+
+.c-discount {
+    padding-bottom: 10px;
+    border-bottom: 1px solid gray;
 }

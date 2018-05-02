@@ -10,21 +10,35 @@
 
 {% paginate customer.addresses by 5 %}
 
-<div class="c-account c-account--address c-account--account page account-dashboard">
-    <div class="c-account__sectionsContainer">
-        <div class="c-account__sectionIntro">
-            <h1 class="c-account__title">My Account</h1>
 
-            {% if customer %}
-                <a class="c-account__logoutLink account-dashboard__logout" href="account/logout">Log Out</a>
-            {% endif %}
-        </div>
-
-        <div class="c-account__sectionMain">
+<div class="c-accounts c-account--account account-dashboard ">
+   <div class="o-flex">
+      <div class="o-flex__item o-flex__col-4">
+         <h1 class="c-account__title">Index</h1>
+         <ul class="c-index">
+            <li class="c-index__underline"><span>My Account</span></li>
+            <li>Account Information</li>  
+            <li><a href="/account/addresses">Address Book</a></li>
+            <li>My Orders</li>
+            <li class="c-index__underline">
+               {% if customer.metafields.subscriptions.customer_string %}
+               <!--BeginRechargeCode-->
+               <a href="/tools/recurring/customer/{{customer.metafields.subscriptions.customer_string}}/subscriptions/">Manage Subscriptions</a>
+               <!--EndRechargeCode-->
+               {% endif %}
+            </li>
+            <li>Privacy Policy</li>
+            <li>Terms of Use</li>
+            <li class="c-index--refer"><button class="c-btn c-btn--index">REFER-A-FRIEND</button></li>
+            <li class="c-index--index"><button class="c-btn c-btn--index c-btn--logout"> <a class="account-dashboard__logout" href="account/logout">Log Out</a></button></li>
+         </ul>
+      </div>
+      <div class="o-flex__item o-flex__col-8 c-cust-info">
+       <div class="c-account__sectionMain">
 
             <div class="c-account__section c-account__section--one account-dashboard__block new-address">
                 
-                <h2 class="c-account__subtitle account-dashboard__subtitle">Your Addresses</h2>
+                <h1 class="c-account__title">Your Addresses</h1>
 
                     {% comment %}
                         List all customer addresses with a unique edit form.
@@ -32,7 +46,7 @@
                     {% endcomment %}
                 {% for address in customer.addresses %}
 
-                    <p class="c-account__infoText c-account__addressName">
+                    <p class="c-account-info-label c-account-info-label--address">
                       {{ address.first_name | capitalize }} {{ address.last_name | capitalize }}
                       {% if address == customer.default_address %}({{ 'customer.addresses.default' | t }}){% endif %}
                     </p>
@@ -63,7 +77,7 @@
                 {% endif %}                
                 
                 <div class="u-showTabletUp">
-                    <a href="#" class="c-account__btn--addAddress c-btn c-btn--large-new" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">Add Address</a>
+                    <a href="#" class="c-btn" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">Add Address</a>
                     
                     <a href="/account" class="c-account__link">
                         <span class="c-account__linkText">Return to My Account</span>
@@ -141,13 +155,13 @@
                             </div>                                      
 
                             <div class="account-links">
-                                <input type="submit" class="c-btn c-account__link--normal c-account__link--normalInput" value="{{ 'customer.addresses.update' | t }}">
+                                <input type="submit" class="c-btn" value="{{ 'customer.addresses.update' | t }}">
 
                                 <a class="c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleForm({{ form.id }}); return false;">{{ 'customer.addresses.cancel' | t }}</a>
                             </div>
 
                         {% endform %}
-                    </div>
+                    </div> 
 
                 {% endfor %}
 
@@ -155,7 +169,7 @@
 
                 <div id="AddAddress" class="form-vertical" style="display: none;">
                     {% form 'customer_address', customer.new_address %}
-                        <h2 class="c-account__subtitle account-dashboard__subtitle">Add New Address</h2>
+                        <h1 class="c-account__title">Add New Address</h1>
 
                         <div class="grid">
 
@@ -202,8 +216,8 @@
                             </label>
                         </div>                        
 
-                        <div class="account-links">
-                            <input type="submit" class="c-btn c-account__link--normalInput" value="{{ 'customer.addresses.add' | t }}">
+                        <div class="account-links c-link-address">
+                            <input type="submit" class="c-btn" value="{{ 'customer.addresses.add' | t }}">
 
                             <a class="c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">
                                 {{ 'customer.addresses.cancel' | t }}
@@ -214,7 +228,7 @@
                 </div> 
 
                 <div class="u-hideTabletUp">
-                    <a href="#" class="c-account__btn--addAddress c-btn c-btn--large-new" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">Add Address</a>
+                    <a href="#" class="c-btn" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">Add Address</a>
                     
                     <a href="/account" class="c-account__link">
                         <span class="c-account__linkText">Return to My Account</span>
@@ -236,7 +250,17 @@
                 </div>                         
             </div>
         </div>
-    </div>
+      </div>
+   </div>
+</div>
+
+
+
+
+
+
+{% comment %} <div class="c-account c-account--address c-account--account page account-dashboard"> {% endcomment %}
+   
 
   <script>
     // Initialize observers on address selectors

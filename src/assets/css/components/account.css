@@ -351,8 +351,9 @@ select {
 }
 
 .c-account__infoText {
-    font-size: 13px;
-    line-height: 22px;
+    font-family: Arial;
+    font-size: 17px;
+    line-height: 26px;
 }
 
 .c-account__addressName {
@@ -367,12 +368,7 @@ select {
 }
 
 .c-account__addressInfo {
-    margin-bottom: 15px;
-    border: 1px solid grey;
-    padding: 8px;
-    @media (--tablet) {
-        margin-bottom: 13px;
-    }
+    margin: 0;
 }
 
 .c-account__buttonContainer {
@@ -506,12 +502,10 @@ select {
         }
     }
     .c-account__title {
-        @media (--mobile-max) {
-            letter-spacing: -2.5px;
-        }
-        display: inline-block;
-        line-height: 48px;
-        margin: 0;
+        margin-bottom: 52px;
+    }
+    .c-account__title--order {
+        margin-bottom: 32px;
     }
     .c-account__addressEditLinks {
         margin-bottom: 26px;
@@ -686,22 +680,116 @@ input:focus::-webkit-input-placeholder {
     height: 16px
 }
 
-.c-cust-info table,
-.c-cust-info th,
-.c-cust-info td {
-    padding: 0.8rem;
+.c-cust-info table {
+    text-align: left;
     border-collapse: collapse;
-    border: 1px solid grey;
+    margin-bottom: 52px;
 }
 
-.c-cust-info table label {
-    color: #393D4E;
-    font-size: 15px;
-    font-weight: 600;
+.c-cust-info th {
+    padding: 1rem 0;
+}
+
+.c-cust-info td {
+    text-align: left;
+    border-collapse: collapse;
+    padding: 2rem 8rem 0 0;
 }
 
 .c-manage-subs a {
     color: #E5751A;
     font-weight: 600;
     text-decoration: none;
+}
+
+.c-accounts {
+    color: #393D4E;
+    font-family: Arial;
+}
+
+.c-accounts .o-flex__col-4 {
+    background: #fff;
+    padding: 2rem;
+    @media(--mobile-large) {
+        padding: 10rem;
+    }
+}
+
+.c-accounts .o-flex__col-8 {
+    padding: 2rem;
+    @media(--mobile-large) {
+        padding: 10rem 5rem;
+    }
+}
+
+.c-account-desc {
+    font-size: 17px;
+    line-height: 27px;
+    margin-bottom: 4rem;
+}
+
+.c-account-information,
+.c-account-information--order {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 35px;
+    border-bottom: 1px solid #d6d6d6;
+    padding-bottom: 10px;
+}
+
+.c-account-info-label {
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 26px;
+    color: $color-cold-grey;
+    margin-bottom: 1rem;
+    a {
+        font-size: 17px;
+        font-weight: bold;
+        line-height: 26px;
+        color: $color-cold-grey;
+    }
+}
+
+.c-index {
+    margin-top: 52px;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 35px;
+}
+
+.c-index__underline {
+    text-decoration: underline;
+}
+
+.c-btn--logout a {
+    color: #fff;
+}
+
+.c-index--refer {
+    margin-top: 2rem;
+}
+
+.c-index--index {
+    margin-top: 1rem;
+}
+
+.c-account-information--order {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 26px;
+    text-transform: uppercase;
+}
+
+table {
+    width: 100%;
+}
+
+.c-account-info-label--address {
+    border-bottom: 1px solid #d6d6d6;
+}
+
+.c-link-address {
+    margin-bottom: 1rem;
 }

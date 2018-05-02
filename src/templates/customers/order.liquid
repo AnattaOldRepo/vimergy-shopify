@@ -1,5 +1,30 @@
 <!-- /templates/customers/order.liquid -->
-<div class="c-account c-account--order">
+
+<div class="c-accounts c-account--account account-dashboard ">
+   <div class="o-flex">
+      <div class="o-flex__item o-flex__col-4">
+         <h1 class="c-account__title">Index</h1>
+         <ul class="c-index">
+            <li class="c-index__underline"><span>My Account</span></li>
+            <li>Account Information</li>  
+            <li><a href="/account/addresses">Address Book</a></li>
+            <li>My Orders</li>
+            <li class="c-index__underline">
+               {% if customer.metafields.subscriptions.customer_string %}
+               <!--BeginRechargeCode-->
+               <a href="/tools/recurring/customer/{{customer.metafields.subscriptions.customer_string}}/subscriptions/">Manage Subscriptions</a>
+               <!--EndRechargeCode-->
+               {% endif %}
+            </li>
+            <li>Privacy Policy</li>
+            <li>Terms of Use</li>
+            <li class="c-index--refer"><button class="c-btn c-btn--index">REFER-A-FRIEND</button></li>
+            <li class="c-index--index"><button class="c-btn c-btn--index c-btn--logout"> <a class="account-dashboard__logout" href="account/logout">Log Out</a></button></li>
+         </ul>
+      </div>
+      <div class="o-flex__item o-flex__col-8 c-cust-info">
+      <div class="c-account c-account--order">
+
     <h1 class="c-account__title">{{ 'customer.account.title' | t }}</h1>
 
     <a class="c-account__link--normal" href="/account">{{ 'customer.account.return' | t }}</a>
@@ -136,3 +161,13 @@
       </div>
 
     </div>
+</div>
+      </div>
+   </div>
+</div>
+
+
+
+
+
+

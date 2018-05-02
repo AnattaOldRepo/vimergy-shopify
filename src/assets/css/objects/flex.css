@@ -8,89 +8,88 @@
 .o-flex__item {
     flex: 1;
     order: 1;
-
     @media(--mobile-max) {
-		flex-basis: 100%;
-	}
+        flex-basis: 100%;
+    }
 }
 
 .o-flex__item--reverse {
-	order: 2;
+    order: 2;
+    @media(--tablet-max) {
+        order: 1;
+    }
+}
 
-	@media(--tablet-max) {
-		order: 1;
-	}
+.o-flex__item__is-left {
+    order: 1;
 }
-.o-flex__item__is-left{
-	order: 1;	
+
+.o-flex__item--is-right {
+    order: 1;
+    @media(--mobile-large) {
+        order: 2;
+    }
 }
-.o-flex__item--is-right{
-	order: 1;
-	
-	@media(--mobile-large) {
-		order: 2;
-	}	
-}
+
 .o-flex__col-6 {
-	flex-basis:100%;
-
-	@media(--mobile-large) {
-		flex-basis: 50%;
-	}
+    flex-basis: 100%;
+    @media(--mobile-large) {
+        flex-basis: 50%;
+    }
 }
+
 .o-flex__col-lg-6 {
-	flex-basis:100%;
-
-	@media(--tablet-large) {
-		flex-basis: 50%;
-	}
+    flex-basis: 100%;
+    @media(--tablet-large) {
+        flex-basis: 50%;
+    }
 }
+
 .o-flex__col-sm-6 {
-	flex-basis:100%;
-
-	@media(--mobile-max) {
-		flex-basis: 50%;
-		width:50%;
-	}
+    flex-basis: 100%;
+    @media(--mobile-max) {
+        flex-basis: 50%;
+        width: 50%;
+    }
 }
+
 .o-flex__col-8 {
-	flex-basis:100%;
-
-	@media(--mobile-large) {
-		flex-basis: 66.66%;
-	}
+    flex-basis: 100%;
+    @media(--mobile-large) {
+        flex-basis: 66.66%;
+    }
 }
+
 .o-flex__col-3 {
-	flex-basis:100%;
-
-	@media(--mobile-large) {
-		flex-basis: 25%;
-	}
+    flex-basis: 100%;
+    @media(--mobile-large) {
+        flex-basis: 25%;
+    }
 }
-.o-flex__col-lg-8{
-	flex-basis:100%;
 
-	@media(--tablet-large) {
-		flex-basis: 66.66%;
-	}	
+.o-flex__col-lg-8 {
+    flex-basis: 100%;
+    @media(--tablet-large) {
+        flex-basis: 66.66%;
+    }
 }
+
 .o-flex__col-4 {
-	flex-basis:100%;
-
-	@media(--mobile-large) {
-		flex-basis: 33.33%;
-		width:33.33%;
-	}
+    flex-basis: 100%;
+    @media(--mobile-large) {
+        flex-basis: 33.33%;
+        width: 33.33%;
+    }
 }
-.o-flex__col-lg-4{
-	flex-basis:100%;
 
-	@media(--tablet-large) {
-		flex-basis: 33.33%;
-	}	
+.o-flex__col-lg-4 {
+    flex-basis: 100%;
+    @media(--tablet-large) {
+        flex-basis: 33.33%;
+    }
 }
+
 .o-flex--verticalMobile {
-
     @media(--mobile-max) {
         box: vertical;
     }
@@ -99,5 +98,3 @@
 .o-flex__item--middle {
     box-item: center;
 }
-
-

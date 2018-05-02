@@ -55,17 +55,20 @@
                             	$.ajax({
 								type: 'GET',
 								data: data,
-								url: '/cart',
+								url: '/cart.json',
 								dataType: 'json',
 								success: function(response) {
+									
                                     var Subscription_active = false;
                                     for(var i = 0; i< response.items.length; i++){
-                                    if(response.items[i].properties != null){
+										
+                                    if(Object.keys(response.items[i].properties).length !=0){
+										
                                         Subscription_active = true;
                                     }
                                     }
 									if(Subscription_active){
-                                       
+                                       console.log(Subscription_active,"recharge");
                                         function get_cookie(name){ return( document.cookie.match('(^|; )'+name+'=([^;]*)')||0 )[2] }
                                         do{
                                             token=get_cookie('cart');

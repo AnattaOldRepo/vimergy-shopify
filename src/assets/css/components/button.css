@@ -1,4 +1,5 @@
-.c-btn , .shopify-challenge__button{
+.c-btn,
+.shopify-challenge__button {
     display: $button-display;
     width: $button-width;
     margin: $button-margin;
@@ -8,7 +9,8 @@
     text-transform: uppercase;
     line-height: $button-line-height;
     color: $button-color;
-    background-image: none; /* Reset unusual Firefox-on-Android default style */
+    background-image: none;
+    /* Reset unusual Firefox-on-Android default style */
     background-color: $button-background;
     white-space: nowrap;
     cursor: $button-cursor;
@@ -20,41 +22,37 @@
     letter-spacing: 0.04em;
     line-height: 1.4;
     border-radius: 2px;
-
     @media(--mobile-large) {
         font-size: 14px;
     }
-
     @media(--tablet-large) {
         padding: .8125rem 3rem;
-        font-size:  .9375rem;
+        font-size: .9375rem;
     }
-
     &.disabled,
     &[disabled] {
         opacity: 0.5;
         cursor: default;
         pointer-events: none;
     }
-
     &:--enter {
         color: #fff;
         background-color: #F6741D
     }
 }
+
 .c-btn--black {
     border-color: $color-black;
 }
 
-.c-btn--secondary{
+.c-btn--secondary {
     padding: .5625rem 2rem;
     font-size: .875rem;
     color: #fff;
     background-color: $color-cold-grey;
-
-    &:--enter{
-        background-color:$color-cold-greylight;
-        color:$color-white;
+    &:--enter {
+        background-color: $color-cold-greylight;
+        color: $color-white;
     }
 }
 
@@ -62,7 +60,6 @@
     color: $color-black;
     background-color: $color-white;
     border-color: $color-black;
-
     &:--enter {
         color: $color-white;
         background-color: $color-black;
@@ -74,7 +71,9 @@
     font-size: 23px;
 }
 
+
 /* Temp - have to refactor this component */
+
 .c-btn--large-new {
     padding: 5px 32px 0;
     font-family: $font-family-primary-bold;
@@ -84,6 +83,27 @@
     letter-spacing: 0;
     border-color: $color-black;
 }
-.shopify-challenge__button{
-    margin-bottom:2rem !important;
+
+.shopify-challenge__button {
+    margin-bottom: 2rem !important;
+}
+
+.c-btn--index {
+    width: 195px;
+    height: 42px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 16px;
+    padding: 0;
+}
+
+.c-btn--logout {
+    background-color: $color-green;
+    border-color: $color-green;
+    &:--enter {
+        color: $color-white;
+        background-color: $color-green;
+        border-color: $color-green;
+    }
 }

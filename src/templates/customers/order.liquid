@@ -22,14 +22,14 @@
             <li class="c-index--index"><button class="c-btn c-btn--index c-btn--logout"> <a class="account-dashboard__logout" href="account/logout">Log Out</a></button></li>
          </ul>
       </div>
-      <div class="o-flex__item o-flex__col-8 c-cust-info">
-      <div class="c-account c-account--order">
+      <div class="o-flex__item o-flex__col-8">
+      <div>
 
     <h1 class="c-account__title">{{ 'customer.account.title' | t }}</h1>
 
-    <a class="c-account__link--normal" href="/account">{{ 'customer.account.return' | t }}</a>
+    <a class="c-index c-index__underline" href="/account">{{ 'customer.account.return' | t }}</a>
 
-    <div class="">
+    <div class="c-order-container">
 
       <div class="">
         <h4 class="c-account__subtitle">{{ 'customer.order.title' | t: name: order.name }}</h4>
@@ -45,7 +45,7 @@
         {% endif %}
 
         <div class="table-wrap">
-          <table class="full">
+          <table class="full c-orders-table">
             <thead>
               <tr>
                 <th>{{ 'customer.order.product' | t }}</th>

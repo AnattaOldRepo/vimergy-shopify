@@ -38,25 +38,25 @@
 }
 
 .c-cart__itemImageBox {
-    padding-top: 3rem;
-    lost-column: 2/5 2 6px;
-    flex: 49;
+    padding-top: 10px;
+    flex: 30;
 }
 
 .c-cart__itemImageLink {}
 
-.c-cart__itemImage {
+
+/* .c-cart__itemImage {
     display: block;
     max-width: 140%;
     margin-left: -25px;
-}
+} */
 
 .c-cart__itemInfoBox {
     /* lost-column: 3/5 2 6px; */
     position: relative;
     padding: 14px 14px 10px 15px;
     display: flex;
-    flex: 60;
+    flex: 70;
     justify-content: space-between;
     flex-direction: column;
 }
@@ -82,11 +82,11 @@
 
 .c-cart__itemName {
     display: block;
-    margin-bottom: 16px;
-    margin-right: 12px;
+    /* margin-bottom: 16px;
+    margin-right: 12px; */
     font-family: $font-family-primary-bold;
     font-weight: $font-weight-bold;
-    font-size: 16px;
+    font-size: 12px;
     line-height: 18px;
     letter-spacing: -.4px;
 }
@@ -96,12 +96,14 @@
     font-family: $font-family-primary;
     font-size: 13px;
     line-height: 16px;
+    margin-top: 5px;
 }
 
 .c-cart__itemLowerBox {
     display: block;
     justify-content: space-between;
     align-items: flex-end;
+    line-height: 1;
 }
 
 .c-cart__itemQuantityBox {}
@@ -124,7 +126,9 @@
 .c-cart__itemDiscoutBox {}
 
 .c-cart__itemDiscount {
-    font-size: 10px;
+    font-size: 11px;
+    color: $color-green;
+    font-weight: 800;
 }
 
 .c-cart__footer {
@@ -244,7 +248,7 @@
 .js-qty {
     display: flex;
     position: relative;
-    margin-bottom: 2px;
+    /* margin-bottom: 2px; */
     max-width: 66px;
     overflow: visible;
     input {
@@ -253,9 +257,8 @@
         border: none;
         text-align: center;
         width: 100%;
-        padding: 0;
-        padding-top: 3px;
-        padding-right: 3px;
+        padding: 10px 3px;
+        padding-top: 18px;
         margin: 0;
         font-size: 13px;
     }
@@ -271,14 +274,15 @@
     cursor: pointer;
     position: absolute;
     display: block;
-    top: 0;
+    top: 15px;
     bottom: 0;
     border: 0 none;
     padding: 0 4px;
-    background: none;
+    height: 1.3rem;
+    border: 1px solid #c4c4ae;
+    background-color: #fff;
     text-align: center;
     overflow: hidden;
-    background-color: transparent;
     color: $color-black;
     &:--enter {
         color: $color-vimergy-orange !important;
@@ -587,4 +591,8 @@
 .c-discount {
     padding-bottom: 10px;
     border-bottom: 1px solid gray;
+}
+
+.c-cart__itemRemove {
+    border: 0 !important;
 }

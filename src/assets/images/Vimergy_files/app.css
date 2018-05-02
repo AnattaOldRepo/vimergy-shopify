@@ -768,9 +768,9 @@ body {
             box-shadow: 0px 0px 18px 2px rgba(0, 0, 0, .1);
     padding: 20px 19px;
     padding: 1.25rem 1.1875rem;
-   
+
     padding-bottom: 9.6px;
-   
+
     padding-bottom: 0.6rem;
 }
 .o-header:after {
@@ -814,7 +814,7 @@ body {
 @media (max-width: 63.9375em) {
     .c-menu__item--cart{
         visibility: visible;
-    } 
+    }
     .o-header__menu {
         position:absolute;
         top: 3.125rem;
@@ -997,7 +997,7 @@ body {
     height: 100%;
     /* overflow-x: hidden;
     overflow-y: auto; */
-    visibility: hidden;  
+    visibility: hidden;
     background-color: #fff;
     -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
@@ -1215,12 +1215,12 @@ body.offcanvas-open {
                     }
 .c-cart__itemPrice {
                             font-family: $font-family-primary;
-                            font-size: 13px;                    
+                            font-size: 13px;
                         }
 .c-cart__itemPrice--noSale {
                             font-family: $font-family-primary;
-                            font-size: 13px;  
-                            color: $color-crimson;                  
+                            font-size: 13px;
+                            color: $color-crimson;
                         }
 .c-cart__itemDiscoutBox {
 
@@ -1248,8 +1248,8 @@ body.offcanvas-open {
                 -webkit-box-pack: justify;
                     -ms-flex-pack: justify;
                         justify-content: space-between;
-                margin-bottom: 18px;       
-                padding: 0 10px;         
+                margin-bottom: 18px;
+                padding: 0 10px;
                 font-family: $font-family-primary-bold;
                 font-weight: 700;
                 font-size: 19px;
@@ -1306,7 +1306,7 @@ body.offcanvas-open {
                     margin-right: 13px !important;
                     min-width: 0 !important;
                     min-width: initial !important;
-                    margin-bottom: 10px !important;     
+                    margin-bottom: 10px !important;
                     border-radius: 0 !important;
 }
 .c-cart__additionalButtons .additional-checkout-button--paypal-express {
@@ -1381,6 +1381,7 @@ body.offcanvas-open {
   top: 0;
   bottom: 0;
   border: 0 none;
+  line-height: 1;
   padding: 0 4px;
   background: none;
   text-align: center;
@@ -1888,7 +1889,7 @@ body.offcanvas-open {
     }
 }
 .c-menu_item__quiker-links{
-   
+
     background-position: 0 3px;
     padding-left: 25px;
     padding-left: 1.5625rem;
@@ -1981,7 +1982,7 @@ body.offcanvas-open {
         margin-bottom: 16px;
         border-bottom: 1px solid #d7d7d7;
 }
-.c-mobileNav__itemLink { 
+.c-mobileNav__itemLink {
             cursor: pointer;
             font-family: 'proxima-nova',sans-serif;
             font-size: 16px;

@@ -5,14 +5,14 @@
         margin: 0 auto;
         max-width: 85.6875rem;
         width: 100%;
-            padding-top:3.4375rem;
-        }
+        padding:3.4375rem *;
+    }
 }
 
 .c-collection-container{
     margin-bottom: 1.75rem;
     border-bottom: 1px dashed #b7b7b0;
-    
+
     @media(--mobile-large) {
         padding-bottom:.875rem;
     }
@@ -57,7 +57,7 @@
         max-width: 33.33%;
         padding-right: .5rem;
         padding-left: .5rem;
-        
+
     }
 }
 

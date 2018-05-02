@@ -16,10 +16,10 @@
    {{ variant.title }}
    </option>
    {% endfor %}
-   </select>                      
+   </select>
 </form> {% endcomment %}
 <div class="c-product" ata-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
-{% if collection != blank %} 
+{% if collection != blank %}
 <a class="c-product__breadcrumb" href="{{ collection.url }}">
    <svg class="c-product__breadcrumbArrow" width="25px" height="12px" viewBox="0 0 25 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
@@ -57,55 +57,55 @@
                <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
 
               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
-              
+
                   <h1 class="c-product-name">{{ product.title }}</h1>
-                    
+
 
                   <div class="c-product-description">
                      {{ product.metafields.c_f.desc1 }}
                   </div>
 
-                {% if product.metafields.sub_description  %} 
+                {% if product.metafields.sub_description  %}
 
                   <div class="c-product-description">
                      {{ product.metafields.c_f.sub_description }}
                   </div>
 
-                 {% endif %}   
+                 {% endif %}
 
                {%- assign product_quantity = 1 -%}
                 {% for item in cart.items %}
-                  
-                {% if product.id ==  item.product_id %} 
-                   
+
+                {% if product.id ==  item.product_id %}
+
                      {%- assign product_quantity = item.quantity -%}
                       {% break %}
-    
-                {% endif %} 
+
+                {% endif %}
                 {% endfor %}
-                
+
                   <div class="c-item-options">
                   <div>
-                   
+
                   <div class="c-quantity">
                      <label for="qty">Quantity</label>
                      <input type="number"
                         name="quantity"
                         id="updates_{{ product.id }}"
                         value="1"
-                        min="1" 
+                        min="1"
                         data-product-quantity
                         aria-label="{{ 'cart.general.item_quantity' | t }}">
                     </div>
-                     {% if product.metafields.c_f.made_in_usa  %} 
+                     {% if product.metafields.c_f.made_in_usa  %}
 
                     <div class="c-product-made">
                         <span class="c-icon-usa">Made in USA</span>
                     </div>
 
-                    {% endif %} 
+                    {% endif %}
                     </div>
-                    
+
                     <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
                     {% if product.options.size == 1 %}
                         <label><strong>{{ product.options.first }}</strong></label>
@@ -120,16 +120,16 @@
                             {{ variant.title }}
                             </option>
                             {% endfor %}
-                        </select> 
-                    </div>  
+                        </select>
+                    </div>
 
-                    {% if product.metafields.subscriptions.has_subscription  %} 
+                    {% if product.metafields.subscriptions.has_subscription  %}
                         <div class="product-options-bottom">
                         <h2 class="del-interval__heading">Pick a delivery option</h2>
                         {% if product.available %}{% include 'subscription-product' %}{% endif %}
                         </div>
-                     
-                    {% endif %}   
+
+                    {% endif %}
 
                   </div>
                   <div class="c-product__priceBox c-product-price" data-price-wrapper>
@@ -173,16 +173,20 @@
 
 {% endif %}
 
-{% section 'product-detail' %}
+{% unless product.title == 'Gift Card' %}
 
-{% section 'related-products' %} 
+    {% section 'product-detail' %}
+
+    {% section 'related-products' %}
+
+{% endunless %}
 
 {{ 'option_selection.js' | shopify_asset_url | script_tag }}
 <script>
    console.log({{ product | json}})
-   
+
    var selectCallback = function(variant, selector) {
-   
+
 //        console.log(variant);
         console.log(selector);
 
@@ -199,14 +203,14 @@
                 })
             }
         }
-              
+
    };
-   
+
    // jQuery(function($) {
    new Shopify.OptionSelectors('product-select', {
        product: {{ product | json }},
        onVariantSelected: selectCallback,
        enableHistoryState: true
    });
-   
+
 </script>

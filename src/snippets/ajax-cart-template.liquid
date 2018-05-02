@@ -27,14 +27,20 @@
                         </svg>
                     </button>
 
+
+
                     <div class="c-cart__itemInfoContainer">
-                        <a href="{{url}}" class="c-cart__itemName">{{name}}</a>
-                        {{#if variantSize}}
-                        <span class="c-cart__itemMeta">Size: {{variantSize}}</span>
+                        <a href="{{url}}" class="c-cart__itemName" data-product-type="{{GiftInCart}}">{{name}}</a>
+
+                        {{#if GiftInCart}}
+                            {{#if variantSize}}
+                            <span class="c-cart__itemMeta"> Size: {{variantSize}}</span>
+                            {{/if}}
                         {{/if}}
 
+
                         {{#if variantColor}}
-                        <span class="c-cart__itemMeta">Bundle:  {{variantColor}}</span>
+                        <span class="c-cart__itemMeta">Bundle: {{variantColor}}</span>
                         {{/if}}
 
                         {% endraw %}{% if settings.cart_vendor_enable %}{% raw %}

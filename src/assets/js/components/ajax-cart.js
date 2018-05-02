@@ -326,6 +326,7 @@ var ajaxCart = (function(module, $) {
         url: cartItem.url,
         img: prodImg,
         name: cartItem.product_title,
+        type: cartItem.product_type,
         variation: cartItem.variant_title,
         variantSize: cartItem.variant_options[0],
         variantColor: cartItem.variant_options[1],
@@ -340,7 +341,6 @@ var ajaxCart = (function(module, $) {
         discounts: cartItem.discounts,
         discountsApplied: cartItem.line_price === cartItem.original_line_price ? false : true
       };
-
       items.push(item);
     });
 

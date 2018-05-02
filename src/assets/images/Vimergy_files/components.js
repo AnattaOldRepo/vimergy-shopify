@@ -293,6 +293,15 @@
         return;
       }
 
+
+      // Checking gift card type
+      var GiftInCart = false;
+      if (cartItem.product_type =! 'Gift Card'){
+        GiftInCart = false;
+      } else {
+        GiftInCart = true;
+      }
+
       // Handlebars.js cart layout
       var items = [],
           item = {},
@@ -326,6 +335,7 @@
           img: prodImg,
           name: cartItem.product_title,
           variation: cartItem.variant_title,
+          type: checkGiftCard,
           variantSize: cartItem.variant_options[0],
           variantColor: cartItem.variant_options[1],
           properties: cartItem.properties,
@@ -343,13 +353,17 @@
         items.push(item);
       });
 
+      console.log(GiftInCart);
+
+
       // Gather all cart data and add to DOM
       data = {
         items: items,
         note: cart.note,
         totalPrice: Shopify.formatMoney(cart.total_price, settings.moneyFormat),
         totalCartDiscount: cart.total_discount === 0 ? 0 : '[savings]'.replace('[savings]', Shopify.formatMoney(cart.total_discount, settings.moneyFormat)),
-        totalCartDiscountApplied: cart.total_discount === 0 ? false : true
+        totalCartDiscountApplied: cart.total_discount === 0 ? false : true,
+        GiftInCart: GiftInCart
       };
 
       $cartContainer.append(template(data));
@@ -684,7 +698,7 @@ $(function () {
     });
   });
 
-  // size grid 
+  // size grid
   $(document).ready(function () {
 
     $('.js-size-type-select').on('click', function () {

@@ -693,7 +693,7 @@ input:focus::-webkit-input-placeholder {
 .c-cust-info td {
     text-align: left;
     border-collapse: collapse;
-    padding: 2rem 8rem 0 0;
+    padding: 2rem 4rem 0 0;
 }
 
 .c-manage-subs a {

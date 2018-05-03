@@ -137,7 +137,7 @@
 
 .recharge .rc_layout__container {
     @media(--tablet-large) {
-        max-width: 1316px !important;
+        max-width: 1366px !important;
     }
 }
 
@@ -153,7 +153,7 @@
 }
 
 .rc_layout__container {
-    padding-top: 3rem;
+    padding: 8rem 0;
 }
 
 .rc_customer__name,
@@ -189,7 +189,6 @@
 .table-responsive td {
     @media(--mobile-large) {
         border-collapse: collapse;
-        border: 1px solid grey;
     }
 }
 
@@ -197,21 +196,26 @@
 .rc_table th,
 .rc_table td {
     border-collapse: collapse;
-    border: 1px solid grey;
 }
 
 .recharge .table th,
 .rc_table th {
-    @media(--tablet-large) {
-        padding: 0.8rem;
-        font-size: 16px;
-    }
+    text-align: left;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 26px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #d6d6d6;
+    padding: 0;
 }
 
 .table-responsive td,
 .rc_table td {
     @media(--tablet-large) {
-        padding: 0.8rem;
+        padding: 0rem;
+        padding-top: 10px;
+        font-size: 16px;
     }
 }
 
@@ -260,6 +264,49 @@ tbody td:last-child {
     }
 }
 
-.rc_toggler__block {
+.rc_toggler__block,
+#rc_subscriptions__items__address,
+#rc_subscriptions__items__payment_method {
     width: 50%;
+    font-size: 14px;
+}
+
+.rc_title-bar__title h2 {
+    font-size: 28px;
+    font-weight: 700;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d6d6d6;
+}
+
+.re__schedule__order__address {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.re__schedule__order__item__edit {
+    margin-left: 50px;
+}
+
+.re__schedule__order__items td:first-child {
+    width: 65%;
+}
+
+#customer_tab_content .rc_toggler__block label,
+#rc_subscriptions__items__address label,
+#rc_subscriptions__items__payment_method label {
+    border-bottom: 1px solid #d6d6d6;
+    font-weight: 500;
+    font-size: 17px;
+}
+
+#rc_subscriptions__items__address address {
+    font-size: 14px;
+}
+
+#customer_tab_content .rc_layout__container a {
+    font-size: 14px;
+}
+
+.btn-back {
+    text-decoration: underline;
 }

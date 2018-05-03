@@ -255,12 +255,14 @@
     }
 }
 
-.c-item-options .js-qty {
+.c-item-options .js-qty,
+.rc_layout__content .js-qty {
     max-width: 133px;
     margin-right: 16px;
 }
 
-.c-item-options .js-qty__num {
+.c-item-options .js-qty__num,
+.rc_layout__content .js-qty__num {
     font-size: 16px;
     width: 3.5625rem;
     height: 3rem;
@@ -272,11 +274,13 @@
     border: 1px solid #ccc;
 }
 
-.c-item-options .fallback-text {
+.c-item-options .fallback-text,
+.rc_layout__content .fallback-text {
     font-weight: 900;
 }
 
-.c-item-options .js-qty__adjust {
+.c-item-options .js-qty__adjust,
+.rc_layout__content .js-qty__adjust {
     height: 3rem;
     border: 1px solid #c4c4ae;
     padding: 0.8125rem 1rem !important;

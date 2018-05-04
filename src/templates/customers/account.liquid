@@ -8,10 +8,9 @@ For all available customer liquid tags:
       <div class="o-flex__item o-flex__col-4">
          <h1 class="c-account__title">Index</h1>
          <ul class="c-index">
-            <li class="c-index__underline"><span>My Account</span></li>
-            <li>Account Information</li>  
+            <li class="c-index__underline"><span><a href="/account">My Account</a></span></li>
             <li><a href="/account/addresses">Address Book</a></li>
-            <li>My Orders</li>
+              <li><a href="#" id="myOrder">My Orders</a></li>
             <li class="c-index__underline">
                {% if customer.metafields.subscriptions.customer_string %}
                <!--BeginRechargeCode-->
@@ -19,9 +18,8 @@ For all available customer liquid tags:
                <!--EndRechargeCode-->
                {% endif %}
             </li>
-            <li>Privacy Policy</li>
-            <li>Terms of Use</li>
-            <li class="c-index--refer"><button class="c-btn c-btn--index">REFER-A-FRIEND</button></li>
+              <li><a href="https://vimergy.myshopify.com/pages/privacy-policy">Privacy Policy </a></li>
+             <li><a href="pages/customer-service">Terms of Use</a></li>
             <li class="c-index--index"><button class="c-btn c-btn--index c-btn--logout"> <a class="account-dashboard__logout" href="account/logout">Log Out</a></button></li>
          </ul>
       </div>
@@ -29,15 +27,10 @@ For all available customer liquid tags:
          <h2 class="c-account__title">Hello, {{ customer.name }}</h2>
          <p class="c-account-desc">From your dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.
          </p>
-         <div>
-            <table>
-               <tr>
-                  <th class="c-account-information">Account Information</th>
-                  <th class="c-account-information">Address Book</th>
-               </tr>
-               <tr>
-                  <td>
-                     <label class="c-account-info-label">Account Information</label>
+         <div class="o-flex">
+            <div class="o-flex__item o-flex__col-6">
+            <h2 class="c-account-information">Account Information</h2>
+            <label class="c-account-info-label c-address-subtitle">Account Information</label>
                      <div>
                         <p class="account-details__name c-account__infoText">{{ customer.name }}</p>
                         {% if customer.email != "" %}
@@ -46,9 +39,10 @@ For all available customer liquid tags:
                         </p>
                         {% endif %}
                      </div>
-                  </td>
-                  <td>
-                     <label class="c-account-info-label">
+            </div>
+            <div class="o-flex__item o-flex__col-6">
+            <h2 class="c-account-information ">Address Book</h2>
+            <label class="c-account-info-label c-address-subtitle">
                         <p><a class="c-account__link--normal" href="/account/addresses">Manage Addresses ({{ customer.addresses_count }})</a></p>
                      </label>
                      {% if customer.default_address != nil %}
@@ -76,10 +70,10 @@ For all available customer liquid tags:
                         {{ customer.default_address.phone }}
                      </p>
                      {% endif %}
-                  </td>
-               </tr>
-            </table>
-            <div class="account-dashboard__block order-history">
+            </div>
+         </div>
+    
+            <div class="account-dashboard__block order-history" id="orders">
                <h2 class="c-account__title c-account__title--order">My Orders</h2>
                {% comment %}
                If we have past orders, loop through each one

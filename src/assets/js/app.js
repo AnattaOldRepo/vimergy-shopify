@@ -58,4 +58,16 @@ $(function() {
         navigation: true,
         heightStyle: "content"
     });
+
+    $("#myOrder").click(function() {
+        if ($("#orders").length == 0) {
+            window.location.href = "/account";
+            $('html, body').animate({
+                scrollTop: ($("#orders").offset().top - 100)
+            }, 2000);
+        }
+        $('html, body').animate({
+            scrollTop: ($("#orders").offset().top - 100)
+        }, 2000);
+    });
 });

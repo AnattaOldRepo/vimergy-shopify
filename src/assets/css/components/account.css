@@ -318,6 +318,7 @@ select {
 
 .c-account__addressBlock {
     font-size: 13px;
+    margin-bottom: 2rem;
 }
 
 .c-account__addressBlock--billing {
@@ -503,6 +504,10 @@ select {
     }
     .c-account__title {
         margin-bottom: 52px;
+        text-align: center;
+        @media (--mobile-large) {
+            text-align: left;
+        }
     }
     .c-account__title--order {
         margin-bottom: 32px;
@@ -710,9 +715,15 @@ input:focus::-webkit-input-placeholder {
 .c-accounts .o-flex__col-4 {
     background: #fff;
     padding: 2rem;
+    text-align: center;
     @media(--mobile-large) {
         padding: 10rem;
+        text-align: left;
     }
+}
+
+.c-address-subtitle {
+    padding: 2rem 4rem 0 0;
 }
 
 .c-accounts .o-flex__col-8 {

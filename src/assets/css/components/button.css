@@ -1,5 +1,6 @@
 .c-btn,
-.shopify-challenge__button {
+.shopify-challenge__button,
+.button {
     display: $button-display;
     width: $button-width;
     margin: $button-margin;
@@ -88,7 +89,8 @@
     margin-bottom: 2rem !important;
 }
 
-.c-btn--index {
+.c-btn--index,
+#content__subscriptions .btn {
     width: 195px;
     height: 42px;
     font-size: 14px;
@@ -96,6 +98,11 @@
     letter-spacing: 1px;
     line-height: 16px;
     padding: 0;
+    color: #fff !important;
+}
+
+#content__subscriptions .btn {
+    padding: 14px !important;
 }
 
 .c-btn--logout {

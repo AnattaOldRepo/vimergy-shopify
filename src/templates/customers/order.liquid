@@ -5,10 +5,9 @@
       <div class="o-flex__item o-flex__col-4">
          <h1 class="c-account__title">Index</h1>
          <ul class="c-index">
-            <li class="c-index__underline"><span>My Account</span></li>
-            <li>Account Information</li>  
+            <li class="c-index__underline"><span><a href="/account">My Account</a></span></li> 
             <li><a href="/account/addresses">Address Book</a></li>
-            <li>My Orders</li>
+            <li><a href="#" id="myOrder">My Orders</a></li>
             <li class="c-index__underline">
                {% if customer.metafields.subscriptions.customer_string %}
                <!--BeginRechargeCode-->
@@ -16,9 +15,8 @@
                <!--EndRechargeCode-->
                {% endif %}
             </li>
-            <li>Privacy Policy</li>
-            <li>Terms of Use</li>
-            <li class="c-index--refer"><button class="c-btn c-btn--index">REFER-A-FRIEND</button></li>
+            <li><a href="https://vimergy.myshopify.com/pages/privacy-policy">Privacy Policy </a></li>
+            <li><a href="pages/customer-service">Terms of Use</a></li>
             <li class="c-index--index"><button class="c-btn c-btn--index c-btn--logout"> <a class="account-dashboard__logout" href="account/logout">Log Out</a></button></li>
          </ul>
       </div>
@@ -117,7 +115,7 @@
       <div class="c-grid">
 
         <div class="c-grid__item--oneHalf c-account__addressBlock c-account__addressBlock--billing">
-            <h4 class="c-account__subtitle">{{ 'customer.order.billing_address' | t }}</h4>
+            <h4 class="c-account-information">{{ 'customer.order.billing_address' | t }}</h4>
 
             <p class="c-account__infoText"><strong>{{ 'customer.order.payment_status' | t }}:</strong> {{ order.financial_status_label }}</p>
 
@@ -138,7 +136,7 @@
         </div>
 
         <div class="c-grid__item--oneHalf c-account__addressBlock">
-            <h4 class="c-account__subtitle">{{ 'customer.order.shipping_address' | t }}</h4>
+            <h4 class="c-account-information">{{ 'customer.order.shipping_address' | t }}</h4>
 
             <p class="c-account__infoText"><strong>{{ 'customer.order.fulfillment_status' | t }}:</strong> {{ order.fulfillment_status_label }}</p>
 

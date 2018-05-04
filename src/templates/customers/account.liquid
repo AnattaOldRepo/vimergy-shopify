@@ -80,8 +80,8 @@ For all available customer liquid tags:
                {% endcomment %}
                {% paginate customer.orders by 20 %}
                {% if customer.orders.size != 0 %}
-               
                <table class="responsive-table">
+               <thead>
                   <tr class="responsive-table-row">
                      <th class="c-account-information--order">Order</th>
                      <th class="c-account-information--order">Date</th>
@@ -89,6 +89,8 @@ For all available customer liquid tags:
                      <th class="c-account-information--order">Fullfillment Status</th>
                      <th class="c-account-information--order">Total</th>
                   </tr>
+                  </thead>
+                  <tbody>
                   {% for order in customer.orders %}
                   <tr class="responsive-table-row">
                      <td >
@@ -120,6 +122,7 @@ For all available customer liquid tags:
                      </td>
                   </tr>
                     {% endfor %}
+                    </tbody>
                </table>
              
                {% else %}

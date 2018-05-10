@@ -1,4 +1,5 @@
 /* Typography reset */
+
 html {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
@@ -20,7 +21,9 @@ p {
     margin-bottom: (16px / 2);
 }
 
+
 /* Abbreviations and acronyms */
+
 abbr[title] {
     cursor: help;
     border-bottom: 1px dotted #f6f6f6;
@@ -73,7 +76,9 @@ dfn {
     font-style: italic;
 }
 
+
 /* Headings */
+
 :--headings {
     margin-top: 7px;
     margin-bottom: 7px;
@@ -84,7 +89,12 @@ dfn {
     color: inherit;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin: 0;
     padding: 0;
     font-weight: 700;
@@ -92,34 +102,34 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h1 {
-    font-size: 42px;
-    line-height: normal;
+    font-size: 39px;
+    font-weight: bold;
+    line-height: 44px;
     letter-spacing: 0.01em;
-
     @media (--mobile-max) {
-            font-size:24px
-        }
+        font-size: 24px
+    }
 }
 
 h2 {
-    font-size: 36px;
-    line-height: normal;
-
+    font-size: 31px;
+    line-height: 40px;
+    font-weight: normal;
     @media (--mobile-max) {
-            font-size:18px;
-        }
+        font-size: 18px;
+    }
 }
 
 h3 {
-    font-size: 26px;
-    font-weight: 600;
-    line-height: normal
+    font-size: 25px;
+    line-height: 34px;
+    font-weight: normal;
 }
 
 h4 {
-    font-size: 19px;
-    font-weight: 400;
-    line-height: normal
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 26px;
 }
 
 h5 {
@@ -136,10 +146,10 @@ p {
 
 
 /* Links */
+
 a {
     color: $color-blue;
     text-decoration: none;
-
     &:--enter {
         color: $color-blue;
         text-decoration: none;
@@ -147,7 +157,9 @@ a {
     }
 }
 
+
 /* Lists */
+
 dl {
     margin-top: 0;
     margin-bottom: 20px;
@@ -165,7 +177,9 @@ dd {
     margin-left: 0;
 }
 
+
 /* Code */
+
 code,
 kbd,
 pre,
@@ -173,7 +187,9 @@ samp {
     font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+
 /* Inline code */
+
 code {
     padding: 2px 4px;
     font-size: 12px;
@@ -182,7 +198,9 @@ code {
     white-space: nowrap;
 }
 
+
 /* User input typically entered via keyboard */
+
 kbd {
     padding: 2px 4px;
     font-size: 12px;
@@ -190,7 +208,9 @@ kbd {
     background: #f6f6f6;
 }
 
+
 /* Blocks of code */
+
 pre {
     display: block;
     margin: 0 0 10px;
@@ -201,7 +221,6 @@ pre {
     background: #f6f6f6;
     border: 1px solid #ddd;
     word-wrap: break-word;
-
     code {
         padding: 0;
         font-size: inherit;
@@ -212,12 +231,16 @@ pre {
     }
 }
 
+
 /* Undo browser default styling */
+
 cite {
     font-style: normal;
 }
 
+
 /* Blockquotes */
+
 blockquote {
     margin: 0 0 20px 40px;
     padding: 0;
@@ -228,7 +251,6 @@ blockquote {
     line-height: 1.5;
     color: $color-black;
     border-left: 1px solid #f6f6f6;
-
     p,
     ul,
     ol {
@@ -236,7 +258,6 @@ blockquote {
             margin-bottom: 0;
         }
     }
-
     footer,
     small,
     .small {
@@ -244,18 +265,18 @@ blockquote {
         font-size: 11px;
         line-height: 1.5;
         color: $color-black;
-
         &:before {
             content: '\2014 \00A0';
         }
     }
-
     cite {
         font-style: normal;
     }
 }
 
+
 /* Quotes */
+
 blockquote:before,
 blockquote:after {
     content: '';

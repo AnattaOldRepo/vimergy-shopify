@@ -1,0 +1,38 @@
+
+<div class="">
+  <div class="o-flex">
+      <div class="o-flex__item o-flex__col-lg-2" >
+        <p class="c-side-text">{{ section.settings.side-text }}</p>
+      </div>
+    <div class="o-flex__item o-flex__col-lg-10 c-hero-img" style="background-image: url('{{ section.settings.image | img_url: 'master' }}');">
+    <div class="c-home-hero-info">
+      <p class="c-img-text">{{ section.settings.text }}</p>
+    </div>
+    </div>   
+  </div>
+</div>
+
+
+{% schema %}
+    {
+        "name": "Home Hero Banner",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+             {
+                "type": "text",
+                "id": "side-text",
+                "label": "Side Text"
+            },
+            {
+                "type": "text",
+                "id": "text",
+                "label": "Text"
+            }
+
+        ]
+    }
+{% endschema %}   

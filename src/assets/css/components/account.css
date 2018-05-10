@@ -417,7 +417,8 @@ select {
 }
 
 .c-account__linkArrow {
-    display: block;
+    margin-right: 3px;
+    padding-top: 9px;
 }
 
 .c-account--login {
@@ -571,7 +572,7 @@ select {
     td {
         text-align: left;
         padding: $gutter / 2;
-        border: 1px solid $color-black;
+        /* border: 1px solid $color-black; */
     }
 }
 
@@ -704,6 +705,7 @@ input:focus::-webkit-input-placeholder {
     text-align: left;
     border-collapse: collapse;
     padding: 2rem 4rem 0 0;
+    font-size: 17px;
 }
 
 .c-manage-subs a {

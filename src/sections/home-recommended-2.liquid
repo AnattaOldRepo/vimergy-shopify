@@ -1,0 +1,57 @@
+
+<div class="">
+  <div class="o-flex">
+    <div class="o-flex__item o-flex__col-lg-5">
+        <div class="c-reco-img">
+          <img src="{{ section.settings.image | img_url: 'master'}}"  alt="">
+        </div>
+    </div>
+    <div class="o-flex__item o-flex__col-lg-7">
+        <div class="c-reco-info"> 
+            <h1 class="c-reco__heading">{{ section.settings.heading}}</h1>
+            <h3 class="c-reco-text">{{ section.settings.text }}</h3>
+            <h4 class="c-reco-desc">{{ section.settings.desc }}</h4>
+            <p><a class="c-btn c-btn-primary" href="{{ section.settings.button-link }}">{{ section.settings.button-text }}</a></p>
+        </div>
+    </div>   
+  </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Home Recomended product-2",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+             {
+                "type": "text",
+                "id": "heading",
+                "label": "Heading"
+            },
+            {
+                "type": "text",
+                "id": "text",
+                "label": "Text"
+            },
+             {
+                "type": "text",
+                "id": "desc",
+                "label": "Description"
+            },
+             {
+                "type": "text",
+                "id": "button-text",
+                "label": "Button Text"
+            },
+             {
+                "type": "text",
+                "id": "button-link",
+                "label": "Button"
+            }
+
+        ]
+    }
+{% endschema %}   

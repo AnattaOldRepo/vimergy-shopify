@@ -723,12 +723,21 @@ body.fancybox-active.compensate-for-scrollbar {
     @media(--tablet-large) {
         position: absolute;
         transform: rotate(270deg);
-        bottom: 91%;
+        top: 71%;
     }
 }
 
 .c-reco-info {
     text-align: center;
+    @media(--tablet-large) {
+        margin-top: 14rem;
+        padding: 0 8rem;
+    }
+}
+
+.c-reco-info-2 {
+    width: 700px;
+    text-align: left;
     @media(--tablet-large) {
         margin-top: 14rem;
         padding: 0 8rem;
@@ -743,3 +752,6 @@ body.fancybox-active.compensate-for-scrollbar {
 .c-reco-desc {
     margin-bottom: 5rem;
 }
+
+width: 700px;
+text-align: left;

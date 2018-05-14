@@ -31,11 +31,10 @@
     var hpCustomGridSliderSettings = {
         mobileFirst: true,
         centerMode: true,
-        centerPadding: '46px',   
+        centerPadding: '46px',
         slidesToShow: 1,
         infinite: false,
-        responsive: [
-            {
+        responsive: [{
                 breakpoint: 640,
                 initialSlide: 1,
                 settings: {
@@ -49,17 +48,16 @@
             }
         ],
         prevArrow: prevArrow,
-        nextArrow: nextArrow,    
+        nextArrow: nextArrow,
     }
 
     var hpProductsSliderSettings = {
         mobileFirst: true,
         centerMode: true,
-        centerPadding: '46px',   
+        centerPadding: '46px',
         slidesToShow: 1,
         infinite: false,
-        responsive: [
-            {
+        responsive: [{
                 breakpoint: 640,
                 initialSlide: 1,
                 settings: {
@@ -73,17 +71,16 @@
             }
         ],
         prevArrow: prevArrow,
-        nextArrow: nextArrow,    
-    }    
+        nextArrow: nextArrow,
+    }
 
     var productImageSliderSettings = {
         mobileFirst: true,
         centerMode: true,
-        centerPadding: '46px',   
+        centerPadding: '46px',
         slidesToShow: 1,
         infinite: true,
-        responsive: [
-            {
+        responsive: [{
                 breakpoint: 640,
                 initialSlide: 1,
                 settings: {
@@ -97,17 +94,16 @@
             }
         ],
         prevArrow: prevArrow,
-        nextArrow: nextArrow,    
-    }  
+        nextArrow: nextArrow,
+    }
 
     var productRelatedProductsSettings = {
         mobileFirst: true,
         centerMode: true,
-        centerPadding: '46px',   
+        centerPadding: '46px',
         slidesToShow: 1,
         infinite: true,
-        responsive: [
-            {
+        responsive: [{
                 breakpoint: 640,
                 initialSlide: 1,
                 settings: {
@@ -121,24 +117,22 @@
             }
         ],
         prevArrow: prevArrow,
-        nextArrow: nextArrow,    
-    }          
+        nextArrow: nextArrow,
+    }
 
     var hpInstagramGridSliderSettings = {
         mobileFirst: true,
         centerMode: true,
-        centerPadding: '46px',   
+        centerPadding: '46px',
         slidesToShow: 1,
         infinite: false,
-        responsive: [
-            {
-                breakpoint: 768,
-                settings: "unslick"
-            }
-        ],
+        responsive: [{
+            breakpoint: 768,
+            settings: "unslick"
+        }],
         prevArrow: prevArrow,
-        nextArrow: nextArrow,    
-    }      
+        nextArrow: nextArrow,
+    }
 
     function waitForEl(selector, callback) {
         if (jQuery(selector).length) {
@@ -148,19 +142,19 @@
                 waitForEl(selector, callback);
             }, 100);
         }
-    }  
+    }
 
     function twoCenterSlides(slider) {
         slider.on('init', function(event, slick) {
-          slider.find('.slick-current').prev().addClass('slick-current-override');
+            slider.find('.slick-current').prev().addClass('slick-current-override');
         });
 
-        slider.on('beforeChange', function(event, slick, currentSlide, nextSlide){
+        slider.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
             var nextCurrentSlideEl = $(`[data-slick-index='${nextSlide}']`);
             $('.slick-current-override').removeClass('slick-current-override');
             $(nextCurrentSlideEl).prev().addClass('slick-current-override');
-        }); 
-    }     
+        });
+    }
 
     // disable non current slides that are links
     $('.slick-slide:not(.slick-active)').on('click', function(event) {
@@ -173,7 +167,7 @@
 
     // product sliders
     var productImageSlider = $('.js-product-image-slider');
-    var productRelatedProductsSlider = $('.js-product-related-products-slider'); 
+    var productRelatedProductsSlider = $('.js-product-related-products-slider');
 
     // set up logic for stlying 2 centered slides on mobile large sliders
     if (isMobileLarge) {
@@ -181,7 +175,7 @@
         twoCenterSlides(homeProductsSlider);
         twoCenterSlides(productImageSlider);
         twoCenterSlides(productRelatedProductsSlider);
-    }    
+    }
 
     // init home sliders
     homeCustomGridSlider.slick(hpCustomGridSliderSettings);

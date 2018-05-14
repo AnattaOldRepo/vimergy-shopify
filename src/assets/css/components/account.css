@@ -571,7 +571,6 @@ select {
     td {
         text-align: left;
         padding: $gutter / 2;
-        border: 1px solid $color-black;
     }
 }
 

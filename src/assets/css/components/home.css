@@ -518,32 +518,27 @@
 
 /* testimonials */
 
-.c-testimonials {
-    padding: 2.3125rem 0;
-    color: #393D4E;
-    background-image: url("../pattern.jpg");
-    @media(--mobile-large) {
-        margin-bottom: 1.5rem;
-    }
-    @media(--tablet-large) {
-        padding: 3.6875rem 0 3.75rem;
-        margin-bottom: 3.75rem;
-    }
-}
-
 .c-testimonials .o-row {
     width: 97%;
 }
 
 .c-testimonials-carousel.o-flex {
-    max-width: 84.6875rem;
     margin: 0 auto;
+    text-align: center;
+    @media(--tablet-large) {
+        max-width: 60.6875rem;
+    }
+    @media(--desktop-medium) {
+        max-width: 80.6875rem;
+    }
 }
 
-.c-testimonials-carousel .o-flex__items {
+
+/* .c-testimonials-carousel .o-flex__items {
     padding-right: .5rem;
     padding-left: .5rem;
-}
+   
+} */
 
 .c-testimonials__icon {
     display: none;
@@ -586,7 +581,7 @@
 }
 
 .c-testimonial {
-    width: 100%;
+    /* width: 100%;
     padding: 1.25rem 1.25rem;
     text-align: center;
     border: 1px solid #d9dee8;
@@ -594,16 +589,14 @@
     background-color: #fff;
     @media(--tablet-large) {
         padding: 2.1875rem 2.8125rem 3.4375rem;
-    }
+    } */
 }
 
 .c-testimonial__img img {
-    display: block;
-    border-radius: 50%;
     width: 4.6875rem;
     margin: 0 auto;
     @media (--desktop-medium) {
-        width: 14.6875rem;
+        width: 34rem;
     }
 }
 
@@ -727,6 +720,15 @@ body.fancybox-active.compensate-for-scrollbar {
     }
 }
 
+.c-side-text--right {
+    font-size: 17px;
+    font-weight: 500;
+    @media(--tablet-large) {
+        transform: rotate(270deg);
+        float: right;
+    }
+}
+
 .c-reco-info {
     text-align: center;
     @media(--tablet-large) {
@@ -753,5 +755,52 @@ body.fancybox-active.compensate-for-scrollbar {
     margin-bottom: 5rem;
 }
 
-width: 700px;
-text-align: left;
+.c-shop-all {
+    height: 572.61px;
+    background-color: #EFEAE5;
+}
+
+.c-shop-all-desc {
+    width: 224.05px;
+    margin-left: 160px;
+    margin-top: 183px;
+    text-align: left;
+}
+
+.c-shop-all-products {
+    margin-top: 112px;
+}
+
+.slick-slide {
+    display: flex;
+}
+
+.c-testimonial-info {
+    height: 132px;
+    width: 310px;
+    color: #253237;
+}
+
+.c-testimonial-info-container {
+    padding-top: 136px;
+}
+
+.c-testimonial-container {
+    padding-left: 250px;
+}
+
+.c-testimonials-carousel-info {
+    height: 528px;
+    width: 327px;
+    margin-left: 285px;
+    text-align: left;
+}
+
+.c-testimonial--heading {
+    margin-bottom: 42px;
+}
+
+.c-main-testimonial,
+.c-testimonial-first {
+    background: white;
+}

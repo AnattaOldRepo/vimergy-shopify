@@ -1,0 +1,75 @@
+<div class="c-shop-all">
+  <div class="o-flex">
+    <div class="o-flex__item o-flex__col-lg-3">
+        <h2 class="c-shop-all-desc">{{ section.settings.desc }}</h2>
+    </div>
+    <div class="o-flex__item o-flex__col-lg-9 c-shop-all-products">
+        <div class="o-flex c-testimonials-carousel js-products-carousel">
+
+        {% for block in section.blocks %}
+
+            <div class="c-testimonial">
+                <div>
+                    <a href="{{ block.settings.link | link: 'master'}}" tabindex="-1"> 
+                    <div class="c-testimonial__img">
+                        <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
+                    </div>
+                    <p >{{ block.settings.name }}</p>
+                    <p>{{ block.settings.price }}</p>
+                </div></a>
+            </div>
+
+        {% endfor %}  
+        
+   </div>
+    </div>   
+  </div>
+</div>
+{% schema %}   
+  {
+      "name": "Home Shop All",
+      "settings": [
+          
+            {
+                "type": "html",
+                "id": "desc",
+                "label": "Description"
+            }
+
+        ],
+    "blocks": [
+      {
+        "type": "contentcolumn",
+        "name": "icons",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "text",
+                "id": "name",
+                "label": "Name"
+            },
+            {
+                "type": "text",
+                "id": "price",
+                "label": "Price"
+            },
+            {
+                "type": "text",
+                "id": "link",
+                "label": "Link"
+            }
+        ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "Home Shop All",
+            "category": "Custom"
+        }
+    ]
+  }
+{% endschema %}    

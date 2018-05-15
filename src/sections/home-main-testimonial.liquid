@@ -1,0 +1,43 @@
+
+<div class="c-main-testimonial">
+  <div class="o-flex">
+  <div class="o-flex__item o-flex__col-lg-1 c-testimonial-first">
+  </div>
+    <div class="o-flex__item o-flex__col-lg-4">
+    <div class="c-testimonial-info c-testimonial-info-container"> 
+            <h1 class="c-testimonial--heading">{{ section.settings.heading}}</h1>
+            <h4 class="c-testimonial--desc">{{ section.settings.desc }}</h4>
+    </div>
+      
+    </div>
+    <div class="o-flex__item o-flex__col-lg-7">
+        <div class="c-reco-img">
+          <img src="{{ section.settings.image | img_url: 'master'}}"  alt="">
+        </div>
+    </div>   
+  </div>
+</div>
+  
+{% schema %}
+    {
+        "name": "Home main testimonial",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+             {
+                "type": "html",
+                "id": "heading",
+                "label": "Heading"
+            },
+             {
+                "type": "html",
+                "id": "desc",
+                "label": "Description"
+            }
+
+        ]
+    }
+{% endschema %}   

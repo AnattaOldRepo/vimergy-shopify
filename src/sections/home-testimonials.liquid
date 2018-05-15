@@ -1,29 +1,31 @@
-<div class="c-testimonials">
-   <div class="o-row">
-      <div class="c-testimonials__icon"><img src="http://vimergy.com/skin/frontend/vimergy/default/images/media/icon-plant.svg" alt="Plant"></div>
-      <h2 class="c-testimonials__heading">Our Vimergy Community</h2>
-   </div>
-    <div class="o-flex c-testimonials-carousel js-testimonals-carousel">
 
-        {% for block in section.blocks %}
+ 
+ <div class="c-testimonials js-testimonals-carousel">
+ {% for block in section.blocks %}
+  <div class="o-flex c-testimonial">
+    <div class="o-flex__item o-flex__col-lg-1 c-testimonial-first">
+    </div>
+    <div class="o-flex__item o-flex__col-lg-4">
+      <div>
+            <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
+        </div>
+    </div>
+    <div class="o-flex__item o-flex__col-lg-7 c-shop-all-products">
+        <div class="o-flex c-testimonials-carousel">
 
-            <div class="o-flex__items o-flex__col-4 ">
-                <div class="c-testimonial">
-                    <div class="c-testimonial__img">
-                        <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
-                    </div>
-                    <p class="c-testimonial__name">{{ block.settings.name }}</p>
-                    <p class="c-testimonial__desc">{{ block.settings.desc }}</p>
-                    <p class="c-testimonial__link">
-                        <a href="{{ block.settings.link | link: 'master'}}" tabindex="-1">{{ block.settings.link-title }}</a>
-                    </p>
+            <div class="c-testimonial-info-container">
+                <div class="c-testimonials-carousel-info">
+                    <h1 class="c-testimonial--heading">{{ block.settings.heading}}</h1>
+                    <h4 class="c-testimonial--desc">{{ block.settings.desc }}</h4>
                 </div>
             </div>
-
-        {% endfor %} 
-        
+     
    </div>
+    </div>   
+  </div>
+   {% endfor %} 
 </div>
+  
 {% schema %}
   {
     "blocks": [
@@ -31,15 +33,15 @@
         "type": "contentcolumn",
         "name": "Testimonials",
         "settings": [
+            {   
+                "type": "text",
+                "id": "heading",
+                "label": "Heading"
+            },
             {
                 "type": "image_picker",
                 "id": "image",
                 "label": "Image"
-            },
-            {
-                "type": "text",
-                "id": "name",
-                "label": "Name"
             },
             {
                 "type": "text",
@@ -50,11 +52,6 @@
                 "type": "text",
                 "id": "link",
                 "label": "Link"
-            },
-            {   
-                "type": "text",
-                "id": "link-title",
-                "label": "Link Title"
             }
         ]
       }

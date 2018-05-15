@@ -73,6 +73,13 @@
     }
 }
 
+.o-flex__col-lg-3 {
+    flex-basis: 100%;
+    @media(--tablet-large) {
+        flex-basis: 24.99%;
+    }
+}
+
 .o-flex__col-lg-8 {
     flex-basis: 100%;
     @media(--tablet-large) {
@@ -135,6 +142,13 @@
     flex-basis: 100%;
     @media(--tablet-large) {
         flex-basis: 33.33%;
+    }
+}
+
+.o-flex__col-lg-9 {
+    flex-basis: 100%;
+    @media(--tablet-large) {
+        flex-basis: 74.97%;
     }
 }
 

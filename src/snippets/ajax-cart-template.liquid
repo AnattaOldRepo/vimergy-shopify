@@ -3,7 +3,8 @@
     <form action="/cart" method="post" novalidate class="cart ajaxcart" id="cartform">
         <div class="c-cart__inner">
         {{#items}}
-        <div class="c-cart__product">
+    
+        <div class="c-cart__product" style="{{collapse}}">
             <div class="c-cart__row" data-line="{{line}}">
                 <div class="c-cart__itemImageBox">
                     <a href="{{url}}" class="c-cart__itemImageLink">
@@ -178,5 +179,6 @@
             rjQuery('.additional-checkout-buttons').hide()
         })
     }
+   
     </script>
 {% endif %}

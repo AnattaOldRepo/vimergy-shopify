@@ -80,15 +80,35 @@
         - Allow use of form element instead of just id
         - Allow custom error callback
     ==============================================================================*/
-    ShopifyAPI.addItemFromForm = function(form, callback, errorCallback) {
-        var formObject = jQuery(form).serializeArray();
-        var quantity = formObject[1].value;
-        var data;
-        if (jQuery('input[name$="kits"]').val() == 'true') {
-            data = "quantity=" + quantity + "&id=" + jQuery(form).find("#product-select option:selected").text().trim();
+    ShopifyAPI.addItemFromForm = function(form, callback, errorCallback, index) {
+        var data, dataArray, index;
+        var productArray = [];
+        if ($("input[name='kits']").attr("data-val") == 'true') {
+            console.log(jQuery(form).serializeArray(), "datas", jQuery(form).serialize());
+            dataArray = jQuery(form).serializeArray();
+            productArray = dataArray[0].value.split(',');
+            console.log(dataArray, "dataArray");
+            if (index == undefined) {
+                index = 0;
+                jQuery("input[name='kits']").attr('data-val', 'true');
+            }
+            if (productArray[index] && index < productArray.length) {
+                var id = (productArray[index]).trim();
+                data = {
+                        "quantity": dataArray[1].value,
+                        "id": id,
+                        properties: {
+                            'kits': dataArray[2].value
+                        }
+                    }
+                    //data = "quantity=" + dataArray[1].value + "&id=" + id;
+            }
+
+
         } else {
-            data = jQuery(form).serialize();
+            data = jQuery(form).not("input[type='hidden']").serialize();
         }
+        console.log(data, "data", index, "index", productArray.length);
         var $body = $(document.body),
             params = {
                 type: 'POST',
@@ -99,17 +119,26 @@
                     $body.trigger('beforeAddItem.ajaxCart', form);
                 },
                 success: function(line_item) {
+                    index = index + 1;
+                    console.log("success", index);
+                    if (index < productArray.length) {
+
+                        ShopifyAPI.addItemFromForm(form, callback, errorCallback, index);
+                    }
+                    if (index == productArray.length) {
+
+                        jQuery("input[name='kits']").attr('data-val', 'false');
+                        console.log("kitdata", jQuery(form).not("input[type='hidden']").serialize());
+                        ShopifyAPI.addItemFromForm(form, callback, errorCallback, index);
+                    }
+                    console.log(line_item, "line_item");
                     if ((typeof callback) === 'function') {
                         callback(line_item, form);
                     } else {
                         ShopifyAPI.onItemAdded(line_item, form);
                     }
-
                     $body.trigger('afterAddItem.ajaxCart', [line_item, form]);
-                    if ($("#product-select option:selected").next().length != 0) {
-                        $("#product-select option:selected").removeAttr('selected').next().attr('selected', 'selected');
-                        ShopifyAPI.addItemFromForm(form);
-                    }
+
                 },
                 error: function(XMLHttpRequest, textStatus) {
                     if ((typeof errorCallback) === 'function') {
@@ -131,6 +160,7 @@
         $(document.body).trigger('beforeGetCart.ajaxCart');
         jQuery.getJSON('/cart.js', function(cart, textStatus) {
             if ((typeof callback) === 'function') {
+                console.log(callback, "callback");
                 callback(cart);
             } else {
                 ShopifyAPI.onCartUpdate(cart);
@@ -140,23 +170,44 @@
     };
 
     // POST to cart/change.js returns the cart in JSON
-    ShopifyAPI.changeItem = function(line, quantity, callback) {
+    ShopifyAPI.changeItem = function(line, quantity, callback, id) {
+        var parent_id = $('button[data-line=' + line + ']').attr("data-id");
+        var data
+        if (line) {
+            data = 'quantity=' + quantity + '&line=' + line;
+        } else {
+            data = {
+                "id": id,
+                "quantity": quantity
+            }
+        }
+
         var $body = $(document.body),
             params = {
                 type: 'POST',
                 url: '/cart/change.js',
-                data: 'quantity=' + quantity + '&line=' + line,
+                data: data,
                 dataType: 'json',
                 beforeSend: function() {
                     $body.trigger('beforeChangeItem.ajaxCart', [line, quantity]);
                 },
                 success: function(cart) {
+
+
                     if ((typeof callback) === 'function') {
                         callback(cart);
                     } else {
                         ShopifyAPI.onCartUpdate(cart);
                     }
+
                     $body.trigger('afterChangeItem.ajaxCart', [line, quantity, cart]);
+                    for (var i = 0; i < cart.items.length; i++) {
+                        console.log(cart, "removekits")
+                        if (cart.items[i].properties.kits == parent_id) {
+
+                            ShopifyAPI.changeItem(undefined, cart.items[i].quantity, callback, cart.items[i].id);
+                        }
+                    }
                 },
                 error: function(XMLHttpRequest, textStatus) {
                     $body.trigger('errorChangeItem.ajaxCart', [XMLHttpRequest, textStatus]);
@@ -291,6 +342,7 @@
         };
 
         buildCart = function(cart) {
+
             // Start with a fresh cart div
             $cartContainer.empty();
 
@@ -301,7 +353,7 @@
                 cartCallback(cart);
                 return;
             }
-
+            var kits_total_price = 0;
             // Handlebars.js cart layout
             var items = [],
                 item = {},
@@ -349,10 +401,19 @@
                     discounts: cartItem.discounts,
                     discountsApplied: cartItem.line_price === cartItem.original_line_price ? false : true
                 };
+                if (cartItem.properties.kits) {
+
+                    // item.collapse = "display:none";
+                    kits_total_price = kits_total_price + (cartItem.quantity * cartItem.line_price);
+
+
+                    console.log("item", item);
+                }
                 items.push(item);
             });
 
-            // Gather all cart data and add to DOM
+            // Gather all cart data and add to DOM 
+            cart.total_price = cart.total_price - kits_total_price;
             data = {
                 items: items,
                 note: cart.note,
@@ -360,7 +421,7 @@
                 totalCartDiscount: cart.total_discount === 0 ? 0 : '[savings]'.replace('[savings]', Shopify.formatMoney(cart.total_discount, settings.moneyFormat)),
                 totalCartDiscountApplied: cart.total_discount === 0 ? false : true
             }
-
+            console.log(data, "data");
             $cartContainer.append(template(data));
 
             cartCallback(cart);

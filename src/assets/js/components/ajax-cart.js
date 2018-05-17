@@ -40,6 +40,7 @@
     };
 
     ShopifyAPI.updateCartNote = function(note, callback) {
+        console.log("update", note);
         var $body = $(document.body),
             params = {
                 type: 'POST',
@@ -103,8 +104,6 @@
                     }
                     //data = "quantity=" + dataArray[1].value + "&id=" + id;
             }
-
-
         } else {
             data = jQuery(form).not("input[type='hidden']").serialize();
         }
@@ -119,19 +118,21 @@
                     $body.trigger('beforeAddItem.ajaxCart', form);
                 },
                 success: function(line_item) {
+
                     index = index + 1;
                     console.log("success", index);
                     if (index < productArray.length) {
-
                         ShopifyAPI.addItemFromForm(form, callback, errorCallback, index);
                     }
                     if (index == productArray.length) {
-
                         jQuery("input[name='kits']").attr('data-val', 'false');
                         console.log("kitdata", jQuery(form).not("input[type='hidden']").serialize());
                         ShopifyAPI.addItemFromForm(form, callback, errorCallback, index);
                     }
-                    console.log(line_item, "line_item");
+
+                    if (index > productArray.length) {
+                        jQuery("input[name='kits']").attr('data-val', 'true');
+                    }
                     if ((typeof callback) === 'function') {
                         callback(line_item, form);
                     } else {
@@ -141,6 +142,7 @@
 
                 },
                 error: function(XMLHttpRequest, textStatus) {
+
                     if ((typeof errorCallback) === 'function') {
                         errorCallback(XMLHttpRequest, textStatus);
                     } else {
@@ -150,8 +152,10 @@
                 },
                 complete: function(jqxhr, text) {
                     $body.trigger('completeAddItem.ajaxCart', [this, jqxhr, text]);
+                    $body.trigger('completeAddItem', [this, jqxhr, text]);
                 }
             };
+
         jQuery.ajax(params);
     };
 
@@ -172,7 +176,8 @@
     // POST to cart/change.js returns the cart in JSON
     ShopifyAPI.changeItem = function(line, quantity, callback, id) {
         var parent_id = $('button[data-line=' + line + ']').attr("data-id");
-        var data
+        var data;
+        var updates = {};
         if (line) {
             data = 'quantity=' + quantity + '&line=' + line;
         } else {
@@ -193,21 +198,39 @@
                 },
                 success: function(cart) {
 
-
-                    if ((typeof callback) === 'function') {
-                        callback(cart);
-                    } else {
-                        ShopifyAPI.onCartUpdate(cart);
-                    }
-
-                    $body.trigger('afterChangeItem.ajaxCart', [line, quantity, cart]);
                     for (var i = 0; i < cart.items.length; i++) {
                         console.log(cart, "removekits")
                         if (cart.items[i].properties.kits == parent_id) {
-
-                            ShopifyAPI.changeItem(undefined, cart.items[i].quantity, callback, cart.items[i].id);
+                            //var childId = cart.items[i].id;
+                            updates[cart.items[i].id] = quantity;
+                            //ShopifyAPI.changeItem(undefined, cart.items[i].quantity, callback, cart.items[i].id);
+                            // cart.items.splice(i, 1);
+                            // --cart.item_count;
+                            // i--;
                         }
                     }
+                    console.log(updates, "update_data");
+                    if (Object.keys(updates).length) {
+                        jQuery.post('/cart/update.js', { updates: updates }).then(
+                            function() {
+                                if ((typeof callback) === 'function') {
+                                    callback(cart);
+                                } else {
+                                    ShopifyAPI.onCartUpdate(cart);
+                                }
+                                $body.trigger('afterChangeItem.ajaxCart', [line, quantity, cart]);
+                            }
+                        )
+                    } else {
+                        if ((typeof callback) === 'function') {
+                            callback(cart);
+                        } else {
+                            ShopifyAPI.onCartUpdate(cart);
+                        }
+                        $body.trigger('afterChangeItem.ajaxCart', [line, quantity, cart]);
+                    }
+
+
                 },
                 error: function(XMLHttpRequest, textStatus) {
                     $body.trigger('errorChangeItem.ajaxCart', [XMLHttpRequest, textStatus]);
@@ -215,6 +238,7 @@
                 },
                 complete: function(jqxhr, text) {
                     $body.trigger('completeChangeItem.ajaxCart', [this, jqxhr, text]);
+                    //$body.trigger('completeChangeItem', [this, jqxhr, text]);
                 }
             };
         jQuery.ajax(params);

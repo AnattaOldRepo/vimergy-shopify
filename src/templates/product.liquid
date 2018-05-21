@@ -58,10 +58,7 @@
 
               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
                 {% if product.metafields.c_f.kits =='true'  %}
-
-                 {{ product.metafields.c_f.kits_products }}
                  <input type="hidden" name="kits" value="{{ product.metafields.c_f.kits_products }}" data-val="true"/>
-
                 {% endif %}
                   <h1 class="c-product-name">{{ product.title }}</h1>
 

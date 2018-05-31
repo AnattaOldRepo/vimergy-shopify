@@ -1,7 +1,7 @@
 
-<div class="">
+<div class="c-insta">
 <div class="o-flex">
-<div class="c-instagrams__box">
+    <div class="c-instagrams__box">
                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 128 128" enable-background="new 0 0 128 128" xml:space="preserve">
                         <g id="_x37__stroke">
                            <g id="Instagram_1_">
@@ -16,29 +16,25 @@
                            </g>
                         </g>
                      </svg>
-                     <h2 class="c-instagrams__heading">@Vimergy on Instagram</h2>
-                     <p class="c-instagrams__view c-instagrams__view--one"><a target="_blank" href="https://www.instagram.com/vimergy/">View all</a></p>
-                  </div>
+                     <h2>Vimergy on Instagram</h2>
+                     
+         </div>
 </div>
     <div class="o-flex">
-             <div class="o-flex__item o-flex__col-lg-8 ">
-                  <div class="c-instagrams__list">
-                     <div class="o-row instagallery">
+            <div class="instagallery">
                         
                       
-                     </div>
-                  </div>
-                </div>
-         </div>
-        <p class="c-instagrams__view c-instagrams__view--two"><a target="_blank" href="https://www.instagram.com/vimergy/">View all</a></p>
+             </div>
+                
     </div>
+        {% comment %} <p class="c-instagrams__view c-instagrams__view--two"><a target="_blank" href="https://www.instagram.com/vimergy/">View all</a></p> {% endcomment %}
 </div>
 
   <script>
   
 (function ($) {
     var token = "3561792490.1677ed0.8167784b79634ea08757ecc269d6056c";  
-    var num_photos = 6;
+    var num_photos = 4;
      $.ajax({
          url: "https://api.instagram.com/v1/users/self/media/recent",
          dataType: "jsonp",
@@ -47,7 +43,7 @@
          success: function(data){
              console.log(data ,"insta");
              for( x in data.data ){
-             $('.instagallery').append('<div class="o-flex__item o-flex__col-4 o-flex__col-sm-6" ><a rel="gallery1" target="_blank" href="'+data.data[x].link+'" title=""> <img class="c-insta-img" src="'+data.data[x].images.low_resolution.url+'"></a></div>');  
+             $('.instagallery').append('<div class="o-flex__item o-flex__col-lg-3 o-flex__col-lg-6" style="padding:0;"><a rel="gallery1" target="_blank" href="'+data.data[x].link+'" title=""> <img class="c-insta-img" src="'+data.data[x].images.low_resolution.url+'"></a></div>');  
              }
          },
          error: function(data){

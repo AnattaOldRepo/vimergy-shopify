@@ -413,26 +413,31 @@
     }
 }
 
+.c-insta {
+    background: #fff;
+}
+
 .c-instagrams__box {
     width: 100%;
     height: initial;
-    text-align: center;
+    padding-top: 4rem;
+    padding-bottom: 1rem;
     @media(--tablet-large) {
-        padding: 5rem 2.5rem 2.5rem;
-        margin-bottom: 0.5rem;
-        background-color: #fff
+        padding-left: 9rem;
     }
-    @media (--desktop-medium) {
-        padding-top: 8.5625rem;
-    }
+}
+
+.instagallery {
+    width: 100%;
 }
 
 .c-instagrams__box svg {
     margin-bottom: .3125rem;
     width: 2.5rem;
     @media(--tablet-large) {
+        float: left;
         margin-bottom: 1.9375rem;
-        width: 4.5625rem;
+        margin-right: 2rem;
     }
 }
 
@@ -529,7 +534,7 @@
         max-width: 60.6875rem;
     }
     @media(--desktop-medium) {
-        max-width: 80.6875rem;
+        max-width: 76.6875rem;
     }
 }
 
@@ -593,11 +598,11 @@
 }
 
 .c-testimonial__img img {
-    width: 4.6875rem;
-    margin: 0 auto;
-    @media (--desktop-medium) {
+    width: 15.6875rem;
+    smargin: 0 auto;
+    /* @media (--desktop-medium) {
         width: 34rem;
-    }
+    } */
 }
 
 .c-testimonial__name {

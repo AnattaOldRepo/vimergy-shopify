@@ -58,10 +58,7 @@
 
               <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
                 {% if product.metafields.c_f.kits =='true'  %}
-
-                 {{ product.metafields.c_f.kits_products }}
                  <input type="hidden" name="kits" value="{{ product.metafields.c_f.kits_products }}" data-val="true"/>
-
                 {% endif %}
                   <h1 class="c-product-name">{{ product.title }}</h1>
 
@@ -149,7 +146,7 @@
                      </s>
                      {% endif %}
                   </div>
-               
+
                   <button
                   id="AddToCart"
                   class="c-btn c-add-to-cart-buttons c-product__submit"
@@ -220,7 +217,7 @@
    });
    jQuery( document ).ready(function() {
         var product = {{ product | json }};
-              $.ajax({    
+              $.ajax({
                     type: 'GET',
                     url: '/cart.js',
                     dataType: 'json',
@@ -233,7 +230,7 @@
                         console.log("ready",product.variants[0].inventory_quantity);
                      } else{
                        jQuery('.c-product__submit').removeAttr('disabled');
-                    } 
+                    }
                 }
             }
                     }
@@ -241,7 +238,7 @@
         jQuery("body").bind("completeAddItem", function(jqxhr, text){
             console.log("completeAddItem", this);
               var product = {{ product | json }};
-            $.ajax({    
+            $.ajax({
                     type: 'GET',
                     url: '/cart.js',
                     dataType: 'json',
@@ -260,10 +257,10 @@
                     }
                 });
         });
-         
-  
-   
+
+
+
 });
-          
+
 
 </script>

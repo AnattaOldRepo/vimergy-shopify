@@ -80,64 +80,31 @@
 
         {% include 'drawer-right' %}        
 
-        {% section 'size-guide' %}
-
         <div class="o-page">
             {% include 'header' %}
 
             <main role="main" id="MainContent">
                 {{ content_for_layout }}
             </main>
-              {% include 'subscribe' %}  
+
+            {% include 'subscribe' %}  
             {% include 'footer' %}
         </div>
 
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+        {{ '//cdn.shopify.com/s/assets/themes_support/option_selection-ea4f4a242e299f2227b2b8038152223f741e90780c0c766883939e8902542bda.js' | script_tag }}
 
         <script src="{{ 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js'}}" defer="defer" type="text/javascript"></script>
-
-       
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.6/jquery.lazy.min.js" defer="defer"></script>
-
-        <script src="{{ 'vue-components.js' | asset_url }}"></script>
-        
-
+               
         <!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'components.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
         <!--[if lt IE 9]><script src="{{ 'components.js' | asset_url }}"></script><![endif]-->
 
         <!--[if (gt IE 9)|!(IE)]><!--><script src="{{ 'app.js' | asset_url }}" defer="defer"></script><!--<![endif]-->
         <!--[if lt IE 9]><script src="{{ 'app.js' | asset_url }}"></script><![endif]-->
        
-        <script defer="defer">
-            $(document).ready(function() {
-            $(function($) {
-                ajaxCart.init({
-                  formSelector: '#AddToCartForm',
-                  cartContainer: '#CartContainer',
-                  addToCartSelector: '#AddToCart',
-                  cartCountSelector: '#CartCount',
-                  cartCostSelector: '#CartCost',
-                  moneyFormat: {{ shop.money_format | json }}
-                });
-              });
+        {% comment %} {% include 'subscription-theme-footer' %} {% endcomment %}
 
-              ajaxCart.load();
-              var loadCount = 0
-
-              $(document.body).on('afterGetCart.ajaxCart', function(evt, cart) {
-                if (loadCount >= 1 && !$('body').hasClass('offcanvas-open')) {
-                    $('.js-offcanvas[data-offcanvas-src="#offcanvas-right"]').trigger('click')
-                }
-
-                loadCount += 1;
-              })
-          })
-        </script>
-{% comment %} {% include 'subscription-theme-footer' %} {% endcomment %}
-{% include 'search-autocomplete' %}
+        {% include 'search-autocomplete' %}
 
     </body>
 </html>

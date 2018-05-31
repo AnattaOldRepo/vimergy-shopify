@@ -56,7 +56,7 @@
                <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
                <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
 
-              <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
+              <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}" data-cart-submit="data-cart-submit">
                 {% if product.metafields.c_f.kits =='true'  %}
                  <input type="hidden" name="kits" value="{{ product.metafields.c_f.kits_products }}" data-val="true"/>
                 {% endif %}

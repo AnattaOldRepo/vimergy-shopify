@@ -62,7 +62,7 @@
                                     var Subscription_active = false;
                                     for(var i = 0; i< response.items.length; i++){
 										
-                                    if(Object.keys(response.items[i].properties).length !=0){
+                                    if(Object.keys(response.items[i].properties).indexOf("subscription_id") > -1){
 										
                                         Subscription_active = true;
                                     }

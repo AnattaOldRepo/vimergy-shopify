@@ -141,7 +141,7 @@
 .c-cart__footerPriceBox {
     display: flex;
     justify-content: space-between;
-    padding: 0 10px;
+    padding: 10px;
     font-family: $font-family-primary-bold;
     font-weight: $font-weight-bold;
     font-size: 19px;
@@ -149,18 +149,11 @@
     margin-bottom:24px;
 }
 
-.c-cart__subtotal {}
-
-.c-cart__total {}
-
-.c-cart__discounts {}
-
 .c-cart__checkout {
     width: 100%;
-    max-width: 315px;
     margin: 0 auto 21px;
     padding: 0px 0 0;
-    height: 46px;
+    height: 52px;
     font-size: 23px;
     font-family: $font-family-primary-bold;
     font-weight: $font-weight-bold;
@@ -264,6 +257,26 @@
         font-size: 13px;
         font-weight:normal;
     }
+}
+
+.ajaxcart__qty {
+    margin: 10px 0;
+}
+
+.ajaxcart__qty a{
+    border: 1px solid #c4c4ae;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    text-align: center;
+    color: black!important;
+    font-weight: normal!important;;
+}
+
+.ajaxcart__qty span{
+    font-size: 16px;
+    padding: 0 6px;
+    padding-top: 2px;
 }
 
 .c-cartTable__td .js-qty input {

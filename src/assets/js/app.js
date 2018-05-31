@@ -2,9 +2,6 @@ console.log("App.js is ready now!!");
 
 $('.js-modal').modal();
 
-
-
-
 // $('.lazy-load').Lazy();
 
 $('.js-testimonals-carousel').slick({
@@ -49,6 +46,10 @@ $('.c-mobileNav--expand').click(function(e) {
 
 $('.js-offcanvas').offcanvas({
     showOverlay: false
+});
+
+var cartDrawer = $(".js-cartCanvas").offcanvas({
+	showOverlay: false
 });
 
 $(function() {

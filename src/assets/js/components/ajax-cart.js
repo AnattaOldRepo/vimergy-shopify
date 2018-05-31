@@ -426,8 +426,10 @@
                     discountsApplied: cartItem.line_price === cartItem.original_line_price ? false : true
                 };
                 if (cartItem.properties.kits) {
-
-                    // item.collapse = "display:none";
+                    item.linePrice = 0;
+                    item.price = 0;
+                    item.collapse = "display:none";
+                    item.type = cartItem.product_type = "kits_child";
                     kits_total_price = kits_total_price + (cartItem.quantity * cartItem.line_price);
 
 

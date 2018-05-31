@@ -1,9 +1,11 @@
 .c-content-pages {
     padding: 2.5rem 0;
-    color: #393D4E; 
+    color: #393D4E;
 }
 
-.c-content-pages .c-cs-container,.c-content-pages .col2-left-layout .main,.col2-left-layout .c-content-pages .main {
+.c-content-pages .c-cs-container,
+.c-content-pages .col2-left-layout .main,
+.col2-left-layout .c-content-pages .main {
     max-width: 56.25rem;
     margin: 0 auto;
 }
@@ -15,13 +17,13 @@
 .c-content-pages p {
     font-size: 1.0625rem;
     margin-bottom: 1.25rem;
-
     @media (--mobile-max) {
-            font-size:.875rem;
-            font-weight: normal;
-            line-height: 18px
-        }
+        font-size: .875rem;
+        font-weight: normal;
+        line-height: 18px
+    }
 }
+
 .c-content-pages a {
     text-decoration: underline;
     color: #393D4E;
@@ -32,17 +34,20 @@
     color: #0288D1
 }
 
-.c-content-pages a:active, .c-content-pages a:focus {
+.c-content-pages a:active,
+.c-content-pages a:focus {
     color: inherit
 }
+
 .c-content-pages .link-standalone {
     @media (--mobile-max) {
-        font-size:11px
+        font-size: 11px
     }
 }
+
 .c-content-pages .link-standalone:after {
     @media (--mobile-max) {
-        margin-top:5px;
+        margin-top: 5px;
         margin-left: 6px;
         border-width: 6px
     }
@@ -57,9 +62,8 @@
     font-size: 1.0625rem;
     line-height: 25px;
     list-style-type: disc;
-
     @media (--mobile-max) {
-        font-size:.875rem;
+        font-size: .875rem;
         line-height: 18px;
     }
 }
@@ -67,9 +71,8 @@
 .c-content-pages h2 {
     margin-bottom: 1.25rem;
     font-weight: 700;
-
     @media (--mobile-max) {
-        margin-bottom:.625rem;
+        margin-bottom: .625rem;
         font-size: 16px;
         line-height: 30px
     }
@@ -81,9 +84,8 @@
     line-height: 35px;
     margin-bottom: 4px;
     color: $color-vimergy-orange;
-
     @media (--mobile-max) {
-        font-size:14px;
+        font-size: 14px;
         line-height: 28px;
     }
 }
@@ -91,7 +93,6 @@
 .c-page-head div {
     margin-bottom: 0.625rem;
     padding: 1.25rem 0;
-    border-bottom: 1px dashed #b7b7b0
 }
 
 .c-content-pages div:last-child {
@@ -108,29 +109,27 @@
     font-size: 12px;
     font-weight: 600;
     color: #92278f;
-
     @media (--mobile-max) {
-        font-size:10px
+        font-size: 10px
     }
 }
 
 .c-content-pages .table td {
     font-size: 14px;
-
     @media (--mobile-max) {
-        font-size:11px;
+        font-size: 11px;
     }
 }
 
-.c-content-pages .table tr td,.c-content-pages .table tr th {
+.c-content-pages .table tr td,
+.c-content-pages .table tr th {
     border-right: 1px solid #d6d6d6;
     border-left: 1px solid #d6d6d6;
     border-bottom: 0;
     padding: 10px;
     line-height: normal;
-
     @media (--mobile-max) {
-        padding:3px;
+        padding: 3px;
     }
 }
 
@@ -138,15 +137,18 @@
     border-left: 1px solid #d6d6d6
 }
 
-.c-content-pages .table tr:last-child td,.c-content-pages .table tr:last-child th {
+.c-content-pages .table tr:last-child td,
+.c-content-pages .table tr:last-child th {
     border-bottom: 1px solid #d6d6d6
 }
 
-.c-content-pages .table tr.label-head th,.c-content-pages .table tr.label-head td {
+.c-content-pages .table tr.label-head th,
+.c-content-pages .table tr.label-head td {
     border: 1px solid #d6d6d6
 }
 
-.c-content-pages .table tr.sub-head th,.c-content-pages .table tr.sub-head td {
+.c-content-pages .table tr.sub-head th,
+.c-content-pages .table tr.sub-head td {
     vertical-align: top
 }
 
@@ -155,7 +157,8 @@
     color: #898989
 }
 
-.c-content-pages .table tr:nth-child(even) td, .c-content-pages .table tr:nth-child(even) th {
+.c-content-pages .table tr:nth-child(even) td,
+.c-content-pages .table tr:nth-child(even) th {
     background-color: #f4f4f4
 }
 
@@ -166,9 +169,8 @@
     border-left: 1px solid #d6d6d6;
     height: 31px;
     padding: 0;
-
     @media (--mobile-max) {
-        height:auto;
+        height: auto;
     }
 }
 

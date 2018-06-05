@@ -3,14 +3,14 @@
   <div class="o-flex">
   <div class="o-flex__item o-flex__col-lg-1 c-testimonial-first">
   </div>
-    <div class="o-flex__item o-flex__col-lg-4">
+    <div class="o-flex__item o-flex__col-lg-4 o-flex__item--reverse-col1">
     <div class="c-testimonial-info c-testimonial-info-container"> 
             <h1 class="c-testimonial--heading">{{ section.settings.heading}}</h1>
             <h4 class="c-testimonial--desc">{{ section.settings.desc }}</h4>
     </div>
       
     </div>
-    <div class="o-flex__item o-flex__col-lg-7">
+    <div class="o-flex__item o-flex__col-lg-7 o-flex__item--reverse">
         <div class="c-reco-img">
           <img src="{{ section.settings.image | img_url: 'master'}}"  alt="">
         </div>

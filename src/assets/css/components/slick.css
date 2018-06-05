@@ -108,9 +108,9 @@
     z-index: 4;
     display: block;
     height: 50px;
-    height: 2.125rem;
+    height: 1.5rem;
     width: 50px;
-    width: 2.125rem;
+    width: 1.5rem;
     cursor: pointer;
     top: 51%;
     -webkit-transform: translate(0, -50%);
@@ -124,10 +124,7 @@
 .slick-prev:hover,
 .slick-prev:focus,
 .slick-next:hover,
-.slick-next:focus {
-    opacity: 1;
-    background-color: #262a39;
-}
+.slick-next:focus {}
 
 .slick-prev.slick-disabled,
 .slick-next.slick-disabled {
@@ -145,7 +142,10 @@
 }
 
 .slick-next {
-    right: 25px;
+    right: 0px;
+    @media(--tablet-large) {
+        right: 25px;
+    }
 }
 
 
@@ -157,14 +157,21 @@
 
 .slick-dots {
     position: absolute;
-    bottom: 94px;
-    left: 27%;
     display: block;
     width: 100%;
     padding: 0;
     margin: 0;
     list-style: none;
     text-align: center;
+    @media(--tablet-large) {
+        bottom: 116px;
+        left: 27%;
+    }
+    @media(--tablet-max) {
+        background-color: #f3f3ea;
+        padding-bottom: 30px;
+        padding-top: 30px;
+    }
 }
 
 .slick-dots li {
@@ -226,15 +233,24 @@
 .slick-prev--testimonial {
     position: absolute;
     z-index: 3;
-    left: 57%;
-    top: 86%;
+    top: 104.5%;
+    left: 10%;
     border-bottom: 1px solid black;
+    @media(--tablet-large) {
+        left: 57%;
+        top: 86%;
+    }
+  
 }
 
 .slick-next--testimonial {
     position: absolute;
     z-index: 3;
-    left: 91%;
-    top: 86%;
+    left: 85%;
+    top: 104.5%;
     border-bottom: 1px solid black;
+    @media(--tablet-large) {
+        left: 91%;
+        top: 86%;
+    }
 }

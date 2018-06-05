@@ -43,7 +43,7 @@
          success: function(data){
              console.log(data ,"insta");
              for( x in data.data ){
-             $('.instagallery').append('<div class="o-flex__item o-flex__col-lg-3 o-flex__col-lg-6" style="padding:0;"><a rel="gallery1" target="_blank" href="'+data.data[x].link+'" title=""> <img class="c-insta-img" src="'+data.data[x].images.low_resolution.url+'"></a></div>');  
+             $('.instagallery').append('<div class="o-flex__item o-flex__col-lg-3 o-flex__col-sm-6" style="padding:0;"><a rel="gallery1" target="_blank" href="'+data.data[x].link+'" title=""> <img class="c-insta-img" src="'+data.data[x].images.low_resolution.url+'"></a></div>');  
              }
          },
          error: function(data){

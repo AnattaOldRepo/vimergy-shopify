@@ -2,15 +2,19 @@
  
  <div class="c-testimonials js-testimonals-carousel">
  {% for block in section.blocks %}
-  <div class="o-flex c-testimonial">
-    <div class="o-flex__item o-flex__col-lg-1 c-testimonial-first">
-    </div>
-    <div class="o-flex__item o-flex__col-lg-4">
-      <div>
+  <div class="o-flex c-testimonial ">
+  
+    <div class="o-flex__item o-flex__col-lg-1 c-testimonial-first c-side-text-display">
+      <p class="c-side-text">--Communtity</p>
+</div>
+    <div class="o-flex__item o-flex__col-lg-4 c-side-container">
+     <p class="c-side-text--right c-side-testimonial-mobile">Communtity--</p>
+      <div class="c-img-mobile c-mobile-testimonial">
             <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
         </div>
+        
     </div>
-    <div class="o-flex__item o-flex__col-lg-7 c-shop-all-products">
+    <div class="o-flex__item o-flex__col-lg-7 c-off-white">
         <div class="o-flex c-testimonials-carousel">
 
             <div class="c-testimonial-info-container">

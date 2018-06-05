@@ -5,40 +5,45 @@
     width: $button-width;
     margin: $button-margin;
     padding: $button-padding;
-    font-weight: 700;
+    font-family: $button-font-family;
+    font-weight: $button-font-weight;
     font-size: $button-font-size;
     text-transform: uppercase;
     line-height: $button-line-height;
     color: $button-color;
+    letter-spacing: 2px;
     background-image: none;
     /* Reset unusual Firefox-on-Android default style */
     background-color: $button-background;
-    white-space: nowrap;
+    border: 3px solid $button-border;
+    border-radius: 0;
     cursor: $button-cursor;
     vertical-align: middle;
     transition: $button-transition;
-    outline: none;
-    position: relative;
-    text-align: center;
-    letter-spacing: 0.04em;
-    line-height: 1.4;
-    border-radius: 2px;
-    @media(--mobile-large) {
-        font-size: 14px;
+    &::-moz-focus-inner {
+        padding: 0;
+        border: 0;
     }
-    @media(--tablet-large) {
-        padding: .8125rem 3rem;
-        font-size: .9375rem;
+    &:focus,
+    &:active {
+        color: $button-color-active;
+        background-color: $button-background-active;
+        border-color: $button-border-active;
+    }
+    &:hover {
+        color: $button-color-hover;
+        background-color: $button-background-hover;
+        border-color: $button-border-hover;
     }
     &.disabled,
-    &[disabled] {
-        opacity: 0.5;
+    &[disabled],
+    fieldset[disabled] & {
+        color: $button-color-disabled;
+        background-color: $button-background-disabled;
+        border-color: $button-border-disabled;
         cursor: default;
         pointer-events: none;
-    }
-    &:--enter {
-        color: #fff;
-        background-color: #F6741D
+        /* Disabling of clicks */
     }
 }
 
@@ -68,8 +73,16 @@
     }
 }
 
+.c-btn--small {
+    height: $button-height-sm;
+}
+
 .c-btn--large {
-    font-size: 23px;
+    height: $button-height-lg;
+}
+
+.c-btn--extra-large {
+    height: $button-height-xl;
 }
 
 

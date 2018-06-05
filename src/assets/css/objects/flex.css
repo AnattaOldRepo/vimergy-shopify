@@ -8,6 +8,7 @@
 .o-flex__item {
     flex: 1;
     order: 1;
+    line-height: 0;
     @media(--mobile-max) {
         flex-basis: 100%;
     }
@@ -17,6 +18,13 @@
     order: 2;
     @media(--tablet-max) {
         order: 1;
+    }
+}
+
+.o-flex__item--reverse-col1 {
+    order: 1;
+    @media(--tablet-max) {
+        order: 2;
     }
 }
 

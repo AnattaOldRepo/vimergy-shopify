@@ -4,25 +4,34 @@ $button-display: inline-block !default;
 $button-margin: 0 !default;
 $button-padding: 0.8125rem 3rem;
 $button-width: auto !default;
-$button-font-family: $font-family-primary-bold !default;
+$button-font-family: $font-family-base !default;
 $button-font-weight: $font-weight-bold !default;
 $button-font-size: 0.935rem;
-$button-line-height: $font-size-new + 2 !default;
-$button-color: $color-white !default;
-$button-background: $color-vimergy-orange !default;
-$button-border: $color-white !default;
+$button-line-height: $font-size-new+2 !default;
+$button-color: $color-primary-black !default;
+$button-background: $color-white !default;
+$button-border: $color-primary-black !default;
 $button-cursor: pointer !default;
 $button-transition: all 0.250s ease-in-out !default;
+$button-shadow: 0px 2px 4px 0px #000000;
+$button-height-sm: 44px;
+$button-height-lg: 56px;
+$button-height-xl: 64px;
 
 /* Hover */
-$button-color-hover: $color-black !default;
-$button-background-hover: $color-white !default;
-$button-border-hover: $color-black !default;
+
+$button-color-hover: $color-accent-1 !default;
+$button-background-hover: $color-hover-grey !default;
+$button-border-hover: $color-hover-grey !default;
 
 /* Focus and Active */
-$button-color-active: $color-black !default;
-$button-background-active: $color-white !default;
-$button-border-active: $color-black !default;
+
+$button-color-active: $color-accent-1 !default;
+$button-background-active: $color-primary-black !default;
+$button-border-active: $color-primary-black !default;
 
 /* Disabled */
-$button-disabled-opacity: 0.5 !default;
+
+$button-color-disabled: $color-disabled-font !default;
+$button-background-disabled: $color-disabled-bg !default;
+$button-border-disabled: $color-disabled-bg !default;

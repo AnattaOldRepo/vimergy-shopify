@@ -53,18 +53,17 @@
                         </div>
                     </div>
                 </div>
-                <div rv-show="cart.item_count | lt 1">
+                <div rv-show="cart.item_count | lt 1" class="c-cart__emptyText">
                     <span>You have no items in your shopping bag.</span>
                 </div>
                 <div rv-show="cart.item_count | gt 0" class="c-cart__footerPriceBox">
                     <div class="c-cart__subtotal"><p>Subtotal</p></div>
-                    <div id="cart-subtotal" class="c-cart__total"></div>
+                    <div class="c-cart__total" rv-html="cart.total_price | money Currency.currentCurrency"></div>
                 </div>
                 <div class="cartCanvas__buttons" rv-show="cart.item_count | gt 0">
                     <button class="c-btn c-cart__checkout cart__checkout" type="submit" name="checkout" value="Check Out">Checkout</button>
                 </div>
-            </div>
-            <div class="c-cart__footer">
+                <div class="c-cart__footer" rv-hide="cart.item_count | lt 1">
                 {% if additional_checkout_buttons %}
                     <div class="additional_checkout_buttons c-cart__additionalButtons">
                         <span class="c-cart__additionalButtonsText">
@@ -75,6 +74,7 @@
                         </div>
                     </div>
                 {% endif %}
+            </div>
             </div>
         </form>
     </div>
@@ -101,13 +101,6 @@
 
 // Shopify Object To JavaScript Global Object
 var cartJSON = {{ cart | json }}, AddToCartClicked = false;
-  
-  cartJSON.items.forEach(function(item){
-    if(item.properties.kitsItem){
-      cartJSON.total_price -= item.price;
-    }
-  });
-  
 
 // Initializing CartJS
 jQuery(function() {
@@ -117,15 +110,13 @@ jQuery(function() {
 		"moneyFormat": "{{ shop.money_format }}",
 		"moneyWithCurrencyFormat": "{{ shop.money_with_currency_format }}"
 	});
-	console.log(CartJS);
 
-	rivets.bind($("[rv-value]"), CartJS);
+	rivets.bind($("[rv-value], #CartCount"), CartJS);
 
     $("#AddToCart").click(function(){
         AddToCartClicked = true;
     });
-  
-  	$("#cart-subtotal").text(rivets.formatters.money(cartJSON.total_price, 'Currency.currentCurrency'))
+
 });
 
 // Variant Selection Callback
@@ -155,14 +146,8 @@ jQuery('.addtocart-form').on('click','.remove-item', function(){
 jQuery(document).on('cart.requestComplete', function(event, cart) {
   	cartJSON = cart;
 	// Opening Cart Drawer
-	cartDrawer.offcanvas('open');
+    cartDrawer.offcanvas('open');
   
-  //cart.items.forEach(function(item){
-   // if(item.properties.kitsItem){
-   //   cart.total_price -= item.price;
-   // }
-  //});
-
   $("#cart-subtotal").text(rivets.formatters.money(cart.total_price, 'Currency.currentCurrency'))
 	// Updating Button Text
    	jQuery('[data-add-to-cart-text]').text("Add to Cart");

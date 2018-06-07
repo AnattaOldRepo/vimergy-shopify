@@ -185,82 +185,13 @@
 {% endunless %}
 
 {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+
 <script>
-   console.log({{ cart | json}} , "radhika");
-
-   var selectCallback = function(variant, selector) {
-
-//        console.log(variant);
-        console.log(selector);
-
-        if(selector.selectors.length == 2) {
-            if('Size' === selector.selectors[0].name && 'Bundles' === selector.selectors[1].name) {
-                var value = $(selector.selectors[0].element).val();
-                $(selector.selectors[1].element).find('option').prop('disabled', 'disabled');
-                $.each (selector.product.variants, function (key, variant) {
-        //            console.log(variant);
-                    if (variant.option1 == value) {
-                        var option2 = variant.option2;
-                        $(selector.selectors[1].element).find('option[value="'+$.escapeSelector(option2)+'"]').prop('disabled', false);
-                    }
-                })
-            }
-        }
-
-   };
-
    // jQuery(function($) {
    new Shopify.OptionSelectors('product-select', {
        product: {{ product | json }},
        onVariantSelected: selectCallback,
        enableHistoryState: true
    });
-   jQuery( document ).ready(function() {
-        var product = {{ product | json }};
-              $.ajax({
-                    type: 'GET',
-                    url: '/cart.js',
-                    dataType: 'json',
-                    success: function(response) {
-                        var cart = response;
-                        for(var i =0; i< cart.items.length; i++){
-                if(cart.items[i].id == product.variants[0].id){
-                    if(product.variants[0].inventory_quantity==cart.items[i].quantity){
-                        jQuery('.c-product__submit').attr("disabled", "disabled");
-                        console.log("ready",product.variants[0].inventory_quantity);
-                     } else{
-                       jQuery('.c-product__submit').removeAttr('disabled');
-                    }
-                }
-            }
-                    }
-                });
-        jQuery("body").bind("completeAddItem", function(jqxhr, text){
-            console.log("completeAddItem", this);
-              var product = {{ product | json }};
-            $.ajax({
-                    type: 'GET',
-                    url: '/cart.js',
-                    dataType: 'json',
-                    success: function(response) {
-                        var cart = response;
-                        for(var i =0; i< cart.items.length; i++){
-                if(cart.items[i].id == product.variants[0].id){
-                    if(product.variants[0].inventory_quantity==cart.items[i].quantity){
-                        jQuery('.c-product__submit').attr("disabled", "disabled");
-                        console.log("onclick",product.variants[0].inventory_quantity);
-                    } else{
-                       jQuery('.c-product__submit').removeAttr('disabled');
-                    }
-                }
-            }
-                    }
-                });
-        });
-
-
-
-});
-
 
 </script>

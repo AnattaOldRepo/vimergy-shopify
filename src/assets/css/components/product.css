@@ -125,7 +125,7 @@
     font-size: 1.25rem;
     height: 2.9375rem;
     line-height: 2.9375rem;
-    padding-left: .9375rem;
+    padding-left: 0;
     @media(--tablet-large) {
         font-size: 1.875rem;
     }
@@ -453,7 +453,8 @@ div.rc_popup__block {
 
 .c-quantity {
     display: inline-block;
-    margin-bottom: 1.75rem;
+    margin-bottom: 0;
+    max-width: 60px;
 }
 
 .c-variant select {

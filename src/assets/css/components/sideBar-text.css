@@ -1,0 +1,40 @@
+.c-sideBartext {
+    display: none;
+
+    @media(--tablet) {
+        display: block;
+        width: 170px;
+        flex: initial;
+        position: relative;
+        text-align:left;
+    }
+}
+
+.c-side-text {
+    font-size: 17px;
+    font-weight: 500;
+
+    @media(--tablet) {
+        position: absolute * 0 270px -50%;
+        margin: auto;
+        width: 350px;
+        transform: rotate(270deg) translateY(-50%);
+    }
+
+    &:before {
+        content: "";
+        size: 22px 2px;
+        background-color: $color-border-black;
+        display: block;
+        position: absolute 50% * * -32px;
+        transform: translateY(-50%);
+    }
+}
+
+.c-productCol {
+
+    .c-sideBartext {
+        position: absolute * 0 0 *;
+        height: 100%;
+    }
+}

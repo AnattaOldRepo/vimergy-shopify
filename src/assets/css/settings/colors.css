@@ -27,6 +27,8 @@ $color-border-black:#253237;
 
 /* Text colors */
 
+$color-heading:$color-border-black;
+
 $color-body-text: $color-primary-black;
 
 /* Backgrounds */

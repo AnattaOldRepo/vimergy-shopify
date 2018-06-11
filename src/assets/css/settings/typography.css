@@ -1,6 +1,6 @@
 /*================ Typography Variables ================*/
 
-$font-family-base: 'Mark-pro';
+$font-family-base: 'Mark-pro', Arial, sans-serif;
 $font-size-base: 19px;
 $font-line-height-base: 1.5;
 $font-weight-normal: 400;

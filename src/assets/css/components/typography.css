@@ -1,0 +1,11 @@
+.c-heading {
+    color:$color-heading;
+    font-family: $font-family-base;
+    margin-bottom:15px;
+}
+
+.c-copy {
+    margin-top: 25px;
+    font-size:16px;
+    line-height: 25px;
+}

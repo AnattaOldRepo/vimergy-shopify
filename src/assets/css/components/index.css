@@ -11,7 +11,17 @@
 @import "mobileNav";
 @import "footer";
 @import "megamenu";
+
+@import "typography";
+
 @import "home";
+
+@import "home-hero";
+
+@import "home-productCol";
+
+@import "sideBar-text";
+
 @import "about";
 @import "content-pages";
 @import "account";

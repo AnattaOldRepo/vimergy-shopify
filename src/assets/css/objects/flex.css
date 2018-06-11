@@ -14,6 +14,13 @@
     }
 }
 
+.o-flex--center {
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
 .o-flex__item--reverse {
     order: 2;
     @media(--tablet-max) {
@@ -34,6 +41,7 @@
 
 .o-flex__item--is-right {
     order: 1;
+
     @media(--mobile-large) {
         order: 2;
     }

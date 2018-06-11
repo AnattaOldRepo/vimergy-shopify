@@ -10,7 +10,7 @@
 
             <div class="c-testimonial">
                 <div>
-                    <a href="{{ block.settings.link | link: 'master'}}" tabindex="-1"> 
+                    <a href="{{ block.settings.link | link: 'master'}}" tabindex="-1">
                     <div class="c-testimonial__img">
                         <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
                     </div>
@@ -19,17 +19,17 @@
                 </div></a>
             </div>
 
-        {% endfor %}  
-        
+        {% endfor %}
+
    </div>
-    </div>   
+    </div>
   </div>
 </div>
-{% schema %}   
+{% schema %}
   {
       "name": "Home Shop All",
       "settings": [
-          
+
             {
                 "type": "html",
                 "id": "desc",
@@ -72,4 +72,4 @@
         }
     ]
   }
-{% endschema %}    
+{% endschema %}

@@ -1,22 +1,16 @@
-
-<div class="">
-  <div class="o-flex">
-    <div class="o-flex__item o-flex__col-lg-7">
-        <div class="c-reco-img">
+<div class="c-productCol o-flex o-flex--center">
+    <div class="c-productCol__image o-flex__item o-flex__col-lg-7">
           <img src="{{ section.settings.image | img_url: 'master'}}"  alt="">
+    </div>
+    <div class="c-productCol__content o-flex__item o-flex--center  o-flex__col-lg-5">
+        <div class="c-productCol__detail">
+            <h1 class="c-heading">{{ section.settings.heading}}</h1>
+            <h3 class="c-subheading">{{ section.settings.text }}</h3>
+            <p class="c-copy">{{ section.settings.desc }}</p>
+            <a class="c-btn c-btn-primary" href="{{ section.settings.button-link }}">SHOP NOW</a>
         </div>
     </div>
-    <div class="o-flex__item o-flex__col-lg-5">
-        <div class="c-reco-info"> 
-            <h1 class="c-reco__heading">{{ section.settings.heading}}</h1>
-            <h3 class="c-reco-text">{{ section.settings.text }}</h3>
-            <h4 class="c-reco-desc">{{ section.settings.desc }}</h4>
-            <p><a class="c-btn c-btn-primary" href="{{ section.settings.button-link }}">SHOP NOW</a></p>
-        </div>
-    </div>   
-  </div>
 </div>
-
 
 {% schema %}
     {
@@ -50,4 +44,4 @@
 
         ]
     }
-{% endschema %}   
+{% endschema %}

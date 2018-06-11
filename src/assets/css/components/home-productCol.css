@@ -1,0 +1,22 @@
+.c-productCol {
+    position: relative;
+}
+
+.c-productCol__detail {
+    max-width:350px;
+    width:100%;
+}
+
+.c-productCol__detail .c-btn {
+    margin-top: 75px;
+    height: 56px;
+    width: 168px;
+    border: 2px solid $color-border-black;
+    font-size: 13px;
+    font-weight: bold;
+    padding:0px;
+    letter-spacing: 1px;
+    line-height: 54px;
+    text-align:center;
+}
+

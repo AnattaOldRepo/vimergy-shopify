@@ -1,0 +1,29 @@
+.c-hero-img {
+    text-align: center;
+    color: #fff;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 474px;
+    position: relative;
+    width: 100%;
+
+    @media(--tablet) {
+        padding-top: 53.4%;
+        height: auto;
+        width: calc(100% - 170px);
+    }
+}
+
+.c-home-hero-info {
+    position: absolute * * 12.8% 8.1%;
+    color: #FAFAFA;
+    margin: 0 auto;
+    width: 255px;
+    text-align: center;
+
+    @media(--tablet) {
+        text-align: left;
+        width: 747px;
+    }
+}

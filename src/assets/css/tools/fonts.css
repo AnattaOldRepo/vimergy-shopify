@@ -3,18 +3,20 @@
 	font-family: 'Mark-pro';
 	src: url('../../assets/MarkPro-Medium.otf');
     font-weight: 500;
-    font-style: normal; 
+    font-style: normal;
 }
 
 @font-face {
 	font-family: 'Mark-pro';
 	src: url('../../assets/MarkPro-Bold.otf');
-    font-weight: bold; 
+    font-weight: bold;
     font-style: normal;
 }
+
 @font-face {
 	font-family: 'Mark-pro';
 	src: url('../../assets/MarkPro.otf');
     font-weight: normal;
     font-style: normal;
 }
+

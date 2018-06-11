@@ -2,12 +2,14 @@
     position: relative;
     background-color: #fff;
     text-transform: uppercase;
+
     @media (--tablet-large-max) {
         padding: 10px 0px;
     }
 }
 
 .c-header__logo {
+
     @media (--tablet-max) {
         display: block;
         margin: 0 auto;
@@ -20,6 +22,7 @@
 }
 
 .c-header__nav {
+
     @media (--tablet-large) {
         float: left;
         width: calc(100% - 165px);
@@ -27,6 +30,7 @@
     }
 }
 .c-header_container{
+
  @media (--tablet-large) {
     height:133px;
     padding: 28px 50px;
@@ -35,7 +39,7 @@
 .vimergy-logo {
     background-image: url("../vimergy.png");
     size: 4.8rem 4.8rem;
-    background-size: 4.8rem;  
+    background-size: 4.8rem;
 }
 .c-header__cart {
     position: absolute;

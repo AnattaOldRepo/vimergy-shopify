@@ -1,7 +1,7 @@
 /*================ Site wrappers ================*/
 
 .o-page{
-    max-width: $width-wrapper-base;
+    max-width: $width-page-container;
     margin: 0px auto;
     background-color: #f3f3ea;
 }
@@ -84,7 +84,7 @@
 
     @media(--mobile-large) {
         width: 50%;
-    } 
+    }
 }
 
 .o-medium-4 {

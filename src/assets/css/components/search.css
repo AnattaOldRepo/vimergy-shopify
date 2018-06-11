@@ -21,7 +21,7 @@ input[type="search"]{
 
 .c-search-button{
     background: transparent;
-    padding: 2px;
+    padding: 0;
     border: 0;
     
     &:--enter {
@@ -49,13 +49,7 @@ input[type="search"]{
     margin: 2rem 0;
 }
 .c-search-box{
-    position: absolute;
-    right: 1rem;
-    top: 3.7rem;
-    @media (--tablet-large) {
-        right:5.6rem;
-        top:1rem;
-    }
+  display:inline-flex;
 }
 .c-search__breadcrumbLink, .c-product__breadcrumb{
     font-weight:700;
@@ -67,5 +61,11 @@ input[type="search"]{
     pointer-events: all;
     position: absolute;
     right: 4px;
-    top: 3px;
+    top: 28px;
+}
+.search-bar{
+    @media (--tablet-large) {
+    padding-top: 2rem;
+    padding-left: 3rem;
+    }
 }

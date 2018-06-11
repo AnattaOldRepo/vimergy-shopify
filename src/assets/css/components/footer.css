@@ -1,7 +1,5 @@
 .c-footer {
     display: inline-block;
-    background-color: #eeeedc;
-    color: #393D4E;
     font-size: 16px;
     padding: 2.5rem * 2.5rem *;
     text-align: center;
@@ -15,12 +13,9 @@
 
 .c-footer__title {
     margin-bottom: .8125rem;
-    font-size: .875rem;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 500;
     text-transform: uppercase;
-    @media (--tablet-large) {
-        font-size: 1.0625rem;
-    }
     @media(--mobile-max) {
         margin-top: 20px;
     }
@@ -34,15 +29,12 @@
 }
 
 .c-footer__link {
-    font-size: .875rem;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: normal;
     line-height: 2;
-    color: #393D4E;
+    color: #253237;
     cursor: pointer;
     margin-top: .4375rem;
-    @media (--tablet-large) {
-        font-size: 1.0625rem
-    }
     &:--enter {
         text-decoration: underline;
         color: #0288D1;
@@ -60,6 +52,7 @@
 .c-footer__social ul li {
     display: inline-block;
     font-size: .875rem;
+    padding:0 30px 30px 30px;
     @media (--tablet-large) {
         font-size: 1.0625rem
     }
@@ -69,31 +62,48 @@
     margin-top: 0;
     margin-left: .625rem
 }
-
+.s-icon-store {
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: 0 center;
+    width: 2rem;
+    height: 2rem;
+    display: block;
+}
 .s-icon {
     background-repeat: no-repeat;
     background-size: 30px;
     background-position: 0 center;
-    width: 1.875rem;
-    height: 1.875rem;
+    width: 2rem;
+    height: 2rem;
     display: inline-block;
 }
-
-@each $val in can,
-aus,
-uk,
-usa {
-    .icon-$(val) {
-        background-image: url("../icon-$(val).png");
-        padding-left: 30px;
-        size: auto auto;
-        background-size: 20px;
+.c-store-list{
+    @media (--tablet-max) {
+    margin: 0 auto;
+    width: 100px;
     }
 }
 
-@each $val in facebook-dark,
-twitter-dark,
-instagram-dark {
+.c-store-list li{
+    padding-bottom:20px;
+}
+@each $val in can,
+aus,
+uk,
+usa{
+    .icon-$(val) {
+        background-image: url("../icon-$(val).png");
+        padding-left: 44px;
+        padding-top: 14px;
+        size: 2rem 2rem;
+        background-size: 2rem;
+    } 
+}
+
+@each $val in facebook,
+instagram,
+twitter {
     .icon-$(val) {
         background: url("../icon-$(val).svg");
         text-indent: -9999px;
@@ -118,7 +128,7 @@ instagram-dark {
     text-align: left;
     @media (--tablet-large) {
         font-size: 0.875rem;
-        padding: 0 2rem;
+        padding: 2rem;
     }
 }
 
@@ -130,7 +140,10 @@ instagram-dark {
 }
 
 .c-store {
-    margin-top: 2px;
+    margin-top: 20px;
+    @media (--tablet-large) {
+        margin-top: 2px;
+    }
 }
 
 
@@ -138,9 +151,7 @@ instagram-dark {
 
 .c-subscribe {
     padding: 1.875rem 0 1.8125rem;
-    color: #fff;
     text-align: center;
-    background-color: #393D4E;
 }
 
 .c-subscribe .o-flex {

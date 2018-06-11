@@ -8,10 +8,10 @@
         <div class="c-header__logo">
             {% if template != 'index' %}
                 <a class="c-logo" href="{{ shop.secure_url }}">
-                    {% include 'header-logo' %}
+                  <div class="vimergy-logo"></div>
                 </a>
             {% else %}
-                {% include 'header-logo' %}
+               <div class="vimergy-logo"></div>
             {% endif %}
         </div>
         <div class="c-header__nav u-hideTabletLargeDown ">
@@ -38,48 +38,7 @@
                     {% endfor %}
                 </ul>
             </menu>
-            <ul class="c-menu" >
-                <li class="c-menu__item c-menu__item--can c-menu__item--has-dropdown">
-                    <a class="c-menu__link" href="https://www.amazon.ca/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords=Vimergy&amp;rh=i%3Aaps%2Ck%3AVimergy" target="_blank">CAN</a>
-                    <div id="header-can" class="c-menu__dropdown">
-                        <div class="c-menu__dropdownContent">
-                            <h5>Shopping from Canada?</h5>
-                            <p>Visit our Vimergy Amazon Canada site for FREE Prime Shipping on all orders, and zero customs fees.</p>
-                            <a class="c-btn c-btn--secondary" href="https://www.amazon.ca/s/ref=nb_sb_noss?url=search-alias%3Daps&amp;field-keywords=Vimergy&amp;rh=i%3Aaps%2Ck%3AVimergy" target="_blank">Take me to amazon.ca</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="c-menu__item c-menu__item--aus c-menu__item--has-dropdown">
-                    <a class="c-menu__link" href="https://floweroflife.com.au" target="_blank">AUS</a>
-                    <div id="header-aus" class="c-menu__dropdown">
-                        <div class="c-menu__dropdownContent">
-                            <h5>Shopping from Australia?</h5>
-                            <p>Visit our Australia / NZ distributor for fast shipping and zero customs fees.</p>
-                            <a class="c-btn c-btn--secondary" href="https://floweroflife.com.au" target="_blank">Australian Distributor</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="c-menu__item">
-                    <a class="c-menu__link" href="https://vimergy.myshopify.com/pages/customer-service">Help</a>
-                </li>  
-                <li class="c-menu__item">
-                    <a class="c-menu__link"
-                     {% if customer %}
-                        href="https://vimergy.myshopify.com/account"
-                        {% else %}
-                       href="https://vimergy.myshopify.com/account/login"
-                        {% endif %}
-                     >
-                        {% if customer %}
-                        My Account
-                        {% else %}
-                        Log In
-                        {% endif %}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    <div class="c-search-box c-search-display">
+            <div class="c-search-box c-search-display">
         <form action="/search" method="get" class="input-group search-bar" role="search" >
         <input type="hidden" name="type" value="product">
         <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" class="input-group-field search-input" aria-label="{{ 'general.search.placeholder' | t }}" style="display:none;">
@@ -107,6 +66,25 @@
         </span> 
         </form>
     </div>
+            <ul class="c-menu" > 
+                <li class="c-menu__item">
+                    <a class="c-menu__link"
+                     {% if customer %}
+                        href="https://vimergy.myshopify.com/account"
+                        {% else %}
+                       href="https://vimergy.myshopify.com/account/login"
+                        {% endif %}
+                     >
+                        {% if customer %}
+                        My Account
+                        {% else %}
+                        SIGN In
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    
         <div class="c-header__cart">
         <div style="position:relative;"><div id="CartCount"></div></div>
         
@@ -122,7 +100,7 @@ $('.search-button').click(function() {
   $('.search-input').toggle(); 
   $('.c-search-close').toggle(); 
   $('.search-button').toggle(); 
-  $('.c-menu').toggle();
+  $('.c-megamenu').toggle();
 });
 
 $('.c-search-close').click(function() {  
@@ -130,7 +108,7 @@ $('.c-search-close').click(function() {
     $('.search-input').toggle(); 
     $('.c-search-close').toggle(); 
     $('.search-button').toggle(); 
-    $('.c-menu').toggle();
+    $('.c-megamenu').toggle();
 });
 
  $('.search-bar').submit(function(e) {

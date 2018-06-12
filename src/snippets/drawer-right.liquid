@@ -46,7 +46,7 @@
                                 </div>
                                 <ul rv-hide="item.propertyArray | empty">
                                     <li rv-each-property="item.propertyArray < properties">
-                                        <small class="text-muted">{property.name}: {property.value}</small>
+                                        <!--small class="text-muted">{property.name}: {property.value}</small-->
                                     </li>
                                 </ul>
                             </div>
@@ -99,53 +99,50 @@
 
 <script>
 
-  // Shopify Object To JavaScript Global Object
-  var cartJSON = {{ cart | json }}, AddToCartClicked = false;
+// Shopify Object To JavaScript Global Object
+var cartJSON = {{ cart | json }}, AddToCartClicked = false;
 
-  // Initializing CartJS
-  jQuery(function() {
-    CartJS.init(cartJSON , {
-      "dataAPI": true,
-      "requestBodyClass": "loading",
-      "moneyFormat": "{{ shop.money_format }}",
-      "moneyWithCurrencyFormat": "{{ shop.money_with_currency_format }}"
+// Initializing CartJS
+jQuery(function() {
+	CartJS.init(cartJSON , {
+		"dataAPI": true,
+		"requestBodyClass": "loading",
+		"moneyFormat": "{{ shop.money_format }}",
+		"moneyWithCurrencyFormat": "{{ shop.money_with_currency_format }}"
+	});
+
+	rivets.bind($("[rv-value], #CartCount"), CartJS);
+
+    $("#AddToCart").click(function(){
+        AddToCartClicked = true;
     });
 
-    rivets.bind($("[rv-value], #CartCount"), CartJS);
-
-      $("#AddToCart").click(function(){
-          AddToCartClicked = true;
-      });
-  });
-
-  // Variant Selection Callback
-  var selectCallback = function(variant, selector) {
-    console.log(variant);
-  };
-
-  // Adding Loading Text
-  jQuery('[data-add-to-cart]').click( function(){
-    jQuery(this).find('span').text('Adding...')
-  })
-
 });
+
+// Adding Loading Text
+jQuery('[data-add-to-cart]').click( function(){
+	jQuery('[data-add-to-cart-text]').text('Adding...')
+})
 
 jQuery(document).on('cart.requestComplete', function(event, cart) {
-  cartJSON = cart;
-  // Opening Cart Drawer
-  cartDrawer.offcanvas('open');
+  	cartJSON = cart;
+	// Opening Cart Drawer
+    cartDrawer.offcanvas('open');
 
   $("#cart-subtotal").text(rivets.formatters.money(cart.total_price, 'Currency.currentCurrency'))
-  	// Updating Button Text
-  jQuery('[data-add-to-cart-text]').text("Add to Cart");
+	// Updating Button Text
+   	jQuery('[data-add-to-cart-text]').text("Add to Cart");
+
 });
+
+</script>
 
 </script>
 
 {% include 'subscription-theme-footer' %}
 
 {% if template != 'cart'  %}
-  <script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 	<script>
 	rjQuery = jQuery.noConflict( true );
     var subscription_active='{{shop.metafields.subscriptions.subscription_active}}';
@@ -168,4 +165,11 @@ jQuery(document).on('cart.requestComplete', function(event, cart) {
 
     </script>
 {% endif %}
+
+<script>
+  // Variant Selection Callback
+  var selectCallback = function(variant, selector) {
+    console.log(variant);
+  };
+</script>
 

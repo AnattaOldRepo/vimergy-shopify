@@ -126,6 +126,7 @@
                     </div>
 
                     {% if product.metafields.subscriptions.has_subscription  %}
+                        <br/>
                         <div class="product-options-bottom">
                         <h2 class="del-interval__heading">Pick a delivery option</h2>
                         {% if product.available %}{% include 'subscription-product' %}{% endif %}

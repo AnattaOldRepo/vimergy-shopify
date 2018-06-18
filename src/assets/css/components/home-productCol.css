@@ -3,14 +3,18 @@
 }
 
 .c-productCol__detail {
-    max-width:350px;
+    max-width:290px;
     width:100%;
+
+    @media(--tablet){
+        max-width:350px;
+    }
 }
 
 .c-productCol__detail .c-btn {
     margin-top: 75px;
     height: 56px;
-    width: 168px;
+    width: 255px;
     border: 2px solid $color-border-black;
     font-size: 13px;
     font-weight: bold;
@@ -18,5 +22,16 @@
     letter-spacing: 1px;
     line-height: 54px;
     text-align:center;
+
+    @media(--tablet){
+        width:168px;
+    }
+}
+
+.c-productCol__content {
+
+    @media(--mobile-max){
+        padding:40px *;
+    }
 }
 

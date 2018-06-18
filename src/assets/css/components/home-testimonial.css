@@ -3,7 +3,11 @@
 }
 
 .c-testimonial_info {
-    padding-left:11%;
+    padding:30px 60px;
+
+    @media(--tablet){
+        padding-left:11%;
+    }
 }
 
 .c-testimonial__text {

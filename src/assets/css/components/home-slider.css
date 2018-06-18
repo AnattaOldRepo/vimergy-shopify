@@ -2,9 +2,15 @@
     height: 572.61px;
     background-color: #EFEAE5;
     flex-wrap: nowrap;
-    padding:* 100px * 170px;
+    padding: * 20px * 20px;
     justify-content: center;
     align-items: center;
+    flex-direction:column;
+
+    @media(--tablet){
+        flex-direction: row;
+        padding:* 100px * 170px;
+    }
 }
 
 .c-shop-all__text {
@@ -15,8 +21,12 @@
 .c-shop-all-products {
 
     &.c-shop-all__slider {
-        width:calc(100% - 270px);
-        margin-left:30px;
+        width:100%;
+
+        @media(--tablet){
+            width:calc(100% - 270px);
+            margin-left:30px;
+        }
     }
 
     .c-testimonials-carousel {

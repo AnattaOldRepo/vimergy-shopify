@@ -20,6 +20,11 @@
 
 @import "home-productCol";
 
+@import "home-slider";
+
+@import "home-testimonial";
+
+
 @import "sideBar-text";
 
 @import "about";

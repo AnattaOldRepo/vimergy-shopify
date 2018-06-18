@@ -1,30 +1,26 @@
-<div class="c-shop-all">
-  <div class="o-flex">
-    <div class="o-flex__item o-flex__col-lg-3">
-        <h2 class="c-shop-all-desc">{{ section.settings.desc }}</h2>
+<div class="c-shop-all o-flex">
+    <div class="c-shop-all__text">
+        <h2 class="c-shop-all__lefttext">{{ section.settings.desc }}</h2>
     </div>
-    <div class="o-flex__item o-flex__col-lg-9 c-shop-all-products">
+    <div class="c-shop-all-products c-shop-all__slider">
         <div class="o-flex c-testimonials-carousel js-products-carousel">
 
-        {% for block in section.blocks %}
-
-            <div class="c-testimonial">
-                <div>
+            {% for block in section.blocks %}
+                <div class="c-testimonial">
                     <a href="{{ block.settings.link | link: 'master'}}" tabindex="-1">
-                    <div class="c-testimonial__img">
-                        <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
-                    </div>
-                    <p >{{ block.settings.name }}</p>
-                    <p>{{ block.settings.price }}</p>
-                </div></a>
-            </div>
+                        <div class="c-testimonial__img">
+                            <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
+                        </div>
+                        <p >{{ block.settings.name }}</p>
+                        <p>{{ block.settings.price }}</p>
+                    </a>
+                </div>
+            {% endfor %}
 
-        {% endfor %}
-
-   </div>
+        </div>
     </div>
-  </div>
 </div>
+
 {% schema %}
   {
       "name": "Home Shop All",

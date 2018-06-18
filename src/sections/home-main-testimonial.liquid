@@ -1,23 +1,16 @@
-
-<div class="c-main-testimonial">
-  <div class="o-flex">
-  <div class="o-flex__item o-flex__col-lg-1 c-testimonial-first">
-  </div>
-    <div class="o-flex__item o-flex__col-lg-4 o-flex__item--reverse-col1">
-    <div class="c-testimonial-info c-testimonial-info-container"> 
+<div class="c-mainTestimonial o-flex o-flex--center">
+    <div class="c-mainTestimonial__image o-flex__item o-flex__col-lg-7 o-flex__item--reverse">
+        <img src="{{ section.settings.image | img_url: 'master'}}"  alt="">
+    </div>
+    <div class="c-testimonial_info o-flex__item o-flex__col-lg-5">
+        <div class="c-testimonial__text u-textLeft">
             <h1 class="c-testimonial--heading">{{ section.settings.heading}}</h1>
             <h4 class="c-testimonial--desc">{{ section.settings.desc }}</h4>
-    </div>
-      
-    </div>
-    <div class="o-flex__item o-flex__col-lg-7 o-flex__item--reverse">
-        <div class="c-reco-img">
-          <img src="{{ section.settings.image | img_url: 'master'}}"  alt="">
+            <h4 class="c-testimonial__author">{{ section.settings.author}}</h4>
         </div>
-    </div>   
-  </div>
+    </div>
 </div>
-  
+
 {% schema %}
     {
         "name": "Home main testimonial",
@@ -36,8 +29,12 @@
                 "type": "html",
                 "id": "desc",
                 "label": "Description"
+            },
+            {
+                "type": "text",
+                "id": "author",
+                "label": "Author"
             }
-
         ]
     }
-{% endschema %}   
+{% endschema %}

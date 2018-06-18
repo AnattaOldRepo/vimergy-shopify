@@ -803,11 +803,6 @@ body.fancybox-active.compensate-for-scrollbar {
     margin-bottom: 5rem;
 }
 
-.c-shop-all {
-    height: 572.61px;
-    background-color: #EFEAE5;
-}
-
 .c-shop-all-desc {
     text-align: center;
     width: 250px;
@@ -818,12 +813,6 @@ body.fancybox-active.compensate-for-scrollbar {
         margin-left: 160px;
         margin-top: 183px;
         text-align: left;
-    }
-}
-
-.c-shop-all-products {
-    @media(--tablet-large) {
-        margin-top: 112px;
     }
 }
 

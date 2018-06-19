@@ -52,6 +52,28 @@
     .slick-next--testimonial {
         border-bottom-width:2px;
     }
+
+    .slick-dots {
+        top:85%;
+        bottom:auto;
+        left:70%;
+        width:auto;
+    }
+
+    .slick-dots li  button:before {
+        opacity: .75;
+        width: 10px;
+        height: 10px;
+        top: 5px;
+        left: 5px;
+        content: "";
+        background: $color-white;
+        border-radius: 50%;
+    }
+
+    .slick-dots li.slick-active  button:before{
+        background-color:$color-black;
+    }
 }
 
 .c-testimonial__author {

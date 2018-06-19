@@ -41,16 +41,18 @@
     size: 4.8rem 4.8rem;
     background-size: 4.8rem;
 }
+
 .c-header__cart {
     position: absolute;
-    right: 60px;
-    padding-top: 3.5rem;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     top: 0;
     cursor: pointer;
-    @media (--tablet-large-max) {
-        padding-top: 11px;
-        right: 30px;
-    }
+    background-color: #EFEAE5;
+    width:132px;
 }
 
 @media(--tablet-large) {

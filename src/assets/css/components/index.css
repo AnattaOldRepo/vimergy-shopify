@@ -24,8 +24,9 @@
 
 @import "home-testimonial";
 
-
 @import "sideBar-text";
+
+@import "collections";
 
 @import "about";
 @import "content-pages";

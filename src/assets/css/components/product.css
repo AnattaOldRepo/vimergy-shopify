@@ -1,8 +1,24 @@
 .c-product {
     margin: 0;
-    background-color: #fbfbf6;
-
+    background-color: $color-white;
 }
+
+.c-product__slider {
+    background-color:$color-secondary;
+    width:50%;
+    text-align:center;
+    padding:20px;
+}
+
+.c-product__slideItem {
+    outline:none;
+
+    img {
+        object-fit:cover;
+        width:100%;
+    }
+}
+
 
 .c-product-view .o-flex {
     margin: 0 auto;

@@ -18,7 +18,7 @@
    {% endfor %}
    </select>
 </form> {% endcomment %}
-<div class="c-product" ata-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
+<div class="c-product" data-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
 {% if collection != blank %}
 <a class="c-product__breadcrumb" href="{{ collection.url }}">
    <svg class="c-product__breadcrumbArrow" width="25px" height="12px" viewBox="0 0 25 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -42,144 +42,154 @@
 
 
 <div class="c-product">
-<div class="c-product-view">
-   <div class="o-flex">
-      <div class="o-flex-item o-flex__col-lg-6">
-         <div class="c-product-image">
-            <img  src="{{ product.images[1].src | img_url: '526x526' }}">
-         </div>
-      </div>
-      <div class="o-flex-item o-flex__col-lg-6">
-         <div class="c-product-shop">
-            <div itemprop="offers" itemscope itemtype="http:/  /schema.org/Offer">
-               <meta itemprop="priceCurrency" content="{{   shop.currency }}">
-               <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
-               <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
+    <div class="c-product_hero o-flex">
+        <div class="c-product__slider o-flex-item o-flex__col-lg-6">
+            <div class="c-product__singleSlider">
+                <img src="{{ featured_image | img_url: '480x480' }}" alt="{{ featured_image.alt | escape }}" data-product-featured-image>
+            </div>
 
-              <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
+             {% if product.images.size > 1 %}
+                <div class="c-product__sliderNav ">
 
-                  <h1 class="c-product-name">{{ product.title }}</h1>
+                    {% for image in product.images %}
+                        <div class="c-product__slideItem">
+                            <img src="{{ image.src | img_url: '200X200' }}" alt="{{ image.alt | escape }}">
+                        </div>
+                    {% endfor %}
 
+                </div>
+            {% endif %}
+        </div>
+        <div class="c-product__detail o-flex-item o-flex__col-lg-6">
+            <div class="c-product-shop">
+                <div itemprop="offers" itemscope itemtype="http:/  /schema.org/Offer">
+                <meta itemprop="priceCurrency" content="{{   shop.currency }}">
+                <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
+                <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
 
-                  <div class="c-product-description">
-                     {{ product.metafields.c_f.desc1 }}
-                  </div>
+                <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
 
-                {% if product.metafields.sub_description  %}
+                    <h1 class="c-product-name">{{ product.title }}</h1>
 
-                  <div class="c-product-description">
-                     {{ product.metafields.c_f.sub_description }}
-                  </div>
-
-                 {% endif %}
-
-               {%- assign product_quantity = 1 -%}
-                {% for item in cart.items %}
-
-                {% if product.id ==  item.product_id %}
-
-                     {%- assign product_quantity = item.quantity -%}
-                      {% break %}
-
-                {% endif %}
-                {% endfor %}
-
-                  <div class="c-item-options">
-                  <div>
-
-                  <div class="c-quantity">
-                     <label for="qty">Quantity</label>
-                     <input type="number"
-                        name="quantity"
-                        id="updates_{{ product.id }}"
-                        value="1"
-                        min="1"
-                        data-product-quantity
-                        aria-label="{{ 'cart.general.item_quantity' | t }}">
-                    </div>
-                     {% if product.metafields.c_f.made_in_usa  %}
-
-                    <div class="c-product-made">
-                        <span class="c-icon-usa">Made in USA</span>
+                    <div class="c-product-description">
+                        {{ product.metafields.c_f.desc1 }}
                     </div>
 
-                    {% endif %}
-                    </div>
+                    {% if product.metafields.sub_description  %}
 
-                    <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
-                    {% if product.options.size == 1 %}
-                        <label><strong>{{ product.options.first }}</strong></label>
-                    {% endif %}
-                        <select id="product-select" name='id' class="no-js sadass" data-product-select  data-productid="{{product.id}}">
-                        {% for variant in product.variants %}
-                            <option
-                            {% if variant == current_variant   %}selected="selected"{% endif %}
-                            {% unless variant.available   %}disabled="disabled"{% endunless %}
-                            value="{{ variant.id }}"
-                            >
-                            {{ variant.title }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    {% if product.metafields.subscriptions.has_subscription  %}
-                        <div class="product-options-bottom">
-                        <h2 class="del-interval__heading">Pick a delivery option</h2>
-                        {% if product.available %}{% include 'subscription-product' %}{% endif %}
+                        <div class="c-product-description">
+                            {{ product.metafields.c_f.sub_description }}
                         </div>
 
                     {% endif %}
 
-                  </div>
-                  <div class="c-product__priceBox c-product-price" data-price-wrapper>
-                     <span id="productPrice" class="c-product__price " data-product-price>
-                     {{ current_variant.price | money }}
-                     </span>
-                     {% if product.compare_at_price_max >   product.price %}
-                     <s class="c-product__price c-product__price--nosale" data-compare-price>
-                     {% if current_variant.compare_at_price > current_variant.price %}
-                     {{ current_variant.compare_at_price   | money }}
-                     {% endif %}
-                     </s>
-                     {% endif %}
-                  </div>
-                  <button
-                  id="AddToCart"
-                  class="c-btn c-add-to-cart-buttons c-product__submit"
-                  type="submit"
-                  name="add"
-                  data-add-to-cart
-                  {% unless current_variant.available   %}disabled="disabled"{% endunless %}
-                  ><span class="c-icon"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 135.8 115" enable-background="new 0 0 135.8 115" xml:space="preserve"><path d="M113.8,84h-72c-2.6,0-4.9-1.9-5.4-4.4L22.7,11H0V0h27.2c2.6,0,4.9,1.9,5.4,4.4L36.1,22h94.1c1.8,0,3.4,0.8,4.4,2.3c1,1.4,1.3,3.3,0.8,4.9l-16.5,51C118.3,82.5,116.2,84,113.8,84z M46.3,73h63.5l12.9-40H38.3L46.3,73z"></path><circle cx="50" cy="103.9" r="11"></circle><circle cx="104.5" cy="103.9" r="11"></circle></svg></span>
-                  <span class="c-product__submitText" data-add-to-cart-text>
-                  {% if current_variant.available %}
-                  Add To Cart
-                  {% else %}
-                  Sold Out
-                  {% endif %}
-                  </span>
-                  </button>
-               </form>
+                    {%- assign product_quantity = 1 -%}
+                    {% for item in cart.items %}
+
+                        {% if product.id ==  item.product_id %}
+
+                            {%- assign product_quantity = item.quantity -%}
+                            {% break %}
+
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="c-item-options">
+                    <div>
+
+                    <div class="c-quantity">
+                        <label for="qty">Quantity</label>
+                        <input type="number"
+                            name="quantity"
+                            id="updates_{{ product.id }}"
+                            value="1"
+                            min="1"
+                            data-product-quantity
+                            aria-label="{{ 'cart.general.item_quantity' | t }}">
+                        </div>
+                        {% if product.metafields.c_f.made_in_usa  %}
+
+                        <div class="c-product-made">
+                            <span class="c-icon-usa">Made in USA</span>
+                        </div>
+
+                        {% endif %}
+                        </div>
+
+                        <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
+                        {% if product.options.size == 1 %}
+                            <label><strong>{{ product.options.first }}</strong></label>
+                        {% endif %}
+                            <select id="product-select" name='id' class="no-js sadass" data-product-select  data-productid="{{product.id}}">
+                            {% for variant in product.variants %}
+                                <option
+                                    {% if variant == current_variant   %}selected="selected"{% endif %}
+                                    {% unless variant.available   %}disabled="disabled"{% endunless %}
+                                    value="{{ variant.id }}"
+                                >
+                                    {{ variant.title }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {% if product.metafields.subscriptions.has_subscription  %}
+                            <div class="product-options-bottom">
+                                <h2 class="del-interval__heading">Pick a delivery option</h2>
+                                {% if product.available %}{% include 'subscription-product' %}{% endif %}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+                    <div class="c-product__priceBox c-product-price" data-price-wrapper>
+                        <span id="productPrice" class="c-product__price " data-product-price>
+                            {{ current_variant.price | money }}
+                        </span>
+                        {% if product.compare_at_price_max >   product.price %}
+                            <s class="c-product__price c-product__price--nosale" data-compare-price>
+                                {% if current_variant.compare_at_price > current_variant.price %}
+                                    {{ current_variant.compare_at_price   | money }}
+                                {% endif %}
+                            </s>
+                        {% endif %}
+                    </div>
+                    <button
+                        id="AddToCart"
+                        class="c-btn c-add-to-cart-buttons c-product__submit"
+                        type="submit"
+                        name="add"
+                        data-add-to-cart
+                        {% unless current_variant.available   %}disabled="disabled"{% endunless %}
+                    >
+                    <span class="c-icon"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 135.8 115" enable-background="new 0 0 135.8 115" xml:space="preserve"><path d="M113.8,84h-72c-2.6,0-4.9-1.9-5.4-4.4L22.7,11H0V0h27.2c2.6,0,4.9,1.9,5.4,4.4L36.1,22h94.1c1.8,0,3.4,0.8,4.4,2.3c1,1.4,1.3,3.3,0.8,4.9l-16.5,51C118.3,82.5,116.2,84,113.8,84z M46.3,73h63.5l12.9-40H38.3L46.3,73z"></path><circle cx="50" cy="103.9" r="11"></circle><circle cx="104.5" cy="103.9" r="11"></circle></svg></span>
+                        <span class="c-product__submitText" data-add-to-cart-text>
+                            {% if current_variant.available %}
+                                Add To Cart
+                            {% else %}
+                                Sold Out
+                            {% endif %}
+                        </span>
+                    </button>
+                </form>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
-</div>
+        </div>
+    </div>
 
-{% if product.metafields.cert != blank ||  if product.metafields.cert == true %}
+    {% if product.metafields.cert != blank ||  if product.metafields.cert == true %}
 
-{% section 'product-certs' %}
+        {% section 'product-certs' %}
 
-{% endif %}
+    {% endif %}
 
-{% unless product.title == 'Gift Card' %}
+    {% unless product.title == 'Gift Card' %}
 
-    {% section 'product-detail' %}
+        {% section 'product-detail' %}
 
-    {% section 'related-products' %}
+        {% section 'related-products' %}
 
-{% endunless %}
+    {% endunless %}
 
 {{ 'option_selection.js' | shopify_asset_url | script_tag }}
 <script>
@@ -212,5 +222,4 @@
        onVariantSelected: selectCallback,
        enableHistoryState: true
    });
-
 </script>

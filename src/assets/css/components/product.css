@@ -43,8 +43,8 @@
 }
 
 .c-variant__boxItem {
-    width:31.33%;
-    margin:0px 1%;
+    width:30.33%;
+    margin:0px 2%;
     border: 1px solid $color-heading;
     display: flex;
     align-items: center;
@@ -59,6 +59,7 @@
         height:30px;
         background-image:url("../select.svg");
         transform:translateX(50%) translateY(-50%);
+        background-size:100%;
     }
 }
 

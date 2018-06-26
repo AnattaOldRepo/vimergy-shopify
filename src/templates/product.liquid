@@ -81,7 +81,6 @@
                 <a href="#" class="read-review">read reviews</a>
 
                 <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
-                    <span>Step 01</span>
                     {% if product.options.size == 1 %}
                         <label><strong>Box Size</strong></label>
                     {% endif %}
@@ -105,6 +104,23 @@
 
                     {% endif %}
                 {% endfor %}
+
+                <div class="c-quantity" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
+                    {% if product.options.size == 1 %}
+                        <label><strong>Quantity &amp; saving Options</label>
+                    {% endif %}
+                    <select id="product-select" name='id' class="no-js sadass" data-product-select  data-productid="{{product.id}}">
+                        {% for variant in product.variants %}
+                            <option
+                                {% if variant == current_variant   %}selected="selected"{% endif %}
+                                {% unless variant.available   %}disabled="disabled"{% endunless %}
+                                value="{{ variant.id }}"
+                            >
+                                pack ({{ variant.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
                 <div class="c-item-options">
                     <div class="c-quantity">

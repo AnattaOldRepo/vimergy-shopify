@@ -2,6 +2,7 @@
 
 }
 
+
 .c-testimonial_info {
     padding:30px 60px;
 
@@ -20,6 +21,26 @@
 
 /* Testimonial-slider */
 
+.c-testimonials {
+    position: relative;
+
+    .slick-prev--testimonial {
+
+        @media(--mobile-max){
+            top:auto;
+            bottom:20px;
+        }
+    }
+
+    .slick-next--testimonial {
+
+        @media(--mobile-max){
+            top:auto;
+            bottom:20px;
+        }
+    }
+}
+
 .c-testimonial__sidetext {
     position: absolute;
     width:160px;
@@ -27,11 +48,22 @@
 }
 
 .c-testimonials__left {
-    padding-left:11%;
+    width:100%;
+
+    @media(--tablet){
+        width:41.66%;
+    }
 }
 
 .c-testimonials__slider {
     position: relative;
+    width:100%;
+
+    @media(--tablet){
+        width:89%;
+        margin-left:11%;
+        padding-bottom:0px;
+    }
 
     span.c-text-arrow {
         color: $color-heading;
@@ -42,8 +74,11 @@
     }
 
     .slick-prev--testimonial {
-        left:54%;
         border-bottom-width: 2px;
+
+        @media(--tablet){
+            left:54%;
+        }
     }
     .c-prev-testimonial {
         left:-12px;
@@ -51,13 +86,25 @@
 
     .slick-next--testimonial {
         border-bottom-width:2px;
+
+        @media(--mobile-max){
+            top:auto;
+        }
     }
 
     .slick-dots {
-        top:85%;
-        bottom:auto;
-        left:70%;
-        width:auto;
+        bottom:38px;
+        left:0;
+        width:100%;
+        padding:0px;
+
+        @media(--tablet){
+            top:85%;
+            bottom:auto;
+            left:70%;
+            width:auto;
+            padding:30px *;
+        }
     }
 
     .slick-dots li  button:before {
@@ -84,10 +131,19 @@
     max-width:330px;
 }
 .c-testimonials__right {
+    padding-bottom:85px;
+
+    @media(--tablet){
+        padding-bottom:0px;
+    }
 
     .c-testimonials-carousel {
-        padding-top:12.5%;
-        padding-left:17.8%;
+        padding:42px * * *;
+
+        @media(--tablet){
+            padding-top:12.5%;
+            padding-left:17.8%;
+        }
     }
 }
 

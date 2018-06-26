@@ -6,11 +6,12 @@
 @import "cart";
 @import "cart-table";
 @import "header";
-@import "menu";
+/* @import "menu"; */
+@import "navigation";
 @import "hamburger";
 @import "mobileNav";
 @import "footer";
-@import "megamenu";
+/* @import "megamenu"; */
 
 @import "typography";
 

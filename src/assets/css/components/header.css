@@ -2,9 +2,9 @@
     position: relative;
     background-color: #fff;
     text-transform: uppercase;
-
-    @media (--tablet-large-max) {
-        padding: 10px 0px;
+    padding:10px *;
+    @media(--tablet-large){
+        padding:0px;
     }
 }
 
@@ -25,21 +25,32 @@
 
     @media (--tablet-large) {
         float: left;
-        width: calc(100% - 165px);
-        padding-right: 40px;
+        width: calc(100% - 195px);
+        display:flex;
+        align-items: center;
+        min-height:76px;
+        justify-content:space-between;
     }
 }
+
 .c-header_container{
 
- @media (--tablet-large) {
-    height:133px;
-    padding: 28px 50px;
+    @media (--tablet-large) {
+        height:130px;
+        padding: 28px 38px;
     }
 }
+
 .vimergy-logo {
     background-image: url("../vimergy.png");
-    size: 4.8rem 4.8rem;
-    background-size: 4.8rem;
+    size:58px;
+    background-size: 58px;
+
+    @media(--tablet){
+        size: 4.8rem 4.8rem;
+        background-size: 4.8rem;
+    }
+
 }
 
 .c-header__cart {
@@ -52,7 +63,11 @@
     top: 0;
     cursor: pointer;
     background-color: #EFEAE5;
-    width:132px;
+    width:68px;
+
+    @media(--tablet){
+        width:132px;
+    }
 }
 
 @media(--tablet-large) {

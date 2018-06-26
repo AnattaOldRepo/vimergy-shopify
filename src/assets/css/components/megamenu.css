@@ -14,27 +14,6 @@
     font-weight: 700;
     font-size: 14px;
     line-height: 24px;
-
-    &:first-child {
-        position:relative;
-    }
-
-    &:first-child:after{
-        content:'';
-        size: 1px 20px;
-        background-color:$color-cold-grey;
-        position: absolute 50% -4px * *;
-        transform: translateY(-50%);
-
-        @media(--desktop){
-            size: 1px 28px;
-        }
-    }
-
-    @media(--desktop){
-        font-size: 17px;
-        line-height: 27px;
-    }
 }
 
 .c-megamenu__link {
@@ -62,10 +41,10 @@
     > a {
         position: relative;
         display: inline-block;
-        
+
         &.open {
             z-index: 1;
-        }        
+        }
     }
 }
 
@@ -81,7 +60,7 @@
     color: $color-cold-grey;
     background-color: #fbfbf6;
 
-   
+
     &.open {
         display: block;
     }

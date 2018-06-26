@@ -15,7 +15,9 @@
     margin-bottom: .8125rem;
     font-size: 16px;
     font-weight: 500;
-    text-transform: uppercase;
+    font-family:$font-family-medium;
+    text-transform: capitalize;
+
     @media(--mobile-max) {
         margin-top: 20px;
     }
@@ -49,19 +51,20 @@
     }
 }
 
+.c-footer__social ul{
+    display: flex;
+    justify-content: space-around;
+}
+
+
 .c-footer__social ul li {
     display: inline-block;
     font-size: .875rem;
-    padding:0 30px 30px 30px;
     @media (--tablet-large) {
         font-size: 1.0625rem
     }
 }
 
-.c-footer__social li+li {
-    margin-top: 0;
-    margin-left: .625rem
-}
 .s-icon-store {
     background-repeat: no-repeat;
     background-size: 30px;
@@ -98,7 +101,7 @@ usa{
         padding-top: 14px;
         size: 2rem 2rem;
         background-size: 2rem;
-    } 
+    }
 }
 
 @each $val in facebook,

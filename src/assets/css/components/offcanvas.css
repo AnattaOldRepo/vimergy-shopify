@@ -10,7 +10,7 @@ $offcanvas-overlay-background: rgba(#000, 0.5) !default;
     width: 100%;
     max-width: 380px;
     height: 100%;
-    visibility: hidden;  
+    visibility: hidden;
     background-color: $color-white;
     backface-visibility: hidden;
     transition: transform 0.5s ease, visibility 0.5s ease;
@@ -55,6 +55,7 @@ $offcanvas-overlay-background: rgba(#000, 0.5) !default;
     left: 0;
     padding: 32px;
     transform: translateX(-$offcanvas-width);
+    z-index: 99999999;
 }
 
 .c-offcanvas--right {

@@ -1,6 +1,7 @@
 .c-iconSection {
     padding: 100px *;
     text-align: center;
+    background-color:$color-primary-white;
 }
 
 .c-icons li {

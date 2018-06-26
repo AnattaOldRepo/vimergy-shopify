@@ -1,14 +1,13 @@
-
-    <div class="c-testimonials c-testimonials__slider js-testimonals-carousel">
+<div class="c-testimonials">
+    <div class="c-testimonial__sidetext">
+        <p class="c-side-text">Communtity</p>
+    </div>
+    <div class="c-testimonials__slider js-testimonals-carousel">
 
         {% for block in section.blocks %}
             <div class="o-flex c-testimonial">
-                <div class="c-testimonial__sidetext">
-                    <p class="c-side-text">Communtity</p>
-                </div>
                 <div class="c-testimonials__left o-flex__item o-flex__col-lg-5 c-side-container">
-                    <p class="c-side-text--right c-side-testimonial-mobile">Communtity--</p>
-                    <div class="c-img-mobile c-mobile-testimonial">
+                    <div class="c-testimonial__img">
                         <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
                     </div>
                 </div>
@@ -25,7 +24,7 @@
         {% endfor %}
 
     </div>
-
+</div>
 {% schema %}
   {
     "blocks": [

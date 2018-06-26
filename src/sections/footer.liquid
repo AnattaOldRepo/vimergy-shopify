@@ -12,7 +12,7 @@
                     <div class="c-footerMenuGroup">
                         <h3 class="c-footerMenuTitle">{{ linklists[footer_menu].title }}</h3>
 
-                        <nav class="c-footerMenu">  
+                        <nav class="c-footerMenu">
                             <ul>
                             {% for link in linklists[footer_menu].links %}
                                 <li class="c-footerMenuItem"><a class="c-footerMenuLink" href="{{ link.url }}">{{ link.title }}</a></li>
@@ -47,7 +47,7 @@
                         <img class="c-footerImage" src="{{ footer_image.src | img_url: 'master' }}" alt="{{ footer_image.alt }}">
                     </div>
                 {% endif %}
-            {% endfor %} 
+            {% endfor %}
         </div>
         <span class="c-footerCopyright u-hideTabletLargeUp">Copyright © 2017 Sub_Urban Riot. All Rights Reserved.</span>
     </div>

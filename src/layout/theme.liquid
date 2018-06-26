@@ -9,20 +9,20 @@
         <meta name="theme-color" content="{{ settings.color_primary }}">
         <link rel="canonical" href="{{ canonical_url }}">
 
-      <!-- Hotjar Tracking Code for www.suburbanriot.com -->
-      <script>
-          (function(h,o,t,j,a,r){
-              h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-              h._hjSettings={hjid:737605,hjsv:6};
-              a=o.getElementsByTagName('head')[0];
-              r=o.createElement('script');r.async=1;
-              r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-              a.appendChild(r);
-          })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-      </script>
+        <!-- Hotjar Tracking Code for www.suburbanriot.com -->
+        <script>
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:737605,hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        </script>
 
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3194810-1"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3194810-1"></script>
 
         {% if settings.favicon != blank %}
             <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
@@ -57,8 +57,10 @@
 
         <script src="//code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         {% comment %} <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js" ></script> {% endcomment %}
+
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
         <!-- It inserts the necessary Shopify scripts -->
+
         {{ content_for_header }}
 
         {% comment %} <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
@@ -69,7 +71,6 @@
 
         <script src="https://use.typekit.net/wpk2erb.js"></script>
         <script>try{Typekit.load({ async: true });}catch(e){}</script>
-
 
     </head>
 
@@ -87,20 +88,15 @@
             <main role="main" id="MainContent">
                 {{ content_for_layout }}
             </main>
-              {% include 'subscribe' %}
+
+            {% include 'subscribe' %}
             {% include 'footer' %}
         </div>
 
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
-
         <script src="{{ 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js'}}" defer="defer" type="text/javascript"></script>
-
-
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.6/jquery.lazy.min.js" defer="defer"></script>
-
         <script src="{{ 'vue-components.js' | asset_url }}"></script>
 
 
@@ -112,31 +108,31 @@
 
         <script defer="defer">
             $(document).ready(function() {
-            $(function($) {
-                ajaxCart.init({
-                  formSelector: '#AddToCartForm',
-                  cartContainer: '#CartContainer',
-                  addToCartSelector: '#AddToCart',
-                  cartCountSelector: '#CartCount',
-                  cartCostSelector: '#CartCost',
-                  moneyFormat: {{ shop.money_format | json }}
+                $(function($) {
+                    ajaxCart.init({
+                    formSelector: '#AddToCartForm',
+                    cartContainer: '#CartContainer',
+                    addToCartSelector: '#AddToCart',
+                    cartCountSelector: '#CartCount',
+                    cartCostSelector: '#CartCost',
+                    moneyFormat: {{ shop.money_format | json }}
+                    });
                 });
-              });
 
-              ajaxCart.load();
-              var loadCount = 0
+                ajaxCart.load();
+                var loadCount = 0
 
-              $(document.body).on('afterGetCart.ajaxCart', function(evt, cart) {
-                if (loadCount >= 1 && !$('body').hasClass('offcanvas-open')) {
-                    $('.js-offcanvas[data-offcanvas-src="#offcanvas-right"]').trigger('click')
-                }
+                $(document.body).on('afterGetCart.ajaxCart', function(evt, cart) {
+                    if (loadCount >= 1 && !$('body').hasClass('offcanvas-open')) {
+                        $('.js-offcanvas[data-offcanvas-src="#offcanvas-right"]').trigger('click')
+                    }
 
-                loadCount += 1;
-              })
-          })
+                    loadCount += 1;
+                })
+            })
         </script>
-{% comment %} {% include 'subscription-theme-footer' %} {% endcomment %}
-{% include 'search-autocomplete' %}
+        {% comment %} {% include 'subscription-theme-footer' %} {% endcomment %}
 
+        {% include 'search-autocomplete' %}
     </body>
 </html>

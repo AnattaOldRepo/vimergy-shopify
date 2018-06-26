@@ -15,6 +15,11 @@
 
 .c-shop-all__text {
     width:225px;
+    text-align: center;
+
+    @media(--tablet){
+        text-align: left;
+    }
 }
 
 

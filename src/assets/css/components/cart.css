@@ -360,6 +360,10 @@
     fill: #393D4E;
     vertical-align: middle;
     margin-top: -3px;
+
+    @media(--mobile-max){
+        width:24px;
+    }
 }
 
 .header-cart-link .count {

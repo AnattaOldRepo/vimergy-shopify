@@ -1,0 +1,10 @@
+.c-header__navItem {
+    margin:* 30px;
+    display: inline-block;
+    line-height:32px;
+}
+
+.c-header__navLink {
+    font-size:13px;
+    font-family: $font-family-bold;
+}

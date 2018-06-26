@@ -12,26 +12,30 @@
         padding: 0 50px;
     }
 }
+
 .o-wrapper--footer{
     padding-left: .9375rem;
     padding-right: .9375rem;
 
-    @media (--tablet) {
+    @media(--tablet) {
         padding: 0 15px;
         max-width: 1920px;
     }
 
-    @media (--desktop-medium) {
-        padding: 0 150px;
+    @media(--desktop-medium) {
+        padding: 0 114px;
     }
 }
+
 .o-wrapper-background{
     background-color: #fff;
-} 
+}
+
 .o-wrapper--medium {
     max-width: 75.9375rem;
     margin: 0 auto;
 }
+
 .o-wrapper-noPadding {
 	padding-left: 0px;
 	padding-right: 0px;

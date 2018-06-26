@@ -16,14 +16,16 @@
 }
 
 .c-home-hero-info {
-    position: absolute * * 12.8% 8.1%;
+    position: absolute * 0 12.8% 0;
     color: #FAFAFA;
     margin: 0 auto;
     width: 255px;
     text-align: center;
 
     @media(--tablet) {
+        position: absolute * auto 12.8% 8.1%;
         text-align: left;
-        width: 747px;
+        max-width: 747px;
+        width:90%;
     }
 }

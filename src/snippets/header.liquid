@@ -15,70 +15,47 @@
             {% endif %}
         </div>
         <div class="c-header__nav u-hideTabletLargeDown ">
-            <menu class="c-megamenu js-megamenu" role="navigation">
-                <ul>
-                    {% for link in linklists.new-menu.links %}
-                        <li class="c-megamenu__item c-megamenu__navitem">
-                            <a class="c-megamenu__link {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
-                            {% if link.links != blank %}
-                                <div class="c-megamenu__subnav">
-                                     <div class="c-megamenu__subnavInner">
+            <ul class="c-header__navLeft">
 
-                                            {% for child_link in link.links %}
-                                            <div class="c-megamenu__subnavGroup">
-                                             <a  class="c-megamenu__box" href="{{ child_link.url }}">
-                                             <img src="{{ child_link.object.featured_image | img_url: 'medium'  }}" />
-                                                <span>{{ child_link.title }}<span>{{ child_link.object.price | money }}</span></span></a>
-                                            </div>
-                                            {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </menu>
-        <div class="c-search-box c-search-display">
-        <form action="/search" method="get" class="input-group search-bar" role="search" >
-        <input type="hidden" name="type" value="product">
-        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" class="input-group-field search-input" aria-label="{{ 'general.search.placeholder' | t }}" style="display:none;">
-             <span class="c-search-close" data-action="search-close" style="display:none;">
-             <svg class="c-search-close-icon" width="14px" height="14px" viewBox="0 0 10 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <g id="home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                                <g id="1440-02-home-minicart@2x" transform="translate(-315.000000, -101.000000)" stroke="#000000">
-                                    <g id="item" transform="translate(30.000000, 81.000000)">
-                                        <g id="icon-remove" transform="translate(286.000000, 20.000000)">
-                                            <path d="M0,0 L8,8" id="Line"></path>
-                                            <path d="M0,0 L8,8" id="Line-Copy" transform="translate(4.000000, 4.000000) scale(-1, 1) translate(-4.000000, -4.000000) "></path>
-                                        </g>
-                                    </g>
-                                </g>
-                            </g>
-                        </svg>
-            </span>
-        <span class="input-group-btn">
-        <button type="submit" class="btn icon-fallback-text search-button c-search-button">
-            <span class="icon icon-search" aria-hidden="true"><img class="search-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARhSURBVGhD1ZpbyGZTGMc/jHNyisjZjNOFQyPcTCZFIYQL05waJHeomZrBpChuRk2GQo6RUrhwmCYulZwPGcwNzTCOQ85R5PT7YdXTau3x7r3X/mb716/eb7/f+6y19l7rOb3vVA8dCBfCtXAHPAD3wRpYBufC3jBKHQw3wDvw5wT8Dq/A1bAvbHO5gPvhFyhNeBJ+hFthL5h2bQdXgZMoTU5+hU3wOrwJm+E3KP2vfAGXwLRpD3gGSpN5F26BU2FHyLUznAG3wUYo2bgbSp+tqv3AO5wP7h0/E9rIpzoP3ofc3jrYDQbRnvAaxAF/hkvBSXXVTqCHy7fdU7ADVJUTfRriQJ/AyVBLZ8N3EMe4HarqGogDfAyHQG2dAHExf8D5UEW62OidfoJTYChdAHGbfQS7Q28ZJ5JRuQyG1s0Qx7wOesmnEYPdG9DnYE8qPdankMb9CnaFzloJyZi0dbF9dAXEsedDZxngkqH3vDCNMihugTS+7riTDoBkRIzYUdvDif+8HEx3QRr/e5gBrWUqHhdyGkSZF5lvDamLIc7hJGgto20yYAKY3w3zrfwp1dbhEBdiStNaFkXJwAdeCHJb+agf/fuv4eQ4MaYshdZ6EJKBt7wQpFv2+tfQad+20LeQ5nGjF9oqBsK3vRB0PKT3TMuHVExZOgVGa+xk4EMvBEWP9qQXBpJP23wrjXU5tJb7MRlwn+4CSabXMeLPgSF0NKQx5DxoLbsd0Ui+hZ6D9N56GKIQWghxDrOgtWzZ2O1IRixPo66EOMgTUDsPewiSfWv+znoVkiEbCXGi1t+enfS+3Au16m2fsC4+2bY/1ln2neJE8y7HRRAPozwP+0NfrYBo1wqys2yexaLKwJjf8ZsgDijeSTPnrgXRPhDjhwlr7227CuIkvVO5lkM8TwkDpvvcnOkgmHTb3QPRTie3m8sOYEyndcXnQK7TwTZonECO29C7uxia7nDuRGw/VcsePBvRuNG2lIk6ubmwGl4EPc2XsAEegSWwtUrvLIjxyddmEVVlBzAu5gfoFKAa5JMwy45j2KirLhtpayEO5LnwsPepp3Uo+U2K2IjQvlu32tPRt5f6vp+BNXabGKItnUT0Tk3Y0Uyv3bKHQW958Ewo8/ghOoU7wfhyBFhPJPm5o8C042HIu4rihJ/NrpWw13UkVJHnQ4OlgRJuvW/+pfR+5AUwSdRh2Cot/U+k6mIMeNeDnqk02CRYtC2C+PTyPK8JveJMqCYP4wKwNtGblQaNmLeZlzX1yYxTpc+VsA/tlq0uz4JtIhsFfvlpeWplZ6vV7TjJHZwNpUk34TcDbstR6iUoTboJW6zHwOh0KPyXM8kxDBwLo5NeyQNdmnQTn8NxMDp5pjzQpUk34WJsWY1O1uptF/M4jFK6WL1TadIlDMKjlS42fgG0NVz0qKWL1TuVJh+xsh29dLEe6NIC5GXo9VXddEoX6+9XSovwxw3/K9nQeAysaTwT/spoiI7nttbU1F8ecld/HmfjEQAAAABJRU5ErkJggg=="></span>
-            {% comment %} <span class="fallback-text">{{ 'general.search.submit' | t }}</span> {% endcomment %}
+                {% for link in linklists.new-menu.links %}
+                    <li class="c-header__navItem">
+                        <a class="c-header__navLink {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+                    </li>
+                {% endfor %}
 
-        </button>
-
-        </span>
-        </form>
-    </div>
-            <ul class="c-menu" >
-                <li class="c-menu__item">
-                    <a class="c-menu__link"
-                     {% if customer %}
-                        href="https://vimergy.myshopify.com/account"
+                <li class="c-header__navItem">
+                    <div class="c-search-box c-search-display">
+                        <form action="/search" method="get" class="input-group search-bar" role="search" >
+                            <input type="hidden" name="type" value="product">
+                            <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" class="input-group-field search-input" aria-label="{{ 'general.search.placeholder' | t }}" style="display:none;">
+                            <span class="c-search-close" data-action="search-close" style="display:none;">
+                                {% include 'icon-searchClose' %}
+                            </span>
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn icon-fallback-text search-button c-search-button">
+                                    <span class="icon icon-search" aria-hidden="true">
+                                        {% include 'icon-search' %}
+                                    </span>
+                                    {% comment %} <span class="fallback-text">{{ 'general.search.submit' | t }}</span> {% endcomment %}
+                                </button>
+                            </span>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+            <ul class="c-header__navRight">
+                <li class="c-header__navItem">
+                    <a class="c-header__navLink"
+                        {% if customer %}
+                            href="https://vimergy.myshopify.com/account"
                         {% else %}
-                       href="https://vimergy.myshopify.com/account/login"
+                            href="https://vimergy.myshopify.com/account/login"
                         {% endif %}
                      >
                         {% if customer %}
-                        My Account
+                            My Account
                         {% else %}
-                        SIGN In
+                            SIGN In
                         {% endif %}
                     </a>
                 </li>
@@ -86,8 +63,10 @@
         </div>
 
         <div class="c-header__cart">
-        <div style="position:relative;"><div id="CartCount"></div></div>
-
+            <div style="position:relative;">
+                <div id="CartCount">
+                </div>
+            </div>
             {% include 'cart-logo' %}
         </div>
     </div>

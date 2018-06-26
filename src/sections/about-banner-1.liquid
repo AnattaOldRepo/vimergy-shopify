@@ -1,5 +1,4 @@
-<div class="c-about-banner o-wrapper--medium">
-
+<div class="c-about-banner c-about-banner-1 o-flex">
    {% case section.settings.alignment %}
             {% when 'left' %}
                 {% assign alignment = "is-left" %}
@@ -7,23 +6,21 @@
                 {% assign alignment = "is-right" %}
     {% endcase %}
 
-         <div class="c-about-banner__inner">
-            <div class="o-flex">
-               <div class="o-flex__item--{{alignment}}  o-flex__col-6 ">
-                  <div class="c-about-banner__img"><img src="{{ section.settings.image | img_url: '1360x'}}" alt=""></div>
-               </div>
-               <div class="o-flex__item o-flex__col-6">
-                  <div class="c-about-banner__info">
-                     <h2 class="c-about-banner__heading">{{ section.settings.heading }}</h2>
-                     <p class="c-about-banner__desc">{{ section.settings.desc }}</p>
-                  </div>
-               </div>
-            </div>
-         </div>
+    <div class="c-about-banner__img o-flex__item--{{alignment}}  o-flex__col-lg-7">
+        <img src="{{ section.settings.image | img_url: '1360x'}}" alt="">
+    </div>
+
+    <div class="c-about-banner__info o-flex--center o-flex__item  o-flex__col-lg-5">
+        <div class="c-about__content u-textLeft">
+            <h2 class="c-heading">{{ section.settings.heading }}</h2>
+            <p class="c-copy">{{ section.settings.desc }}</p>
+        </div>
+    </div>
 </div>
+
 {% schema %}
     {
-        "name": "About Banner-1",
+        "name": "About Banner",
         "settings": [
             {
                 "type": "image_picker",
@@ -51,4 +48,4 @@
             }
         ]
     }
-{% endschema %}  
+{% endschema %}

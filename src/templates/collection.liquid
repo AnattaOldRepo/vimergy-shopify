@@ -1,10 +1,61 @@
 <div class="c-collections">
-	<h2 class="c-heading c-collections__title">{{collection.title}}</h2>
 	<div class="c-collections__content o-flex">
 		<div class="c-collections__left o-flex__col-lg-2">
-			product filter
+			<div class="c-collFilters">
+				<h3 class="c-collFilters__title">Filter By</h3>
+				<div class="c-collFiltersGroup">
+					<h4 class="c-collFiltersGroup__title">Type</h4>
+					<div class="c-collFiltersGroup__list">
+						<div class="c-collFiltersGroup__item is-active">
+							<span class="c-collFiltersGroup__itemText">Extract</span>
+						</div>
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">Capsules</span>
+						</div>
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">Tinctures</span>
+						</div>
+					</div>
+				</div>
+				<div class="c-collFiltersGroup">
+					<h4 class="c-collFiltersGroup__title">Packaging</h4>
+					<div class="c-collFiltersGroup__list">
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">Single</span>
+						</div>
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">Kits</span>
+						</div>
+					</div>
+				</div>
+				<div class="c-collFiltersGroup">
+					<h4 class="c-collFiltersGroup__title">Special Offers</h4>
+					<div class="c-collFiltersGroup__list">
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">New</span>
+						</div>
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">Best Seller</span>
+						</div>
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">Sale</span>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="c-collections__right o-flex__col-lg-10">
+			<div class="c-collectionBar o-flex">
+				<span class="filter-result">Showing All products({{product.length}})</span>
+				<div class="c-collectionSortby o-flex">
+					<label class="c-collFiltersGroup__title">Sort by</label>
+					<select id="collection-sortby">
+						<option value="new" selected>New</option>
+						<option value="best-seller">Best Seller</option>
+						<option value="popular">Popular</option>
+					</select>
+				</div>
+			</div>
 			<div class="c-collections__row o-flex">
 
 				{% comment %} Collection pages product grids {% endcomment %}

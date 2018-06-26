@@ -1,157 +1,47 @@
 /* about banner */
-
 .c-about {
-    color: #393D4E;
-}
-
-.c-about-banner .o-flex {
-    @media (--mobile-small-max) {
-        margin-left: 0;
-        margin-right: 0;
-    }
-}
-
-.c-about-banner__inner {
-    @media(--mobile-large) {
-        padding-top: 3.625rem;
-        padding-bottom: 3.625rem;
-    }
-    @media(--tablet-large) {
-        padding-top: 6rem;
-        padding-bottom: 6rem;
-    }
-}
-
-.c-about-banner__inner--border {
-    border-bottom: 1px dashed #b7b7b0;
-}
-
-.c-about-banner__inner .o-flex__item {
-    padding-left: .9375rem;
-    padding-right: .9375rem;
-}
-
-.c-about-banner__img {
-    width: 100%;
-    text-align: center;
+    background-color:$color-white;
 }
 
 .c-about-banner__img img {
-    width: 93%;
-    display: inline-block;
+    width: 100%;
+    vertical-align: bottom;
+}
+
+.c-about__content {
+    max-width:490px;
+}
+.c-about-banner {
+    min-height: 500px;
+}
+
+.c-home-hero-info .c-heading {
+    color:$color-white;
+}
+
+.c-about-bannerFull  {
+
+    .c-home-hero-info {
+        max-width:760px;
+        width: 100%;
+    }
+}
+
+.c-about-banner .c-productCol__detail {
+    max-width: 490px;
+}
+
+.c-about-banner-1 .c-about__content {
+    max-width: 400px;
 }
 
 .c-about-banner__info {
-    padding: .9375rem 1.375rem 1.5625rem;
-    margin: 0 auto;
-    @media(--mobile-large) {
-        padding: 0;
-        max-width: 30.9375rem;
+    padding: 40px 20px;
+
+    @media(--tablet){
+        padding:15px;
     }
 }
-
-.c-about-banner__info--center {
-    text-align: center;
-}
-
-.c-about-banner__heading {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-    @media(--tablet-large) {
-        font-size: 2.25rem;
-        margin-bottom: 2rem;
-    }
-}
-
-.c-about-banner__heading--uppercase {
-    text-transform: uppercase;
-}
-
-.c-about-banner__desc {
-    font-size: .8125rem;
-    font-weight: 600;
-    line-height: 1.7;
-    @media(--tablet-large) {
-        font-size: 1.25rem;
-    }
-}
-
-
-/* about certi */
-
-.c-about-certs {
-    margin-bottom: 3rem;
-    border-top: 1px dashed #b7b7b0;
-    border-bottom: 1px dashed #b7b7b0;
-    text-align: center;
-    margin: 0 auto;
-    max-width: 85.6875rem;
-    width: 100%;
-    @media(--mobile-large) {
-        margin-bottom: 0;
-    }
-    @media(--tablet-large) {
-        border: 0;
-    }
-}
-
-.c-about-certs__inner {
-    padding-top: 2rem;
-    @media(--tablet-large) {
-        border-top: 1px dashed #b7b7b0;
-        border-bottom: 1px dashed #b7b7b0
-    }
-}
-
-.c-about-certs__inner::after {
-    clear: both;
-    content: "";
-    display: table
-}
-
-.c-about-cert {
-    float: left;
-    width: 33.33333%;
-    margin-bottom: 1.6875rem;
-    @media(--mobile-large) {
-        float: none;
-        width: auto;
-        display: inline-block;
-        margin: 0 1.125rem 0.7rem 1.125rem;
-    }
-    @media(--tablet-large) {
-        margin-right: 1.5625rem;
-        margin-left: 1.5625rem;
-    }
-}
-
-.c-about-cert__icon {
-    display: inline-block;
-    padding: .4375rem;
-    background-color: rgba(104, 107, 78, 0.7);
-    border-radius: 50%;
-    width: 3.5625rem;
-    @media(--tablet-large) {
-        padding: .6875rem;
-        width: 5.4375rem
-    }
-}
-
-.c-about-cert__icon img {
-    display: block
-}
-
-.c-about-cert__name {
-    font-size: .75rem;
-    font-weight: 600;
-    color: #64671c;
-    @media(--tablet-large) {
-        margin-top: 0.2125rem;
-        font-size: 1.1875rem
-    }
-}
-
 
 /* about-product-cards */
 

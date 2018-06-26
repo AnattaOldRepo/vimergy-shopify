@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="31px" height="31px" viewBox="0 0 31 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs></defs>
+    <g id="Modules" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-1028.000000, -8156.000000)" id="Group">
+            <g transform="translate(868.000000, 7655.000000)">
+                <g id="Group-2" transform="translate(0.500000, 0.244945)">
+                    <g id="select" transform="translate(160.000000, 501.000000)">
+                        <circle id="Oval" fill="#1F2A44" cx="15.4059071" cy="15.0972412" r="15.0972412"></circle>
+                        <path d="M23.4268609,11.1754673 L13.985164,20.9956733 C13.459457,21.5424086 12.6183259,21.5424086 12.0926189,20.9956733 L7.38228454,16.0540279 C6.85657758,15.5072927 6.85657758,14.624105 7.38228454,14.0773697 C7.9079915,13.5306345 8.74912263,13.5306345 9.27482959,14.0773697 L13.0599197,18.0306861 L21.5553442,9.19880916 C22.0810511,8.65207392 22.9221823,8.65207392 23.4478892,9.19880916 C23.9525679,9.7455444 23.9525679,10.6287321 23.4268609,11.1754673 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

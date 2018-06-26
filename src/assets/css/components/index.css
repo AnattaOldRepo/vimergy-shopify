@@ -28,6 +28,10 @@
 
 @import "collections";
 
+@import "icons";
+
+@import "filters";
+
 @import "about";
 @import "content-pages";
 @import "account";

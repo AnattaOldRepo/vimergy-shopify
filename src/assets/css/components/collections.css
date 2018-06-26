@@ -7,9 +7,16 @@
     margin-bottom: 50px;
 }
 
+.c-collections__left {
+    display: flex;
+    justify-content: center;
+}
+
 .c-collections__row{
     width:90%;
-    margin:0px auto;
+    margin:10px auto 0px;
+    border-top:1px solid;
+    max-width:960px;
 }
 
 .c-product__item {
@@ -51,10 +58,10 @@
 .c-product__hoverImage {
     opacity: 0;
 }
+
 .c-product__link {
     display: block;
     margin: 15px;
-    background:$color-white;
     overflow: hidden;
     position: relative;
 
@@ -86,3 +93,23 @@
     margin-bottom: 10px;
 }
 
+.c-collectionSortby {
+    align-items: center;
+
+    label {
+        display: inline-block;
+        font-size:16px;
+        margin-right:10px;
+    }
+
+    #collection-sortby {
+        display: inline-block;
+        width:150px;
+    }
+}
+
+.c-collectionBar {
+    justify-content: space-between;
+    max-width:960px;
+    margin: 0px auto;
+}

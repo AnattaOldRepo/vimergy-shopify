@@ -1,0 +1,15 @@
+.c-iconSection {
+    padding: 100px *;
+    text-align: center;
+}
+
+.c-icons li {
+    display:inline-block;
+    margin:* 20px;
+
+    svg {
+        max-width:100px;
+        display:block;
+        height:auto;
+    }
+}

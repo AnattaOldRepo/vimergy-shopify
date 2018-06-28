@@ -190,11 +190,7 @@
     </div>
 </div>
 
-    {% if product.metafields.cert != blank ||  if product.metafields.cert == true %}
-
-        {% section 'product-certs' %}
-
-    {% endif %}
+    {% include 'vimergy-icons' %}
 
     {% unless product.title == 'Gift Card' %}
 

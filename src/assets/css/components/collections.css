@@ -1,5 +1,6 @@
 .c-collections {
     padding:50px *;
+    background-color: $color-white;
 }
 
 .c-collections__title {

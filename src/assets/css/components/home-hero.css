@@ -4,7 +4,7 @@
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    height: 474px;
+    height: 555px;
     position: relative;
     width: 100%;
 
@@ -16,10 +16,10 @@
 }
 
 .c-home-hero-info {
-    position: absolute * 0 12.8% 0;
+    position: absolute * 0 10% 0;
     color: #FAFAFA;
     margin: 0 auto;
-    width: 255px;
+    width: 271px;
     text-align: center;
 
     @media(--tablet) {

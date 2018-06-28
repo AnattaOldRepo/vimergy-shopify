@@ -9,6 +9,7 @@
     flex: 1;
     order: 1;
     line-height: 0;
+
     @media(--mobile-max) {
         flex-basis: 100%;
     }
@@ -23,14 +24,16 @@
 
 .o-flex__item--reverse {
     order: 2;
-    @media(--tablet-max) {
+
+    @media(--mobile-max) {
         order: 1;
     }
 }
 
 .o-flex__item--reverse-col1 {
     order: 1;
-    @media(--tablet-max) {
+
+    @media(--tablet) {
         order: 2;
     }
 }
@@ -56,42 +59,42 @@
 
 .o-flex__col-lg-1 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 8.33%;
     }
 }
 
 .o-flex__col-lg-2 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 16.67%;
     }
 }
 
 .o-flex__col-lg-10 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 83.33%;
     }
 }
 
 .o-flex__col-lg-11 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 91.66%;
     }
 }
 
 .o-flex__col-lg-6 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 50%;
     }
 }
 
 .o-flex__col-lg-3 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 25%;
         width: 25%;
     }
@@ -99,7 +102,7 @@
 
 .o-flex__col-lg-8 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 66.66%;
     }
 }
@@ -128,7 +131,7 @@
 
 .o-flex__col-lg-8 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 66.66%;
     }
 }
@@ -143,28 +146,28 @@
 
 .o-flex__col-lg-7 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 58.33%;
     }
 }
 
 .o-flex__col-lg-5 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 41.66%;
     }
 }
 
 .o-flex__col-lg-4 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 33.33%;
     }
 }
 
 .o-flex__col-lg-9 {
     flex-basis: 100%;
-    @media(--tablet-large) {
+    @media(--tablet) {
         flex-basis: 74.97%;
     }
 }

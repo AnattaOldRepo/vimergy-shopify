@@ -3,17 +3,19 @@
 }
 
 .c-productCol__detail {
-    max-width:290px;
+    max-width:296px;
     width:100%;
+    padding-left:16px;
 
     @media(--tablet){
         max-width:350px;
+        padding-left:0;
     }
 }
 
 .c-productCol__detail .c-btn {
-    margin-top: 75px;
-    height: 56px;
+    margin-top: 44px;
+    height: 64px;
     width: 255px;
     border: 2px solid $color-border-black;
     font-size: 13px;
@@ -22,16 +24,20 @@
     letter-spacing: 1px;
     line-height: 54px;
     text-align:center;
+    float:left;
 
     @media(--tablet){
         width:168px;
+        margin-top: 75px;
+        height: 56px;
+        float:none;
     }
 }
 
 .c-productCol__content {
 
     @media(--mobile-max){
-        padding:40px *;
+        padding:38px * 50px;
     }
 }
 

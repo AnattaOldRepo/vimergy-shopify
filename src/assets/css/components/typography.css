@@ -1,11 +1,20 @@
 .c-heading {
     color:$color-heading;
     font-family: $font-family-base;
-    margin-bottom:15px;
+    margin-bottom:3px;
+
+    @media(--tablet){
+        margin-bottom: 15px;
+    }
 }
 
 .c-copy {
-    margin-top: 25px;
+    margin-top: 13px;
     font-size:16px;
     line-height: 25px;
+    letter-spacing: .25px;
+
+    @media(--tablet){
+        margin-top: 25px;
+    }
 }

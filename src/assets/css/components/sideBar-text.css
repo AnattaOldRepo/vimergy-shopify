@@ -13,12 +13,14 @@
 .c-side-text {
     font-size: 17px;
     font-weight: 500;
+    position: absolute * 0 270px -60%;
+    margin: auto;
+    width:162px;
+    transform: rotate(270deg) translateY(-50%);
 
     @media(--tablet) {
-        position: absolute * 0 270px -50%;
         margin: auto;
         width: 350px;
-        transform: rotate(270deg) translateY(-50%);
     }
 
     &:before {

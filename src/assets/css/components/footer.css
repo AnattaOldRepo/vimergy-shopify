@@ -153,8 +153,10 @@ twitter {
 /* subscribe section */
 
 .c-subscribe {
-    padding: 1.875rem 0 1.8125rem;
+    padding: 66px 0;
     text-align: center;
+    max-width:1150px;
+    margin: 0px auto;
 }
 
 .c-subscribe .o-flex {
@@ -162,62 +164,81 @@ twitter {
     margin: 0 auto;
 }
 
+.c-subscribe__left  {
+
+    @media(--mobile-max){
+        width:255px;
+        margin:0px auto;
+    }
+}
+
+.c-subscribe__right {
+    width:314px;
+    margin: 0px auto;
+
+    @media(--tablet){
+        width: auto;
+    }
+}
+
 .c-subscribe h2 {
-    margin-bottom: 1.6875rem;
-    font-size: 1.0625rem;
-    font-weight: 600;
-    @media (--mobile-large) {
-        font-size: 1.375rem;
+    margin:0px auto;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+    max-width:255px;
+
+    @media(--tablet){
+        font-size: 25px;
+        line-height:34px;
+        max-width:378px;
+        text-align: left;
     }
-    @media (--tablet-large) {
-        display: inline-block;
-        margin-bottom: 0;
-        margin-right: -2.5625rem;
-        padding-top: 0.7125rem;
+
+}
+
+.c-subscribe #mailchimp {
+    max-width: 654px;
+    width:100%;
+    float: right;
+    margin-right: 20px;
+}
+
+.c-subscribe #mc-embedded-subscribe-form {
+
+    .input-group .form-field {
+        height:76px;
+        outline:none;
+        border:none;
+        color:$color-border-black;
+        font-size:13px;
+        line-height:18px;
+        padding:10px 25px;
+        font-family: $font-family-bold;
     }
 }
 
-#mailchimp {
-    @media (--tablet-large) {
-        margin-top: 0.4rem;
-        display: inline-block;
-        vertical-align: top;
-        width: 33.75rem;
-    }
-}
-
-.c-subscribe .input-group {
+.c-subscribe #mc-embedded-subscribe-form .input-group {
     position: relative;
-    padding-right: 6.25rem;
-    margin: 0 auto;
-    font-size: 0;
-    max-width: 33.75rem;
-    @media (--tablet-large) {
-        padding-right: 10.625rem;
-    }
-}
 
-.c-subscribe .input-group .form-field,
-.c-subscribe .input-group .c-btn {
-    float: none;
-    display: inline-block;
-    vertical-align: top
-}
+    #mc-embedded-subscribe{
+        size: 150px 100%;
+        font-size: 13px;
+        line-height: 18px;
+        font-family: $font-family-bold;
+        text-transform:uppercase;
+        color:$color-border-black;
+        position: absolute 0 0 * *;
+        text-align: left;
+        background-color: transparent;
+        border: none;
+        background:url('../right-arrow.png') no-repeat 0 0;
+        background-size: 22px;
+        background-position: 85% center;
 
-.c-subscribe .input-group .form-field {
-    width: 100%;
-    border-color: #000;
-}
-
-.c-subscribe .input-group .c-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding-left: 0;
-    padding-right: 0;
-    width: 5.9375rem;
-    @media (--tablet-large) {
-        width: 10.3125rem;
+        &:--enter {
+            outline:none;
+        }
     }
 }
 
@@ -228,28 +249,6 @@ twitter {
     color: #fff;
     background-color: #393D4E;
 }
-
-.c-btn.secondary:hover,
-.c-btn.secondary:focus,
-.button.secondary:hover,
-.button.secondary:focus {
-    color: #fff;
-    background-color: #3D4668;
-}
-
-.c-btn.green,
-.button.green {
-    background-color: #7ba243;
-    border-color: #7ba243;
-}
-
-.c-btn.green:hover,
-.c-btn.green:focus,
-.button.green:hover,
-.button.green:focus {
-    background-color: #6d903c;
-}
-
 .c-footer__social a:hover {
     text-decoration: underline;
     color: #0288D1;

@@ -416,7 +416,8 @@
 
 .c-insta {
     background: #fff;
-    @media(--tablet-max) {
+
+    @media(--tablet){
         margin-top: 4rem;
     }
 }
@@ -424,10 +425,12 @@
 .c-instagrams__box {
     width: 100%;
     height: initial;
-    padding-top: 4rem;
-    padding-bottom: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     text-align: center;
-    @media(--tablet-large) {
+
+    @media(--tablet) {
+        padding-top:4rem;
         padding-left: 9rem;
         text-align: left;
     }
@@ -670,7 +673,8 @@ body.fancybox-active.compensate-for-scrollbar {
 
 .c-img-text {
     font-size: 31px;
-    line-height:31px;
+    line-height:39px;
+    margin: 0px;
     color:$color-white;
 
     @media(--tablet-large) {

@@ -217,13 +217,15 @@
 		<div class="rc_popup">
 			{% if show_widget %}
 				<div class="rc_popup__hover">
-					{% if show_widget_icon %}
-						<img src="{{ widget_icon }}" height="21" width="18" class="rc_popup__icon"> 
-					{% endif %}
-					{{ subscription_details_label }}
+					<span class="autoship__label">
+						{% if show_widget_icon %}
+							<img src="{{ widget_icon }}" height="21" width="18" class="rc_popup__icon">
+						{% endif %}
+						{{ subscription_details_label }}
+					</span>
 					<div class="rc_popup__block">
 						<div class="rc_popup__block__content">
-							<div class="rc_popup__close" style="display: none;">x</div>
+							<div class="rc_popup__close">x</div>
 							{{ how_it_works_text }}
 							{% if show_learnmore %}
 								<br><a href="{{ learnmore_url }}" target="_blank">{{ learnmore_link }}</a>
@@ -268,6 +270,18 @@
 				ReCharge.addProduct(myProduct);
 			});
 		})();
+	</script>
+
+	<script>
+		jQuery(document).ready(function($) {
+			$('.autoship__label').on('click', function(){
+				$('.rc_popup__block').addClass('active');
+			});
+
+			$('.rc_popup__close').on('click', function(){
+				$('.rc_popup__block').removeClass('active');
+			});
+		});
 	</script>
 {% endif %}
 <!-- Subscriptions Powered by ReCharge Payments: End Liquid Code -->

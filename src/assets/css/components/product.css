@@ -445,6 +445,21 @@ div.rc_popup__block {
     }
 }
 
+.rc_popup .rc_popup__hover:hover .rc_popup__block {
+    display: none;
+}
+
+.rc_popup .rc_popup__hover:hover .rc_popup__block.active {
+    display:block;
+}
+
+.rc_popup__block.active {
+    display: block;
+}
+
+.rc_popup .rc_popup__block:before {
+    display:none;
+}
 
 /* .c-variant{
     width: 50%;

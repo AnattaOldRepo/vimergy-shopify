@@ -145,6 +145,12 @@ instagram-dark {
 .c-subscribe .o-flex {
     max-width: 75.625rem;
     margin: 0 auto;
+    flex-direction: column;
+    justify-content: center;
+
+    @media(--desktop){
+        flex-direction: row;
+    }
 }
 
 .c-subscribe h2 {
@@ -163,12 +169,18 @@ instagram-dark {
 }
 
 #mailchimp {
+    padding:0px 15px;
+
     @media (--tablet-large) {
         margin-top: 0.4rem;
         display: inline-block;
         vertical-align: top;
         width: 33.75rem;
     }
+}
+#om-cpfqxacjz70fam0hvvwu .tulsa-outer-wrap,
+#om-cpfqxacjz70fam0hvvwu .tulsa-body {
+    min-height: 0px !important;
 }
 
 .c-subscribe .input-group {
@@ -177,8 +189,9 @@ instagram-dark {
     margin: 0 auto;
     font-size: 0;
     max-width: 33.75rem;
-    @media (--tablet-large) {
-        padding-right: 10.625rem;
+
+    @media(--tablet) {
+        padding-right:10.625rem;
     }
 }
 
@@ -194,14 +207,26 @@ instagram-dark {
     border-color: #000;
 }
 
-.c-subscribe .input-group .c-btn {
+.c-subscribe .input-group #c-input {
+    border:none;
+    height:2.5rem;
+    font-size:14px;
+}
+
+.c-subscribe .input-group #mc-embedded-subscribe{
     position: absolute;
     top: 0;
     right: 0;
+    height: 2.5rem;
     padding-left: 0;
     padding-right: 0;
     width: 5.9375rem;
-    @media (--tablet-large) {
+    background-color:#7ba243;
+    font-size:14px;
+    line-height:1;
+    border:none;
+
+    @media(--tablet){
         width: 10.3125rem;
     }
 }

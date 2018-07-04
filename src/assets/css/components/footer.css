@@ -81,6 +81,7 @@
 
 @each $val in can,
 aus,
+uk,
 usa {
     .icon-$(val) {
         background-image: url("../icon-$(val).png");

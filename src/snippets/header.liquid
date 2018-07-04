@@ -4,7 +4,7 @@
             <span class="c-hamburgerPatty c-hamburgerPatty--top"></span>
             <span class="c-hamburgerPatty c-hamburgerPatty--middle"></span>
             <span class="c-hamburgerPatty c-hamburgerPatty--bottom"></span>
-        </div> 
+        </div>
         <div class="c-header__logo">
             {% if template != 'index' %}
                 <a class="c-logo" href="{{ shop.secure_url }}">
@@ -18,12 +18,12 @@
             <menu class="c-megamenu js-megamenu" role="navigation">
                 <ul>
                     {% for link in linklists.main-menu.links %}
-                        <li class="c-megamenu__item c-megamenu__navitem"> 
+                        <li class="c-megamenu__item c-megamenu__navitem">
                             <a class="c-megamenu__link {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
                             {% if link.links != blank %}
                                 <div class="c-megamenu__subnav">
-                                     <div class="c-megamenu__subnavInner">  
-                                        
+                                     <div class="c-megamenu__subnavInner">
+
                                             {% for child_link in link.links %}
                                             <div class="c-megamenu__subnavGroup">
                                              <a  class="c-megamenu__box" href="{{ child_link.url }}">
@@ -33,7 +33,7 @@
                                             {% endfor %}
                                     </div>
                                 </div>
-                            {% endif %} 
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
@@ -59,9 +59,12 @@
                         </div>
                     </div>
                 </li>
+                <li class="c-menu__item c-menu__item--uk">
+                    <a class="c-menu__link" target="_blank" href="http://www.aggressivehealthshop.com/popular-brands-a-to-z/t-z-brands/vimergy.html">UK</a>
+                </li>
                 <li class="c-menu__item">
                     <a class="c-menu__link" href="https://vimergy.myshopify.com/pages/customer-service">Help</a>
-                </li>  
+                </li>
                 <li class="c-menu__item">
                     <a class="c-menu__link"
                      {% if customer %}
@@ -101,47 +104,47 @@
         <button type="submit" class="btn icon-fallback-text search-button c-search-button">
             <span class="icon icon-search" aria-hidden="true"><img class="search-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAARhSURBVGhD1ZpbyGZTGMc/jHNyisjZjNOFQyPcTCZFIYQL05waJHeomZrBpChuRk2GQo6RUrhwmCYulZwPGcwNzTCOQ85R5PT7YdXTau3x7r3X/mb716/eb7/f+6y19l7rOb3vVA8dCBfCtXAHPAD3wRpYBufC3jBKHQw3wDvw5wT8Dq/A1bAvbHO5gPvhFyhNeBJ+hFthL5h2bQdXgZMoTU5+hU3wOrwJm+E3KP2vfAGXwLRpD3gGSpN5F26BU2FHyLUznAG3wUYo2bgbSp+tqv3AO5wP7h0/E9rIpzoP3ofc3jrYDQbRnvAaxAF/hkvBSXXVTqCHy7fdU7ADVJUTfRriQJ/AyVBLZ8N3EMe4HarqGogDfAyHQG2dAHExf8D5UEW62OidfoJTYChdAHGbfQS7Q28ZJ5JRuQyG1s0Qx7wOesmnEYPdG9DnYE8qPdankMb9CnaFzloJyZi0dbF9dAXEsedDZxngkqH3vDCNMihugTS+7riTDoBkRIzYUdvDif+8HEx3QRr/e5gBrWUqHhdyGkSZF5lvDamLIc7hJGgto20yYAKY3w3zrfwp1dbhEBdiStNaFkXJwAdeCHJb+agf/fuv4eQ4MaYshdZ6EJKBt7wQpFv2+tfQad+20LeQ5nGjF9oqBsK3vRB0PKT3TMuHVExZOgVGa+xk4EMvBEWP9qQXBpJP23wrjXU5tJb7MRlwn+4CSabXMeLPgSF0NKQx5DxoLbsd0Ui+hZ6D9N56GKIQWghxDrOgtWzZ2O1IRixPo66EOMgTUDsPewiSfWv+znoVkiEbCXGi1t+enfS+3Au16m2fsC4+2bY/1ln2neJE8y7HRRAPozwP+0NfrYBo1wqys2yexaLKwJjf8ZsgDijeSTPnrgXRPhDjhwlr7227CuIkvVO5lkM8TwkDpvvcnOkgmHTb3QPRTie3m8sOYEyndcXnQK7TwTZonECO29C7uxia7nDuRGw/VcsePBvRuNG2lIk6ubmwGl4EPc2XsAEegSWwtUrvLIjxyddmEVVlBzAu5gfoFKAa5JMwy45j2KirLhtpayEO5LnwsPepp3Uo+U2K2IjQvlu32tPRt5f6vp+BNXabGKItnUT0Tk3Y0Uyv3bKHQW958Ewo8/ghOoU7wfhyBFhPJPm5o8C042HIu4rihJ/NrpWw13UkVJHnQ4OlgRJuvW/+pfR+5AUwSdRh2Cot/U+k6mIMeNeDnqk02CRYtC2C+PTyPK8JveJMqCYP4wKwNtGblQaNmLeZlzX1yYxTpc+VsA/tlq0uz4JtIhsFfvlpeWplZ6vV7TjJHZwNpUk34TcDbstR6iUoTboJW6zHwOh0KPyXM8kxDBwLo5NeyQNdmnQTn8NxMDp5pjzQpUk34WJsWY1O1uptF/M4jFK6WL1TadIlDMKjlS42fgG0NVz0qKWL1TuVJh+xsh29dLEe6NIC5GXo9VXddEoX6+9XSovwxw3/K9nQeAysaTwT/spoiI7nttbU1F8ecld/HmfjEQAAAABJRU5ErkJggg=="></span>
             {% comment %} <span class="fallback-text">{{ 'general.search.submit' | t }}</span> {% endcomment %}
-        
+
         </button>
-   
-        </span> 
+
+        </span>
         </form>
     </div>
         <div class="c-header__cart">
         <div style="position:relative;"><div id="CartCount" rv-html="cart.item_count"></div></div>
-        
+
             {% include 'cart-logo' %}
         </div>
     </div>
 </div>
 
 
- 
+
 <script>
-$('.search-button').click(function() {  
-  $('.search-input').toggle(); 
-  $('.c-search-close').toggle(); 
-  $('.search-button').toggle(); 
+$('.search-button').click(function() {
+  $('.search-input').toggle();
+  $('.c-search-close').toggle();
+  $('.search-button').toggle();
   $('.c-menu').toggle();
 });
 
-$('.c-search-close').click(function() {  
+$('.c-search-close').click(function() {
     $('input[name="q"]').val('');
-    $('.search-input').toggle(); 
-    $('.c-search-close').toggle(); 
-    $('.search-button').toggle(); 
+    $('.search-input').toggle();
+    $('.c-search-close').toggle();
+    $('.search-button').toggle();
     $('.c-menu').toggle();
 });
 
  $('.search-bar').submit(function(e) {
 
        var term = $(this).find('input[name="q"]').val();
-        console.log(term,"term")    
+        console.log(term,"term")
        if(term == '' || term == undefined){
-          
+
            return false;
        }
-    
+
     });
 
 </script>

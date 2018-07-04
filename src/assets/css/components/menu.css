@@ -58,6 +58,12 @@
     background-image: url(../icon-aus.png);
 }
 
+.c-menu__item--uk {
+    @extend .c-menu__item--can;
+    background-image: url(../icon-uk.png);
+}
+
+
 .c-menu__dropdown {
     max-height: 0px;
     overflow: hidden;

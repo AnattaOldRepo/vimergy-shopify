@@ -13,13 +13,16 @@
                         <nav>
                             <h5 class="c-footer__title">Account</h5>
                             <ul>
+                                <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/account">My Account</a></li>
+                                <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/cart">My Cart</a></li>
+                                <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/cart">Checkout</a></li>
 
-                            {% for link in linklists.footer.links %}
+                                {% unless customer.has_account  == true %}
 
-                                <li><a class="c-footer__link {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
+                                    <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/account/register">Register</a></li>
+                                    <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/account/login">Log In</a></li>
 
-                                {% endfor %}
-
+                                {% endunless %}
                             </ul>
                         </nav>
                     </div>

@@ -60,6 +60,12 @@ $(function() {
         heightStyle: "content"
     });
 
+    $('.accordion__heading').click(function(){
+        $('html, body').animate({
+            scrollTop: ($('.c-product-detail').offset().top - 100)
+        }, 500);
+    })
+
     $("#myOrder").click(function() {
         if ($("#orders").length == 0) {
             window.location.href = "/account";

@@ -131,3 +131,27 @@
         font-size: 1.0625rem;
     }
 }
+
+.c-pageNot-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 610px;
+    flex-direction: column;
+
+    @media(--mobile-max){
+        height:400px;
+    }
+}
+.c-pageNot-found h2 {
+    font-weight:normal;
+}
+
+.c-pageNot-found .c-link {
+    margin-top: 20px;
+    color: #e3732b;
+    display: inline-block;
+    padding-bottom: 4px;
+    font-weight: 600;
+    border-bottom: 1px solid;
+}

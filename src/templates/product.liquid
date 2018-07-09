@@ -78,8 +78,6 @@
                     </div>
                 {% endif %} {% endcomment %}
 
-                <a href="#" class="read-review">read reviews</a>
-
                 <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
                     {% if product.options.size == 1 %}
                         <label><strong>Box Size</strong></label>
@@ -190,13 +188,12 @@
     </div>
 </div>
 
-    {% include 'vimergy-icons' %}
 
     {% unless product.title == 'Gift Card' %}
 
         {% section 'product-detail' %}
 
-        {% section 'related-products' %}
+        {% comment %} {% section 'related-products' %} {% endcomment %}
 
     {% endunless %}
 

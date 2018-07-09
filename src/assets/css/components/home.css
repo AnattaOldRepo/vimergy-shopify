@@ -541,9 +541,6 @@
     @media(--desktop-medium) {
         max-width: 76.6875rem;
     }
-    @media(--tablet-max) {
-        max-width: 18rem;
-    }
 }
 
 

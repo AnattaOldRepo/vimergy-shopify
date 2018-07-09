@@ -1,15 +1,28 @@
 <div class="c-product-detail">
     <h2 class="c-heading">Product info</h2>
-    <div class="c-product__desc">
-        {{ product.metafields.c_f.prod-info }}
+    <div class="c-product__text">
+        <p>{{ product.metafields.c_f.prod-info-new }}</p>
+        {% include 'vimergy-icons' %}
     </div>
-    <div class="accordion__content">
-        {{ product.metafields.c_f.usage }}
+    <div class="c-product__features">
+        <div class="c-product__featureImg">
+            {{ product.metafields.c_f.feature-image }}
+        </div>
+        <div class="c-product__featureList">
+            {{ product.metafields.c_f.feature-list }}
+        </div>
     </div>
-    <div class="product-resource">
-        <p>
-            {{product.metafields.c_f.resources}}
-        </p>
+    <div class="c-product__usage">
+        <div class="c-product__usageLeft">
+            <div class="c-product__usagetext">
+                <h3>How to Use</h3>
+                <p>{{ product.metafields.c_f.usage-text }}</p>
+            </div>
+        </div>
+        <div class="c-product__usageImg">
+            {{ product.metafields.c_f.usage-image }}
+        </div>
     </div>
+
 </div>
 

@@ -63,6 +63,10 @@
     @media (--tablet-large) {
         font-size: 1.0625rem
     }
+
+    @media(--mobile-max){
+        margin: 20px;
+    }
 }
 
 .s-icon-store {
@@ -80,6 +84,7 @@
     width: 2rem;
     height: 2rem;
     display: inline-block;
+    font-size:16px;
 }
 .c-store-list{
     @media (--tablet-max) {
@@ -97,10 +102,10 @@ uk,
 usa{
     .icon-$(val) {
         background-image: url("../icon-$(val).png");
-        padding-left: 44px;
+        padding-left: 35px;
         padding-top: 14px;
-        size: 2rem 2rem;
-        background-size: 2rem;
+        size: 1.5rem;
+        background-size: 1.5rem;
     }
 }
 
@@ -153,10 +158,14 @@ twitter {
 /* subscribe section */
 
 .c-subscribe {
-    padding: 66px 0;
+    padding:25px 0;
     text-align: center;
     max-width:1150px;
     margin: 0px auto;
+
+    @media(--tablet){
+        padding: 66px 0;
+    }
 }
 
 .c-subscribe .o-flex {
@@ -202,6 +211,10 @@ twitter {
     width:100%;
     float: right;
     margin-right: 20px;
+
+    @media(--mobile-max){
+        margin: 20px auto *;
+    }
 }
 
 .c-subscribe #mc-embedded-subscribe-form {

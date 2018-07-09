@@ -44,8 +44,8 @@
 .c-testimonial__sidetext {
     position: absolute;
     width:62px;
-    height: 50%;
-    background:$color-white;
+    height: 100%;
+    background: transparent;
     z-index: 2;
 
 
@@ -53,6 +53,14 @@
         width:160px;
         height:100%;
         background-color: transparent;
+    }
+
+    .c-side-text {
+
+        @media(--mobile-max){
+            bottom:auto;
+            top:5%;
+        }
     }
 }
 
@@ -62,8 +70,10 @@
     .c-testimonial__img {
 
         @media(--mobile-max){
-            width: calc(100% - 62px);
+            width:100%;
             float:right;
+            padding-left:62px;
+            background-color:$color-white;
         }
     }
 
@@ -152,6 +162,10 @@
 .c-testimonials__right {
     padding-bottom:85px;
     min-height:510px;
+
+    @media(--mobile-max){
+        padding:* 20px * 62px;
+    }
 
     @media(--tablet){
         padding-bottom:0px;

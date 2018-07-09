@@ -50,4 +50,32 @@
         return formatString.replace(placeholderRegex, value);
       };
     }
+
+    $(document).ready(function() {
+      function showRecoverPasswordForm() {
+          $('#RecoverPasswordForm').show();
+          $('#CustomerLoginForm').hide();
+      }
+
+      function hideRecoverPasswordForm() {
+          $('#RecoverPasswordForm').hide();
+          $('#CustomerLoginForm').show();
+      }
+
+      $('#RecoverPassword').on('click', function(evt) {
+          evt.preventDefault();
+          showRecoverPasswordForm();
+      });
+
+      $('#HideRecoverPasswordLink').on('click', function(evt) {
+          evt.preventDefault();
+          hideRecoverPasswordForm();
+      });
+
+      // Allow deep linking to recover password form
+      if (window.location.hash == '#recover') {
+          showRecoverPasswordForm();
+      }
+  });
+
 })();

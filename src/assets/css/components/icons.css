@@ -1,17 +1,28 @@
 .c-iconSection {
-    padding: 100px *;
+    padding: 50px *;
     text-align: center;
-    background-color:$color-primary-white;
+
+    @media(--tablet){
+        padding:100px *;
+    }
 }
 
 .c-icons li {
     display:inline-block;
     margin:* 20px;
-    font-size:16px;
+    font-size:12px;
+
+    @media(--tablet){
+        font-size:16px;
+    }
 
     svg {
-        max-width:60px;
+       max-width:30px;
         display:block;
         height:auto;
+
+        @media(--tablet){
+            max-width:60px;
+        }
     }
 }

@@ -15,7 +15,7 @@ $(function() {
     var input = $(this).find('input[name="q"]');
     // Adding a list for showing search results.
     var offSet = input.position().top + input.innerHeight();
-    $('<ul class="search-results"></ul>').css( { 'position': 'absolute', 'left': '-12px', 'top': offSet } ).appendTo($(this)).hide();    
+    $('<ul class="search-results"></ul>').css( { 'position': 'absolute', 'left': '-12px', 'top': offSet } ).appendTo($(this)).hide();
     // Listening to keyup and change on the text field within these search forms.
     input.attr('autocomplete', 'off').bind('keyup change', function() {
       // What's the search term?
@@ -33,7 +33,7 @@ $(function() {
         // Killing any Ajax request that's currently being processed.
         if (currentAjaxRequest != null) currentAjaxRequest.abort();
         // Pulling results.
-        
+
         currentAjaxRequest = $.getJSON(searchURL + '&view=json', function(data) {
           // Reset results.
           resultsList.empty();
@@ -57,10 +57,10 @@ $(function() {
               resultsList.append('<li><span class="title"><a href="' + searchURL + '">See all results (' + data.results_count + ')</a></span></li>');
             }
             resultsList.fadeIn(200);
-          }        
+          }
         });
       }
-      
+
     });
   });
   // Clicking outside makes the results disappear.
@@ -74,13 +74,13 @@ $(function() {
 <style>
 .search-results {
   z-index: 8889;
-  list-style-type: none;   
+  list-style-type: none;
   width: {{ results_box_width }};
   margin: 0;
   padding: 0;
   background: {{ results_box_background_color }};
   border: 1px solid {{ results_box_border_color }};
-  border-radius: 3px;
+  border-radius: 0px;
   -webkit-box-shadow: 0px 4px 7px 0px rgba(0,0,0,0.1);
   box-shadow: 0px 4px 7px 0px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -94,6 +94,7 @@ $(function() {
   border-top: 1px solid {{ results_box_border_color }};
   line-height: 38px;
   overflow: hidden;
+  font-size:14px;
 }
 .search-results li:first-child {
   border-top: none;
@@ -113,7 +114,7 @@ $(function() {
   float: left;
   display: block;
   width: 32px;
-  height: 32px;    
+  height: 32px;
   margin: 3px 0 3px 3px;
   padding: 0;
   text-align: center;

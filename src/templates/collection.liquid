@@ -3,7 +3,7 @@
 		<div class="c-collections__left o-flex__col-lg-2">
 			<div class="c-collFilters">
 				<h3 class="c-collFilters__title">Filter By</h3>
-				<div class="c-collFiltersGroup">
+				{% comment %} <div class="c-collFiltersGroup">
 					<h4 class="c-collFiltersGroup__title">Type</h4>
 					<div class="c-collFiltersGroup__list">
 						<div class="c-collFiltersGroup__item is-active">
@@ -16,7 +16,7 @@
 							<span class="c-collFiltersGroup__itemText">Tinctures</span>
 						</div>
 					</div>
-				</div>
+				</div> {% endcomment %}
 				<div class="c-collFiltersGroup">
 					<h4 class="c-collFiltersGroup__title">Packaging</h4>
 					<div class="c-collFiltersGroup__list">
@@ -60,7 +60,7 @@
 
 				{% comment %} Collection pages product grids {% endcomment %}
 				{% for product in collection.products %}
-					<div class="c-product__item o-flex__item o-flex__col-4">
+					<div class="c-product__item o-flex__item o-flex__col-4" data-filter="{{product.handle}}">
 						<a href="{{ product.url }}" title="{{ product.title }}" class="c-product__link">
 							<div class="c-product__img">
 								<img class="c-product__Mainimage" src="{{ product.images[0].src  | img_url: 'large' }}">

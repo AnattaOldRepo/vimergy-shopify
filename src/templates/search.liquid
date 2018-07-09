@@ -1,12 +1,12 @@
 {% paginate search.results by 15 %}
-    
+
     <div class="o-wrapper c-search">
 
         <div class="c-search__breadcrumb">
             <a class="c-search__breadcrumbLink" href="{{ shop.secure_url }}{{parent_collection_url}}">
                 <svg class="c-search__breadcrumbArrow" width="25px" height="12px" viewBox="0 0 25 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                        <g id="Category-Banner" transform="translate(0.000000, -6.000000)" stroke="#FF0000">
+                        <g id="Category-Banner" transform="translate(0.000000, -6.000000)" stroke="#e3732b">
                             <g id="breadcrumbs">
                                 <g transform="translate(0.000000, 2.000000)">
                                     <g id="arrow" transform="translate(12.500000, 10.000000) rotate(-90.000000) translate(-12.500000, -10.000000) translate(7.000000, -2.000000)">
@@ -17,13 +17,13 @@
                             </g>
                         </g>
                     </g>
-                </svg>            
+                </svg>
                 <span class="c-search__breadcrumbText">Home</span>
             </a>
             <span class="c-search__breadcrumbNoLink">
                 <svg class="c-search__breadcrumbDivider" width="6px" height="8px" viewBox="0 0 6 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                        <g id="1440-05-home-search-results-1@2x@2x" transform="translate(-142.000000, -142.000000)" stroke="#FF0000">
+                        <g id="1440-05-home-search-results-1@2x@2x" transform="translate(-142.000000, -142.000000)" stroke="#e3732b">
                             <g id="breadcrumbs" transform="translate(50.000000, 136.000000)">
                                 <polyline id="Rectangle-10" points="93 6 97 10 93 14"></polyline>
                             </g>
@@ -64,7 +64,7 @@
                     <button type="submit" class="c-btn c-searchForm__submit" name="commit" id="Subscribe">GO</button>
                 </span>
             </div>
-        </form>      
+        </form>
 
 
         {% if search.performed %}
@@ -80,7 +80,7 @@
 
                             <span class="c-search__priceSection">
                                 {% unless item.available %}
-                                    <span class="c-search__itemPrice c-search__itemPrice--soldOut">Sold Out</span>  
+                                    <span class="c-search__itemPrice c-search__itemPrice--soldOut">Sold Out</span>
                                 {% endunless %}
 
                                 {% if item.compare_at_price > item.price %}

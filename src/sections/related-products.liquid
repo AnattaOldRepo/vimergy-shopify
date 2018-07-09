@@ -1,5 +1,5 @@
 <div class="product-template__container page-width" itemscope itemtype="http://schema.org/Product" id="ProductSection-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product" data-enable-history-state="true">
- 
+
 {% assign heading = section.settings.related_title %}
 
 {% comment %}
@@ -55,7 +55,7 @@
     {% capture related_items %}
         {% for product in collection.products %}
             {% unless product.handle == current_product.handle %}
-                {% unless same_vendor and current_product.vendor != product.vendor %}
+               {% unless same_vendor and current_product.vendor != product.vendor %}
                     {% unless same_type and current_product.type != product.type %}
 
                         {% comment %} <a href="{{ collection.url }}{{ product.url }}" class="c-relatedProducts__item c-relatedProducts__item--left{{ forloop.index }}">
@@ -67,34 +67,34 @@
                             </div>
                         </a> {% endcomment %}
 
-<div class="c-home-products-recommend">   
+                            <div class="c-home-products-recommend">
 
-    <div class="c-recommend">
-        <div class="c-recommend-inner">
-            <div class="o-flex">
-            <h2 class="c-recommend__heading  c-display">RECOMMENDED PRODUCT</h2>
-                <div class="o-flex__item  o-flex__col-6 ">
-                    <div class="c-recommend__img">
-                        <img class="c-relatedProductsItem__image lazy-load" src="{{ product.images[1] | img_url: '443x443' }}')">
-                    </div>
-                </div>
+                                <div class="c-recommend">
+                                    <div class="c-recommend-inner">
+                                        <div class="o-flex">
+                                        <h2 class="c-recommend__heading  c-display">RECOMMENDED PRODUCT</h2>
+                                            <div class="o-flex__item  o-flex__col-6 ">
+                                                <div class="c-recommend__img">
+                                                    <img class="c-relatedProductsItem__image lazy-load" src="{{ product.images[1] | img_url: '443x443' }}')">
+                                                </div>
+                                            </div>
 
-                <div class="o-flex__item o-flex__col-6 ">  
-                    <div class="c-recommend__info">
-                        <h2 class="c-recommend__heading ">RECOMMENDED PRODUCT</h2>
-                        <p class="c-recommend__title">{{ product.title }}</p>
-                        <p class="c-recommend__desc">  {{ product.metafields.c_f.desc1 }} </p>
-                        <p><a class="c-btn c-btn-primary c-related-product-shop" href="{{ product.url }}"><span class="c-icon"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 135.8 115" enable-background="new 0 0 135.8 115" xml:space="preserve"><path d="M113.8,84h-72c-2.6,0-4.9-1.9-5.4-4.4L22.7,11H0V0h27.2c2.6,0,4.9,1.9,5.4,4.4L36.1,22h94.1c1.8,0,3.4,0.8,4.4,2.3c1,1.4,1.3,3.3,0.8,4.9l-16.5,51C118.3,82.5,116.2,84,113.8,84z M46.3,73h63.5l12.9-40H38.3L46.3,73z"></path><circle cx="50" cy="103.9" r="11"></circle><circle cx="104.5" cy="103.9" r="11"></circle></svg></span>VIEW PRODUCT</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-</div>
+                                            <div class="o-flex__item o-flex__col-6 ">
+                                                <div class="c-recommend__info">
+                                                    <h2 class="c-recommend__heading ">RECOMMENDED PRODUCT</h2>
+                                                    <p class="c-recommend__title">{{ product.title }}</p>
+                                                    <p class="c-recommend__desc">  {{ product.metafields.c_f.desc1 }} </p>
+                                                    <p><a class="c-btn c-btn-primary c-related-product-shop" href="{{ product.url }}"><span class="c-icon"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 135.8 115" enable-background="new 0 0 135.8 115" xml:space="preserve"><path d="M113.8,84h-72c-2.6,0-4.9-1.9-5.4-4.4L22.7,11H0V0h27.2c2.6,0,4.9,1.9,5.4,4.4L36.1,22h94.1c1.8,0,3.4,0.8,4.4,2.3c1,1.4,1.3,3.3,0.8,4.9l-16.5,51C118.3,82.5,116.2,84,113.8,84z M46.3,73h63.5l12.9-40H38.3L46.3,73z"></path><circle cx="50" cy="103.9" r="11"></circle><circle cx="104.5" cy="103.9" r="11"></circle></svg></span>VIEW PRODUCT</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
 
-                        {% assign counter = counter | plus: 1 %}
-                        {% if counter == 1 %}
-                            {% break %}
-                        {% endif %}
+                            {% assign counter = counter | plus: 1 %}
+                            {% if counter == 1 %}
+                                {% break %}
+                            {% endif %}
                     {% endunless %}
                 {% endunless %}
             {% endunless %}
@@ -113,9 +113,9 @@
             </div>
         </section>
     {% endunless %}
-     
+
 {% endif %}
-  
+
 </div>
 
 {% schema %}

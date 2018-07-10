@@ -417,7 +417,7 @@
 .c-insta {
     background: #fff;
 
-    @media(--tablet){
+    @media(--tablet-large){
         margin-top: 4rem;
     }
 }
@@ -430,9 +430,14 @@
     text-align: center;
 
     @media(--tablet) {
+        padding-top:3rem;
+        padding-left: 5rem;
+        text-align: left;
+    }
+
+    @media(--tablet-large) {
         padding-top:4rem;
         padding-left: 9rem;
-        text-align: left;
     }
 }
 
@@ -443,6 +448,12 @@
 .c-instagrams__box svg {
     margin-bottom: .3125rem;
     width: 2.5rem;
+
+    @media(--tablet){
+        float:left;
+        margin-right: 1rem;
+    }
+
     @media(--tablet-large) {
         float: left;
         margin-bottom: 1.9375rem;

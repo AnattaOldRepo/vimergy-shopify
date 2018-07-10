@@ -33,6 +33,8 @@
 
 @import "filters";
 
+@import "related-products";
+
 @import "about";
 @import "content-pages";
 @import "account";

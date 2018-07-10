@@ -14,12 +14,12 @@
                <div class="vimergy-logo"></div>
             {% endif %}
         </div>
-        <div class="c-header__nav u-hideTabletLargeDown ">
+        <div class="c-header__nav ">
             <ul class="c-header__navLeft">
 
                 {% for link in linklists.new-menu.links %}
                     <li class="c-header__navItem">
-                        <a class="c-header__navLink {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+                        <a class="c-header__navLink {% if link.active %} is-active {% endif %}" href="{{ link.url }}/">{{ link.title }}</a>
                     </li>
                 {% endfor %}
 

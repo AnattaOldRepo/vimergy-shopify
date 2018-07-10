@@ -2,7 +2,7 @@
     padding: 50px *;
     text-align: center;
 
-    @media(--tablet){
+    @media(--tablet-large){
         padding:100px *;
     }
 }

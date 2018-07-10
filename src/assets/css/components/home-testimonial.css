@@ -2,20 +2,37 @@
 
 }
 
-
-.c-testimonial_info {
-    padding:30px 60px;
-
-    @media(--tablet){
-        padding-left:11%;
-    }
-}
-
 .c-testimonial__text {
     max-width: 310px;
 }
 
+.c-testimonial_info {
+    padding:30px 60px;
+
+    @media(--tablet-max){
+        flex-basis: 100%;
+    }
+
+    @media(--tablet){
+        padding-left:11%;
+    }
+
+    .c-testimonial__text{
+
+        @media(--tablet-max){
+            max-width: 100%;
+            width:90%;
+        }
+    }
+
+}
+
 .c-mainTestimonial__image {
+
+    @media(--tablet-max){
+        flex-basis: 100%;
+        order:1;
+    }
 
 }
 
@@ -48,8 +65,11 @@
     background: transparent;
     z-index: 2;
 
+    @media(--tablet-max){
+        width:90px;
+    }
 
-    @media(--tablet){
+    @media(--tablet-large){
         width:160px;
         height:100%;
         background-color: transparent;
@@ -74,6 +94,13 @@
             float:right;
             padding-left:62px;
             background-color:$color-white;
+        }
+
+        @media(--tablet){
+            img {
+                min-height:520px;
+                object-fit: cover;
+            }
         }
     }
 
@@ -104,10 +131,21 @@
     .slick-prev--testimonial {
         border-bottom-width: 2px;
 
+
         @media(--tablet){
             left:54%;
+            top:93%;
+        }
+
+        @media(--tablet-large){
+            top:90%;
+        }
+
+        svg {
+            top:45%;
         }
     }
+
     .c-prev-testimonial {
         left:-12px;
     }
@@ -115,8 +153,20 @@
     .slick-next--testimonial {
         border-bottom-width:2px;
 
+        @media(--tablet){
+            top:93%;
+        }
+
+        @media(--tablet-large){
+            top:90%;
+        }
+
         @media(--mobile-max){
             top:auto;
+        }
+
+        svg {
+            top:45%;
         }
     }
 
@@ -127,11 +177,22 @@
         padding:0px;
 
         @media(--tablet){
-            top:85%;
+            top:90%;
             bottom:auto;
-            left:70%;
+            left:59%;
             width:auto;
+            padding:0px *;
+            background-color: transparent;
+        }
+
+        @media(--tablet-large){
             padding:30px *;
+            top:83%;
+            left:67%;
+        }
+
+        @media(--desktop){
+            top:85%;
         }
     }
 
@@ -176,6 +237,11 @@
         padding:42px * * *;
 
         @media(--tablet){
+            padding-top:10.5%;
+            padding-left:10.8%;
+        }
+
+        @media(--tablet-large){
             padding-top:12.5%;
             padding-left:17.8%;
         }

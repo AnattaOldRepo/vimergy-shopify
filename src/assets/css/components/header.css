@@ -23,8 +23,9 @@
 }
 
 .c-header__nav {
-
+    display:none;
     @media (--tablet-large) {
+        display:block;
         float: left;
         width: calc(100% - 195px);
         display:flex;

@@ -17,50 +17,68 @@
 						</div>
 					</div>
 				</div> {% endcomment %}
-				<div class="c-collFiltersGroup">
-					<h4 class="c-collFiltersGroup__title">Packaging</h4>
-					<div class="c-collFiltersGroup__list">
-						<div class="c-collFiltersGroup__item">
-							<span class="c-collFiltersGroup__itemText">Single</span>
-						</div>
-						<div class="c-collFiltersGroup__item">
-							<span class="c-collFiltersGroup__itemText">Kits</span>
-						</div>
-					</div>
-				</div>
+        {% if collection.handle == "shop" %}
+          <div class="c-collFiltersGroup">
+            <h4 class="c-collFiltersGroup__title">Packaging</h4>
+            <div class="c-collFiltersGroup__list">
+              <label class="c-collFiltersGroup__wrap-item">
+                <input class="c-collFiltersGroup__item-model" value="Single" data-filter="Packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+                <div class="c-collFiltersGroup__item">
+                  <span class="c-collFiltersGroup__itemText">Single</span>
+                </div>
+              </label>
+              <label class="c-collFiltersGroup__wrap-item">
+                <input class="c-collFiltersGroup__item-model" value="Kits" data-filter="Packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+                <div class="c-collFiltersGroup__item">
+                  <span class="c-collFiltersGroup__itemText">Kits</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        {% endif %}
 				<div class="c-collFiltersGroup">
 					<h4 class="c-collFiltersGroup__title">Special Offers</h4>
 					<div class="c-collFiltersGroup__list">
-						<div class="c-collFiltersGroup__item">
-							<span class="c-collFiltersGroup__itemText">New</span>
-						</div>
-						<div class="c-collFiltersGroup__item">
-							<span class="c-collFiltersGroup__itemText">Best Seller</span>
-						</div>
-						<div class="c-collFiltersGroup__item">
-							<span class="c-collFiltersGroup__itemText">Sale</span>
-						</div>
+          <label class="c-collFiltersGroup__wrap-item">
+            <input class="c-collFiltersGroup__item-model" value="New" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+              <div class="c-collFiltersGroup__item">
+                <span class="c-collFiltersGroup__itemText">New</span>
+              </div>
+          </label>
+            <label class="c-collFiltersGroup__wrap-item">
+            	<input class="c-collFiltersGroup__item-model" value="Best-Seller" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+				<div class="c-collFiltersGroup__item">
+					<span class="c-collFiltersGroup__itemText">Best Seller</span>
+				</div>
+            </label>
+            <label class="c-collFiltersGroup__wrap-item">
+              <input class="c-collFiltersGroup__item-model" value="sale" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+						  <div class="c-collFiltersGroup__item">
+							  <span class="c-collFiltersGroup__itemText">Sale</span>
+						  </div>
+            </label>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="c-collections__right o-flex__col-lg-10">
 			<div class="c-collectionBar o-flex">
-				<span class="filter-result">Showing All products({{product.length}})</span>
-				<div class="c-collectionSortby o-flex">
-					<label class="c-collFiltersGroup__title">Sort by</label>
-					<select id="collection-sortby">
+				<span class="filter-result">Showing All products({{ collection.products.length }})</span>
+				 <div class="c-collectionSortby o-flex">
+					<label class="c-collFiltersGroup__title" onclick="filters.clearFilter(true)">Clear Filter</label>
+					{% comment %} <select id="collection-sortby">
 						<option value="new" selected>New</option>
 						<option value="best-seller">Best Seller</option>
 						<option value="popular">Popular</option>
-					</select>
+					</select> {% endcomment %}
 				</div>
 			</div>
 			<div class="c-collections__row o-flex">
 
+
 				{% comment %} Collection pages product grids {% endcomment %}
 				{% for product in collection.products %}
-					<div class="c-product__item o-flex__item o-flex__col-4" data-filter="{{product.handle}}">
+					<div class="c-product__item o-flex__item o-flex__col-4" data-filter="{{ product.tags |  join: ',' }}">
 						<a href="{{ product.url }}" title="{{ product.title }}" class="c-product__link">
 							<div class="c-product__img">
 								<img class="c-product__Mainimage" src="{{ product.images[0].src  | img_url: 'large' }}">
@@ -79,3 +97,106 @@
 		</div>
 	</div>
 </div>
+
+<script>
+  var filters = {
+    item_selector: ".c-product__item",
+    filter_model: ".c-collFiltersGroup__item-model",
+    appliedFilters: {},
+    multiple_filter_enable: false,
+    getProducts: function(){
+      if(!this.products){
+        this.products = $(this.item_selector);
+      }
+      return this.products;
+    },
+    onFilterChange: function(el){
+      this.buildFilter(el);
+      if(this.isFilterEmpty()){
+        	this.clearFilter();
+      }else{
+			$(".c-collectionSortby").show(0);
+    	this.applyFilter();
+      }
+      //console.log(this.appliedFilters);
+    },
+    isFilterEmpty: function(){
+      var _filters = Object.keys(this.appliedFilters), _isFilterEmpty = true;
+      if(_filters.length > 0){
+        for(var i=0; i<_filters.length;i++){
+          if(this.appliedFilters[_filters[i]].length > 0){
+            _isFilterEmpty = false;
+          }
+        }
+      }
+      return _isFilterEmpty;
+    },
+    clearFilter: function(uncheckAll){
+      this.appliedFilters = {};
+      this.getProducts().show(0);
+	  $(".c-collectionSortby").hide(0);
+
+      if(uncheckAll){
+        $(this.filter_model).prop("checked", false);
+      }
+    },
+    checkSingleEnable: function(){
+      if(!this.multiple_filter_enable){
+        this.appliedFilters = {};
+      }
+    },
+    buildFilter: function(el){
+      this.checkSingleEnable();
+      var filter_config = {
+        category: el.dataset.filter.toLowerCase(),
+        selected: el.value.toLowerCase()
+      },
+      appliedFilters = this.appliedFilters[filter_config.category],
+      isFilterSelected;
+
+      if(!appliedFilters){
+        this.appliedFilters[filter_config.category] = [filter_config.selected];
+      }else{
+        isFilterSelected = appliedFilters.indexOf(filter_config.selected);
+        if(isFilterSelected == -1){
+          appliedFilters.push(filter_config.selected);
+        }else{
+          appliedFilters.splice(isFilterSelected, 1);
+        }
+      }
+    },
+    applyFilter: function(){
+      var _this = this,
+      products = _this.getProducts();
+
+      products.each(function(){
+        var filters = this.dataset.filter;
+        if(_this.matchFilters(filters)){
+          $(this).show(0);
+        }else{
+          $(this).hide(0);
+        }
+      });
+    },
+
+    matchFilters: function(filters){
+      var frs = filters.split(","), filterName, category, aFilter, isMatched = false;
+      for(var i=0; i<frs.length; i++){
+        filterName = frs[i];
+
+        if(filterName.indexOf("filter-") > -1){
+          filterName = filterName.replace('filter-', '').split("-");
+          category = filterName[0];
+          aFilter = filterName.slice(1).join("-");
+
+          if(this.appliedFilters[category] && this.appliedFilters[category].indexOf(aFilter) > -1){
+            isMatched = true;
+            break;
+          }
+        }
+      }
+
+      return isMatched;
+    }
+  }
+</script>

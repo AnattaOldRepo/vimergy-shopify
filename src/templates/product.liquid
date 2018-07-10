@@ -65,7 +65,7 @@
             <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
             <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
             <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
-                <h2 class="c-product__title">{{ product.title }}</h2>
+                <h2 class="c-product__title">{{ product.title }}<span class="c-product-icon"><img src="{{'organic-color-icon.png' | asset_img_url }}"></span></h2>
                 <div class="c-product-description">
                     <p>{{ product.metafields.c_f.desc1 }}</p>
                 </div>
@@ -177,12 +177,57 @@
     </div>
 </div>
 
-
     {% unless product.title == 'Gift Card' %}
 
         {% section 'product-detail' %}
 
-        {% section 'related-products-new' %}
+        <div class="c-related-products">
+            <h2> You may also like</h2>
+            <div class="c-related-productGrid">
+                {% for collection in product.collections %}
+                    {% assign current_product = product %}
+                    {% if collection.title == 'Powders' %}
+                        {% for product in collections.extracts-1.products %}
+                            {% unless product.title == current_product.title %}
+                                <div class="c-product__item o-flex__item o-flex__col-4" >
+                                    <a href="{{ product.url }}" title="{{ product.title }}" class="c-product__link">
+                                        <div class="c-product__img">
+                                            <img class="c-product__Mainimage" src="{{ product.images[0].src  | img_url: 'large' }}">
+                                        </div>
+                                        <div class="c-product__info">
+                                            <h2 class="c-product__name">{{ product.title  }}</h2>
+                                            <h2 class="c-product__price">{{ product.price  | money}}</h2>
+                                        </div>
+                                        <div class="c-product__hoverText"><span>view details</span></div>
+                                        <object class="shop-link"><a href="{{ product.url }}" class="c-btn">Shop now</a></object>
+                                    </a>
+                                </div>
+                            {% endunless %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if collection.title == 'Kits' %}
+                        {% for product in collections.kits-1.products %}
+                            {% unless product.title == current_product.title %}
+                                <div class="c-product__item o-flex__item o-flex__col-4" >
+                                    <a href="{{ product.url }}" title="{{ product.title }}" class="c-product__link">
+                                        <div class="c-product__img">
+                                            <img class="c-product__Mainimage" src="{{ product.images[0].src  | img_url: 'large' }}">
+                                        </div>
+                                        <div class="c-product__info">
+                                            <h2 class="c-product__name">{{ product.title  }}</h2>
+                                            <h2 class="c-product__price">{{ product.price  | money}}</h2>
+                                        </div>
+                                        <div class="c-product__hoverText"><span>view details</span></div>
+                                        <object class="shop-link"><a href="{{ product.url }}" class="c-btn">Shop now</a></object>
+                                    </a>
+                                </div>
+                            {% endunless %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
     {% endunless %}
 

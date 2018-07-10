@@ -3,17 +3,21 @@
 
     @media(--tablet) {
         display: block;
-        width: 170px;
+        width: 90px;
         flex: initial;
         position: relative;
         text-align:left;
+    }
+
+    @media(--desktop){
+        width:170px;
     }
 }
 
 .c-side-text {
     font-size: 17px;
     font-weight: 500;
-    position: absolute * 0 270px -60%;
+    position: absolute * 0 270px -50%;
     margin: auto;
     width:162px;
     transform: rotate(270deg) translateY(-50%);
@@ -21,6 +25,15 @@
     @media(--tablet) {
         margin: auto;
         width: 350px;
+        left: -130%;
+        bottom: 220px;
+    }
+
+    @media(--desktop) {
+        margin: auto;
+        width: 350px;
+        left: -50%;
+        bottom: 270px;
     }
 
     &:before {
@@ -38,5 +51,9 @@
     .c-sideBartext {
         position: absolute * 0 0 *;
         height: 100%;
+
+        @media(--tablet-max){
+            display: none;
+        }
     }
 }

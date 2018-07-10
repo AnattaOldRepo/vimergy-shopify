@@ -150,7 +150,7 @@ twitter {
 
 .c-store {
     margin-top: 20px;
-    @media (--tablet-large) {
+    @media(--tablet) {
         margin-top: 2px;
     }
 }
@@ -199,10 +199,17 @@ twitter {
     max-width:255px;
 
     @media(--tablet){
-        font-size: 25px;
-        line-height:34px;
+        font-size: 22px;
+        line-height:32px;
         max-width:378px;
         text-align: left;
+        padding:* 10px;
+    }
+
+    @media(--tablet-large){
+        font-size: 25px;
+        line-height:34px;
+        padding:0px;
     }
 
 }
@@ -215,6 +222,7 @@ twitter {
 
     @media(--mobile-max){
         margin: 20px auto *;
+        float:none;
     }
 }
 
@@ -266,4 +274,11 @@ twitter {
 .c-footer__social a:hover {
     text-decoration: underline;
     color: #0288D1;
+}
+
+.c-footer  .c-footer_content{
+
+    @media(--mobile-max){
+        text-align: center;
+    }
 }

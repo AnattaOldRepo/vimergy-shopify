@@ -124,7 +124,6 @@
 .c-product-cards__heading {
     margin-bottom: 1.5rem;
     font-size: 1.6875rem;
-    font-weight: 700;
     text-align: center;
     @media(--tablet-large) {
         margin-bottom: 2.5rem;

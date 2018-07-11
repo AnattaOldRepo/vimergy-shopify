@@ -415,10 +415,10 @@
 }
 
 .c-insta {
-    background: #fff;
+    background:$color-white;
 
-    @media(--tablet-large){
-        margin-top: 4rem;
+    @media(--desktop){
+        margin-top: 6px;
     }
 }
 
@@ -454,10 +454,10 @@
         margin-right: 1rem;
     }
 
-    @media(--tablet-large) {
+    @media(--desktop) {
         float: left;
-        margin-bottom: 1.9375rem;
-        margin-right: 2rem;
+        width: 38px;
+        margin: * 22px 12px 13px;
     }
 }
 

@@ -23,7 +23,7 @@
     text-align: center;
 
     @media(--tablet) {
-        position: absolute * auto 12.8% 8.1%;
+        position: absolute * auto 13.8% 7.1%;
         text-align: left;
         max-width: 747px;
         width:90%;

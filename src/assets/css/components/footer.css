@@ -3,8 +3,8 @@
     font-size: 16px;
     padding: 2.5rem * 2.5rem *;
     text-align: center;
-    @media (--desktop-medium) {
-        padding: 3.5rem * 3.5rem *;
+    @media (--desktop) {
+        padding: 37px * 3.5rem *;
     }
     @media (--mobile-large) {
         text-align: left;
@@ -14,7 +14,6 @@
 .c-footer__title {
     margin-bottom: .8125rem;
     font-size: 16px;
-    font-weight: 500;
     font-family:$font-family-medium;
     text-transform: capitalize;
 
@@ -32,7 +31,6 @@
 
 .c-footer__link {
     font-size: 13px;
-    font-weight: normal;
     line-height: 2;
     color: #253237;
     cursor: pointer;
@@ -102,10 +100,10 @@ uk,
 usa{
     .icon-$(val) {
         background-image: url("../icon-$(val).png");
-        padding-left: 35px;
+        padding-left: 50px;
         padding-top: 14px;
-        size: 1.5rem;
-        background-size: 1.5rem;
+        size: 2rem;
+        background-size: 2rem;
         font-size:14px;
     }
 }
@@ -122,7 +120,6 @@ twitter {
 .c-strapline-text {
     text-align: left;
     font-size: .875rem;
-    font-weight: 500;
     color: #393D4E;
     @media (--tablet-large) {
         font-size: 1.0625rem;
@@ -131,7 +128,6 @@ twitter {
 
 .c-footer-disclaimer {
     color: #909397;
-    font-weight: 500;
     line-height: 1.5;
     padding: 0;
     text-align: left;
@@ -142,10 +138,7 @@ twitter {
 }
 
 .c-footer-disclaimer p {
-    font-size: 0.75rem;
-    @media (--tablet-large) {
-        font-size: 0.875rem;
-    }
+    font-size: 12px;
 }
 
 .c-store {
@@ -165,7 +158,7 @@ twitter {
     margin: 0px auto;
 
     @media(--tablet){
-        padding: 66px 0;
+        padding: 62px 0;
     }
 }
 
@@ -180,6 +173,18 @@ twitter {
         width:255px;
         margin:0px auto;
     }
+
+    h2 {
+        @media(--desktop){
+            float: left;
+        }
+    }
+
+    @media(--desktop){
+        flex-basis: 40%;
+        margin-top: -3px;
+        padding-left: 10px;
+    }
 }
 
 .c-subscribe__right {
@@ -188,6 +193,27 @@ twitter {
 
     @media(--tablet){
         width: auto;
+    }
+
+    @media(--desktop){
+        flex-basis: 60%;
+        padding:* 15px * 10px;
+    }
+
+    .c-input {
+
+        &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+            text-transform: uppercase;
+          }
+          &::-moz-placeholder { /* Firefox 19+ */
+            text-transform: uppercase;
+          }
+          &:-ms-input-placeholder { /* IE 10+ */
+            text-transform: uppercase;
+          }
+          &:-moz-placeholder { /* Firefox 18- */
+            text-transform: uppercase;
+          }
     }
 }
 
@@ -237,6 +263,7 @@ twitter {
         line-height:18px;
         padding:10px 25px;
         font-family: $font-family-bold;
+        letter-spacing:1px;
     }
 }
 
@@ -256,8 +283,8 @@ twitter {
         border: none;
         background:url('../right-arrow.png') no-repeat 0 0;
         background-size: 22px;
-        background-position: 85% center;
-
+        background-position: 79% center;
+        padding-left:13px;
         &:--enter {
             outline:none;
         }
@@ -274,6 +301,13 @@ twitter {
 .c-footer__social a:hover {
     text-decoration: underline;
     color: #0288D1;
+}
+
+.c-footer__social {
+
+    @media(--desktop){
+        flex-basis: 20%;
+    }
 }
 
 .c-footer  .c-footer_content{

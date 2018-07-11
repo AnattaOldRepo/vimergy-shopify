@@ -10,13 +10,13 @@
     }
 
     @media(--desktop){
-        width:170px;
+        width:165px;
     }
 }
 
 .c-side-text {
     font-size: 17px;
-    font-weight: 500;
+    font-family:$font-family-medium;
     position: absolute * 0 270px -50%;
     margin: auto;
     width:162px;
@@ -33,7 +33,7 @@
         margin: auto;
         width: 350px;
         left: -50%;
-        bottom: 270px;
+        bottom: 38%;
     }
 
     &:before {

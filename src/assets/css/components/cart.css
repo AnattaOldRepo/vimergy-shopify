@@ -161,14 +161,17 @@
     margin: 0 auto 21px;
     padding: 0px 0 0;
     height: 60px;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 22px;
     font-family: $font-family-bold;
-    font-weight: $font-weight-bold;
     letter-spacing: 0;
     background-color:$color-black;
     color:$color-white;
     border:none;
+
+    &:-enter {
+        color:#fff;
+    }
 }
 
 .c-cart__additionalButtons {
@@ -363,7 +366,7 @@
 .header-cart-link .icon svg {
     fill: #393D4E;
     vertical-align: middle;
-    margin-top: -3px;
+    margin-left: -3px;
 
     @media(--mobile-max){
         width:24px;

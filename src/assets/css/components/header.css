@@ -16,9 +16,10 @@
         margin: 0 auto;
         width: 7.1875rem;
     }
+
     @media (--tablet-large) {
         float: left;
-        margin-right: 1.5625rem;
+        margin:6px 1.5625rem * 2px;
     }
 }
 
@@ -135,7 +136,7 @@
     background: #E5751A;
     color: white;
     font-size: 10px;
-    font-weight: 700;
+    font-family: $font-family-bold;
     text-align: center;
     z-index: 5;
     pointer-events: none;

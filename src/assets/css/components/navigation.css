@@ -1,5 +1,5 @@
 .c-header__navItem {
-    margin:* 30px;
+    margin:3px 30px * 23px;
     display: inline-block;
     line-height:32px;
 }
@@ -7,4 +7,11 @@
 .c-header__navLink {
     font-size:13px;
     font-family: $font-family-bold;
+}
+
+.c-header__navRight {
+
+    @media(--tablet-large){
+        margin-right: 26px;
+    }
 }

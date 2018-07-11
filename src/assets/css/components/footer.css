@@ -4,8 +4,9 @@
     padding: 2.5rem * 2.5rem *;
     text-align: center;
     @media (--desktop) {
-        padding: 37px * 3.5rem *;
+        padding: 34px * 15px *;
     }
+
     @media (--mobile-large) {
         text-align: left;
     }
@@ -86,13 +87,19 @@
 }
 .c-store-list{
     @media (--tablet-max) {
-    margin: 0 auto;
-    width: 100px;
+        margin: 0 auto;
+        width: 100px;
     }
 }
 
 .c-store-list li{
     padding-bottom:20px;
+
+    @media(--desktop){
+        padding-bottom: 6px;
+        padding-top: 10px;
+        padding-left: 4px;
+    }
 }
 @each $val in can,
 aus,

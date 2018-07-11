@@ -28,7 +28,7 @@
             </li>
             <li><a href="https://vimergy.myshopify.com/pages/privacy-policy">Privacy Policy </a></li>
              <li><a href="pages/customer-service">Terms of Use</a></li>
-            <li class="c-index--refer"><button class="c-btn c-btn--index">REFER-A-FRIEND</button></li>
+            <li class="c-index--refer u-hide"><button class="c-btn c-btn--index">REFER-A-FRIEND</button></li>
             <li class="c-index--index"><button class="c-btn c-btn--index c-btn--logout"> <a class="account-dashboard__logout" href="account/logout">Log Out</a></button></li>
          </ul>
       </div>
@@ -36,7 +36,7 @@
        <div class="c-account__sectionMain">
 
             <div class="c-account__section c-account__section--one account-dashboard__block new-address">
-                
+
                 <h1 class="c-account__title">Your Addresses</h1>
 
                     {% comment %}
@@ -73,11 +73,11 @@
                     <div class="pagination">
                        {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
                     </div>
-                {% endif %}                
-                
+                {% endif %}
+
                 <div class="u-showTabletUp">
                     <a href="#" class="c-btn" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">Add Address</a>
-                    
+
                     <a href="/account" class="c-account__link">
                         <span class="c-account__linkText">Return to My Account</span>
                         <svg class="c-account__linkArrow" width="26px" height="12px" viewBox="0 0 26 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -100,7 +100,7 @@
 
 
             <div class="c-account__section c-account__section--two account-dashboard__block address">
-                  
+
 
                 {% for address in customer.addresses %}
 
@@ -149,9 +149,9 @@
                                 <input class="c-input c-input--checkbox" type="checkbox" id="address_default_address_{{ form.id }}" name="address[default]" value="1" checked="checked" />
 
                                 <label for="address_default_address_{{ form.id }}">
-                                    <span class="c-input__checkboxText">Set as default address</span>  
+                                    <span class="c-input__checkboxText">Set as default address</span>
                                 </label>
-                            </div>                                      
+                            </div>
 
                             <div class="account-links">
                                 <input type="submit" class="c-btn" value="{{ 'customer.addresses.update' | t }}">
@@ -160,7 +160,7 @@
                             </div>
 
                         {% endform %}
-                    </div> 
+                    </div>
 
                 {% endfor %}
 
@@ -211,9 +211,9 @@
                             <input class="c-input c-input--checkbox" type="checkbox" id="address_default_address_new" name="address[default]" value="1" checked="checked" />
 
                             <label for="address_default_address_new">
-                                <span class="c-input__checkboxText">{{ 'customer.addresses.set_default' | t }}</span>  
+                                <span class="c-input__checkboxText">{{ 'customer.addresses.set_default' | t }}</span>
                             </label>
-                        </div>                        
+                        </div>
 
                         <div class="account-links c-link-address">
                             <input type="submit" class="c-btn" value="{{ 'customer.addresses.add' | t }}">
@@ -224,11 +224,11 @@
                         </div>
 
                     {% endform %}
-                </div> 
+                </div>
 
                 <div class="u-hideTabletUp">
                     <a href="#" class="c-btn" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">Add Address</a>
-                    
+
                     <a href="/account" class="c-account__link">
                         <span class="c-account__linkText">Return to My Account</span>
                         <svg class="c-account__linkArrow" width="26px" height="12px" viewBox="0 0 26 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -245,8 +245,8 @@
                                 </g>
                             </g>
                         </svg>
-                    </a>    
-                </div>                         
+                    </a>
+                </div>
             </div>
         </div>
       </div>
@@ -259,7 +259,7 @@
 
 
 {% comment %} <div class="c-account c-account--address c-account--account page account-dashboard"> {% endcomment %}
-   
+
 
   <script>
     // Initialize observers on address selectors
@@ -299,4 +299,4 @@
 
   {% endpaginate %}
 
-</div>
+{% comment %} </div> {% endcomment %}

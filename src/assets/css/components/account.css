@@ -18,7 +18,7 @@
 .c-registered-users{
     padding: 20px;
     padding-right:0;
-    border-left: 1px solid #d6d6d6;    
+    border-left: 1px solid #d6d6d6;
 }
 .c-account-login .page-title h1 {
     border-bottom: 1px solid #d6d6d6;
@@ -107,7 +107,7 @@
         display: inline-block;
         text-transform: uppercase;
         text-align: center;
-        background-color: $color-vimergy-orange;
+        background-color: #000;
         color: #fff;
         text-decoration: none;
         outline: none;
@@ -129,7 +129,7 @@
         }
     }
     .c-btn--large-new {
-        border-color: $color-vimergy-orange;
+        border-color:#000;
     }
     .c-btn--secondary {
         padding: .5625rem 2rem;
@@ -722,10 +722,15 @@ input:focus::-webkit-input-placeholder {
 .c-accounts .o-flex__col-4 {
     background: #fff;
     padding: 2rem;
-    text-align: center;
-    @media(--mobile-large) {
-        padding: 10rem;
+    text-align:left;
+    flex-basis: 100%;
+    width: 100%;
+
+    @media(--tablet-large) {
+        padding: 10rem 10%;
         text-align: left;
+        flex-basis: 33.33%;
+        width: 33.33%;
     }
 }
 
@@ -735,8 +740,13 @@ input:focus::-webkit-input-placeholder {
 
 .c-accounts .o-flex__col-8 {
     padding: 2rem;
-    @media(--mobile-large) {
-        padding: 10rem 5rem;
+    flex-basis: 100%;
+    width: 100%;
+
+    @media(--tablet-large) {
+        padding: 10rem 10%;
+        flex-basis: 66.66%;
+        width: 66.66%;
     }
 }
 
@@ -761,6 +771,7 @@ input:focus::-webkit-input-placeholder {
     line-height: 26px;
     color: $color-cold-grey;
     margin-bottom: 1rem;
+
     a {
         font-size: 17px;
         font-weight: bold;
@@ -807,7 +818,12 @@ table {
 .c-account-info-label--address {
     border-bottom: 1px solid #d6d6d6;
 }
-
+.account-dashboard__block.new-address .c-btn{
+    background-color:#000;
+    color:#fff;
+    height:45px;
+    line-height: 1;
+}
 .c-link-address {
     margin-bottom: 1rem;
 }

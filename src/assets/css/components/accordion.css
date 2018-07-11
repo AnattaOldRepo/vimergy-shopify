@@ -15,19 +15,20 @@
      &.is-active {
         color: white;
         background-color: gray;
-    } 
+    }
 }
 
 .c-accordion__panel {
     display: none;
     margin: 0;
     padding: 10px 0;
- 
+
     .no-js &,
     &.is-active {
-        display: block;  
+        display: block;
     }
 }
+
 /* edited */
 .accordion {
     border-bottom: 1px solid #c4c4ae
@@ -80,10 +81,10 @@
     display: none
 }
 .accordion__panel.is-active{
-    display: block; 
+    display: block;
     transition: all 0.3s 0s;
-} 
- 
+}
+
 
 .accordion__content {
     padding: 1.25rem .9375rem;
@@ -192,7 +193,7 @@
     @media(--mobile-large) {
         display: flex;
     }
-    
+
 }
 
 .accordion__content .product-resource::after {

@@ -119,11 +119,17 @@
 }
 
 .c-btn--logout {
-    background-color: $color-green;
-    border-color: $color-green;
+    background-color: #EEEAE6;
+    border-color: #EEEAE6;
+    color: #000 !important;
     &:--enter {
-        color: $color-white;
-        background-color: $color-green;
-        border-color: $color-green;
+        color: #000 !important;
+        background-color: #EEEAE6;
+        border-color: #EEEAE6;
     }
+}
+
+.c-account__buttonContainer .c-btn{
+    backgroud-color:#000;
+    color:#fff;
 }

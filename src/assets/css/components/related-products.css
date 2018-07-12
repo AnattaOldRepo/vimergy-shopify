@@ -1,7 +1,7 @@
 .c-related-products {
     padding:70px * 100px;
     text-align: center;
-    background-color:#FCFBFC;
+    background-color:$color-white;
 }
 
 .c-related-productGrid {

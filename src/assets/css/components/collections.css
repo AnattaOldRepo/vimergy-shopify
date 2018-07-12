@@ -106,11 +106,14 @@
 .c-collectionSortby {
     align-items: center;
     display:none;
+    cursor: pointer;
 
     label {
         display: inline-block;
         font-size:16px;
         margin-right:10px;
+        border-bottom:2px solid;
+        cursor: pointer;
     }
 
     #collection-sortby {

@@ -2,6 +2,9 @@
 	<div class="c-collections__content o-flex">
 		<div class="c-collections__left o-flex__col-lg-2">
 			<div class="c-collFilters">
+        {% comment %} <div class="c-collectionSortby">
+					<label class="c-collFiltersGroup__title" onclick="filters.clearFilter(true)">Clear All</label>
+				</div> {% endcomment %}
 				<h3 class="c-collFilters__title">Filter By</h3>
 				{% comment %} <div class="c-collFiltersGroup">
 					<h4 class="c-collFiltersGroup__title">Type</h4>
@@ -65,12 +68,7 @@
 			<div class="c-collectionBar o-flex">
 				<span class="filter-result">Showing All products({{ collection.products.length }})</span>
 				 <div class="c-collectionSortby o-flex">
-					<label class="c-collFiltersGroup__title" onclick="filters.clearFilter(true)">Clear Filter</label>
-					{% comment %} <select id="collection-sortby">
-						<option value="new" selected>New</option>
-						<option value="best-seller">Best Seller</option>
-						<option value="popular">Popular</option>
-					</select> {% endcomment %}
+					<label class="c-collFiltersGroup__title" onclick="filters.clearFilter(true)">Clear All</label>
 				</div>
 			</div>
 			<div class="c-collections__row o-flex">

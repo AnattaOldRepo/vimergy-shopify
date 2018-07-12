@@ -169,7 +169,7 @@
     color:$color-white;
     border:none;
 
-    &:-enter {
+    &:--enter {
         color:#fff;
     }
 }

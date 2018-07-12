@@ -501,6 +501,15 @@ div.rc_block__type--active {
     color: #fff;
 }
 
+.rc_select__frequency {
+    outline:none;
+    border-radius: 0;
+    background: #EEEAE6;
+    font-size:15px;
+    font-family: $font-family-base;
+    border:none;
+}
+
 input[type='radio']:after {
     border: 2px solid #c4c4ae;
     left: -25px;
@@ -530,7 +539,7 @@ input[type='radio']:checked:after {
     display: inline-block;
     visibility: visible;
     border-width: 5px;
-    border-color: #E5751A;
+    border-color: $color-active;
 }
 
 div.rc_popup__hover,

@@ -3,6 +3,7 @@
     font-size: 16px;
     padding: 2.5rem * 2.5rem *;
     text-align: center;
+    font-weight:400;
     @media (--desktop) {
         padding: 34px * 15px *;
     }
@@ -36,9 +37,10 @@
     color: #253237;
     cursor: pointer;
     margin-top: .4375rem;
+
     &:--enter {
         text-decoration: underline;
-        color: #0288D1;
+        color:$color-active;
     }
 }
 
@@ -307,7 +309,7 @@ twitter {
 }
 .c-footer__social a:hover {
     text-decoration: underline;
-    color: #0288D1;
+    color:$color-active;
 }
 
 .c-footer__social {

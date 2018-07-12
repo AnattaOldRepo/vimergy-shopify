@@ -301,7 +301,7 @@ select {
 
 .c-account__link--normal {
     margin-top: 30px;
-    color: $color-vimergy-orange;
+    color: $color-black;
     font-weight: 600;
     text-decoration: none;
     font-size: 13px;

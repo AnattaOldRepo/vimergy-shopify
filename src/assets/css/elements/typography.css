@@ -188,7 +188,7 @@ a {
     color: $color-blue;
     text-decoration: none;
     &:--enter {
-        color: $color-blue;
+        color: $color-active;
         text-decoration: none;
         outline: 0;
     }

@@ -2,6 +2,6 @@ a {
     color: $color-cold-grey;
 
     &:--enter {
-        color: $color-vimergy-orange;
+        color: $color-active;
     }
 }

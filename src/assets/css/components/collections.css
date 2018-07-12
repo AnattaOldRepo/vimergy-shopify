@@ -15,6 +15,10 @@
 .c-collections__left {
     display: flex;
     justify-content: center;
+
+    @media(--desktop){
+        justify-content: flex-end;
+    }
 }
 
 .c-collections__row{

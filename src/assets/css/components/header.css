@@ -133,7 +133,7 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #E5751A;
+    background: $color-active;
     color: white;
     font-size: 10px;
     font-family: $font-family-bold;

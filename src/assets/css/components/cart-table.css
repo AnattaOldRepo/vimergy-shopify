@@ -66,7 +66,7 @@
         border-top: 2px solid grey;
     }
     .c-cartTable__row a , .c-cart__itemInfoBox a{
-        color:$color-vimergy-orange;
+        color:$color-border-black;
         font-weight: 700;
     }
         .c-cartTable__th {
@@ -154,15 +154,15 @@
                     }
                 }
                 .c-product-header{
-                   
+
                     @media (--tablet-max) {
                         text-align: right !important;
                         padding-right: 3rem;
                     }
-                    @media (--tablet-large) { 
+                    @media (--tablet-large) {
                         text-align: center !important;
-                        padding-left: 24rem;  
-                    }    
+                        padding-left: 24rem;
+                    }
                 }
                 .c-total-header{
                     padding-right: 5.5rem;

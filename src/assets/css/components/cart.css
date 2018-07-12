@@ -1,5 +1,5 @@
 .c-cart {
-    padding: 42px 30px;
+    padding: 24px 30px 42px;
     .c-cart__closeX {
         left: auto;
         right: 16px;
@@ -14,9 +14,8 @@
 .c-cart__title {
     display: block;
     margin-bottom: 12px;
-    font-family: $font-family-primary-bold;
-    font-weight: $font-weight-bold;
-    font-size: 19px;
+    font-family: $font-family-bold;
+    font-size: 25px;
     letter-spacing: -.68px;
 }
 
@@ -67,7 +66,7 @@
     top: 8px !important;
     bottom: auto !important;
     &:--enter {
-        color: $color-vimergy-orange;
+        color: $color-active;
         background-color: white;
         border-color: white;
     }
@@ -84,11 +83,15 @@
     display: block;
     /* margin-bottom: 16px;
     margin-right: 12px; */
-    font-family: $font-family-primary-bold;
-    font-weight: $font-weight-bold;
+    font-family: $font-family-bold;
     font-size: 14px;
+    color:$color-border-black;
     line-height: 18px;
     letter-spacing: -.4px;
+
+    a {
+        color:$color-border-black;
+    }
 }
 
 .c-cart__itemMeta {
@@ -165,12 +168,14 @@
     line-height: 22px;
     font-family: $font-family-bold;
     letter-spacing: 0;
-    background-color:$color-black;
+    background-color:$color-primary-black;
+    outline:none;
     color:$color-white;
     border:none;
+    letter-spacing:1px;
 
     &:--enter {
-        color:#fff;
+        color:$color-accent-1;
     }
 }
 
@@ -186,7 +191,7 @@
     .additional-checkout-button--paypal-express,
     .additional-checkout-button--amazon {
         background-color: transparent !important;
-        border: 4px solid #EEEAE6 !important;
+        border: 2px solid $color-primary-black !important;
         border-radius: 0 !important;
         padding: 10px 18px !important;
         line-height: 30px !important;
@@ -295,11 +300,11 @@
     line-height: 1;
     color: $color-black;
     &:--enter {
-        color: $color-vimergy-orange !important;
+        color: $color-active !important;
         background-color: transparent !important;
     }
     &:focus {
-        outline: $color-vimergy-orange auto 5px;
+        outline: $color-active auto 5px;
     }
 }
 

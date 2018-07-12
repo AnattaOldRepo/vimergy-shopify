@@ -7,6 +7,10 @@
 .c-header__navLink {
     font-size:13px;
     font-family: $font-family-bold;
+
+    &.is-active {
+        color:$color-active;
+    }
 }
 
 .c-header__navRight {

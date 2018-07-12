@@ -293,6 +293,7 @@
 .c-product-shop .c-btn {
     padding-right: 1.4375rem;
     padding-left: 1.4375rem;
+    font-family:$font-family-bold;
     @media(--mobile-large) {
         padding-right: 4.4375rem;
         padding-left: 4.4375rem
@@ -309,7 +310,7 @@
 }
 
 .c-product-shop .c-btn svg {
-    fill: #fff
+    fill: $color-white;
 }
 
 .c-product-options .c-add-to-cart .c-qty-wrap {
@@ -780,7 +781,13 @@ div.rc_popup__block {
 
     #AddToCart {
         height:64px;
-        background-color:$color-black;
+        background-color:$color-primary-black;
         color:$color-white;
+
+        &:--enter {
+            background-color: $color-hover-grey;
+            color:$color-accent-1;
+            outline:none;
+        }
     }
 }

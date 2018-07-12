@@ -25,7 +25,7 @@ $offcanvas-overlay-background: rgba(#000, 0.5) !default;
 }
 .c-offcanvas--right{
     color: $color-cold-grey;
-    background-color: #f3f3ea;
+    background-color:$color-primary-white;
 }
 
 /* Close button */

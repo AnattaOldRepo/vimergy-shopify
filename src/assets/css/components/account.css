@@ -1,98 +1,12 @@
-/* .c-page-login{
-    max-width: 850px;
-    margin: 0 auto;
-    color: #393D4E;
-}
-
-.c-account-login{
-    padding: 80px 0;
-
-    @media(--mobile-max) {
-            padding-top:30px
-        }
-}
-.c-new-users{
-    padding: 20px;
-    padding-left:0;
-}
-.c-registered-users{
-    padding: 20px;
-    padding-right:0;
-    border-left: 1px solid #d6d6d6;
-}
-.c-account-login .page-title h1 {
-    border-bottom: 1px solid #d6d6d6;
-    padding-bottom: 10px;
-    font-size: 1.75rem;
-    font-weight: 700;
-
-@media(--mobile-max) {
-        font-size:25px
-    }
-}
-
-.c-account-login p {
-    margin-top:2px;
-    margin-bottom: 20px
-}
-
-.c-account-login h2 {
-    font-size: 1.375rem;
-    font-weight: 700
-}
-
-.c-account-login a {
-    color: $color-vimergy-orange;
-    font-weight: 600;
-    text-decoration: none
-}
-
-.c-account-login .input-box{
-    margin-bottom: 10px
-}
-
-.c-account-login .input-box input {
-    width: 100%
-}
-
-.c-account-login ul {
-    padding-left: 20px;
-    margin: 10px 0 20px 0;
-    font-size: 1rem;
-}
-.c-account-login .c-new-users ul {
-    list-style: disc;
-}
-.c-account-login .c-new-users ul li{
-    line-height: 27px;
-}
-
-.c-account-login .required {
-    color: $color-vimergy-orange;
-    font-size: 12px
-}
-.registered-users ul {
-    padding: 0;
-    list-style: none;
-    margin: 0;
-    line-height: normal
-}
-
-.registered-users .buttons-set::after {
-    clear: both;
-    content: "";
-    display: table
-}
-
-.registered-users .buttons-set .f-left,.account-create .buttons-set .f-left,.forgot-password .buttons-set .f-left {
-    margin-top: 18px
-} */
 
 .c-account {
+    background-color: $color-white;
+
     @media (--mobile-max) {
         padding: 38px 40px;
         margin: 0 auto;
     }
+
     @media (--tablet) {
         padding: 70px 40px;
         min-height: 480px;
@@ -107,12 +21,12 @@
         display: inline-block;
         text-transform: uppercase;
         text-align: center;
-        background-color: #000;
-        color: #fff;
+        background-color:$color-primary-black;
+        font-family:$font-family-bold;
+        color: $color-white;
         text-decoration: none;
         outline: none;
         font-size: .9375rem;
-        font-weight: 700;
         padding: .8125rem 3rem;
         white-space: nowrap;
         -webkit-appearance: none;
@@ -121,12 +35,17 @@
         -webkit-transition: background 400ms ease-in-out, color 300ms ease;
         -moz-transition: background 400ms ease-in-out, color 300ms ease;
         transition: background 400ms ease-in-out, color 300ms ease;
-        -webkit-border-radius: 2px;
-        -moz-border-radius: 2px;
-        border-radius: 2px;
+        border:none;
+        min-height:56px;
         @media (--mobile-max) {
             width: 100%;
         }
+
+        &:--enter {
+            background-color: $color-hover-grey;
+            color:$color-accent-1;
+        }
+
     }
     .c-btn--large-new {
         border-color:#000;
@@ -156,6 +75,10 @@
             text-align: right;
         }
     }
+
+    .c-input {
+        min-height:64px;
+    }
 }
 
 .c-input,
@@ -174,10 +97,8 @@
 [type='url'],
 [type='color'],
 textarea {
-    border: 1px solid #ccc;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+    border: 2px solid $color-border-black;
+    border-radius: 0px;
     text-shadow: none;
     box-shadow: none;
     height: 2.5rem;
@@ -187,8 +108,10 @@ textarea {
     font-weight: 600;
     padding: .625rem .6875rem;
     color: #010101;
-    -webkit-appearance: none
+    -webkit-appearance: none;
 }
+
+
 
 select {
     width: 100%;
@@ -267,8 +190,7 @@ select {
 }
 
 .c-account__title {
-    font-family: $font-family-primary-bold;
-    font-weight: $font-weight-bold;
+    font-family: $font-family-bold;
     font-size: 1.75rem;
     font-weight: 700;
     border-bottom: 1px solid #d6d6d6;
@@ -279,8 +201,7 @@ select {
         font-size: 1.375rem;
     }
     @media (--tablet) {
-        font-weight: 700;
-        line-height: 34px;
+        line-height: 39px;
         letter-spacing: -1px;
     }
 }
@@ -422,10 +343,11 @@ select {
 }
 
 .c-account--login {
-    max-width: 1174px;
+    max-width: 100%;
+
     .c-account__section {
         @media (--mobile-max) {
-            margin-bottom: 83px;
+            margin:0px auto 83px;
         }
     }
     .c-account__section--two {
@@ -443,6 +365,12 @@ select {
             margin-top: 35px;
         }
     }
+}
+
+.c-account__sectionsContainer {
+    max-width:1174px;
+    width:100%;
+    margin: 0px auto;
 }
 
 .c-account--register {
@@ -819,10 +747,15 @@ table {
     border-bottom: 1px solid #d6d6d6;
 }
 .account-dashboard__block.new-address .c-btn{
-    background-color:#000;
-    color:#fff;
+    background-color:$color-primary-black;
+    color:$color-white;
     height:45px;
     line-height: 1;
+
+    &:--enter{
+        background-color: $color-hover-grey;
+        color:$color-accent-1;
+    }
 }
 .c-link-address {
     margin-bottom: 1rem;

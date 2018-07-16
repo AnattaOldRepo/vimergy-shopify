@@ -21,8 +21,10 @@ $offcanvas-overlay-background: rgba(#000, 0.5) !default;
         overflow-x: hidden;
         visibility: visible;
         transform: translate(0, 0);
+        z-index:99999999;
     }
 }
+
 .c-offcanvas--right{
     color: $color-cold-grey;
     background-color:$color-primary-white;

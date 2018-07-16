@@ -330,7 +330,23 @@
 }
 
 .header-cart-link {
-    text-decoration: none
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.c-header__cartCount {
+    position: absolute 0 0 * *;
+    margin:auto;
+    size:100%;
+    display:flex;
+    justify-content:center;
+    align-items: center;
 }
 
 @media(--tablet-large) {

@@ -121,6 +121,7 @@
 
 .o-dropdown-static {
     position: absolute !important;
+
     @media (--tablet-large) {
         position: static !important;
     }
@@ -128,8 +129,8 @@
 
 #CartCount {
     position: absolute;
-    top: -6px;
-    left: 24px;
+    top: 48.5%;
+    left: 50%;
     width: 14px;
     height: 14px;
     border-radius: 50%;
@@ -140,7 +141,9 @@
     text-align: center;
     z-index: 5;
     pointer-events: none;
+    transform:translateX(-50%)translateY(-50%);
 }
+
 
 .hidden-count {
     display: none;

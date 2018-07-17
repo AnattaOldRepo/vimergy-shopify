@@ -68,7 +68,8 @@
 }
 
 .c-collFiltersGroup__item-model:checked + .c-collFiltersGroup__item:before {
-    background-color: $color-black;
+    background-color: $color-active;
+    border-color: $color-active;
 }
 
 .c-collFiltersGroup__item-model:checked + .c-collFiltersGroup__item:after {
@@ -87,7 +88,7 @@
     display: block;
     font-size: 14px;
     line-height: 18px;
-    padding-top: 3px;
+    padding-top: 1px;
     padding-left: 25px;
     padding-right: 10px;
     letter-spacing: 0;

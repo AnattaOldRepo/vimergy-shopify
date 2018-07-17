@@ -249,6 +249,8 @@
 .c-testimonials__right {
     padding-bottom:85px;
     min-height:510px;
+    background-color:$color-primary-white;
+
 
     @media(--mobile-max){
         padding:* 20px * 62px;

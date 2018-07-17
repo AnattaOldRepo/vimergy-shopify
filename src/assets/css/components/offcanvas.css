@@ -20,8 +20,8 @@ $offcanvas-overlay-background: rgba(#000, 0.5) !default;
     &.offcanvas-open {
         overflow-x: hidden;
         visibility: visible;
+        z-index: 99999999;
         transform: translate(0, 0);
-        z-index:99999999;
     }
 }
 

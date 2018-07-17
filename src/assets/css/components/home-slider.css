@@ -52,6 +52,15 @@
     .c-testimonials-carousel {
         padding: * 80px * 30px;
 
+        @media(--mobile-max){
+            padding: * 30px;
+
+            .c-prev {
+                top:49%;
+                left:0;
+            }
+        }
+
         @media(--desktop){
             padding:0 100px 0 0;
 

@@ -20,7 +20,7 @@
                             <h2 class="c-account__title">Customer Login</h2>
                             {% comment %}
                                 {{ form.errors | default_errors }}
-                            {% endcomment %}    
+                            {% endcomment %}
                             {% if form.errors %}
                              {% for field in form.errors %}
                                 <div class="errors">
@@ -36,14 +36,32 @@
                               {% endfor %}
                             {% endif %}
 
-                            <input type="email" name="customer[email]" id="CustomerEmail" class="c-input {% if form.errors contains 'email' %} error{% endif %}" placeholder="{{ 'customer.login.email' | t }}" autocorrect="off" autocapitalize="off" autofocus>
+                            <input
+                                type="email"
+                                name="customer[email]"
+                                id="CustomerEmail"
+                                class="c-input {% if form.errors contains 'email' %} error{% endif %}"
+                                placeholder="{{ 'customer.login.email' | t }}"
+                                autocorrect="off"
+                                autocapitalize="off"
+                                autofocus>
 
                             {% if form.password_needed %}
-                            <input type="password" value="" name="customer[password]" id="CustomerPassword" class="c-input {% if form.errors contains 'password' %} error{% endif %}" placeholder="{{ 'customer.login.password' | t }}">
+                                <input
+                                    type="password"
+                                    value=""
+                                    name="customer[password]"
+                                    id="CustomerPassword"
+                                    class="c-input {% if form.errors contains 'password' %} error{% endif %}"
+                                    placeholder="{{ 'customer.login.password' | t }}">
+
                             {% endif %}
 
                             <div class="c-account__buttonContainer">
-                                <input type="submit" class="c-btn c-btn--large-new" value="Log in">
+                                <input
+                                    type="submit"
+                                    class="c-btn c-btn--large-new"
+                                    value="Log in">
                             </div>
                             <div class="account-links">
                                 {% if form.password_needed %}
@@ -53,7 +71,6 @@
                             </div>
                         {% endform %}
                     </div>
-
 
 
                     {% comment %}
@@ -70,32 +87,31 @@
                                 {{ form.errors | default_errors }}
 
                                 {% comment %}
-                                Assign variable to be used after timber.init() is run in theme.liquid
+                                    Assign variable to be used after timber.init() is run in theme.liquid
                                 {% endcomment %}
                                 {% if form.posted_successfully? %}
                                 {% assign resetPassword = true %}
                                 {% endif %}
 
-                                <input type="email" value="" name="email" id="RecoverEmail" class="input-full" placeholder="{{ 'customer.recover_password.email' | t }}" autocorrect="off" autocapitalize="off">
-
+                                <input
+                                    type="email" value="" name="email" id="RecoverEmail" class="input-full" placeholder="{{ 'customer.recover_password.email' | t }}" autocorrect="off" autocapitalize="off">
                                 <div class="c-account__buttonContainer">
                                     <input type="submit" class="c-btn c-btn--large-new" value="{{ 'customer.recover_password.submit' | t }}">
                                 </div>
-                                <a href="//javascript();" class="c-account__link--normal" id="HideRecoverPasswordLink">Log In</a> 
+                                <a href="//javascript();" class="c-account__link--normal" id="HideRecoverPasswordLink">Log In</a>
                             {% endform %}
                         </div>
-                    </div>     
+                    </div>
                 </div>
-            </div>  
+            </div>
             <div class="c-account__section c-account__section--two page account register">
                 <div class="loginPage__box">
                     <h2 class="c-account__title" style="white-space:nowrap;">Create An Account</h2>
                     {% comment %} <a href="/account/register" class="c-btn c-btn--secondary">Create an Account</a> {% endcomment %}
                     <div class="signInPage__box">
-
-                {% include 'registerform' %}
-            </div>    
-                </div>    
+                        {% include 'registerform' %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

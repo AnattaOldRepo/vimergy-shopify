@@ -4,6 +4,7 @@
     padding: 2.5rem * 2.5rem *;
     text-align: center;
     font-weight:400;
+    background-color:$color-primary-white;
     @media (--desktop) {
         padding: 34px * 15px *;
     }
@@ -11,6 +12,10 @@
     @media (--mobile-large) {
         text-align: left;
     }
+}
+
+.footer-form {
+    background-color:$color-primary-white;
 }
 
 .c-footer__title {

@@ -25,13 +25,13 @@
             <h4 class="c-collFiltersGroup__title">Packaging</h4>
             <div class="c-collFiltersGroup__list">
               <label class="c-collFiltersGroup__wrap-item">
-                <input class="c-collFiltersGroup__item-model" value="Single" data-filter="Packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+                <input class="c-collFiltersGroup__item-model" value="single" data-filter="packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
                 <div class="c-collFiltersGroup__item">
                   <span class="c-collFiltersGroup__itemText">Single</span>
                 </div>
               </label>
               <label class="c-collFiltersGroup__wrap-item">
-                <input class="c-collFiltersGroup__item-model" value="Kits" data-filter="Packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+                <input class="c-collFiltersGroup__item-model" value="kits" data-filter="packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
                 <div class="c-collFiltersGroup__item">
                   <span class="c-collFiltersGroup__itemText">Kits</span>
                 </div>
@@ -43,19 +43,19 @@
 					<h4 class="c-collFiltersGroup__title">Special Offers</h4>
 					<div class="c-collFiltersGroup__list">
           <label class="c-collFiltersGroup__wrap-item">
-            <input class="c-collFiltersGroup__item-model" value="New" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+            <input class="c-collFiltersGroup__item-model" value="new" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
               <div class="c-collFiltersGroup__item">
                 <span class="c-collFiltersGroup__itemText">New</span>
               </div>
           </label>
             <label class="c-collFiltersGroup__wrap-item">
-            	<input class="c-collFiltersGroup__item-model" value="Best-Seller" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+            	<input class="c-collFiltersGroup__item-model" value="best-seller" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
 				<div class="c-collFiltersGroup__item">
 					<span class="c-collFiltersGroup__itemText">Best Seller</span>
 				</div>
             </label>
             <label class="c-collFiltersGroup__wrap-item">
-              <input class="c-collFiltersGroup__item-model" value="sale" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="radio"/>
+              <input class="c-collFiltersGroup__item-model" value="sale" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
 						  <div class="c-collFiltersGroup__item">
 							  <span class="c-collFiltersGroup__itemText">Sale</span>
 						  </div>
@@ -66,7 +66,7 @@
 		</div>
 		<div class="c-collections__right o-flex__col-lg-10">
 			<div class="c-collectionBar o-flex">
-				<span class="filter-result">Showing All products ( {{ collection.products.length }} )</span>
+				<span class="filter-result">Showing All products ( <span class="item-count"> </span> )</span>
 				 <div class="c-collectionSortby o-flex">
 					<label class="c-collFiltersGroup__title" onclick="filters.clearFilter(true)">Clear All</label>
 				</div>
@@ -98,10 +98,12 @@
 
 <script>
   var filters = {
+	visibleItem: 0,
     item_selector: ".c-product__item",
     filter_model: ".c-collFiltersGroup__item-model",
     appliedFilters: {},
     multiple_filter_enable: false,
+    single_in_eachCategory: true,
     getProducts: function(){
       if(!this.products){
         this.products = $(this.item_selector);
@@ -109,14 +111,16 @@
       return this.products;
     },
     onFilterChange: function(el){
+		this.visibleItem = 0;
       this.buildFilter(el);
       if(this.isFilterEmpty()){
         	this.clearFilter();
       }else{
-			$(".c-collectionSortby").show(0);
-    	this.applyFilter();
+        $(".c-collectionSortby").show(0);
+        this.applyFilter();
       }
-      //console.log(this.appliedFilters);
+      console.log(this.appliedFilters);
+	  this.updateCount();
     },
     isFilterEmpty: function(){
       var _filters = Object.keys(this.appliedFilters), _isFilterEmpty = true;
@@ -131,6 +135,8 @@
     },
     clearFilter: function(uncheckAll){
       this.appliedFilters = {};
+	  this.visibleItem = 8;
+	  this.updateCount();
       this.getProducts().show(0);
 	  $(".c-collectionSortby").hide(0);
 
@@ -138,30 +144,47 @@
         $(this.filter_model).prop("checked", false);
       }
     },
-    checkSingleEnable: function(){
-      if(!this.multiple_filter_enable){
-        this.appliedFilters = {};
-      }
+	updateCount: function(){
+		$('.item-count').text(this.visibleItem);
+	},
+    checkFilterMode: function(el){
+		if(this.single_in_eachCategory){
+			if(el.checked){
+				var fkeys = Object.keys(this.appliedFilters);
+				for(var i=0; i<fkeys.length; i++){
+					if(this.appliedFilters[fkeys[i]].length == 1 && el.dataset.filter == fkeys[i]){
+						$("[data-filter="+ fkeys[i] +"][value="+ this.appliedFilters[fkeys[i]][0] +"]").prop("checked", false);
+						this.appliedFilters[fkeys[i]].length = 0;
+					}
+				}
+			}else{
+				delete this.appliedFilters[el.dataset.filter];
+			}
+      	}else if(!this.multiple_filter_enable){
+    		this.appliedFilters = {};
+      	}
     },
     buildFilter: function(el){
-      this.checkSingleEnable();
-      var filter_config = {
-        category: el.dataset.filter.toLowerCase(),
-        selected: el.value.toLowerCase()
-      },
-      appliedFilters = this.appliedFilters[filter_config.category],
-      isFilterSelected;
+		this.checkFilterMode(el);
+		if(el.checked){
+			var filter_config = {
+				category: el.dataset.filter.toLowerCase(),
+				selected: el.value.toLowerCase()
+			},
+			appliedFilters = this.appliedFilters[filter_config.category],
+			isFilterSelected;
 
-      if(!appliedFilters){
-        this.appliedFilters[filter_config.category] = [filter_config.selected];
-      }else{
-        isFilterSelected = appliedFilters.indexOf(filter_config.selected);
-        if(isFilterSelected == -1){
-          appliedFilters.push(filter_config.selected);
-        }else{
-          appliedFilters.splice(isFilterSelected, 1);
-        }
-      }
+			if(!appliedFilters){
+				this.appliedFilters[filter_config.category] = [filter_config.selected];
+			}else{
+				isFilterSelected = appliedFilters.indexOf(filter_config.selected);
+				if(isFilterSelected == -1){
+				appliedFilters.push(filter_config.selected);
+				}else{
+				appliedFilters.splice(isFilterSelected, 1);
+				}
+			}
+	  	}
     },
     applyFilter: function(){
       var _this = this,
@@ -171,6 +194,7 @@
         var filters = this.dataset.filter;
         if(_this.matchFilters(filters)){
           $(this).show(0);
+		  	_this.visibleItem++
         }else{
           $(this).hide(0);
         }
@@ -197,4 +221,7 @@
       return isMatched;
     }
   }
+
+  filters.visibleItem = {{ collection.products.length }}
+  filters.updateCount();
 </script>

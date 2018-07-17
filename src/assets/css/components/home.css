@@ -821,7 +821,7 @@ body.fancybox-active.compensate-for-scrollbar {
 }
 
 .c-off-white {
-    background-color: #f3f3ea;
+    background-color: $color-primary-white;
 }
 
 .c-testimonial-info-container {

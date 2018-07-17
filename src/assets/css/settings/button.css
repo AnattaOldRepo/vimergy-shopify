@@ -20,13 +20,13 @@ $button-height-xl: 64px;
 
 /* Hover */
 
-$button-color-hover: $color-accent-1 !default;
+$button-color-hover: $color-active!default;
 $button-background-hover: $color-hover-grey !default;
 $button-border-hover: $color-hover-grey !default;
 
 /* Focus and Active */
 
-$button-color-active: $color-accent-1 !default;
+$button-color-active: $color-active !default;
 $button-background-active: $color-primary-black !default;
 $button-border-active: $color-primary-black !default;
 

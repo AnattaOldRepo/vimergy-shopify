@@ -114,6 +114,18 @@
     position: relative;
     cursor: pointer;
 
+    @media(--mobile-max){
+
+        width:29.33%;
+        margin: 0px 4%;
+        font-size:16px;
+
+        svg {
+            width:25px;
+            margin-right: 2px;
+        }
+    }
+
     &:before {
         content:'' ;
         position: absolute 0 0 * *;
@@ -500,6 +512,7 @@ label.rc_label {
 
 div.rc_block__type--active {
     color: #fff;
+    font-family:$font-family-medium;
 }
 
 .rc_select__frequency {
@@ -570,8 +583,8 @@ div.rc_popup__block {
         left: -43rem !important;
     }
     @media(--mobile-max) {
-        width: 355px !important;
-        left: 0rem !important;
+        width: 320px !important;
+        left: 0 !important;
     }
 }
 
@@ -781,13 +794,14 @@ div.rc_popup__block {
 
     #AddToCart {
         height:64px;
-        background-color:$color-primary-black;
+        background-color:$color-border-black;
         color:$color-white;
 
         &:--enter {
-            background-color: $color-hover-grey;
-            color:$color-accent-1;
+            background-color: $color-border-black;
+            color:$color-active;
             outline:none;
+            border-color:$color-border-black;
         }
     }
 }

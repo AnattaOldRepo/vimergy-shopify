@@ -1,8 +1,10 @@
 .c-cart {
     padding: 24px 30px 42px;
+    margin-top: 25px;
     .c-cart__closeX {
         left: auto;
         right: 16px;
+        top:46px;
     }
 }
 
@@ -168,14 +170,14 @@
     line-height: 22px;
     font-family: $font-family-bold;
     letter-spacing: 0;
-    background-color:$color-primary-black;
+    background-color:$color-border-black;
     outline:none;
     color:$color-white;
     border:none;
     letter-spacing:1px;
 
     &:--enter {
-        color:$color-accent-1;
+        color:$color-active;
     }
 }
 

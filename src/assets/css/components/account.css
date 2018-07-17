@@ -42,8 +42,8 @@
         }
 
         &:--enter {
-            background-color: $color-hover-grey;
-            color:$color-accent-1;
+            background-color: $color-border-black;
+            color:$color-active;
         }
 
     }
@@ -53,11 +53,11 @@
     .c-btn--secondary {
         padding: .5625rem 2rem;
         font-size: .875rem;
-        color: #fff;
-        background-color: $color-cold-grey;
+        color: $color-white;
+        background-color: $color-border-black;
         &:--enter {
             background-color: $color-cold-greylight;
-            color: $color-white;
+            color: $color-active;
         }
     }
     .errors {
@@ -103,7 +103,6 @@ textarea {
     box-shadow: none;
     height: 2.5rem;
     display: inline-block;
-    font-family: "proxima-nova", sans-serif;
     font-size: 16px;
     font-weight: 600;
     padding: .625rem .6875rem;
@@ -193,7 +192,6 @@ select {
     font-family: $font-family-bold;
     font-size: 1.75rem;
     font-weight: 700;
-    border-bottom: 1px solid #d6d6d6;
     padding-bottom: 10px;
     margin-bottom: 19px;
     letter-spacing: -1px;
@@ -203,6 +201,7 @@ select {
     @media (--tablet) {
         line-height: 39px;
         letter-spacing: -1px;
+        font-size:39px;
     }
 }
 
@@ -387,6 +386,7 @@ select {
         @media (--mobile-max) {
             margin-bottom: 79px;
         }
+
         .c-account__title {
             @media (--mobile-max) {
                 margin-bottom: 25px;
@@ -418,7 +418,7 @@ select {
     .c-account__logoutLink {
         margin-left: 14px;
         margin-top: 0;
-        color: $color-vimergy-orange;
+        color: $color-border-black;
         font-size: 13px;
         font-weight: 700;
         text-decoration: none;
@@ -432,7 +432,7 @@ select {
         }
     }
     .c-account__title {
-        margin-bottom: 52px;
+        margin-bottom: 20px;
         text-align: center;
         @media (--mobile-large) {
             text-align: left;
@@ -450,18 +450,22 @@ select {
     .action-links {
         a {
             margin-top: 30px;
-            color: $color-vimergy-orange;
+            color: $color-border-black;
             font-size: 13px;
             line-height: 1px;
             font-weight: 600;
             text-decoration: none;
             padding-bottom: 3px;
             margin-right: 16px;
+            display: inline-block;
             &:--enter {
-                color: $color-vimergy-orange;
+                color: $color-active;
             }
         }
     }
+}
+.c-account__sectionMain .c-account__linkArrow {
+    display: none;
 }
 
 .c-account--address {
@@ -614,6 +618,10 @@ input:focus::-webkit-input-placeholder {
     height: 16px
 }
 
+.c-cust-info {
+    background-color:#fbfbf6;
+}
+
 .c-cust-info table {
     text-align: left;
     border-collapse: collapse;
@@ -709,18 +717,28 @@ input:focus::-webkit-input-placeholder {
 }
 
 .c-index {
-    margin-top: 52px;
+    margin-top: 28px;
     font-size: 17px;
     font-weight: bold;
     line-height: 35px;
+    font-family:$font-family-medium;
+}
+.c-index  li {
+    margin-bottom: 10px;
+    font-family: $font-family-base;
 }
 
-.c-index__underline {
-    text-decoration: underline;
+
+.c-index .c-index__underline {
+    font-family: $font-family-medium;
 }
 
 .c-btn--logout a {
-    color: #fff;
+    color:$color-border-black;
+
+    &:--enter {
+        color: $color-active;
+    }
 }
 
 .c-index--refer {
@@ -747,14 +765,19 @@ table {
     border-bottom: 1px solid #d6d6d6;
 }
 .account-dashboard__block.new-address .c-btn{
-    background-color:$color-primary-black;
-    color:$color-white;
-    height:45px;
-    line-height: 1;
+    background-color:$color-white;
+    color:$color-border-black;
+    border-color:$color-border-black;
+    height:56px;
+    width:195px;
+    padding:0px;
+    line-height: 50px;
+    text-align:center;
+    font-family:$font-family-bold;
 
     &:--enter{
-        background-color: $color-hover-grey;
-        color:$color-accent-1;
+        background-color: $color-border-black;
+        color:$color-active;
     }
 }
 .c-link-address {

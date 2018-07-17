@@ -32,7 +32,7 @@
     }
     &:hover {
         color: $button-color-hover;
-        background-color: $button-background-hover;
+        background-color: $color-border-black;
         border-color: $button-border-hover;
     }
     &.disabled,
@@ -57,8 +57,8 @@
     color: #fff;
     background-color: $color-cold-grey;
     &:--enter {
-        background-color: $color-cold-greylight;
-        color: $color-white;
+        background-color: $color-border-black;
+        color: $color-active;
     }
 }
 
@@ -119,13 +119,20 @@
 }
 
 .c-btn--logout {
-    background-color: #EEEAE6;
-    border-color: #EEEAE6;
-    color: #000 !important;
+    background-color:$color-white;
+    border-color: $color-border-black;
+    color: $color-border-black !important;
+    height: 56px;
+    margin-top:40px;
+
     &:--enter {
-        color: #000 !important;
-        background-color: #EEEAE6;
-        border-color: #EEEAE6;
+        color: $color-active !important;
+        background-color: $color-border-black;
+        border-color: $color-border-black;
+
+        a {
+            color:$color-active;
+        }
     }
 }
 

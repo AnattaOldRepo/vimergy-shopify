@@ -267,7 +267,10 @@
         $('.c-variant__boxItem').removeClass('is-active');
         $(this).addClass('is-active');
         $("#product-select").val($(this).data("value"));
-        $(".single-option-selector").val($(this).find('span').data("value"));
+        {% comment %} $(".single-option-selector").val($(this).find('span').data("value")); {% endcomment %}
+        {% if product.type == "Gift Card" %}
+            $(".c-product__price").text($(this).find('span').data("value"));
+        {% endif %}
     });
 
     $('.c-product__slideItem img').on("click", function(e) {

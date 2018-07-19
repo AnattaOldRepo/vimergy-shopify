@@ -126,6 +126,10 @@
         }
     }
 
+    &:first-child {
+        margin-left: 0px;
+    }
+
     &:before {
         content:'' ;
         position: absolute 0 0 * *;
@@ -271,7 +275,8 @@
     font-size: 1.25rem;
     height: 2.9375rem;
     line-height: 2.9375rem;
-    padding-left: .9375rem;
+    padding-left: 0;
+
     @media(--tablet-large) {
         font-size: 1.875rem;
     }

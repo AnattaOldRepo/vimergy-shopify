@@ -691,7 +691,7 @@ input:focus::-webkit-input-placeholder {
     width: 100%;
 
     @media(--tablet-large) {
-        padding: 10rem 10%;
+        padding: 10rem 5%;
         flex-basis: 66.66%;
         width: 66.66%;
     }

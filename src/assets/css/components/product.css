@@ -13,6 +13,7 @@
     align-items: center;
     flex-basis:100%;
     width:100%;
+    flex-direction: column;
 
     @media(--tablet-large){
         width:35%;
@@ -39,13 +40,24 @@
 .c-product__slideItem {
     outline:none;
     cursor: pointer;
-    max-height: 150px;
+    size: 100px;
+    margin:0px 7.5px;
+    border:2px solid #f2f2f2;
+    display: flex;
 
     img {
         object-fit:cover;
         width:100%;
         max-width:100px;
         margin:0px auto;
+    }
+
+    &.slick-current {
+        border: 2px solid $color-active;
+    }
+
+    &.active {
+        border: 2px solid $color-active;
     }
 }
 
@@ -55,14 +67,20 @@
     background-repeat: no-repeat;
     background-color: transparent;
     background-position: center;
-    background-size:100%;
-    size:16px 50px;
-    top:50%;
-    transform: translateY(-50%);
+    background-size:10px;
+    size:16px 30px;
+    margin-top: -15px;
+    display: block;
+    position: absolute 50px auto auto;
+    transform: none;
 
     &.slick-prev {
-        transform: rotate(180deg) translateY(-50%);
-        left:25px;
+        transform: rotate(180deg);
+        left:0px;
+    }
+
+    &.slick-next{
+        right:0px;
     }
 }
 
@@ -701,8 +719,17 @@ div.rc_popup__block {
     }
 }
 
+
 .c-product__sliderNav {
-    display: none;
+    /* display: none; */
+    /* display: block; */
+    width:100%;
+    display: flex;
+    /* max-width:300px; */
+    padding: 0px 20px;
+    position: relative;
+    height: 100px;
+    justify-content: center;
 }
 
 .c-product__featureList {

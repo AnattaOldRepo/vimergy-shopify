@@ -46,17 +46,21 @@
                 <img src="{{ product.images[0] | img_url: 'master' }}" alt="{{ product.images.alt | escape }}" data-product-featured-image>
             </div>
 
-             {% if product.images.size > 1 %}
-                <div class="c-product__sliderNav ">
-
-                    {% for image in product.images %}
-                        <div class="c-product__slideItem">
-                            <img src="{{ image.src | img_url: 'master' }}" alt="{{ image.alt | escape }}">
-                        </div>
-                    {% endfor %}
-
-                </div>
-            {% endif %}
+             {% unless product.title == 'Gift Card' %}
+                {% if product.images.size > 1 %}
+                    <div class="c-product__sliderNav ">
+                            <div class="c-product__slideItem active">
+                                <img src="{{ product.images[0] | img_url: 'master' }}" alt="{{ product.image.alt | escape }}">
+                            </div>
+                            <div class="c-product__slideItem">
+                                <img src="{{ product.images[1] | img_url: 'master' }}" alt="{{ product.image.alt | escape }}">
+                            </div>
+                            <div class="c-product__slideItem">
+                                <img src="{{ product.images[2] | img_url: 'master' }}" alt="{{ product.image.alt | escape }}">
+                            </div>
+                    </div>
+                {% endif %}
+            {% endunless %}
 
         </div>
         <div class="c-product__detail c-product-shop o-flex-item o-flex__col-lg-6">
@@ -78,7 +82,7 @@
 
                 <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
                     {% if product.options.size == 1 %}
-                        <label><strong>Box Size</strong></label>
+                        <label><strong>Size</strong></label>
                     {% endif %}
                     <div id="size-box" class="c-variant__box"   data-productid="{{product.id}}">
                         {% for variant in product.variants %}
@@ -274,6 +278,8 @@
     });
 
     $('.c-product__slideItem img').on("click", function(e) {
+        $('.c-product__slideItem').removeClass('active');
+        $(this).closest('.c-product__slideItem').addClass('active');
         var newImage = $(this).attr('src')
         $('.c-product__singleSlider img').attr('src', newImage);
     });

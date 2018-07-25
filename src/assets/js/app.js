@@ -108,10 +108,11 @@ $(function() {
 
 // Pdp Slider
 
-$('.c-product__sliderNav').slick({
-    infinite:false,
-    dots:false,
-    speed:300,
-    slidesToShow:4,
-    slidesToScroll: 1
-});
+// $('.c-product__sliderNav').slick({
+//     infinite:true,
+//     dots:false,
+//     speed:400,
+//     autoplay:true,
+//     slidesToShow:2,
+//     slidesToScroll: 1
+// });

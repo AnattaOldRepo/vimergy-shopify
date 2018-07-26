@@ -1,8 +1,10 @@
 .c-productCol {
     position: relative;
+    flex-wrap: wrap;
 
     @media(--tablet){
-        background-color: #efeae5
+        background-color: #efeae5;
+        flex-wrap: nowrap;
     }
 
     @media(--tablet-large){

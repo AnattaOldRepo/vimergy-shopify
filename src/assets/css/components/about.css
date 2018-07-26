@@ -13,6 +13,11 @@
 }
 .c-about-banner {
     min-height: 500px;
+    flex-wrap: wrap;
+
+    @media(--tablet){
+        flex-wrap: nowrap;
+    }
 }
 
 .c-home-hero-info .c-heading {
@@ -58,7 +63,12 @@
 
 .c-about-banner {
 
-    .c-productCol{
+    .c-productCol {
+        flex-wrap: wrap;
+
+        @media(--tablet){
+            flex-wrap: nowrap;
+        }
     }
 
     .c-productCol__image {

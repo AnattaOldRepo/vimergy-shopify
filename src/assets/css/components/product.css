@@ -719,6 +719,13 @@ div.rc_popup__block {
     }
 }
 
+.c-product_hero {
+    flex-wrap: wrap;
+
+    @media(--tablet-large){
+        flex-wrap: nowrap;
+    }
+}
 
 .c-product__sliderNav {
     /* display: none; */

@@ -1,4 +1,9 @@
 .c-mainTestimonial {
+    flex-wrap: wrap;
+
+    @media(--tablet-large){
+        flex-wrap: nowrap;
+    }
 
     .c-testimonial_info {
         @media(--desktop){
@@ -72,12 +77,14 @@
 .c-testimonial__sidetext {
     position: absolute;
     width:62px;
+    flex-basis: 62px;
     height: 100%;
     background: transparent;
     z-index: 2;
 
     @media(--tablet-max){
         width:90px;
+        flex-basis:90px;
     }
 
     @media(--tablet-large){
@@ -128,10 +135,12 @@
 .c-testimonials__slider {
     position: relative;
     width:100%;
+    flex-basis: 100%;
     background:$color-white;
 
     @media(--tablet){
         width:89%;
+        flex-basis: 89%;
         margin-left:11%;
         padding-bottom:0px;
     }

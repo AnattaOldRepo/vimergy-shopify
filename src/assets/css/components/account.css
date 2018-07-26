@@ -37,6 +37,7 @@
         transition: background 400ms ease-in-out, color 300ms ease;
         border:none;
         min-height:56px;
+
         @media (--mobile-max) {
             width: 100%;
         }
@@ -446,7 +447,8 @@ select {
         }
     }
     .c-account__title--order {
-        margin-bottom: 32px;
+        margin-bottom: 18px;
+        margin-top: 30px;
     }
     .c-account__addressEditLinks {
         margin-bottom: 26px;
@@ -651,7 +653,7 @@ input:focus::-webkit-input-placeholder {
 .c-cust-info td {
     text-align: left;
     border-collapse: collapse;
-    padding: 2rem 4rem 0 0;
+    padding: 0px;
     font-size: 17px;
 }
 
@@ -700,7 +702,7 @@ input:focus::-webkit-input-placeholder {
 .c-account-desc {
     font-size: 17px;
     line-height: 27px;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
 }
 
 .c-account-information,

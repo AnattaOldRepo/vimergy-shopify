@@ -31,7 +31,7 @@
         width: calc(100% - 195px);
         display:flex;
         align-items: center;
-        min-height:76px;
+        height:76px;
         justify-content:space-between;
     }
 }

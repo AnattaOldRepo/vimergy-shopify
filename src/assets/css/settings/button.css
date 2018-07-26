@@ -20,7 +20,7 @@ $button-height-xl: 64px;
 
 /* Hover */
 
-$button-color-hover: $color-active!default;
+$button-color-hover: $color-active !default;
 $button-background-hover: $color-hover-grey !default;
 $button-border-hover: $color-hover-grey !default;
 

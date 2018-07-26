@@ -49,15 +49,11 @@
              {% unless product.title == 'Gift Card' %}
                 {% if product.images.size > 1 %}
                     <div class="c-product__sliderNav ">
-                            <div class="c-product__slideItem active">
-                                <img src="{{ product.images[0] | img_url: 'master' }}" alt="{{ product.image.alt | escape }}">
+                        {% for image in product.images  limit:3 %}
+                            <div class="c-product__slideItem {% if forloop.first %} active {% endif %}">
+                                <img src="{{ image.src | img_url: 'master' }}" alt="{{ image.alt | escape }}">
                             </div>
-                            <div class="c-product__slideItem">
-                                <img src="{{ product.images[1] | img_url: 'master' }}" alt="{{ product.image.alt | escape }}">
-                            </div>
-                            <div class="c-product__slideItem">
-                                <img src="{{ product.images[2] | img_url: 'master' }}" alt="{{ product.image.alt | escape }}">
-                            </div>
+                        {% endfor %}
                     </div>
                 {% endif %}
             {% endunless %}

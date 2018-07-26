@@ -39,15 +39,16 @@ For all available customer liquid tags:
 			<div class="o-flex">
 				<div class="o-flex__item o-flex__col-6">
 					<h2 class="c-account-information">Account Information</h2>
-					<label class="c-account-info-label c-address-subtitle">Account Information</label>
-				<div>
-				<p class="account-details__name c-account__infoText">{{ customer.name }}</p>
+					<label class="c-account-info-label c-address-subtitle">Account Details</label>
 
-				{% if customer.email != "" %}
-					<p class="c-account__infoText">
-						{{ customer.email }}
-					</p>
-				{% endif %}
+					<p class="account-details__name c-account__infoText">{{ customer.name }}</p>
+
+					{% if customer.email != "" %}
+						<p class="c-account__infoText">
+							{{ customer.email }}
+						</p>
+					{% endif %}
+				</div>
 				<div class="o-flex__item o-flex__col-6">
 					<h2 class="c-account-information ">Address Book</h2>
 					<label class="c-account-info-label c-address-subtitle">

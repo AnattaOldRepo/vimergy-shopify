@@ -1,6 +1,6 @@
 .c-content-pages {
     padding: 2.5rem 0;
-    color: #393D4E; 
+    color: #393D4E;
 }
 
 .c-content-pages .c-cs-container,.c-content-pages .col2-left-layout .main,.col2-left-layout .c-content-pages .main {
@@ -80,7 +80,7 @@
     font-weight: normal;
     line-height: 35px;
     margin-bottom: 4px;
-    color: $color-vimergy-orange;
+    color: $color-active;
 
     @media (--mobile-max) {
         font-size:14px;

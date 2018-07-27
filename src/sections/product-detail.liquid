@@ -10,8 +10,10 @@
         </div>
         <div class="c-product__featureList">
             {{ product.metafields.c_f.feature-list }}
+            <a class=" view-citation  js-modal-inline" href="fallback.html" aria-controls="content" data-modal-src="#content">View Citations</a>
         </div>
     </div>
+
     {% if product.metafields.c_f.usage-text %}
         <div class="c-product__usage">
             <div class="c-product__usageLeft">
@@ -27,4 +29,5 @@
     {% endif %}
 
 </div>
+
 

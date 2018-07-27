@@ -72,6 +72,24 @@ input[type="search"]{
 
 }
 
+.c-search__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top:40px;
+}
+
+.c-search__item {
+    width:25%;
+}
+
+
+
+.c-search__itemContent {
+    text-align: center;
+}
+
 svg.c-search__breadcrumbArrow {
     display:none;
 }

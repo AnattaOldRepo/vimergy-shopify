@@ -179,6 +179,10 @@ twitter {
 .c-subscribe .o-flex {
     max-width: 75.625rem;
     margin: 0 auto;
+
+    @media(--tablet){
+        flex-wrap: nowrap;
+    }
 }
 
 .c-subscribe__left  {

@@ -124,6 +124,8 @@
     color: $color-border-black !important;
     height: 56px;
     margin-top:40px;
+    padding-top:18px;
+    text-align:center;
 
     &:--enter {
         color: $color-active !important;

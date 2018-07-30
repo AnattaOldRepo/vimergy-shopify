@@ -666,6 +666,13 @@ input:focus::-webkit-input-placeholder {
 .c-accounts {
     color: #393D4E;
     font-family: Arial;
+
+    .o-flex {
+
+        @media(--tablet){
+            flex-wrap: nowrap;
+        }
+    }
 }
 
 .c-accounts .o-flex__col-4 {

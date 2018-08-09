@@ -276,10 +276,13 @@
     // Modified contents of customer_area.js (global asset)
     Shopify.CustomerAddress = {
       toggleForm: function(id) {
+        jQuery('.form-vertical').hide();
         var editEl = document.getElementById('EditAddress_'+id);
+
         editEl.style.display = editEl.style.display == 'none' ? '' : 'none';
         return false;
       },
+
 
       toggleNewForm: function() {
         console.log('toggle')
@@ -294,6 +297,11 @@
         }
       }
     }
+
+    jQuery('.c-account__link--normal').on('click', function(){
+        jQuery('.form-vertical').hide(0);
+    });
+
   </script>
 
   {% endpaginate %}

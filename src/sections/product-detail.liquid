@@ -2,7 +2,12 @@
     <h2 class="c-heading">Product info</h2>
     <div class="c-product__text">
         <p>{{ product.metafields.c_f.prod-info-new }}</p>
-        {% include 'vimergy-icons' %}
+
+        <div class="c-iconSection">
+            {% if product.metafields.c_f.prod-icon-grid %}
+                {{ product.metafields.c_f.prod-icon-grid }}
+            {% endif %}
+        </div>
     </div>
     <div class="c-product__features">
         <div class="c-product__featureImg">

@@ -17,8 +17,9 @@
         margin:* 20px;
     }
 
+    img,
     svg {
-       max-width:30px;
+        max-width:30px;
         display:block;
         height:auto;
 

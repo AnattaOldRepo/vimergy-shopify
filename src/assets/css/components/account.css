@@ -633,6 +633,7 @@ input:focus::-webkit-input-placeholder {
 
 .c-cust-info {
     background-color:#fbfbf6;
+    line-height: 1.3;
 }
 
 .c-cust-info table {
@@ -655,6 +656,7 @@ input:focus::-webkit-input-placeholder {
     border-collapse: collapse;
     padding: 0px;
     font-size: 17px;
+    padding: 10px 0px;
 }
 
 .c-manage-subs a {
@@ -669,7 +671,7 @@ input:focus::-webkit-input-placeholder {
 
     .o-flex {
 
-        @media(--tablet){
+        @media(--tablet-large){
             flex-wrap: nowrap;
         }
     }
@@ -698,6 +700,7 @@ input:focus::-webkit-input-placeholder {
     padding: 2rem;
     flex-basis: 100%;
     width: 100%;
+    line-height: initial;
 
     @media(--tablet-large) {
         padding: 10rem 5%;

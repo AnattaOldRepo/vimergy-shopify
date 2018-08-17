@@ -1,0 +1,110 @@
+.c-product-add {
+    margin-top: 20px !important;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 0px !important;
+
+    @media(--tablet-max){
+        .grid__item {
+            width: 50%;
+            float: none;
+            padding: 0px 20px;
+        }
+    }
+
+    .grid-view-item__title {
+        font-size: 15px;
+        text-align: center;
+        margin: 10px 0px;
+    }
+
+    .grid-view-item p {
+        display: none;
+    }
+
+    .product-price__price {
+        font-size: 15px;
+        text-align: center;
+        display: block;
+    }
+
+    .grid-view-item__image-wrapper {
+        text-align: center;
+    }
+}
+
+.c-product_searchTitle {
+    display: none;
+}
+
+.c-search-grid {
+
+    form {
+            position: relative;
+            margin-top: 20px;
+
+        button {
+            position: absolute;
+            right: 0px;
+            height: 40px;
+            top: 0px;
+            border: 2px solid;
+            line-height: 40px;
+            padding: 0px;
+            width: 100px;
+            outline: none;
+            font-family: $font-family-bold;
+        }
+    }
+
+}
+
+.account-links .c-btn {
+    font-family: $font-family-bold;
+    line-height: 1;
+
+    @media(--mobile-max){
+        width: 100%;
+        max-width: 150px;
+        padding: * 0px *;
+        text-align: center;
+    }
+
+}
+
+.c-btn.c-account__link--normal {
+    margin-top: 0px;
+    font-size: 15px;
+    height: 46px;
+    font-family: $font-family-bold;
+}
+
+.account-dashboard {
+
+    #AddAddress select {
+        border: 2px solid #253237;
+    }
+
+    .c-btn {
+        font-family: $font-family-bold;
+
+        @media(--tablet-large){
+            padding: 0.8125rem 2rem;
+        }
+    }
+}
+
+.c-subaccount {
+
+    fieldset {
+        border: none;
+        padding: 0px;
+    }
+
+    .account-links.c-link-address button {
+
+        @media(--mobile-max){
+            max-width: 170px;
+        }
+    }
+}

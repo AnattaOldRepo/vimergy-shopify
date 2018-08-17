@@ -28,3 +28,14 @@
         }
     }
 }
+
+
+.c-icons li img {
+    max-width:60px;
+    display:block;
+    height:auto;
+
+    @media(--mobile-max){
+        max-width:30px;
+    }
+}

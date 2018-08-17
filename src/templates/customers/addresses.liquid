@@ -155,7 +155,7 @@
                             <div class="account-links">
                                 <input type="submit" class="c-btn" value="{{ 'customer.addresses.update' | t }}">
 
-                                <a class="c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleForm({{ form.id }}); return false;">{{ 'customer.addresses.cancel' | t }}</a>
+                                <a class="c-btn c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleForm({{ form.id }}); return false;">{{ 'customer.addresses.cancel' | t }}</a>
                             </div>
 
                         {% endform %}
@@ -215,9 +215,10 @@
                         </div>
 
                         <div class="account-links c-link-address">
-                            <input type="submit" class="c-btn" value="{{ 'customer.addresses.add' | t }}">
+                            {% comment %} <input type="submit" class="c-btn" value="{{ 'customer.addresses.add' | t }}"> {% endcomment %}
+                            <input type="submit" class="c-btn" value="submit">
 
-                            <a class="c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">
+                            <a class="c-btn c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">
                                 {{ 'customer.addresses.cancel' | t }}
                             </a>
                         </div>

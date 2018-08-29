@@ -512,8 +512,132 @@ select {
     th,
     td {
         text-align: left;
-        padding: $gutter / 2;
+        padding: 10px 0;
         /* border: 1px solid $color-black; */
+    }
+    .text-center {
+        @media (--tablet) {
+            text-align: center;
+        }
+    }
+    .text-rightImp {
+        @media (--tablet) {
+            text-align: right !important; 
+        }
+    }
+}
+
+.c-orderWrap__product {
+    @media (--tablet) {
+        max-width: 320px;
+    }
+
+    .note {
+        padding-top: 8px;
+    }
+}
+
+.c-orderWrap {
+
+    tr, td, th {
+        @media (--mobile-max) {
+            display: block;
+        } 
+    }
+
+    thead {
+        @media (--mobile-max) {
+            display: block;
+            width: 50%;
+            float: left;
+        }
+    }
+    tbody {
+        @media (--mobile-max) {
+            display: block;
+            width: 50%;
+            float: right;
+        }
+        td {
+            @media (--mobile-max) {
+                text-align: right;
+            }
+        } 
+    }
+
+    tfoot {
+        @media (--mobile-max) {
+            display: block;
+            clear: both;
+        }
+
+        td {
+            @media (--mobile-max) {
+                width: 50%;
+            }
+            &:last-of-type{
+               @media (--mobile-max) {
+                    float: right;
+                    text-align: right;
+                } 
+            }
+        }
+    }
+}
+.c-ordersMobile .c-mobilePro__block {
+    padding: 10px 0;
+}
+
+
+.c-mobilePro__block {
+    overflow: hidden;
+    clear: both;
+    border-bottom: 1px solid #d4d4d4;
+    display: flex;
+}
+
+.c-mobilePro__col {
+    flex-grow:1;
+    font-size:14px;
+}
+
+.c-mobilePro__col p {
+    font-size: 14px;
+}
+
+.c-mobilePro__colCenter {
+    text-align: center;
+}
+
+.c-mobilePro__col span {
+    padding: 0 10px;
+}
+
+.c-mobilePro__col1 {
+    width:30%;
+    text-align:left;
+    font-weight: 700;
+}
+
+.c-mobilePro__col2 {
+    width: 70%;
+    text-align:right;
+}
+
+.c-mobilePro {
+    margin-bottom: 30px;
+}
+
+.c-ordersMobile {
+    display: none;
+    @media (--mobile-max) {
+        display: block;
+    }
+}
+
+.c-ordersDesktop {
+    @media (--mobile-max) {
+        display: none;
     }
 }
 

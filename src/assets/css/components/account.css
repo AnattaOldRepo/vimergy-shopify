@@ -831,12 +831,12 @@ table {
             max-height: 640px;
             overflow-y: scroll;
             border:1px solid;
-            padding: 20px;
+            padding: 10px 20px;
         }
 
         input, select {
             @media (--mobile-max) { 
-                height: 2rem;
+                height: 1.8rem;
                 padding: 0 10px;
                 border-width: 1px;
             }

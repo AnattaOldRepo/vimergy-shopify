@@ -98,16 +98,17 @@
             </div>
 
 
+
             <div class="c-account__section c-account__section--two account-dashboard__block address">
 
 
                 {% for address in customer.addresses %}
 
-                    <div id="EditAddress_{{ address.id }}" class="form-vertical" style="display:none;">
+                    <div id="EditAddress_{{ address.id }}" class="form-vertical c-account__sectionMobile" style="display:none;">
                         {% form 'customer_address', address %}
 
                             <h2 class="c-account__subtitle account-dashboard__subtitle">Edit Address</h2>
-
+                            
                             <div class="grid">
                                 <div class="grid__item one-half small--one-whole">
                                     <input type="text" id="AddressFirstName_{{ form.id }}" class="input-full" name="address[first_name]" value="{{ form.first_name }}" placeholder="{{ 'customer.addresses.first_name' | t }}" autocapitalize="words">
@@ -140,7 +141,7 @@
                                 </div>
                             </div>
 
-                            <input type="text" id="AddressZip_{{ form.id }}" class="input-full" name="address[zip]" value="{{ form.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}" autocapitalize="characters">
+                            <input type="text" id="AddressZip_{{ form.id }}" class="input-full js-zip" name="address[zip]" value="{{ form.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}" autocapitalize="characters">
 
                             <input type="tel" id="AddressPhone_{{ form.id }}" class="input-full" name="address[phone]" value="{{ form.phone }}" placeholder="{{ 'customer.addresses.phone' | t }}">
 
@@ -153,7 +154,7 @@
                             </div>
 
                             <div class="account-links">
-                                <input type="submit" class="c-btn" value="{{ 'customer.addresses.update' | t }}">
+                                <input type="submit" class="c-btn js-addSubmit" value="{{ 'customer.addresses.update' | t }}">
 
                                 <a class="c-btn c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleForm({{ form.id }}); return false;">{{ 'customer.addresses.cancel' | t }}</a>
                             </div>
@@ -165,10 +166,9 @@
 
                   {% comment %} Add address form, hidden by default {% endcomment %}
 
-                <div id="AddAddress" class="form-vertical" style="display: none;">
+                <div id="AddAddress" class="form-vertical c-account__sectionMobile" style="display: none;">
                     {% form 'customer_address', customer.new_address %}
                         <h1 class="c-account__title">Add New Address</h1>
-
                         <div class="grid">
 
                             <div class="grid__item one-half small--one-whole">
@@ -201,7 +201,7 @@
                             </div>
                         </div>
 
-                        <input type="text" id="AddressZipNew" class="input-full" name="address[zip]" value="{{ form.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}" autocapitalize="characters">
+                        <input type="text" id="AddressZipNew" class="input-full js-zip" name="address[zip]" value="{{ form.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}" autocapitalize="characters">
 
                         <input type="tel" id="AddressPhoneNew" class="input-full" name="address[phone]" value="{{ form.phone }}" placeholder="{{ 'customer.addresses.phone' | t }}">
 
@@ -216,7 +216,7 @@
 
                         <div class="account-links c-link-address">
                             {% comment %} <input type="submit" class="c-btn" value="{{ 'customer.addresses.add' | t }}"> {% endcomment %}
-                            <input type="submit" class="c-btn" value="submit">
+                            <input type="submit" class="c-btn js-addSubmit" value="submit">
 
                             <a class="c-btn c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">
                                 {{ 'customer.addresses.cancel' | t }}
@@ -279,7 +279,7 @@
       toggleForm: function(id) {
         jQuery('.form-vertical').hide();
         var editEl = document.getElementById('EditAddress_'+id);
-
+        console.log('line 282 edit');
         editEl.style.display = editEl.style.display == 'none' ? '' : 'none';
         return false;
       },
@@ -287,6 +287,7 @@
 
       toggleNewForm: function() {
         console.log('toggle')
+        console.log('line 290 add');
         var el = document.getElementById('AddAddress');
         el.style.display = el.style.display == 'none' ? '' : 'none';
         return false;
@@ -302,6 +303,26 @@
     jQuery('.c-account__link--normal').on('click', function(){
         jQuery('.form-vertical').hide(0);
     });
+
+    /*
+    jQuery('.js-zip').focusout( function() {
+       
+        var inputLength = jQuery(this).val().toString();
+
+        console.log(inputLength);
+
+        var inputLengthVal = inputLength.length;
+
+        var inputLengthValue = (inputLengthVal > 4 ) ? true : false;
+
+        if (inputLengthValue) {
+            inputLength.prepend( "0" );
+        } else {
+            console.log('false');
+        }
+        
+    });
+    */
 
   </script>
 

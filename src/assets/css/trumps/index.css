@@ -1,3 +1,34 @@
 .trumps {
     content: "";
 }
+
+.bkt--prec--layout1 .bx-wrapper .bx-viewport .bkt--products-vertical:hover {
+	box-shadow: none !important;
+}
+
+.precommend_default .bkt--prec .bkt--prec--layout_slider.bkt--row .bkt--vertical-title {
+	color: #253237 !important;
+}
+
+.precommend_default .bkt--prec * {
+	font-family: 'Mark-pro',Arial,sans-serif !important;
+}
+.bkt--vertical-variant .bkt--select {
+	max-width: 150px;
+	margin: auto !important;
+}
+
+.precommend_default .bkt--prec .bkt--prec--layout_slider.bkt--row .bkt--products-vertical .bkt--vertical-add-cart {
+	color: #000 !important;
+	max-width: 150px;
+	border: 0 !important;
+	height: 50px;
+    line-height: 50px;
+    padding: 0px 10px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-weight: 800;
+    left: 0 !important;
+    right: 0 !important;
+    margin: auto;
+}

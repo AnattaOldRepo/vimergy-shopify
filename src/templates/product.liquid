@@ -194,12 +194,11 @@
         </div>
     </div>
 </div>
-
     {% unless product.title == 'Gift Card' %}
 
         {% section 'product-detail' %}
 
-        <div class="c-related-products">
+        <div class="c-related-products" style="display: none;">
             <h2> You may also like</h2>
             <div class="c-related-productGrid">
                 {% for collection in product.collections %}
@@ -249,7 +248,9 @@
 
     {% endunless %}
 
+<div class="c-relatedProducts c-related-products">
 
+</div>
 
 {% if product.metafields.c_f.citations %}
 

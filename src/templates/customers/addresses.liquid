@@ -304,25 +304,27 @@
         jQuery('.form-vertical').hide(0);
     });
 
-    /*
-    jQuery('.js-zip').focusout( function() {
-       
+ 
+    $('.js-zip').focusout( function() {
+        
         var inputLength = jQuery(this).val().toString();
-
-        console.log(inputLength);
 
         var inputLengthVal = inputLength.length;
 
-        var inputLengthValue = (inputLengthVal > 4 ) ? true : false;
+        if (inputLengthVal == 3 ) {
 
-        if (inputLengthValue) {
-            inputLength.prepend( "0" );
+            $(this).val('00' + inputLength);
+
+        } else if (inputLengthVal == 4 ) {
+
+            $(this).val('0' + inputLength);
+
         } else {
-            console.log('false');
+            
+            $(this).val(inputLength);
         }
         
     });
-    */
 
   </script>
 

@@ -32,3 +32,12 @@
     right: 0 !important;
     margin: auto;
 }
+
+.bkt--btn{
+	font-family: 'Mark-pro',Arial,sans-serif !important;
+	color: #000 !important;
+	background-color: rgb(238, 234, 230) !important;
+	font-weight: 800 !important;
+	letter-spacing: 2px !important;
+	font-size: 14px !important;
+}

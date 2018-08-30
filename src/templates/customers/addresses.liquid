@@ -306,18 +306,21 @@
 
  
     $('.js-zip').focusout( function() {
-       
+        
         var inputLength = jQuery(this).val().toString();
-
-        console.log(inputLength);
 
         var inputLengthVal = inputLength.length;
 
         if (inputLengthVal == 3 ) {
+
             $(this).val('00' + inputLength);
+
         } else if (inputLengthVal == 4 ) {
+
             $(this).val('0' + inputLength);
+
         } else {
+            
             $(this).val(inputLength);
         }
         

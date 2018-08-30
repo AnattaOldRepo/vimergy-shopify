@@ -983,3 +983,29 @@ table {
         }
     }
 }
+
+.c-orderTable {
+    @media (--mobile-max) { 
+        max-width: 100% !important;
+    }
+    .c-account-information--order {
+        @media (--mobile-max) { 
+            font-size: 12px;
+            line-height: 13px;
+            letter-spacing: 0.8px;
+        }
+    }
+    .c-account__infoText {
+        @media (--mobile-max) { 
+            font-size: 12px;
+            line-height: 13px;
+            letter-spacing: 0.8px;
+        }
+    }
+}
+
+.order-history {
+    @media (--mobile-max) { 
+        margin: 0 -24px;
+    }
+}

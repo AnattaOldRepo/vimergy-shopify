@@ -1,0 +1,39 @@
+.template-giftcard {
+	background-color: #fff;
+	text-align: center;
+}
+.c-giftcardHeader {
+	text-align: center;
+	margin-top: 20px;
+
+	img {
+		max-width: 150px;
+	}
+}
+.giftcard  {
+	max-width: 800px;
+	margin: auto;
+	padding: 20px;
+
+	h1 {
+		padding: 20px 0;
+	}
+}
+.c-giftcardShopping {
+	margin: 20px 0;
+}
+.c-giftcardCode {
+	font-size: 30px;
+    padding: 10px 0 0 0;
+    display: inline-block;
+}
+
+
+@media print { 
+	body {
+		text-align: center;
+		max-width: 800px;
+		background-color: #fff;
+  	}
+	
+}

@@ -84,7 +84,7 @@
                        <label><strong>Size</strong></label>
                        <div class="c-variant__box">
                             <div class="c-variant__boxItem  is-active">
-                                {% include 'icon-spoon' %}
+                                {{ product.metafields.c_f.icon }}
                                 {{ product.metafields.c_f.sizetype }}
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                     <div id="size-box" class="c-variant__box"   data-productid="{{product.id}}">
                         {% for variant in product.variants %}
                             <div class="c-variant__boxItem {% if variant == current_variant   %} is-active {% endif %}" data-value="{{ variant.id }}">
-                                {% unless product.title == 'Gift Card' %} {% include 'icon-spoon' %} {% endunless %} <span data-value="{{ variant.title }}">{{ variant.title }}</span>
+                                {% unless product.title == 'Gift Card' %} {{ product.metafields.c_f.icon }} {% endunless %} <span data-value="{{ variant.title }}">{{ variant.title }}</span>
                             </div>
                         {% endfor %}
                     </div>

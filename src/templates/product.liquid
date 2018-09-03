@@ -84,8 +84,18 @@
                        <label><strong>Size</strong></label>
                        <div class="c-variant__box">
                             <div class="c-variant__boxItem  is-active">
-                                {{ product.metafields.c_f.icon }}
-                                {{ product.metafields.c_f.sizetype }}
+                                {% if product.metafields.c_f.icon  == 'capsule' %}
+                                    <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
+                                {% elsif product.metafields.c_f.icon  == 'spoon' %} 
+                                    <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
+                                {% elsif product.metafields.c_f.icon  == 'sachet' %} 
+                                    <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
+                                {% elsif product.metafields.c_f.icon  == 'tincture' %} 
+                                    <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
+                                {% else %}
+                                    <span></span>
+                                {% endif %}
+                                <span>{{ product.metafields.c_f.sizetype }}</span>
                             </div>
                         </div>
                     </div>  
@@ -99,7 +109,19 @@
                     <div id="size-box" class="c-variant__box"   data-productid="{{product.id}}">
                         {% for variant in product.variants %}
                             <div class="c-variant__boxItem {% if variant == current_variant   %} is-active {% endif %}" data-value="{{ variant.id }}">
-                                {% unless product.title == 'Gift Card' %} {{ product.metafields.c_f.icon }} {% endunless %} <span data-value="{{ variant.title }}">{{ variant.title }}</span>
+                                {% unless product.title == 'Gift Card' %}
+                                    {% if product.metafields.c_f.icon  == 'capsule' %}
+                                        <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
+                                    {% elsif product.metafields.c_f.icon  == 'spoon' %} 
+                                        <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
+                                    {% elsif product.metafields.c_f.icon  == 'sachet' %} 
+                                        <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
+                                    {% elsif product.metafields.c_f.icon  == 'tincture' %} 
+                                        <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
+                                    {% else %}
+                                        <span></span>
+                                    {% endif %}
+                                {% endunless %} <span data-value="{{ variant.title }}">{{ variant.title }}</span>
                             </div>
                         {% endfor %}
                     </div>

@@ -17,6 +17,9 @@
 	max-width: 150px;
 	margin: auto !important;
 }
+.precommend_default .bkt--prec .bkt--prec--layout_title {
+	margin-bottom: 0 !important;
+}
 
 .precommend_default .bkt--prec .bkt--prec--layout_slider.bkt--row .bkt--products-vertical .bkt--vertical-add-cart {
 	color: #000 !important;

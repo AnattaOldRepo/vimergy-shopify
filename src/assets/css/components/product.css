@@ -875,3 +875,10 @@ div.rc_popup__block {
 .template-product .c-modal {
     background-color: #2532378f;
 }
+.c-variant__icon {
+    width: 40px;
+    margin: 10px;
+}
+.c-variant__icon--tintcure {
+    width: 25px;
+}

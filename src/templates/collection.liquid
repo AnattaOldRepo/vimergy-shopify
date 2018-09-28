@@ -6,60 +6,75 @@
 					<label class="c-collFiltersGroup__title" onclick="filters.clearFilter(true)">Clear All</label>
 				</div> {% endcomment %}
 				<h3 class="c-collFilters__title">Filter By</h3>
-				{% comment %} <div class="c-collFiltersGroup">
-					<h4 class="c-collFiltersGroup__title">Type</h4>
-					<div class="c-collFiltersGroup__list">
-						<div class="c-collFiltersGroup__item is-active">
-							<span class="c-collFiltersGroup__itemText">Extract</span>
-						</div>
-						<div class="c-collFiltersGroup__item">
-							<span class="c-collFiltersGroup__itemText">Capsules</span>
-						</div>
-						<div class="c-collFiltersGroup__item">
-							<span class="c-collFiltersGroup__itemText">Tinctures</span>
+				{% if collection.handle == "shop" %}
+					<div class="c-collFiltersGroup">
+						<h4 class="c-collFiltersGroup__title">Type</h4>
+						<div class="c-collFiltersGroup__list">
+							<label class="c-collFiltersGroup__wrap-item">
+								<input class="c-collFiltersGroup__item-model" value="capsule" data-filter="type" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+								<div class="c-collFiltersGroup__item">
+									<span class="c-collFiltersGroup__itemText">Capsule</span>
+								</div>
+							</label>
+							<label class="c-collFiltersGroup__wrap-item">
+								<input class="c-collFiltersGroup__item-model" value="liquid" data-filter="type" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+								<div class="c-collFiltersGroup__item">
+									<span class="c-collFiltersGroup__itemText">Liquid</span>
+								</div>
+							</label>
+							<label class="c-collFiltersGroup__wrap-item">
+								<input class="c-collFiltersGroup__item-model" value="powder" data-filter="type" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+								<div class="c-collFiltersGroup__item">
+									<span class="c-collFiltersGroup__itemText">Powder</span>
+								</div>
+							</label>
+							<label class="c-collFiltersGroup__wrap-item">
+								<input class="c-collFiltersGroup__item-model" value="tea" data-filter="type" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+								<div class="c-collFiltersGroup__item">
+									<span class="c-collFiltersGroup__itemText">Tea</span>
+								</div>
+							</label>
 						</div>
 					</div>
-				</div> {% endcomment %}
-        {% if collection.handle == "shop" %}
-          <div class="c-collFiltersGroup">
-            <h4 class="c-collFiltersGroup__title">Packaging</h4>
-            <div class="c-collFiltersGroup__list">
-              <label class="c-collFiltersGroup__wrap-item">
-                <input class="c-collFiltersGroup__item-model" value="single" data-filter="packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
-                <div class="c-collFiltersGroup__item">
-                  <span class="c-collFiltersGroup__itemText">Single</span>
-                </div>
-              </label>
-              <label class="c-collFiltersGroup__wrap-item">
-                <input class="c-collFiltersGroup__item-model" value="kits" data-filter="packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
-                <div class="c-collFiltersGroup__item">
-                  <span class="c-collFiltersGroup__itemText">Kits</span>
-                </div>
-              </label>
-            </div>
-          </div>
-        {% endif %}
+					<div class="c-collFiltersGroup">
+						<h4 class="c-collFiltersGroup__title">Packaging</h4>
+						<div class="c-collFiltersGroup__list">
+							<label class="c-collFiltersGroup__wrap-item">
+								<input class="c-collFiltersGroup__item-model" value="single" data-filter="packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+								<div class="c-collFiltersGroup__item">
+									<span class="c-collFiltersGroup__itemText">Single</span>
+								</div>
+							</label>
+							<label class="c-collFiltersGroup__wrap-item">
+								<input class="c-collFiltersGroup__item-model" value="kits" data-filter="packaging" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+								<div class="c-collFiltersGroup__item">
+									<span class="c-collFiltersGroup__itemText">Kits</span>
+								</div>
+							</label>
+						</div>
+					</div>
+				{% endif %}
 				<div class="c-collFiltersGroup">
 					<h4 class="c-collFiltersGroup__title">Special Offers</h4>
 					<div class="c-collFiltersGroup__list">
-          <label class="c-collFiltersGroup__wrap-item">
-            <input class="c-collFiltersGroup__item-model" value="new" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
-              <div class="c-collFiltersGroup__item">
-                <span class="c-collFiltersGroup__itemText">New</span>
-              </div>
-          </label>
-            <label class="c-collFiltersGroup__wrap-item">
-            	<input class="c-collFiltersGroup__item-model" value="best-seller" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
-				<div class="c-collFiltersGroup__item">
-					<span class="c-collFiltersGroup__itemText">Best Seller</span>
-				</div>
-            </label>
-            <label class="c-collFiltersGroup__wrap-item">
-              <input class="c-collFiltersGroup__item-model" value="sale" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
-						  <div class="c-collFiltersGroup__item">
-							  <span class="c-collFiltersGroup__itemText">Sale</span>
-						  </div>
-            </label>
+					<label class="c-collFiltersGroup__wrap-item">
+						<input class="c-collFiltersGroup__item-model" value="new" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">New</span>
+						</div>
+					</label>
+					<label class="c-collFiltersGroup__wrap-item">
+						<input class="c-collFiltersGroup__item-model" value="best-seller" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">Best Seller</span>
+						</div>
+					</label>
+					<label class="c-collFiltersGroup__wrap-item">
+						<input class="c-collFiltersGroup__item-model" value="sale" data-filter="so" name="filter-model" onchange="filters.onFilterChange(this)" type="checkbox"/>
+						<div class="c-collFiltersGroup__item">
+							<span class="c-collFiltersGroup__itemText">Sale</span>
+						</div>
+					</label>
 					</div>
 				</div>
 			</div>

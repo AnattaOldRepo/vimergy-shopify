@@ -85,6 +85,12 @@ $('.js-offcanvas').offcanvas({
     showOverlay: false
 });
 
+$('.c-collFilters__mobileTitle').click(function(e){
+    e.preventDefault();
+    $(this).toggleClass('is-open');
+    $('.c-collFilters').slideToggle(400);
+})
+
 $(function() {
     $('.js-accordion').accordion({
         collapsible: true,

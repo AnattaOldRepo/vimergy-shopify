@@ -131,6 +131,8 @@
     min-height: 76px;
     position: relative;
     cursor: pointer;
+    flex-direction: column;
+    padding: 10px;
 
     @media(--mobile-max){
 
@@ -881,4 +883,8 @@ div.rc_popup__block {
 }
 .c-variant__icon--tintcure {
     width: 25px;
+}
+
+.c-variant__boxItem .c-variant__icon {
+    margin: 0px;
 }

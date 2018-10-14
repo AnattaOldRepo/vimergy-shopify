@@ -160,6 +160,10 @@
         background-size:100%;
         display: none;
     }
+
+    &:hover {
+        color: inherit;
+    }
 }
 
 .c-variant__boxItem {

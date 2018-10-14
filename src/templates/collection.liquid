@@ -6,7 +6,7 @@
 			</div>
 
 			<div class="c-collFilters">
-        {% comment %} <div class="c-collectionSortby">
+        		{% comment %} <div class="c-collectionSortby">
 					<label class="c-collFiltersGroup__title" onclick="filters.clearFilter(true)">Clear All</label>
 				</div> {% endcomment %}
 				<h3 class="c-collFilters__title">Filter By</h3>
@@ -115,131 +115,130 @@
 </div>
 
 <script>
-  var filters = {
-	visibleItem: 0,
-    item_selector: ".c-product__item",
-    filter_model: ".c-collFiltersGroup__item-model",
-    appliedFilters: {},
-    multiple_filter_enable: false,
-    single_in_eachCategory: true,
-    getProducts: function(){
-      if(!this.products){
-        this.products = $(this.item_selector);
-      }
-      return this.products;
-    },
-    onFilterChange: function(el){
-		this.visibleItem = 0;
-      this.buildFilter(el);
-      if(this.isFilterEmpty()){
-        	this.clearFilter();
-      }else{
-        $(".c-collectionSortby").show(0);
-        this.applyFilter();
-      }
-      console.log(this.appliedFilters);
-	  this.updateCount();
-    },
-    isFilterEmpty: function(){
-      var _filters = Object.keys(this.appliedFilters), _isFilterEmpty = true;
-      if(_filters.length > 0){
-        for(var i=0; i<_filters.length;i++){
-          if(this.appliedFilters[_filters[i]].length > 0){
-            _isFilterEmpty = false;
-          }
-        }
-      }
-      return _isFilterEmpty;
-    },
-    clearFilter: function(uncheckAll){
-      this.appliedFilters = {};
-	  this.visibleItem = 8;
-	  this.updateCount();
-      this.getProducts().show(0);
-	  $(".c-collectionSortby").hide(0);
+	var filters = {
+		visibleItem: 0,
+		item_selector: ".c-product__item",
+		filter_model: ".c-collFiltersGroup__item-model",
+		appliedFilters: {},
+		multiple_filter_enable: false,
+		single_in_eachCategory: true,
+		getProducts: function(){
+			if(!this.products){
+				this.products = $(this.item_selector);
+			}
+			return this.products;
+		},
 
-      if(uncheckAll){
-        $(this.filter_model).prop("checked", false);
-      }
-    },
-	updateCount: function(){
-		$('.item-count').text(this.visibleItem);
-	},
-    checkFilterMode: function(el){
-		if(this.single_in_eachCategory){
-			if(el.checked){
-				var fkeys = Object.keys(this.appliedFilters);
-				for(var i=0; i<fkeys.length; i++){
-					if(this.appliedFilters[fkeys[i]].length == 1 && el.dataset.filter == fkeys[i]){
-						$("[data-filter="+ fkeys[i] +"][value="+ this.appliedFilters[fkeys[i]][0] +"]").prop("checked", false);
-						this.appliedFilters[fkeys[i]].length = 0;
+		onFilterChange: function(el){
+			this.visibleItem = 0;
+			this.buildFilter(el);
+			if(this.isFilterEmpty()){
+				this.clearFilter();
+			}else{
+			$(".c-collectionSortby").show(0);
+				this.applyFilter();
+			}
+			console.log(this.appliedFilters);
+				this.updateCount();
+		},
+		isFilterEmpty: function(){
+			var _filters = Object.keys(this.appliedFilters), _isFilterEmpty = true;
+			if(_filters.length > 0){
+				for(var i=0; i<_filters.length;i++){
+					if(this.appliedFilters[_filters[i]].length > 0){
+						_isFilterEmpty = false;
 					}
 				}
-			}else{
-				delete this.appliedFilters[el.dataset.filter];
 			}
-      	}else if(!this.multiple_filter_enable){
-    		this.appliedFilters = {};
-      	}
-    },
-    buildFilter: function(el){
-		this.checkFilterMode(el);
-		if(el.checked){
-			var filter_config = {
-				category: el.dataset.filter.toLowerCase(),
-				selected: el.value.toLowerCase()
-			},
-			appliedFilters = this.appliedFilters[filter_config.category],
-			isFilterSelected;
+			return _isFilterEmpty;
+		},
+		clearFilter: function(uncheckAll){
+			this.appliedFilters = {};
+			this.visibleItem = 12;
+			this.updateCount();
+			this.getProducts().show(0);
+			$(".c-collectionSortby").hide(0);
 
-			if(!appliedFilters){
-				this.appliedFilters[filter_config.category] = [filter_config.selected];
-			}else{
-				isFilterSelected = appliedFilters.indexOf(filter_config.selected);
-				if(isFilterSelected == -1){
-				appliedFilters.push(filter_config.selected);
+			if(uncheckAll){
+				$(this.filter_model).prop("checked", false);
+			}
+		},
+		updateCount: function(){
+			$('.item-count').text(this.visibleItem);
+		},
+		checkFilterMode: function(el){
+			if(this.single_in_eachCategory){
+				if(el.checked){
+					var fkeys = Object.keys(this.appliedFilters);
+					for(var i=0; i<fkeys.length; i++){
+						if(this.appliedFilters[fkeys[i]].length == 1 && el.dataset.filter == fkeys[i]){
+							$("[data-filter="+ fkeys[i] +"][value="+ this.appliedFilters[fkeys[i]][0] +"]").prop("checked", false);
+							this.appliedFilters[fkeys[i]].length = 0;
+
+						}
+					}
 				}else{
-				appliedFilters.splice(isFilterSelected, 1);
+					delete this.appliedFilters[el.dataset.filter];
+				}
+			}else if(!this.multiple_filter_enable){
+				this.appliedFilters = {};
+			}
+		},
+		buildFilter: function(el){
+			this.checkFilterMode(el);
+			if(el.checked){
+				var filter_config = {
+					category: el.dataset.filter.toLowerCase(),
+					selected: el.value.toLowerCase()
+				},
+				appliedFilters = this.appliedFilters[filter_config.category],
+				isFilterSelected;
+
+				if(!appliedFilters){
+					this.appliedFilters[filter_config.category] = [filter_config.selected];
+				}else{
+					isFilterSelected = appliedFilters.indexOf(filter_config.selected);
+					if(isFilterSelected == -1){
+					appliedFilters.push(filter_config.selected);
+					}else{
+					appliedFilters.splice(isFilterSelected, 1);
+					}
 				}
 			}
-	  	}
-    },
-    applyFilter: function(){
-      var _this = this,
-      products = _this.getProducts();
+		},
+		applyFilter: function(){
+			var _this = this,
+			products = _this.getProducts();
 
-      products.each(function(){
-        var filters = this.dataset.filter;
-        if(_this.matchFilters(filters)){
-          $(this).show(0);
-		  	_this.visibleItem++
-        }else{
-          $(this).hide(0);
-        }
-      });
-    },
+			products.each(function(){
+				var filters = this.dataset.filter;
+				if(_this.matchFilters(filters)){
+					$(this).show(0);
+					_this.visibleItem++
+				}else{
+					$(this).hide(0);
+				}
+			});
+		},
+		matchFilters: function(filters){
+			var frs = filters.split(","), filterName, category, aFilter, isMatched = false;
+			for(var i=0; i<frs.length; i++){
+				filterName = frs[i];
 
-    matchFilters: function(filters){
-      var frs = filters.split(","), filterName, category, aFilter, isMatched = false;
-      for(var i=0; i<frs.length; i++){
-        filterName = frs[i];
+				if(filterName.indexOf("filter-") > -1){
+					filterName = filterName.replace('filter-', '').split("-");
+					category = filterName[0];
+					aFilter = filterName.slice(1).join("-");
 
-        if(filterName.indexOf("filter-") > -1){
-          filterName = filterName.replace('filter-', '').split("-");
-          category = filterName[0];
-          aFilter = filterName.slice(1).join("-");
-
-          if(this.appliedFilters[category] && this.appliedFilters[category].indexOf(aFilter) > -1){
-            isMatched = true;
-            break;
-          }
-        }
-      }
-
-      return isMatched;
-    }
-  }
-
-  filters.visibleItem = {{ collection.products.length }}
-  filters.updateCount();
+					if(this.appliedFilters[category] && this.appliedFilters[category].indexOf(aFilter) > -1){
+					isMatched = true;
+					break;
+					}
+				}
+			}
+			return isMatched;
+		}
+	}
+	filters.visibleItem = {{ collection.products.length }}
+	filters.updateCount();
 </script>

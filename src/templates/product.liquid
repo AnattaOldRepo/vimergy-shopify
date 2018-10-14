@@ -86,20 +86,37 @@
                             <div class="c-variant__boxItem  is-active">
                                 {% if product.metafields.c_f.icon  == 'capsule' %}
                                     <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
-                                {% elsif product.metafields.c_f.icon  == 'spoon' %} 
+                                {% elsif product.metafields.c_f.icon  == 'spoon' %}
                                     <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
-                                {% elsif product.metafields.c_f.icon  == 'sachet' %} 
+                                {% elsif product.metafields.c_f.icon  == 'sachet' %}
                                     <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
-                                {% elsif product.metafields.c_f.icon  == 'tincture' %} 
+                                {% elsif product.metafields.c_f.icon  == 'tincture' %}
                                     <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
                                 {% else %}
                                     <span></span>
                                 {% endif %}
                                 <span>{{ product.metafields.c_f.sizetype }}</span>
                             </div>
+                            {% if product.metafields.c_f.product_size != blank %}
+                                <a class="c-variant__boxItem" href="{{ product.metafields.c_f.product_size_url }}">
+                                    {% if product.metafields.c_f.product_size-icon  == 'capsule' %}
+                                        <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
+                                    {% elsif product.metafields.c_f.product_size-icon  == 'spoon' %}
+                                        <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
+                                    {% elsif product.metafields.c_f.product_size-icon  == 'sachet' %}
+                                        <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
+                                    {% elsif product.metafields.c_f.product_size-icon  == 'tincture' %}
+                                        <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
+                                    {% else %}
+                                        <span></span>
+                                    {% endif %}
+                                    <span>{{ product.metafields.c_f.product_size }}</span>
+                                </a>
+                            {% endif %}
                         </div>
-                    </div>  
-                {% endif %}      
+                    </div>
+                {% endif %}
+
                 <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
                     {% if product.options.size == 1 %}
                         <label><strong>Size</strong></label>
@@ -112,11 +129,11 @@
                                 {% unless product.title == 'Gift Card' %}
                                     {% if product.metafields.c_f.icon  == 'capsule' %}
                                         <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
-                                    {% elsif product.metafields.c_f.icon  == 'spoon' %} 
+                                    {% elsif product.metafields.c_f.icon  == 'spoon' %}
                                         <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
-                                    {% elsif product.metafields.c_f.icon  == 'sachet' %} 
+                                    {% elsif product.metafields.c_f.icon  == 'sachet' %}
                                         <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
-                                    {% elsif product.metafields.c_f.icon  == 'tincture' %} 
+                                    {% elsif product.metafields.c_f.icon  == 'tincture' %}
                                         <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
                                     {% else %}
                                         <span></span>
@@ -124,6 +141,22 @@
                                 {% endunless %} <span data-value="{{ variant.title }}">{{ variant.title }}</span>
                             </div>
                         {% endfor %}
+                        {% if product.metafields.c_f.product_size != blank %}
+                            <a class="c-variant__boxItem" href="{{ product.metafields.c_f.product_size_url }}">
+                                {% if product.metafields.c_f.product_size-icon  == 'capsule' %}
+                                    <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
+                                {% elsif product.metafields.c_f.product_size-icon  == 'spoon' %}
+                                    <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
+                                {% elsif product.metafields.c_f.product_size-icon  == 'sachet' %}
+                                    <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
+                                {% elsif product.metafields.c_f.product_size-icon  == 'tincture' %}
+                                    <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
+                                {% else %}
+                                    <span></span>
+                                {% endif %}
+                                <span>{{ product.metafields.c_f.product_size }}</span>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
 

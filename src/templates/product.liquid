@@ -122,7 +122,6 @@
                         <label><strong>Size</strong></label>
                     {% endif %}
 
-
                     <div id="size-box" class="c-variant__box"   data-productid="{{product.id}}">
                         {% for variant in product.variants %}
                             <div class="c-variant__boxItem {% if variant == current_variant   %} is-active {% endif %}" data-value="{{ variant.id }}">
@@ -159,7 +158,6 @@
                         {% endif %}
                     </div>
                 </div>
-
                 {%- assign product_quantity = 1 -%}
                 {% for item in cart.items %}
 

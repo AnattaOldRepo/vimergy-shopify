@@ -128,7 +128,23 @@
 			}
 			return this.products;
 		},
+		visibleFilter: function(){
+			var _this = this;
+			$(this.filter_model).each(function(){
+				var myarray = [];
+				var productFilter =  'filter-' + this.dataset.filter + '-' + this.value;
 
+				$(_this.item_selector).each(function(){
+					var itemFilter = this.dataset.filter;
+						[].push.apply(myarray, itemFilter.split(','))
+				});
+
+				if($.inArray(productFilter, myarray) != -1) {
+					}else {
+						$(this).parent().hide();
+				}
+			});
+		},
 		onFilterChange: function(el){
 			this.visibleItem = 0;
 			this.buildFilter(el);
@@ -241,4 +257,5 @@
 	}
 	filters.visibleItem = {{ collection.products.length }}
 	filters.updateCount();
+	filters.visibleFilter();
 </script>

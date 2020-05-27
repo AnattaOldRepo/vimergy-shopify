@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="31px" height="33px" viewBox="0 0 31 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>F7E3B01A-F90F-44E1-8900-DCDBD5603439</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Product" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="pdp-new" transform="translate(-1368.000000, -49.000000)">
+            <g id="Header" transform="translate(-2364.000000, 0.000000)">
+                <g id="Global/desktop/header" transform="translate(0.492948, 0.561747)">
+                    <g id="Ui/Desktop/icons/cart" transform="translate(3731.885135, 50.000000)">
+                        <rect id="Background" x="0" y="0" width="29.0403759" height="31"></rect>
+                        <g id="cart-simple" transform="translate(0.000000, 0.104153)" stroke="#000000" stroke-width="2">
+                            <ellipse id="Oval" stroke-linecap="square" cx="9.01253044" cy="27" rx="3.00417681" ry="3"></ellipse>
+                            <ellipse id="Oval" stroke-linecap="square" cx="26.0361991" cy="27" rx="3.00417681" ry="3"></ellipse>
+                            <polyline id="Shape" points="4.8066829 5 29.0403759 5 27.0375913 20 7.0097459 20 4.00556909 0 0 0"></polyline>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

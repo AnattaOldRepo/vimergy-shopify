@@ -1,0 +1,171 @@
+<script id="CartTemplate" type="text/template">
+    {% raw %}
+    <form action="/cart" method="post" novalidate class="cart ajaxcart" id="cartform">
+        <div class="c-cart__inner">
+        {{#items}}
+        <div class="c-cart__product">
+            <div class="c-cart__row" data-line="{{line}}">
+                <div class="c-cart__itemImageBox">
+                    <a href="{{url}}" class="c-cart__itemImageLink">
+                        <img class="c-cart__itemImage" src="{{img}}" alt=""></a>
+                </div>
+
+                <div class="c-cart__itemInfoBox">
+
+                    <button type="button" class="c-cart__itemRemove ajaxcart__qty-adjust ajaxcart__qty--remove icon-fallback-text" data-id="{{id}}" data-qty="{{itemMinus}}" data-line="{{line}}">
+                        <svg class="c-cart__itemRemoveX" width="10px" height="8px" viewBox="0 0 10 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                                <g id="1440-02-home-minicart@2x" transform="translate(-315.000000, -101.000000)" stroke="#000000">
+                                    <g id="item" transform="translate(30.000000, 81.000000)">
+                                        <g id="icon-remove" transform="translate(286.000000, 20.000000)">
+                                            <path d="M0,0 L8,8" id="Line"></path>
+                                            <path d="M0,0 L8,8" id="Line-Copy" transform="translate(4.000000, 4.000000) scale(-1, 1) translate(-4.000000, -4.000000) "></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </button>
+
+
+
+                    <div class="c-cart__itemInfoContainer">
+                        <a href="{{url}}" class="c-cart__itemName" data-product-type="{{GiftInCart}}">{{name}}</a>
+
+                        {{#if GiftInCart}}
+                            {{#if variantSize}}
+                            <span class="c-cart__itemMeta"> Size: {{variantSize}}</span>
+                            {{/if}}
+                        {{/if}}
+
+
+                        {{#if variantColor}}
+                        <span class="c-cart__itemMeta">Bundle: {{variantColor}}</span>
+                        {{/if}}
+
+                        {% endraw %}{% if settings.cart_vendor_enable %}{% raw %}
+                            <span class="c-cart__itemMeta">{{ vendor }}</span>
+                        {% endraw %}{% endif %}{% raw %}
+                    </div>
+
+                    <div class="c-cart__itemLowerBox">
+                        <div class="c-cart__itemQuantityBox ajaxcart__qty">
+                            <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--minus icon-fallback-text" data-id="{{key}}" data-qty="{{itemMinus}}" data-line="{{line}}">
+                                <span class="icon icon-minus" aria-hidden="true"></span>
+                                <span class="fallback-text" aria-hidden="true">&minus;</span>
+                            </button>
+                            <input type="text" name="updates[]" class="ajaxcart__qty-num" value="{{itemQty}}" min="0" data-id="{{key}}" data-line="{{line}}" aria-label="quantity" pattern="[0-9]*">
+                            <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--plus icon-fallback-text" data-id="{{key}}" data-line="{{line}}" data-qty="{{itemAdd}}">
+                                <span class="icon icon-plus" aria-hidden="true"></span>
+                                <span class="fallback-text" aria-hidden="true">+</span>
+                            </button>
+                        </div>
+
+                        <div class="c-cart__itemPriceBox">
+                            {{#if discountsApplied}}
+                               <small class="c-cart__itemPrice--noSale">Price: <s>{{{originalLinePrice}}}</s></small>
+                               <span class="c-cart__itemPrice">{{{linePrice}}}</span>
+                            {{else}}
+                                <span class="c-cart__itemPrice">Price: {{{linePrice}}}</span>
+                            {{/if}}
+                        </div>
+
+                        {{#if discountsApplied}}
+                        <div class="c-cart__itemDiscountBox">
+                            {{#each discounts}}
+                            <small class="c-cart__itemDiscount">{{ this.title }}</small><br>
+                            {{/each}}
+                        </div>
+                        {{/if}}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/items}}
+
+      </div>
+         <div class="">
+            <div class="c-cart__footerPriceBox c-discount">
+            {{#if totalCartDiscount}}
+              <p>Discount</p>
+                    <p class="c-cart__discounts">
+                        <span>{{{totalCartDiscount}}}</span>
+                    </p>
+                {{/if}}
+        </div>
+        </div>
+        <div class="c-cart__footer">
+            <div class="c-cart__footerPriceBox">
+                <div class="c-cart__subtotal">
+                    <p>Subtotal</p>
+                </div>
+
+                <div class="c-cart__total">
+                    <p>{{{totalPrice}}}</p>
+                </div>
+        </div>
+
+            <button type="submit" class="c-btn c-cart__checkout cart__checkout" onclick="zonosCheckout(event)" name="checkout" style="display:block !important;">
+              Checkout
+            </button>
+
+      
+        </div>
+    </form>
+    {% endraw %}
+
+  </script>
+  <script id="AjaxQty" type="text/template">
+  {% raw %}
+    <div class="ajaxcart__qty">
+      <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--minus icon-fallback-text" data-id="{{key}}" data-qty="{{itemMinus}}">
+        <span class="icon icon-minus" aria-hidden="true"></span>
+        <span class="fallback-text" aria-hidden="true">&minus;</span>
+      </button>
+      <input type="text" class="ajaxcart__qty-num" value="{{itemQty}}" min="0" data-id="{{key}}" aria-label="quantity" pattern="[0-9]*">
+      <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--plus icon-fallback-text" data-id="{{key}}" data-qty="{{itemAdd}}">
+        <span class="icon icon-plus" aria-hidden="true"></span>
+        <span class="fallback-text" aria-hidden="true">+</span>
+      </button>
+    </div>
+  {% endraw %}
+  </script>
+  <script id="JsQty" type="text/template">
+  {% raw %}
+    <div class="js-qty">
+      <button type="button" class="js-qty__adjust js-qty__adjust--minus icon-fallback-text" data-id="{{key}}" data-qty="{{itemMinus}}">
+        <span class="icon icon-minus" aria-hidden="true"></span>
+        <span class="fallback-text" aria-hidden="true">&minus;</span>
+      </button>
+      <input type="text" style="background-color: transparent;max-width:144px;" class="js-qty__num" value="{{itemQty}}" min="1" data-id="{{key}}" aria-label="quantity" pattern="[0-9]*" name="{{inputName}}" id="{{inputId}}">
+      <button type="button" class="js-qty__adjust js-qty__adjust--plus icon-fallback-text" data-id="{{key}}" data-qty="{{itemAdd}}">
+        <span class="icon icon-plus" aria-hidden="true"></span>
+        <span class="fallback-text" aria-hidden="true">+</span>
+      </button>
+    </div>
+  {% endraw %}
+
+
+</script>
+ {% include 'subscription-theme-footer' %}
+
+{% if template != 'cart'  %}
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+	<script>
+	rjQuery = jQuery.noConflict( true );
+    var subscription_active='{{shop.metafields.subscriptions.subscription_active}}';
+
+    function get_cookie(k){return(document.cookie.match('(^|; )'+k+'=([^;]*)')||0)[2]}
+    if (get_cookie('recharge')=='true' || subscription_active=='true') {
+        rjQuery('body').on('click','form[action="/checkout"] input[type="submit"], #ajaxifyCart [name="checkout"], #AjaxifyCart [name="checkout"], #shoppingBagInner [name="checkout"]', function(e){
+            e.preventDefault();
+            //window.location.href = '/cart';
+        })
+        rjQuery('.additional-checkout-buttons').hide()
+        rjQuery(document).ready(function(){
+            rjQuery('.additional-checkout-buttons').hide()
+        })
+    }
+    </script>
+{% endif %}

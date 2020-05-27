@@ -1,0 +1,70 @@
+
+ <div style="display:block;">
+ <div class="c-testimonials js-testimonals-carousel">
+ {% for block in section.blocks %}
+  <div class="o-flex c-testimonial ">
+
+    <div class="o-flex__item o-flex__col-lg-1 c-testimonial-first c-side-text-display">
+      <p class="c-side-text">--Communtity</p>
+</div>
+    <div class="o-flex__item o-flex__col-lg-4 c-side-container">
+     <p class="c-side-text--right c-side-testimonial-mobile">Communtity--</p>
+      <div class="c-img-mobile c-mobile-testimonial">
+            <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
+        </div>
+
+    </div>
+    <div class="o-flex__item o-flex__col-lg-7 c-off-white">
+        <div class="o-flex c-testimonials-carousel">
+
+            <div class="c-testimonial-info-container">
+                <div class="c-testimonials-carousel-info">
+                    <h1 class="c-testimonial--heading">{{ block.settings.heading}}</h1>
+                    <h4 class="c-testimonial--desc">{{ block.settings.desc }}</h4>
+                </div>
+            </div>
+
+   </div>
+    </div>
+  </div>
+   {% endfor %}
+</div>
+  </div>
+{% schema %}
+  {
+    "blocks": [
+      {
+        "type": "contentcolumn",
+        "name": "Testimonials",
+        "settings": [
+            {
+                "type": "text",
+                "id": "heading",
+                "label": "Heading"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "text",
+                "id": "desc",
+                "label": "Description"
+            },
+            {
+                "type": "text",
+                "id": "link",
+                "label": "Link"
+            }
+        ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "Testimonials",
+            "category": "Custom"
+        }
+    ]
+  }
+{% endschema %}

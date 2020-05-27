@@ -1,0 +1,75 @@
+<footer class="c-footer">
+    <div class="c-footer__container o-wrapper--footer u-clearFix">
+        <div class="o-flex c-footer_content">
+            <div class="o-flex__item o-flex__col-lg-2">
+                <nav>
+                    <h5 class="c-footer__title">Account</h5>
+                    <ul>
+                        <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/account">My Account</a></li>
+                        <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/cart">My Cart</a></li>
+                        <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/cart">Checkout</a></li>
+
+                        {% unless customer.has_account  == true %}
+                            <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/account/register">Register</a></li>
+                            <li><a class="c-footer__link {% if link.active %} is-active {% endif %} " href="https://vimergy.myshopify.com/account/login">Log In</a></li>
+                        {% endunless %}
+
+                    </ul>
+                </nav>
+            </div>
+            <div class="o-flex__item o-flex__col-lg-2">
+                <nav>
+                    <h5 class="c-footer__title">Products</h5>
+                    <ul>
+
+                        {% for link in linklists.products.links %}
+                            <li><a class="c-footer__link {%  if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
+                        {% endfor %}
+
+                    </ul>
+                </nav>
+            </div>
+            <div class="o-flex__item o-flex__col-lg-2">
+                <nav>
+                    <h5 class="c-footer__title">Our Company</h5>
+                    <ul>
+
+                        {% for link in linklists.our-company.links %}
+                            <li><a class="c-footer__link {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+            <div class="o-flex__item  o-flex__col-lg-2">
+                <h5 class="c-footer__title c-store">International</h5>
+                <ul class="c-store-list">
+                    <li><a class="s-icon-store icon-can" href="https://www.amazon.ca/vimergy" target="_blank">CAN</a></li>
+                    <li><a class="s-icon-store icon-aus" href="https://floweroflife.com.au" target="_blank">AUS</a></li>
+                  <li><a class="s-icon-store icon-uk" href="http://www.aggressivehealthshop.com/popular-brands-a-to-z/t-z-brands/vimergy.html" target="_blank">GBR </a></li>
+                   <li><a class="s-icon-store icon-swe" href="https://glimja.com/varumarke/vimergy/" target="_blank">SWE</a></li>
+                   <li><a class="s-icon-store icon-ger" href="https://www.supplementa.com/wagr/Vimergy" target="_blank">GER</a></li>
+                    <li><a class="s-icon-store icon-net" href="https://morgenisnu.nl/merk/vimergy/" target="_blank">NET</a></li>
+                    <li><a class="s-icon-store icon-swi" href="http://endlesshealthy.ch/" target="_blank">SWI</a></li>
+                  <li><a class="s-icon-store icon-southafrica" href="https://high-vibrations.co.za/" target="_blank">ZAF</a></li>
+                  <li><a class="s-icon-store icon-austria" href="https://sante-sauvage.com/" target="_blank">FRA</a></li>
+                  
+                   <li><a class="s-icon-store icon-nor" href="https://glimja.com/no/varemerke/vimergy/" target="_blank">NOR</a></li>
+                   <li><a class="s-icon-store icon-sgp" href="https://cleanfoodhaven.com/" target="_blank">SGP</a></li>
+                  <li><a class="s-icon-store icon-aut" href="https://ringnaturshop.com/product-category/nahrungsergaenzungsmittel/vimergy-produkte/" target="_blank">AUT</a></li>
+				<li><a class="s-icon-store icon-ita" href="http://orangesalute.com" target="_blank">ITA</a></li>
+              		<li><a class="s-icon-store icon-dnk" href="https://glimja.com/dk/varemaerke/vimergy/" target="_blank">DNK</a></li>
+		<li><a class="s-icon-store icon-fin" href="https://glimja.com/fi/tuotemerkki/vimergy/" target="_blank">FIN</a></li>
+              </ul>
+            </div>
+            <div class="o-flex__item c-footer__social o-flex__col-lg-3">
+                <ul>
+                    <li><a class="s-icon icon-instagram" href="https://www.instagram.com/vimergy/" target="_blank">Instagram</a></li>
+                    <li><a class="s-icon icon-facebook" href="https://www.facebook.com/Vimergy/" target="_blank">Facebook</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="c-footer-disclaimer">
+            <p><span>© 2020 Vimergy LLC | ® All Rights Reserved. </span> <br>Disclaimer: The health information on this site is provided as an information resource only, and is not to be used or relied on for any diagnostic or treatment purposes. This information is not intended to be patient education, does not create any patient-physician relationship, and should not be used as a substitute for professional diagnosis and treatment. The health information on this site is provided as an information resource only, and is not to be used or relied on for any diagnostic or treatment purposes. This information is not intended to be patient education, does not create any patient-physician relationship, and should not be used as a substitute for professional diagnosis and treatment.&nbsp;</p>
+        </div>
+    </div>
+</footer>

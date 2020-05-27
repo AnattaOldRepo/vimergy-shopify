@@ -1,0 +1,62 @@
+<div class="c-aboutContentSection o-wrapper">
+
+    {% if section.settings.title %}
+        <h2 class="c-aboutContentTitle">{{ section.settings.title}}</h2>
+    {% endif %}
+
+    <div class="js-hp-products-slider c-aboutContentInner">
+        {% for block in section.blocks %}
+            {% assign product_item = all_products[block.settings.product] %}
+
+            <a href="{{ block.settings.link.url }}" class="c-aboutContent__item">
+                <img class="c-aboutContentItem__image lazy-load" src="{{ block.settings.image | img_url: 'master' }}')">
+
+                <div class="c-aboutContent__contentInfo">
+                    <span class="c-aboutContent__contentTitle">{{ block.settings.title }}</span>
+                    <span class="c-aboutContent__contentSubtitle">{{ block.settings.subtitle }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "About Content Grid",
+    "settings": [
+        {
+            "type": "text",
+            "label": "Title",
+            "id": "title"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "content-item",
+            "name": "Content Item",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "label": "Image",
+                    "id": "image"
+                },        
+                {
+                    "type": "text",
+                    "label": "Title",
+                    "id": "title"
+                },      
+                {
+                    "type": "textarea",
+                    "label": "Subtitle",
+                    "id": "subtitle"
+                },                 
+                {
+                    "type": "text",
+                    "label": "Link",
+                    "id": "link"
+                } 
+            ]
+        }
+    ]
+}
+{% endschema %}

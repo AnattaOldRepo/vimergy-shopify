@@ -1,0 +1,19 @@
+<div class="related-products">
+    {% for collection in product.collections %}
+        {% for product in collections.extracts-1.products limit:4 %}
+                <div class="c-product__item o-flex__item o-flex__col-4" >
+                    <a href="{{ product.url }}" title="{{ product.title }}" class="c-product__link">
+                        <div class="c-product__img">
+                            <img class="c-product__Mainimage" src="{{ product.images[0].src  | img_url: 'large' }}">
+                        </div>
+                        <div class="c-product__info">
+                            <h2 class="c-product__name">{{ product.title  }}</h2>
+                            <h2 class="c-product__price">{{ product.price  | money}}</h2>
+                        </div>
+                        <div class="c-product__hoverText"><span>view details</span></div>
+                        <object class="shop-link"><a href="{{ product.url }}" class="c-btn">Shop now</a></object>
+                    </a>
+                </div>
+        {% endfor %}
+    {% endfor %}
+</div>

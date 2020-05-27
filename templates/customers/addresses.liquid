@@ -1,0 +1,333 @@
+<!-- /templates/customers/addressess.liquid -->
+{% comment %}
+
+  Template note:
+    - There are instances of inline JS below. Best practices advise separating this
+      into an external JS file
+    - There are separate 'add new' and 'edit' address forms
+
+{% endcomment %}
+
+{% paginate customer.addresses by 5 %}
+
+
+<div class="c-accounts c-account--account account-dashboard ">
+   <div class="o-flex">
+      <div class="o-flex__item o-flex__col-4">
+         <h1 class="c-account__title">Index</h1>
+         <ul class="c-index">
+           <li class="c-index__underline"><span><a href="/account">My Account</a></span></li>
+            <li><a href="/account/addresses">Address Book</a></li>
+           <li><a href="#" id="myOrder">My Orders</a></li>
+            <li class="c-index__underline">
+               {% if customer.metafields.subscriptions.customer_string %}
+               <!--BeginRechargeCode-->
+               <a href="/tools/recurring/customer/{{customer.metafields.subscriptions.customer_string}}/subscriptions/">Manage Subscriptions</a>
+               <!--EndRechargeCode-->
+               {% endif %}
+            </li>
+            <li><a href="https://vimergy.myshopify.com/pages/privacy-policy">Privacy Policy </a></li>
+            <li class="c-index--refer u-hide"><button class="c-btn c-btn--index">REFER-A-FRIEND</button></li>
+            <li class="c-index--index"><a class="c-btn c-btn--index c-btn--logout account-dashboard__logout" href="account/logout">Log Out</a></li>
+         </ul>
+      </div>
+      <div class="o-flex__item o-flex__col-8 c-cust-info">
+       <div class="c-account__sectionMain">
+
+            <div class="c-account__section c-account__section--one account-dashboard__block new-address">
+
+                <h1 class="c-account__title">Your Addresses</h1>
+
+                    {% comment %}
+                        List all customer addresses with a unique edit form.
+                        Also add pagination in case they have a large number of addresses
+                    {% endcomment %}
+                {% for address in customer.addresses %}
+
+                    <p class="c-account-info-label c-account-info-label--address">
+                      {{ address.first_name | capitalize }} {{ address.last_name | capitalize }}
+                      {% if address == customer.default_address %}({{ 'customer.addresses.default' | t }}){% endif %}
+                    </p>
+
+                    <p class="c-account__infoText c-account__addressInfo">
+                      {{ address.company }}<br>
+                      {{ address.street }}<br>
+                      {{ address.city | capitalize }},
+                      {% if address.province_code %}
+                        {{ address.province_code | upcase }}
+                      {% endif %}
+                      {{ address.zip | upcase }}<br>
+                      {{ address.country }}<br>
+                      {{ address.phone }}
+                    </p>
+                    <div class="action-links c-account__addressEditLinks">
+                      {{ 'customer.addresses.edit' | t | edit_customer_address_link: address.id }}
+                      {{ 'customer.addresses.delete' | t | delete_customer_address_link: address.id }}
+                    </div>
+
+                {% endfor %}
+
+                {% if paginate.pages > 1 %}
+                    <hr>
+                    <div class="pagination">
+                       {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
+                    </div>
+                {% endif %}
+
+                <div class="u-showTabletUp">
+                    <a href="#" class="c-btn" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">Add Address</a>
+
+                    <a href="/account" class="c-account__link">
+                        <span class="c-account__linkText">Return to My Account</span>
+                        <svg class="c-account__linkArrow" width="26px" height="12px" viewBox="0 0 26 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="account" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                                <g id="1440-07-account-default@2x@2x" transform="translate(-328.000000, -611.000000)" stroke="#FF0000">
+                                    <g id="my-account" transform="translate(328.000000, 204.000000)">
+                                        <g id="btn" transform="translate(0.000000, 384.000000)">
+                                            <g id="arrow" transform="translate(13.000000, 29.000000) scale(-1, 1) rotate(-90.000000) translate(-13.000000, -29.000000) translate(7.500000, 16.500000)">
+                                                <path d="M5,21.6102857 L5,0" id="Stroke-420"></path>
+                                                <polyline id="Stroke-421" points="10.4028571 19 5.20142857 24.2014286 0 19"></polyline>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+
+
+            <div class="c-account__section c-account__section--two account-dashboard__block address">
+
+
+                {% for address in customer.addresses %}
+
+                    <div id="EditAddress_{{ address.id }}" class="form-vertical c-account__sectionMobile" style="display:none;">
+                        {% form 'customer_address', address %}
+
+                            <h2 class="c-account__subtitle account-dashboard__subtitle">Edit Address</h2>
+                            
+                            <div class="grid">
+                                <div class="grid__item one-half small--one-whole">
+                                    <input type="text" id="AddressFirstName_{{ form.id }}" class="input-full" name="address[first_name]" value="{{ form.first_name }}" placeholder="{{ 'customer.addresses.first_name' | t }}" autocapitalize="words">
+                                </div>
+
+                                <div class="grid__item one-half small--one-whole">
+                                    <input type="text" id="AddressLastName_{{ form.id }}" class="input-full" name="address[last_name]" value="{{ form.last_name }}" placeholder="{{ 'customer.addresses.last_name' | t }}" autocapitalize="words">
+                                </div>
+                            </div>
+
+                            <input type="text" id="AddressCompany_{{ form.id }}" class="input-full" name="address[company]" value="{{ form.company }}" autocapitalize="words" placeholder="{{ 'customer.addresses.company' | t }}">
+
+                            <input type="text" id="AddressAddress1_{{ form.id }}" class="input-full" name="address[address1]" value="{{ form.address1 }}" placeholder="{{ 'customer.addresses.address1' | t }}" autocapitalize="words">
+
+                            <input type="text" id="AddressAddress2_{{ form.id }}" class="input-full" name="address[address2]" value="{{ form.address2 }}" placeholder="{{ 'customer.addresses.address2' | t }}" autocapitalize="words">
+
+                            <input type="text" id="AddressCity_{{ form.id }}" class="input-full" name="address[city]" value="{{ form.city }}" placeholder="{{ 'customer.addresses.city' | t }}" autocapitalize="words">
+
+                            <div class="has--label">
+                                <div class="c-input__selectWrapper">
+                                    <select id="AddressCountry_{{ form.id }}" class="input-full" name="address[country]" data-default="{{ form.country }}" placeholder="Country">{{ country_option_tags }}</select>
+                                </div>
+                            </div>
+
+                            <div class="has--label">
+                                <div id="AddressProvinceContainer_{{ form.id }}" style="display:none">
+                                    <div class="c-input__selectWrapper">
+                                        <select id="AddressProvince_{{ form.id }}" class="input-full" name="address[province]" data-default="{{ form.province }}"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="text" id="AddressZip_{{ form.id }}" class="input-full js-zip" name="address[zip]" value="{{ form.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}" autocapitalize="characters">
+
+                            <input type="tel" id="AddressPhone_{{ form.id }}" class="input-full" name="address[phone]" value="{{ form.phone }}" placeholder="{{ 'customer.addresses.phone' | t }}">
+
+                           <div class="c-checkbox__wrapper">
+                                <input class="c-input c-input--checkbox" type="checkbox" id="address_default_address_{{ form.id }}" name="address[default]" value="1" checked="checked" />
+
+                                <label for="address_default_address_{{ form.id }}">
+                                    <span class="c-input__checkboxText">Set as default address</span>
+                                </label>
+                            </div>
+
+                            <div class="account-links">
+                                <input type="submit" class="c-btn js-addSubmit" value="{{ 'customer.addresses.update' | t }}">
+
+                                <a class="c-btn c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleForm({{ form.id }}); return false;">{{ 'customer.addresses.cancel' | t }}</a>
+                            </div>
+
+                        {% endform %}
+                    </div>
+
+                {% endfor %}
+
+                  {% comment %} Add address form, hidden by default {% endcomment %}
+
+                <div id="AddAddress" class="form-vertical c-account__sectionMobile" style="display: none;">
+                    {% form 'customer_address', customer.new_address %}
+                        <h1 class="c-account__title">Add New Address</h1>
+                        <div class="grid">
+
+                            <div class="grid__item one-half small--one-whole">
+                                <input type="text" id="AddressFirstNameNew" class="input-full" name="address[first_name]" value="{{ form.first_name }}" placeholder="{{ 'customer.addresses.first_name' | t }}" autocapitalize="words">
+                            </div>
+
+                            <div class="grid__item one-half small--one-whole">
+                                <input type="text" id="AddressLastNameNew" class="input-full" name="address[last_name]" value="{{ form.last_name }}" placeholder="{{ 'customer.addresses.last_name' | t }}" autocapitalize="words">
+                            </div>
+
+                        </div>
+
+                        <input type="text" id="AddressCompanyNew" class="input-full" name="address[company]" value="{{ form.company }}" placeholder="{{ 'customer.addresses.company' | t }}" autocapitalize="words">
+
+                        <input type="text" id="AddressAddress1New" class="input-full" name="address[address1]" value="{{ form.address1 }}" placeholder="{{ 'customer.addresses.address1' | t }}" autocapitalize="words">
+
+                        <input type="text" id="AddressAddress2New" class="input-full" name="address[address2]" value="{{ form.address2 }}" placeholder="{{ 'customer.addresses.address2' | t }}" autocapitalize="words">
+
+                        <input type="text" id="AddressCityNew" class="input-full" name="address[city]" value="{{ form.city }}" placeholder="{{ 'customer.addresses.city' | t }}" autocapitalize="words">
+
+                        <div class="has--label">
+                            <div class="c-input__selectWrapper">
+                                <select id="AddressCountryNew" class="input-full" name="address[country]" data-default="{{ form.country }}">{{ country_option_tags }}</select>
+                            </div>
+                        </div>
+
+                        <div id="AddressProvinceContainerNew" style="display:none">
+                            <div class="c-input__selectWrapper">
+                                <select id="AddressProvinceNew" class="input-full" name="address[province]" data-default="{{ form.province }}"></select>
+                            </div>
+                        </div>
+
+                        <input type="text" id="AddressZipNew" class="input-full js-zip" name="address[zip]" value="{{ form.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}" autocapitalize="characters">
+
+                        <input type="tel" id="AddressPhoneNew" class="input-full" name="address[phone]" value="{{ form.phone }}" placeholder="{{ 'customer.addresses.phone' | t }}">
+
+                        <div class="c-checkbox__wrapper">
+
+                            <input class="c-input c-input--checkbox" type="checkbox" id="address_default_address_new" name="address[default]" value="1" checked="checked" />
+
+                            <label for="address_default_address_new">
+                                <span class="c-input__checkboxText">{{ 'customer.addresses.set_default' | t }}</span>
+                            </label>
+                        </div>
+
+                        <div class="account-links c-link-address">
+                            {% comment %} <input type="submit" class="c-btn" value="{{ 'customer.addresses.add' | t }}"> {% endcomment %}
+                            <input type="submit" class="c-btn js-addSubmit" value="submit">
+
+                            <a class="c-btn c-account__link--normal" href="#" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">
+                                {{ 'customer.addresses.cancel' | t }}
+                            </a>
+                        </div>
+
+                    {% endform %}
+                </div>
+
+                <div class="u-hideTabletUp">
+                    <a href="#" class="c-btn" onclick="Shopify.CustomerAddress.toggleNewForm(); return false;">Add Address</a>
+
+                    <a href="/account" class="c-account__link">
+                        <span class="c-account__linkText">Return to My Account</span>
+                        <svg class="c-account__linkArrow" width="26px" height="12px" viewBox="0 0 26 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="account" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                                <g id="1440-07-account-default@2x@2x" transform="translate(-328.000000, -611.000000)" stroke="#FF0000">
+                                    <g id="my-account" transform="translate(328.000000, 204.000000)">
+                                        <g id="btn" transform="translate(0.000000, 384.000000)">
+                                            <g id="arrow" transform="translate(13.000000, 29.000000) scale(-1, 1) rotate(-90.000000) translate(-13.000000, -29.000000) translate(7.500000, 16.500000)">
+                                                <path d="M5,21.6102857 L5,0" id="Stroke-420"></path>
+                                                <polyline id="Stroke-421" points="10.4028571 19 5.20142857 24.2014286 0 19"></polyline>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+      </div>
+   </div>
+</div>
+
+
+
+
+
+
+{% comment %} <div class="c-account c-account--address c-account--account page account-dashboard"> {% endcomment %}
+
+
+  <script>
+    // Initialize observers on address selectors
+    new Shopify.CountryProvinceSelector('AddressCountryNew', 'AddressProvinceNew', {
+      hideElement: 'AddressProvinceContainerNew'
+    });
+
+    // Setup province selector on each customer address
+    {% for address in customer.addresses %}
+      new Shopify.CountryProvinceSelector('AddressCountry_{{ address.id }}', 'AddressProvince_{{ address.id }}', {
+        hideElement: 'AddressProvinceContainer_{{ address.id }}'}
+      );
+    {% endfor %}
+
+    // Modified contents of customer_area.js (global asset)
+    Shopify.CustomerAddress = {
+      toggleForm: function(id) {
+        jQuery('.form-vertical').hide();
+        var editEl = document.getElementById('EditAddress_'+id);
+        console.log('line 282 edit');
+        editEl.style.display = editEl.style.display == 'none' ? '' : 'none';
+        return false;
+      },
+
+
+      toggleNewForm: function() {
+        console.log('toggle')
+        console.log('line 290 add');
+        var el = document.getElementById('AddAddress');
+        el.style.display = el.style.display == 'none' ? '' : 'none';
+        return false;
+      },
+
+      destroy: function(id, confirm_msg) {
+        if (confirm(confirm_msg || "Are you sure you wish to delete this address?")) {
+          Shopify.postLink('/account/addresses/'+id, {'parameters': {'_method': 'delete'}});
+        }
+      }
+    }
+
+    jQuery('.c-account__link--normal').on('click', function(){
+        jQuery('.form-vertical').hide(0);
+    });
+
+ 
+    $('.js-zip').focusout( function() {
+        
+        var inputLength = jQuery(this).val().toString();
+
+        var inputLengthVal = inputLength.length;
+
+        if (inputLengthVal == 3 ) {
+
+            $(this).val('00' + inputLength);
+
+        } else if (inputLengthVal == 4 ) {
+
+            $(this).val('0' + inputLength);
+
+        } else {
+            
+            $(this).val(inputLength);
+        }
+        
+    });
+
+  </script>
+
+  {% endpaginate %}
+
+{% comment %} </div> {% endcomment %}

@@ -1,0 +1,193 @@
+<script>
+function znAjaxGet(url, callback) {
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.onreadystatechange = function () {
+    if (this.readyState === 4) {
+      if (this.status >= 200 && this.status < 400) {
+        callback(this.responseText);
+      } else {
+        console.log("Error: could not redirect to international checkout");
+      }
+    }
+  };
+  request.send();
+  request = null;
+}
+function znGetValueFromStringOrElement(input) {
+  return (input ? typeof input.value !== 'undefined' ? input.value : input : '');
+}
+function znGetCustomerAddressUrlParameters(shipping, country, firstName, lastName, company, email, phone, address1, address2, city, state, zip) {
+  var parameterName = shipping ? "customer" : "billing";
+  var countryKey = shipping ? "country" : "billingCountry";
+    return countryKey + '='+ znGetValueFromStringOrElement(country)
+      +'&'+ parameterName + 'Name='+ znGetValueFromStringOrElement(firstName) + ' ' + znGetValueFromStringOrElement(lastName) 
+      +'&'+ parameterName + 'Company='+ znGetValueFromStringOrElement(company) 
+      +'&'+ parameterName + 'Email='+ znGetValueFromStringOrElement(email) 
+      +'&'+ parameterName + 'Phone='+ znGetValueFromStringOrElement(phone) 
+      +'&'+ parameterName + 'Address1='+ znGetValueFromStringOrElement(address1) 
+      +'&'+ parameterName + 'Address2='+ znGetValueFromStringOrElement(address2) 
+      +'&'+ parameterName + 'City='+ znGetValueFromStringOrElement(city) 
+      +'&'+ parameterName + 'State='+ znGetValueFromStringOrElement(state) 
+      +'&'+ parameterName + 'Zip='+ znGetValueFromStringOrElement(zip);
+}
+function znGetShippingAddressInput(country) {
+    var firstName = document.querySelector('#checkout_shipping_address_first_name');
+    var lastName = document.querySelector('#checkout_shipping_address_last_name');
+    var company = document.querySelector('#checkout_shipping_address_company');
+    var email = document.querySelector('#checkout_email');
+    var phone = document.querySelector('#checkout_shipping_address_phone');
+    var address1 = document.querySelector('#checkout_shipping_address_address1');
+    var address2 =document.querySelector('#checkout_shipping_address_address2');
+    var city = document.querySelector('#checkout_shipping_address_city');
+    var state = document.querySelector('#checkout_shipping_address_province');
+    var zip = document.querySelector('#checkout_shipping_address_zip');
+    return znGetCustomerAddressUrlParameters(true, country, firstName, lastName, company, email, phone, address1, address2, city, state, zip);
+}
+function znGetBillingAddressInput(country) {
+    var firstName = document.querySelector('#checkout_billing_address_first_name');
+    var lastName = document.querySelector('#checkout_billing_address_last_name');
+    var company = document.querySelector('#checkout_billing_address_company');
+    var email = document.querySelector('#checkout_email');
+    var phone = document.querySelector('#checkout_billing_address_phone');
+    var address1 = document.querySelector('#checkout_billing_address_address1');
+    var address2 =document.querySelector('#checkout_billing_address_address2');
+    var city = document.querySelector('#checkout_billing_address_city');
+    var state = document.querySelector('#checkout_billing_address_province');
+    var zip = document.querySelector('#checkout_billing_address_zip');
+    return znGetCustomerAddressUrlParameters(false, country, firstName, lastName, company, email, phone, address1, address2, city, state, zip);
+}
+function znGetSavedShippingAddress(country) {
+  var firstName = "{{ checkout.shipping_address.first_name | default: '' }}"; 
+  var lastName = "{{ checkout.shipping_address.last_name | default: '' }}";
+  var company = "{{ checkout.shipping_address.company | default: '' }}";
+  var email = "{{ checkout.email| default: '' }}";
+  var phone = "{{ checkout.shipping_address.phone | default: '' }}";
+  var address1 = "{{ checkout.shipping_address.address1 | default: '' }}";
+  var address2 = "{{ checkout.shipping_address.address2 | default: '' }}";
+  var city = "{{ checkout.shipping_address.city | default: '' }}";
+  var state = "{{ checkout.shipping_address.province | default: '' }}";
+  var zip = "{{ checkout.shipping_address.zip | default: '' }}";
+  return znGetCustomerAddressUrlParameters(true, country, firstName, lastName, company, email, phone, address1, address2, city, state, zip);
+}
+function znIsCountryInternational(country) {
+  if (typeof zonos !== 'undefined') {
+    return !zonos.isDomestic(country);
+  }
+  return country && country !== 'US';
+}
+
+  
+function znRedirectToInternationalCheckout(event) {
+  var redirectToInternationalCheckout = false;
+  var shippingCountrySelector = document.querySelector('#checkout_shipping_address_country');
+  var shippingCountryCode = shippingCountrySelector && shippingCountrySelector.options[shippingCountrySelector.selectedIndex].getAttribute('data-code');
+  var savedShippingCountry = "{{ checkout.shipping_address.country_code | default: '' }}";
+  var billingCountrySelector = document.querySelector('#checkout_billing_address_country');
+  var billingCountryCode = billingCountrySelector && billingCountrySelector.options[billingCountrySelector.selectedIndex].getAttribute('data-code');
+  var customerInfo = "";
+ 
+  if (shippingCountryCode && znIsCountryInternational(shippingCountryCode)) {
+    customerInfo = "?" + znGetShippingAddressInput(shippingCountryCode);
+    redirectToInternationalCheckout = true;
+  }
+  if (!shippingCountryCode && !billingCountryCode && savedShippingCountry && znIsCountryInternational(savedShippingCountry)) {
+    customerInfo = "?" + znGetSavedShippingAddress(savedShippingCountry);
+    redirectToInternationalCheckout = true;
+  }
+  if (billingCountryCode && znIsCountryInternational(billingCountryCode)) {
+    //customerInfo = "?" + znGetBillingAddressInput(billingCountryCode) + "&" + znGetSavedShippingAddress(savedShippingCountry);
+    //redirectToInternationalCheckout = true;
+  }
+  if (znIsCountryInternational()) {
+    customerInfo = "?" + znGetShippingAddressInput(zonos.country());
+    redirectToInternationalCheckout = true;
+  }
+  
+  if (document.querySelectorAll('.address.address--tight').length > 0) {
+    if (document.querySelector('.address.address--tight').innerText.includes('United States') != true) {
+       redirectToInternationalCheckout = true;
+    }
+  }
+  
+  var ncountryDropdown = document.querySelector('#checkout_shipping_address_country.field__input.field__input--select').selectedOptions[0].innerText;
+  if (ncountryDropdown != 'United States') {
+    redirectToInternationalCheckout = true;
+  }
+  
+  if (redirectToInternationalCheckout) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    }
+    alert('To ship outside of the United States you will need to use our international checkout. Please click OK to proceed to the international checkout.')
+    znAjaxGet('/cart.json', function (shopifyResponse) {
+      var form = document.createElement('form');
+      form.method = "post";
+      form.action = "/a/iglobal/cart" + customerInfo;
+      var customerId = null;
+      {% if customer.id %}
+        customerId = {{ customer.id }};
+      {% endif %}
+      var tempCart = {cart: JSON.stringify(shopifyResponse), country: shippingCountryCode, c: customerId};
+      for (var item in tempCart) {
+        var input = document.createElement('input');
+        input.type = "hidden";
+        input.className = item;
+        input.value = tempCart[item];
+        form.appendChild(input);
+      }
+      document.querySelector('body').append(form);
+      form.submit();
+    });
+    // Use code below instead for redirecting if the url for their domestic page is not the same as their website
+    //window.location="https://{{shop.domain}}.com/a/iglobal/cart"+customerInfo;
+  }
+}
+function zonosLoaded() {
+  if (!zonos.isDomestic()) {
+    znRedirectToInternationalCheckout();
+  }
+}
+var znCountries = document.querySelectorAll('#checkout_shipping_address_country, #checkout_billing_address_country');
+if (znCountries) {
+  [].slice.call(znCountries).forEach(function(elem) {
+    elem.onchange = function() {
+      znRedirectToInternationalCheckout();
+    }
+  });
+}
+var znButtons = document.querySelectorAll('[data-trekkie-id=continue_to_shipping_method_button], [data-trekkie-id=continue_to_payment_method_button], [data-trekkie-id=complete_order_button]');
+if (znButtons) {
+  [].slice.call(znButtons).forEach(function(elem) {
+    elem.addEventListener("click", znRedirectToInternationalCheckout);
+  });
+}
+  
+var checkExist = setInterval(function() {
+   if (document.querySelectorAll('.btn__content:not(.visually-hidden-on-mobile)').length > 0) {
+     var continueToShip = document.querySelector('.btn__content:not(.visually-hidden-on-mobile)');
+     continueToShip.addEventListener('click', function() {znRedirectToInternationalCheckout();});
+     clearInterval(checkExist);
+   }
+}, 100);
+  
+var doubleCheckExistTheSecond = setInterval(function() {
+   if (document.querySelectorAll('.address.address--tight').length > 0) {
+     if (document.querySelector('.address.address--tight').innerText.includes('United States') != true) {
+  	    znRedirectToInternationalCheckout();
+	 }
+     clearInterval(doubleCheckExistTheSecond);
+   }
+}, 100);
+  
+var ncountryDropdown = document.querySelector('#checkout_shipping_address_country.field__input.field__input--select').selectedOptions[0].innerText;
+if (ncountryDropdown != 'United States') {
+  if (confirm('To ship outside of the United States you will need to use our international checkout. Please click OK to proceed to the international checkout.')) {
+    znRedirectToInternationalCheckout();
+  }
+}
+  
+document.addEventListener('z-country-change', zonosLoaded);
+</script>

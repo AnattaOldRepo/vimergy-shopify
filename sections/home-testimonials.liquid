@@ -1,0 +1,79 @@
+<div class="c-testimonials">
+    <div class="c-testimonial__sidetext">
+        <p class="c-side-text">Communtity</p>
+    </div>
+    <div class="c-testimonials__slider js-testimonals-carousel">
+
+        {% for block in section.blocks %}
+            <div class="o-flex c-testimonial">
+                <div class="c-testimonials__left o-flex__item o-flex__col-lg-5 c-side-container">
+                    <div class="c-testimonial__img">
+                        <img src="{{ block.settings.image | img_url: 'master'}}" alt="">
+                    </div>
+                </div>
+                <div class="c-testimonials__right o-flex__item o-flex__col-lg-7">
+                    <div class="o-flex c-testimonials-carousel">
+                        <div class="c-testimonials__slidetext u-textLeft">
+                            <h1 class="c-testimonial--heading">{{ block.settings.heading}}</h1>
+                            <h4 class="c-testimonial--desc">{{ block.settings.desc }}</h4>
+                            <h4 class="c-testimonial__author">{{ block.settings.author }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% schema %}
+  {
+    "blocks": [
+      {
+        "type": "contentcolumn",
+        "name": "Testimonials",
+        "settings": [
+            {
+                "type": "text",
+                "id": "heading",
+                "label": "Heading"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "html",
+                "id": "desc",
+                "label": "Description"
+            },
+            {
+                "type": "text",
+                "id": "author",
+                "label": "Author"
+            },
+            {
+                "type": "text",
+                "id": "link",
+                "label": "Link"
+            }
+        ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "Testimonials",
+            "category": "Custom"
+        }
+    ]
+  }
+{% endschema %}
+
+<script>
+  		if (typeof znDisplayCurrency === "function") {
+          setTimeout(znDisplayCurrency, 500);
+          setTimeout(znDisplayCurrency, 1000);
+          setTimeout(znDisplayCurrency, 2000);
+          setTimeout(znDisplayCurrency, 4000);
+        }
+</script>

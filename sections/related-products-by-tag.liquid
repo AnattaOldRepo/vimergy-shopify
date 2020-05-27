@@ -1,0 +1,49 @@
+<div data-section-id="{{ section.id }}" data-section-type="limited-essentials">
+
+
+<!-- Reopen .wrapper after full-width -->
+<div class="c-related-products">
+    <h2> You may also like</h2>
+    <div class="c-related-productGrid">
+        <div class="c-product__item o-flex__item o-flex__col-4">
+            {% assign main_product = section.settings.limited_essentials_main_product%}
+            {% assign product = all_products[main_product] %}
+            <a href="{{ product.url }}" class="c-product__link">
+                <img class="block mb3 c-rollTop" src="{{ product.images[0].src | product_img_url: 'original' }}">
+
+                <div class="c-product__img">
+                    {% if product.images[1] %}
+                    <img class="block mb3 c-rollBottom"
+                        src="{{ product.images[1] | product_img_url: 'original' }}"
+                        alt="{{ product.images[1].alt | escape }}">
+                    {% else %}
+                    <img class="block mb3 c-rollBottom"
+                        src="{{ product.images[0] | product_img_url: 'original' }}"
+                        alt="{{ product.images[0].alt | escape }}">
+                    {% endif %}
+                </div>
+                <div class="c-product__info">
+                    <h2 class="c-product__name">{{ product.title  }}</h2>
+                    <h2 class="c-product__price">{{ product.price  | money}}</h2>
+                </div>
+                <div class="c-product__hoverText"><span>view details</span></div>
+                <object class="shop-link"><a href="{{ product.url }}" class="c-btn">Shop now</a></object>
+            </a>
+        </div>        
+    </div>
+</div>
+</div>
+  
+{% schema %}
+{
+  "name": "Related Products",
+  "settings": [
+    {
+      "type": "product",
+      "id": "limited_essentials_main_product",
+      "label": "Main Product",
+      "info": "Choose the featured product"
+    }
+  ]
+}
+{% endschema %}

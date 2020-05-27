@@ -1,0 +1,29 @@
+{% layout none %}
+
+<script type="text/javascript">
+  //Get products inventory state if ba_check_stock url parameter sent
+  {%- capture contentForQuerystring -%}{{ content_for_header }}{%- endcapture -%}
+  {%- assign pageUrl = contentForQuerystring | url_decode | split:'"pageurl":"' | last | split:'"' | first | split:'vimergy.com' | last |
+  replace:'\/','/' |
+  replace:'%20',' ' |
+  replace:'\u0026','&'-%}
+  //Check if url contains ba_check_stock
+  {% if pageUrl contains 'ba_check_stock' %}
+  //booster-check-products-stock
+  {%- assign productsHandles = pageUrl | split:'ba_check_stock=' | last -%}
+  {%  assign handles  = productsHandles | split:',' %}
+  //Build productsInStock object with information about inventory for products and variants
+  window.booster.productsInStock = {
+  {% for handle in handles %}
+  {% assign product  = all_products[handle] %}
+  {{product.id}}:
+  {id: {{ product.id }},available: '{{ product.available }}',title: '{{ product.title | json | escape }}',
+    variants: {
+    {% for variant in all_products[handle].variants %}
+    {{variant.id}}: {id: {{ variant.id }},title: '{{ variant.title | json | escape }}',available: '{{ variant.available  }}', qty: '{{ variant.inventory_quantity }}', inventory_policy: '{{ variant.inventory_policy }}' },
+    {% endfor %}}
+  },
+  {% endfor %}};
+  {% endif %}
+  //booster-check-products-stock-end
+</script>

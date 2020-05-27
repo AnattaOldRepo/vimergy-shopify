@@ -1,0 +1,180 @@
+{% comment %}
+    * defined in indv collection section  and passed in *
+    collection_hero_title
+    collection_hero_image
+    collection_info_content
+
+{% endcomment %}
+
+
+<div class="c-colHero o-wrapper">
+    <div class="c-colHero__container">
+        <img class="c-colHero__image">
+
+        <div class="c-colHero__contentContainer">
+            <div class="c-colHero__titleSection c-colHero__titleSection--left">
+                <h1 class="c-colHero__title c-colHero__title--left">{{ collection.title }}</h1>
+            </div>
+
+            <div class="c-colHero__titleSection c-colHero__titleSection--right">
+                <h1 class="c-colHero__title c-colHero__title--right">{{ collection.title }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="c-colMainWrapper o-wrapper">
+    {% include 'collection-sidebar' %}
+
+    <div class="c-colMain">
+        {% include 'collection-view-sort' %}
+
+        <div class="c-colGrid">
+            {% for product in collection.products %}
+                <a class="c-colGrid__item" href="{{ product.url | within: collection }}">
+                    <img class="c-colGrid__itemImage c-colGrid__itemImage--main" src="{{ product.images[0].src | img_url: 'master' }}" alt="{{ product.images[0].alt | escape }}">
+                    <img class="c-colGrid__itemImage c-colGrid__itemImage--hover" src="{{ product.images[1].src | img_url: 'master' }}" alt="{{ product.images[1].alt | escape }}">
+
+                    <div class="c-colGrid__itemContent">
+                        <span class="c-colGrid__itemTitle">{{ product.title }}</span><br>
+                        {% comment %}<span class="c-colGrid__itemPrice">{{product.price }}</span>{% endcomment %}
+                        {% if product.compare_at_price > product.price %}
+                            {% if product.price_varies %}
+                                {%- assign sale_price = product.price | money -%}
+                                {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+                            {% else %}
+                                {{ product.price | money }}
+                            {% endif %}
+                        {% else %}
+
+                            {% if product.price_varies %}
+                                {%- assign price = product.price | money -%}
+                                {{ 'products.product.from_text_html' | t: price: price }}
+                            {% else %}
+                                {{ product.price | money }}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if product.compare_at_price > product.price %}
+                            <s>{{ product.compare_at_price | money }}</s>
+                        {% endif %}
+
+                        {% unless product.available %}
+                            {{ 'products.product.sold_out' | t }}
+                        {% endunless %}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+
+        <a class="c-colMain__seeMoreButton c-btn" href="#">See More Products</a>
+    </div>
+
+    <div class="c-colInfoSection">
+        <div class="c-colInfo__titleBlock">
+            <h3 class="c-colInfo__title">{{ collection.title }}</h3>
+        </div>
+        <div class="c-colInfo__contentBlock">
+            <p>Their inclination to ignore the rules has paved their road to success for over ten years. Their personal RIOT also speaks to their honesty and positive energy in an industry ruled by egomaniacs and shady people.</p>
+            <p>Sub_Urban Riot believes in the good life - reinvented. The good life 2.0 is about fresh juice, daily philosophy, dogs and cats living together, coffee breaks, farmer’s markets, yoga, croquet battles, art shows, kale, camping, craft brews, and t-shirts.</p>
+            <p>There’s a wink and a smile to the brand; a subtle humor. A deeper dive uncovers a unique viewpoint on the world and times. The zeitgeist will be broadcast on your body.</p>
+        </div>
+    </div>
+</section>
+
+{% paginate collection.products by 12 %}
+  <header role="banner">
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="rte">
+        {{ collection.description }}
+      </div>
+    {% endif %}
+
+    {% if collection.all_tags.size > 0 %}
+      <ul>
+        {% for tag in collection.all_tags %}
+          {% if current_tags contains tag %}
+            <li class="active">
+              {{ tag | link_to_remove_tag: tag }}
+            </li>
+          {% else %}
+            <li>
+              {{ tag | link_to_tag: tag }}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </header>
+
+  <div>
+    {% for product in collection.products %}
+      <div>
+        <a href="{{ product.url | within: collection }}">
+          <img src="{{ product.featured_image.src | img_url: '480x480' }}" alt="{{ product.featured_image.alt | escape }}">
+        </a>
+
+        <p>
+          <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+        </p>
+        <p>
+          {% if product.compare_at_price > product.price %}
+
+            {% if product.price_varies %}
+              {%- assign sale_price = product.price | money -%}
+              {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+            {% else %}
+              {{ 'products.product.on_sale' | t }}
+              {{ product.price | money }}
+            {% endif %}
+
+          {% else %}
+
+            {% if product.price_varies %}
+              {%- assign price = product.price | money -%}
+              {{ 'products.product.from_text_html' | t: price: price }}
+            {% else %}
+              {{ product.price | money }}
+            {% endif %}
+
+          {% endif %}
+
+          {% if product.compare_at_price > product.price %}
+            <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+            <s>{{ product.compare_at_price | money }}</s>
+          {% endif %}
+
+          {% unless product.available %}
+            {{ 'products.product.sold_out' | t }}
+          {% endunless %}
+        </p>
+      </div>
+
+    {% else %}
+      {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
+        {% for i in (1..8) %}
+          <a href="#">
+            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+            {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+          </a>
+
+          <p>
+            <a href="#">{{ 'homepage.onboarding.product_title' | t }}</a>
+          </p>
+
+          <p>
+            {{ 1999 | money }}
+          </p>
+        {% endfor %}
+      {% else %}
+        <p>{{ 'collections.general.no_matches' | t }}</p>
+      {% endif %}
+
+    {% endfor %}
+  </div>
+
+  {% if paginate.pages > 1 %}
+    {% include 'pagination' %}
+  {% endif %}
+{% endpaginate %}

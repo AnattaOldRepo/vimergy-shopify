@@ -1,0 +1,54 @@
+{% comment %}
+  This page represents the /collections and /products pages.
+{% endcomment %}
+<div class="c-collection">
+
+  {% for collection in collections %}
+    <h2 class="c-collection-container__title">{{collection.title}}</h2>
+    <div class="c-collection-container">
+  	 <div class="c-collection-container__inner">
+		<div class="o-flex">
+
+		{% for product in collection.products %}
+			<div class="o-flex__item o-flex__col-4">
+				<div class="c-product-item ">
+
+					<div class="c-product-item__img">
+
+					<a href="{{ image | product_img_url: 'large' }}" title="{{ product.title }}">
+						<img class="product-single__photo" src="{{ product.images[0].src  | img_url: '374x218' }}">
+					</a>
+
+					</div>
+
+					<div class="c-product-item__info">
+					<h2 class="c-product-item__name">
+						<a href="{{ product.url  }}">
+						{{ product.title  }}
+						</a>
+					</h2>
+					</div>
+
+
+					<div class="c-product-item__price">
+						<span class="c-price">{{ product.price  | money }}</span>
+					</div>
+
+					<div class="c-actions">
+						<a class="c-product-item__btn c-btn primary" href="{{ product.url  }}" title="{{ product.title  }}">View Details</a>
+					</div>
+
+					</div>
+				</div>
+
+
+		{% endfor %}
+
+		</div>
+      </div>
+    </div>
+
+  {% endfor %}
+
+</div>
+

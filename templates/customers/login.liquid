@@ -1,0 +1,122 @@
+<!-- /templates/customers/login.liquid -->
+
+<div class="c-account c-account--login o-wrapper page account login">
+<div id="test">{{ page.url }}</div>
+
+    {% comment %} <div class="c-account__noticeBox">
+        <p class="c-account__noticeText">WE’VE UPGRADED SO WE NEED YOU TO CREATE A NEW ACCOUNT AND START YOUR OWN PERSONAL RIOT. <a class="c-account__noticeLink" href="/account/register">CREATE MY ACCOUNT</a></p>
+    </div> {% endcomment %}
+
+    <div class="c-account__sectionsContainer form-container">
+        <div class="c-account__sectionMain">
+            <div class="c-account__section c-account__section--one">
+                <div class="loginPage__box">
+                    <div class="note form-success" id="ResetSuccess" style="display:none;">
+                        {{ 'customer.recover_password.success' | t }}
+                    </div>
+
+                    <div id="CustomerLoginForm" class="form-vertical">
+                        {% form 'customer_login' %}
+                            <h2 class="c-account__title">Customer Login</h2>
+                            {% comment %}
+                                {{ form.errors | default_errors }}
+                            {% endcomment %}
+                            {% if form.errors %}
+                             {% for field in form.errors %}
+                                <div class="errors">
+                                    <ul>
+                                        <li>
+                                            Oops. You have entered an invalid login or password.
+                                        </li>
+                                        <li>
+                                            New customer? You can <a href="/account/register">create an account</a>.
+                                        </li>
+                                    </ul>
+                                </div>
+                              {% endfor %}
+                            {% endif %}
+
+                            <input
+                                type="email"
+                                name="customer[email]"
+                                id="CustomerEmail"
+                                class="c-input {% if form.errors contains 'email' %} error{% endif %}"
+                                placeholder="{{ 'customer.login.email' | t }}"
+                                autocorrect="off"
+                                autocapitalize="off"
+                                autofocus>
+
+                            {% if form.password_needed %}
+                                <input
+                                    type="password"
+                                    value=""
+                                    name="customer[password]"
+                                    id="CustomerPassword"
+                                    class="c-input {% if form.errors contains 'password' %} error{% endif %}"
+                                    placeholder="{{ 'customer.login.password' | t }}">
+
+                            {% endif %}
+
+                            <div class="c-account__buttonContainer">
+                                <input
+                                    type="submit"
+                                    class="c-btn c-btn--large-new"
+                                    value="Log in">
+                            </div>
+                            <div class="account-links">
+                                {% if form.password_needed %}
+                                    <a class="c-account__link--normal" id="RecoverPassword" href="#recover">Forgot Your Password?
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endform %}
+                    </div>
+
+
+                    {% comment %}
+                      JS shows/hides this form in timber.loginForms()
+                    {% endcomment %}
+                    <div id="RecoverPasswordForm" style="display: none;">
+
+                        <h2 class="c-account__title">Reset Your Password</h2>
+                        <p class="c-account__infoText">We will send you an email to reset your password.</p>
+
+                        <div class="form-vertical">
+                            {% form 'recover_customer_password' %}
+
+                                {{ form.errors | default_errors }}
+
+                                {% comment %}
+                                    Assign variable to be used after timber.init() is run in theme.liquid
+                                {% endcomment %}
+                                {% if form.posted_successfully? %}
+                                {% assign resetPassword = true %}
+                                {% endif %}
+
+                                <input
+                                    type="email" value="" name="email" id="RecoverEmail" class="input-full" placeholder="{{ 'customer.recover_password.email' | t }}" autocorrect="off" autocapitalize="off">
+                                <div class="c-account__buttonContainer">
+                                    <input type="submit" class="c-btn c-btn--large-new" value="{{ 'customer.recover_password.submit' | t }}">
+                                </div>
+                                <a href="//javascript();" class="c-account__link--normal" id="HideRecoverPasswordLink">Log In</a>
+                            {% endform %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-account__section c-account__section--two page account register">
+                <div class="loginPage__box">
+                    <h2 class="c-account__title" style="white-space:nowrap;">Create An Account</h2>
+                    {% comment %} <a href="/account/register" class="c-btn c-btn--secondary">Create an Account</a> {% endcomment %}
+                    <div class="signInPage__box">
+                        {% include 'registerform' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+fbq('track', 'Lead');
+
+</script>

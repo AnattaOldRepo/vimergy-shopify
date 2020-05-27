@@ -1,0 +1,410 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign featured_image = current_variant.featured_image | default: product.featured_image   -%}
+<meta itemprop="name" content="{{ product.title   }}{% unless product.has_only_default_variant %}   - {{ current_variant.title }}{% endunless %}">
+<meta itemprop="url" content="{{ shop.url }}{{   current_variant.url }}">
+<meta itemprop="brand" content="{{   product.vendor }}">
+<meta itemprop="image" content="{{   featured_image | img_url: '600x600' }}">
+<meta itemprop="description" content="{{   product.description | strip_html | escape }}">
+{% comment %} <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" style="display:none;">
+   <select id="product-select" name="id" class="no-js" data-product-select style="display:none;" data-productid="{{product.id}}">
+   {% for variant in product.variants %}
+   <option
+   {% if variant == current_variant   %}selected="selected"{% endif %}
+   {% unless variant.available   %}disabled="disabled"{% endunless %}
+   value="{{ variant.id }}"
+   >
+   {{ variant.title }}
+   </option>
+   {% endfor %}
+   </select>
+</form> {% endcomment %}
+<div class="c-product" data-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
+
+    {% if collection != blank %}
+        <a class="c-product__breadcrumb" href="{{ collection.url }}">
+            <svg class="c-product__breadcrumbArrow" width="25px" height="12px" viewBox="0 0 25 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                    <g id="Category-Banner" transform="translate(0.000000, -6.000000)" stroke="#FF0000">
+                        <g id="breadcrumbs">
+                        <g transform="translate(0.000000, 2.000000)">
+                            <g id="arrow" transform="translate(12.500000, 10.000000) rotate(-90.000000) translate(-12.500000, -10.000000) translate(7.000000, -2.000000)">
+                                <path d="M5.20127143,23.6102857 L5.20127143,2" id="Stroke-420"></path>
+                                <polyline id="Stroke-421" transform="translate(5.201429, 3.009414) rotate(-180.000000) translate(-5.201429, -3.009414) " points="10.4028571 0.4087 5.20142857 5.61012857 0 0.4087"></polyline>
+                            </g>
+                        </g>
+                        </g>
+                    </g>
+                </g>
+            </svg>
+        {{ collection.title }}
+        </a>
+    {% endif %}
+
+    <div class="c-product_hero o-flex">
+        <div class="c-product__slider o-flex-item o-flex__col-lg-6">
+            <div class="c-product__singleSlider">
+                <img src="{{ product.images[0] | img_url: 'master' }}" alt="{{ product.images.alt | escape }}" data-product-featured-image>
+            </div>
+
+             {% unless product.title == 'Gift Card' %}
+                {% if product.images.size > 1 %}
+                    <div class="c-product__sliderNav ">
+                        {% for image in product.images  limit:3 %}
+                            <div class="c-product__slideItem {% if forloop.first %} active {% endif %}">
+                                <img src="{{ image.src | img_url: 'master' }}" alt="{{ image.alt | escape }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endunless %}
+
+        </div>
+        <div class="c-product__detail c-product-shop o-flex-item o-flex__col-lg-6">
+            <div itemprop="offers" itemscope itemtype="http:/  /schema.org/Offer">
+            <meta itemprop="priceCurrency" content="{{   shop.currency }}">
+            <meta itemprop="price" content="{{   current_variant.price | divided_by: 100.00 }}">
+            <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
+            <form id="AddToCartForm" class="c-product__form" action="/cart/add" method="post" enctype= "multipart/form-data" data-productid="{{product.id}}">
+                <h2 class="c-product__title">{{ product.title }}
+                    {% if product.metafields.c_f.product-icon %}
+                        <span class="c-product-icon">{{ product.metafields.c_f.product-icon }}</span>
+                    {% endif %}
+                </h2>
+                <div class="c-product-description">
+                    <p>{{ product.metafields.c_f.desc1 }}</p>
+                </div>
+
+                {% comment %} {% if product.metafields.sub_description  %}
+                    <div class="c-product-description">
+                        {{ product.metafields.c_f.sub_description }}
+                    </div>
+                {% endif %} {% endcomment %}
+                {% if product.metafields.c_f.sizetype != blank %}
+              
+                    <div class="c-variant c-variantCf">
+                       <label><strong>Size</strong></label>
+                       <div class="c-variant__box">
+                            <div class="c-variant__boxItem  is-active">
+                                {% if product.metafields.c_f.icon  == 'capsule' %}
+                                    <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
+                                {% elsif product.metafields.c_f.icon  == 'spoon' %}
+                                    <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
+                                {% elsif product.metafields.c_f.icon  == 'sachet' %}
+                                    <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
+                                {% elsif product.metafields.c_f.icon  == 'tincture' %}
+                                    <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
+                                {% else %}
+                                    <span></span>
+                                {% endif %}
+                                <span>{{ product.metafields.c_f.sizetype }}</span>
+                            </div>
+                            {% if product.metafields.c_f.product_size != blank %}
+                                <a class="c-variant__boxItem" href="{{ product.metafields.c_f.product_size_url }}">
+                                    {% if product.metafields.c_f.product_size-icon  == 'capsule' %}
+                                        <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
+                                    {% elsif product.metafields.c_f.product_size-icon  == 'spoon' %}
+                                        <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
+                                    {% elsif product.metafields.c_f.product_size-icon  == 'sachet' %}
+                                        <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
+                                    {% elsif product.metafields.c_f.product_size-icon  == 'tincture' %}
+                                        <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
+                                    {% else %}
+                                        <span></span>
+                                    {% endif %}
+                                    <span>{{ product.metafields.c_f.product_size }}</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="c-variant" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
+                    {% if product.options.size == 1 %}
+                        <label><strong>Size</strong></label>
+                    {% endif %}
+
+                    <div id="size-box" class="c-variant__box"   data-productid="{{product.id}}">
+                        {% for variant in product.variants %}
+                            <div class="c-variant__boxItem {% if variant == current_variant   %} is-active {% endif %}" data-value="{{ variant.id }}">
+                                {% unless product.title == 'Gift Card' %}
+                                    {% if product.metafields.c_f.icon  == 'capsule' %}
+                                        <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
+                                    {% elsif product.metafields.c_f.icon  == 'spoon' %}
+                                        <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
+                                    {% elsif product.metafields.c_f.icon  == 'sachet' %}
+                                        <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
+                                    {% elsif product.metafields.c_f.icon  == 'tincture' %}
+                                        <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
+                                    {% else %}
+                                        <span></span>
+                                    {% endif %}
+                                {% endunless %} <span data-value="{{ variant.title }}">{{ variant.title }}</span>
+                            </div>
+                        {% endfor %}
+                        {% if product.metafields.c_f.product_size != blank %}
+                            <a class="c-variant__boxItem" href="{{ product.metafields.c_f.product_size_url }}">
+                                {% if product.metafields.c_f.product_size-icon  == 'capsule' %}
+                                    <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
+                                {% elsif product.metafields.c_f.product_size-icon  == 'spoon' %}
+                                    <img class="c-variant__icon c-variant__icon--spoon" src="{{ 'icon-spoon.png' | asset_img_url }}" alt="spoon"/>
+                                {% elsif product.metafields.c_f.product_size-icon  == 'sachet' %}
+                                    <img class="c-variant__icon c-variant__icon--sachet" src="{{ 'icon-sachet.png' | asset_img_url }}" alt="sachet"/>
+                                {% elsif product.metafields.c_f.product_size-icon  == 'tincture' %}
+                                    <img class="c-variant__icon c-variant__icon--tintcure" src="{{ 'icon-tincture.png' | asset_img_url }}" alt="tincture"/>
+                                {% else %}
+                                    <span></span>
+                                {% endif %}
+                                <span>{{ product.metafields.c_f.product_size }}</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {%- assign product_quantity = 1 -%}
+                {% for item in cart.items %}
+
+                    {% if product.id ==  item.product_id %}
+
+                        {%- assign product_quantity = item.quantity -%}
+                        {% break %}
+
+                    {% endif %}
+                {% endfor %}
+
+                <div class="c-quantit c-quantity--select" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
+                    {% if product.options.size == 1 %}
+                        <label><strong>Quantity &amp; saving Options</label>
+                    {% endif %}
+                    <select id="product-select" name='id' class="no-js sadass" data-product-select  data-productid="{{product.id}}">
+                        {% for variant in product.variants %}
+                            <option
+                                {% if variant == current_variant   %}selected="selected"{% endif %}
+                                {% unless variant.available   %}disabled="disabled"{% endunless %}
+                                value="{{ variant.id }}"
+                            >
+                                pack ({{ variant.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="c-item-options">
+                    <div class="c-quantity">
+                        <label for="qty">Quantity</label>
+                        <input type="number"
+                            name="quantity"
+                            id="updates_{{ product.id }}"
+                            value="1"
+                            min="1"
+                            data-product-quantity
+                            aria-label="{{ 'cart.general.item_quantity' | t }}">
+                    </div>
+
+                    {% if product.metafields.c_f.made_in_usa  %}
+                        <div class="c-product-made">
+                            <span class="c-icon-usa">Made in USA</span>
+                        </div>
+                    {% endif %}
+
+                    {% if product.metafields.subscriptions.has_subscription  %}
+                        <div class="product-options-bottom">
+                            {% if product.available %}
+                                <h2 class="del-interval__heading">Pick a delivery option</h2>
+                                {% include 'subscription-product' %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="c-product__priceBox c-product-price" data-price-wrapper>
+                    <span id="productPrice" class="c-product__price " data-product-price>
+                        {{ current_variant.price | money }}
+                    </span>
+                    {% if product.compare_at_price_max >  product.price %}
+                        <s class="c-product__price c-product__price--nosale" data-compare-price>
+                            {% if current_variant.compare_at_price > current_variant.price %}
+                                {{ current_variant.compare_at_price   | money }}
+                            {% endif %}
+                        </s>
+                    {% endif %}
+                </div>
+                <button
+                    id="AddToCart"
+                    class="c-btn c-add-to-cart-buttons c-product__submit"
+                    type="submit"
+                    name="add"
+                    data-add-to-cart
+                    {% unless current_variant.available   %}disabled="disabled"{% endunless %}
+                >
+                    <span class="c-product__submitText" data-add-to-cart-text>
+                        {% if current_variant.available %}
+                            Add To Cart
+                        {% else %}
+                            Sold Out
+                        {% endif %}
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+    {% unless product.title == 'Gift Card' %}
+
+        {% section 'product-detail' %}
+
+        <div class="c-related-products" style="display: none;">
+            <h2> You may also like</h2>
+            <div class="c-related-productGrid">
+                {% for collection in product.collections %}
+                    {% assign current_product = product %}
+                    {% if collection.title == 'Powders' %}
+                        {% for product in collections.powders.products %}
+                            {% unless product.title == current_product.title %}
+                                <div class="c-product__item o-flex__item o-flex__col-4" >
+                                    <a href="{{ product.url }}" title="{{ product.title }}" class="c-product__link">
+                                        <div class="c-product__img">
+                                            <img class="c-product__Mainimage" src="{{ product.images[0].src  | img_url: 'large' }}">
+                                        </div>
+                                        <div class="c-product__info">
+                                            <h2 class="c-product__name">{{ product.title  }}</h2>
+                                            <h2 class="c-product__price">{{ product.price  | money}}</h2>
+                                        </div>
+                                        <div class="c-product__hoverText"><span>view details</span></div>
+                                        <object class="shop-link"><a href="{{ product.url }}" class="c-btn">Shop now</a></object>
+                                    </a>
+                                </div>
+                            {% endunless %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if collection.title == 'Kits' %}
+                        {% for product in collections.kits-1.products %}
+                            {% unless product.title == current_product.title %}
+                                <div class="c-product__item o-flex__item o-flex__col-4" >
+                                    <a href="{{ product.url }}" title="{{ product.title }}" class="c-product__link">
+                                        <div class="c-product__img">
+                                            <img class="c-product__Mainimage" src="{{ product.images[0].src  | img_url: 'large' }}">
+                                        </div>
+                                        <div class="c-product__info">
+                                            <h2 class="c-product__name">{{ product.title  }}</h2>
+                                            <h2 class="c-product__price">{{ product.price  | money}}</h2>
+                                        </div>
+                                        <div class="c-product__hoverText"><span>view details</span></div>
+                                        <object class="shop-link"><a href="{{ product.url }}" class="c-btn">Shop now</a></object>
+                                    </a>
+                                </div>
+                            {% endunless %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+    {% endunless %}
+
+<div class="c-relatedProducts c-related-products">
+
+</div>
+
+{% if product.metafields.c_f.citations %}
+
+    <div class="c-product__citations modal-default-popup u-hide " aria-labelledby="modal-title" aria-describedby="modal-desc" aria-hidden="true" role="dialog" id="content">
+        <h3 class="modal-title">Citations</h3>
+        <p class="c-citation-img">{{ product.metafields.c_f.citations }}</p>
+    </div>
+
+{% endif %}
+
+{{ 'modal.js' | asset_url | script_tag }}
+
+<script>
+
+    $(function() {
+        // Inline
+        $('.js-modal-inline').modal();
+    });
+
+</script>
+
+
+{{ 'option_selection.js' | shopify_asset_url | script_tag }}
+<script>
+ //  console.log({{ product | json}})
+
+   var selectCallback = function(variant, selector) {
+
+//        console.log(variant);
+        console.log(selector);
+
+        if(selector.selectors.length == 2) {
+            if('Size' === selector.selectors[0].name && 'Bundles' === selector.selectors[1].name) {
+                var value = $(selector.selectors[0].element).val();
+                $(selector.selectors[1].element).find('option').prop('disabled', 'disabled');
+                $.each (selector.product.variants, function (key, variant) {
+        //            console.log(variant);
+                    if (variant.option1 == value) {
+                        var option2 = variant.option2;
+                        $(selector.selectors[1].element).find('option[value="'+$.escapeSelector(option2)+'"]').prop('disabled', false);
+                    }
+                })
+            }
+        }
+
+   };
+
+   // jQuery(function($) {
+   new Shopify.OptionSelectors('product-select', {
+       product: {{ product | json }},
+       onVariantSelected: selectCallback,
+       enableHistoryState: true
+   });
+
+   $(".c-variant__boxItem").on("click", function(e) {
+        $('.c-variant__boxItem').removeClass('is-active');
+        $(this).addClass('is-active');
+        $("#product-select").val($(this).data("value"));
+        {% comment %} $(".single-option-selector").val($(this).find('span').data("value")); {% endcomment %}
+        {% if product.type == "Gift Card" %}
+            $(".c-product__price").text($(this).find('span').data("value"));
+        {% endif %}
+     	if (typeof znDisplayCurrency === "function") {
+          setTimeout(znDisplayCurrency, 500);
+          setTimeout(znDisplayCurrency, 1000);
+          setTimeout(znDisplayCurrency, 2000);
+        }
+		window.triggerSwymVariantEvent(this.dataset.value);
+    });
+
+    $('.c-product__slideItem img').on("click", function(e) {
+        $('.c-product__slideItem').removeClass('active');
+        $(this).closest('.c-product__slideItem').addClass('active');
+        var newImage = $(this).attr('src')
+        $('.c-product__singleSlider img').attr('src', newImage);
+    });
+
+</script>
+
+      {% if product.variants.size >= 2 %}
+      <script>
+      $(document).ready(function() {
+        if ($('button.btn.swym-button.swym-add-to-watchlist.swym-inject.swym-text.swym-.swym-loaded').is(':visible')) {
+			$('button#AddToCart span.c-product__submitText').text('Sold Out');
+			$('button#AddToCart').attr('disabled', true);
+		} else {
+			$('button#AddToCart span.c-product__submitText').text('Add To Cart');
+			$('button#AddToCart').attr('disabled', false);
+		}
+	$('div#size-box .c-variant__boxItem').click(function() {
+		if ($('button.btn.swym-button.swym-add-to-watchlist.swym-inject.swym-text.swym-.swym-loaded').is(':visible')) {
+			$('button#AddToCart span.c-product__submitText').text('Sold Out');
+			$('button#AddToCart').attr('disabled', true);
+		} else {
+			$('button#AddToCart span.c-product__submitText').text('Add To Cart');
+			$('button#AddToCart').attr('disabled', false);
+		}
+	});
+});
+
+      </script>
+      
+{% endif %}

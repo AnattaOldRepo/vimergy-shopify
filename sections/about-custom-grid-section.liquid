@@ -1,0 +1,131 @@
+<div class="c-hpCGridSection o-wrapper">
+    <div class="js-hp-custom-grid-slider">
+        {% for block in section.blocks %}
+            {% if block.type == 'image-grid-item' %}
+
+                {% if block.settings.link %}
+                    <a class="c-hpCGrid__item c-hpCGrid__item--image" href="{{ block.settings.link }}">
+                        <img class="c-hpCGridItem__image lazy-load" src="{{ block.settings.image | img_url: 'master' }}')">
+                    </a>
+                {% else %} 
+                    <div class="c-hpCGrid__item c-hpCGrid__item--image">
+                        <img class="c-hpCGridItem__image lazy-load" src="{{ block.settings.image | img_url: 'master' }}')">
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if block.type == 'product-grid-item' %}
+                {% assign grid_product = all_products[block.settings.product] %}
+
+                <a href="{{ grid_product.url }}" class="c-hpCGrid__item c-hpCGrid__item--product">
+                    <img class="c-hpCGridItem__image lazy-load" src="{{ block.settings.image | img_url: 'master' }}')">
+
+                    <div class="c-hpCGrid__productInfo">
+                        <span class="c-hpCGrid__productTitle">{{ grid_product.title }}</span>
+                        <span class="c-hpCGrid__productPrice">${{ grid_product.price | money_without_currency }}</span>
+                    </div>
+                </a>
+            {% endif %}
+
+            {% if block.type == 'cta-grid-item' %}
+                <div class="c-hpCGrid__item c-hpCGrid__item--cta">
+                    <img class="c-hpCGridItem__image lazy-load" src="{{ block.settings.image | img_url: 'master' }}')">
+
+                    <span class="c-hpCGrid__ctaTitle"
+                        {% if block.settings.cta-title-color.size > 0 %} style="color:{{ block.settings.cta-title-color }};" {% endif %}
+                    >{{ block.settings.title }}</span>
+
+                    <a class="c-hpCGrid__ctaLink" href="{{ block.settings.cta-link }}">
+                        {{ block.settings.cta-text }}
+                        <svg class="c-hpCGrid__ctaArrow" width="23px" height="12px" viewBox="0 0 23 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Symbols" class="c-hpTwoImg__ctaArrowPath" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                                <g  id="375-happy-alcoholidays" transform="translate(-316.000000, -244.000000)">
+                                    <g id="happy-alcoholidays">
+                                        <g id="text" transform="translate(309.000000, 0.000000)">
+                                            <g id="arrow" transform="translate(18.500000, 250.000000) rotate(-90.000000) translate(-18.500000, -250.000000) translate(13.000000, 239.000000)">
+                                                <path d="M5.20127143,21.6102857 L5.20127143,0" id="Stroke-420"></path>
+                                                <polyline id="Stroke-421" points="10.4028571 16.4087 5.20142857 21.6101286 0 16.4087"></polyline>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+            {% endif %}                
+
+        {% endfor %}
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "About Custom Grid Section",
+    "blocks": [
+        {
+            "type": "image-grid-item",
+            "name": "Image Grid Item",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "label": "Image",
+                    "id": "image"         
+                },
+                {
+                    "type": "text",
+                    "label": "Link",
+                    "id": "link"
+                }                 
+            ]
+        },
+        {
+            "type": "product-grid-item",
+            "name": "Product Grid Item",
+            "settings": [
+                {
+                    "type": "product",
+                    "label": "Product",
+                    "id": "product"
+                },
+                {
+                    "type": "image_picker",
+                    "label": "Image",
+                    "id": "image"         
+                }                
+            ]
+        },
+        {
+            "type": "cta-grid-item",
+            "name": "Cta Grid Item",
+            "settings": [
+                {
+                    "type": "html",
+                    "label": "Title",
+                    "id": "title"
+                },
+                {
+                    "type": "color",
+                    "label": "CTA Title Color",
+                    "id": "cta-title-color"
+                },                    
+                {
+                    "type": "image_picker",
+                    "label": "Image",
+                    "id": "image"         
+                },                  
+                {
+                    "type": "text",
+                    "label": "CTA Text",
+                    "id": "cta-text"
+                },                       
+                {
+                    "type": "text",
+                    "label": "CTA Link",
+                    "id": "cta-link"
+                } 
+            ]
+        }
+    ]
+}
+{% endschema %}

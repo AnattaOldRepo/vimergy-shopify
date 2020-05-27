@@ -1,0 +1,36 @@
+<div class="c-hpIGridSection o-wrapper">
+    {% if section.settings.title %}
+        <h2 class="c-hpIGrid__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <script src="//foursixty.com/media/scripts/fs.embed.v2.5.js" data-feed-id="suburban-riot_2" data-theme="lookbook_v2_5" data-page-size="8"></script>
+    <style>.fs-has-links::after {  padding: 5px 7.5px; background-color: rgb(0, 0, 0); color: rgba(255, 255, 255, 0.8); content: "SHOP NOW";  }.fs-wrapper div.fs-text-container .fs-entry-title, div.fs-detail-title{font-family:Apercu;font-style:italic;font-weight:normal;}div.fs-text-container .fs-entry-date, div.fs-detail-container .fs-post-info, div.fs-wrapper div.fs-has-links::after, .fs-text-product, .fs-overlink-text{font-family:Apercu Bold;font-style:normal;font-weight:bold;}.fs-wrapper div.fs-text-container * {color:rgb(0, 0, 0)}.fs-wrapper div.fs-text-container {background-color:rgba(255, 255, 255, 0.8); margin: 0px}div.fs-entry-date{display:none}div.fs-entry-title{display:none}.fs-wrapper div.fs-timeline-entry{ margin: 1px }</style>
+
+    <style>
+        .fs-wrapper div.fs-text-container .fs-service-icon {display: block;}
+        .fs-large-text {font-family: "Apercu", sans-serif; font-size:16px; font-weight:400;}
+        .fs-medium-text {font-family: "Apercu", sans-serif; font-size:14px; font-weight:300;}
+        .fs-small-text {font-family: "Apercu", sans-serif; font-size:12px; font-weight:300;}
+        .fs-buy-button.fs-medium-text {font-family: "Lato", sans-serif; font-size:12px; font-weight:300;}
+        div.fs-timeline-detail {
+           background-color: rgba(0, 0, 0, 0.7);
+    </style>    
+</div>
+
+{% schema %}
+{
+    "name": "Home Instagram Section",
+    "class": "index-section",
+    "settings": [
+        {
+            "type": "text",
+            "label": "Title",
+            "id": "title"
+        }
+    ],
+    "presets": [{
+        "name": "Home Instagrm Section",
+        "category": "Home Page"
+    }]    
+}
+{% endschema %}

@@ -1,0 +1,41 @@
+<div class="c-productCol  o-flex o-flex--center c-home-productCol ">
+    <div class="c-productCol__image o-flex__item o-flex__col-lg-7 o-flex__item--reverse">
+          <img src="{{ section.settings.image | img_url: 'master'}}"  alt="">
+    </div>
+    <div class="c-productCol__content o-flex__item o-flex--center  o-flex__col-lg-5">
+        <div class="c-productCol__detail u-textLeft">
+            <h2 class="c-subheading">{{ section.settings.text }}</h2>
+            <p class="c-copy">{{ section.settings.desc }}</p>
+            <a class="c-btn c-btn-primary" href="{{ section.settings.button-link }}">SHOP COLLECTION</a>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Home Collection",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "text",
+                "id": "text",
+                "label": "Text"
+            },
+             {
+                "type": "text",
+                "id": "desc",
+                "label": "Description"
+            },
+             {
+                "type": "url",
+                "id": "button-link",
+                "label": "Button Links"
+            }
+
+        ]
+    }
+{% endschema %}

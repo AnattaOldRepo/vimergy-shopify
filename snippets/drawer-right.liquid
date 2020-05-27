@@ -1,0 +1,27 @@
+<div id="offcanvas-right" class="c-offcanvas c-offcanvas--right" aria-hidden="true">
+    <div class="c-cart">
+        <button type="button" class="c-cart__closeX c-offcanvas__close" aria-label="Close Menu">
+            <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                    <g id="375-03-home-menu@2x" transform="translate(-329.000000, -29.000000)" stroke-width="2" stroke="#000000">
+                        <g id="icon-close" transform="translate(330.000000, 30.000000)">
+                            <g id="error-1">
+                                <path d="M0,0 L14,14" id="Line"></path>
+                                <path d="M0,0 L14,14" id="Line-Copy" transform="translate(7.000000, 7.000000) scale(-1, 1) translate(-7.000000, -7.000000) "></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </svg>
+        </button>
+
+        <span class="c-cart__title">Your Shopping Cart</span>
+
+        <div class="c-cart__cart">
+            <div id="CartContainer"></div>
+        </div>
+
+    </div>
+</div>
+
+{% include 'ajax-cart-template' %}

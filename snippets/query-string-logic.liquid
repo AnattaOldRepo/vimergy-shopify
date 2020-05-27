@@ -1,0 +1,11 @@
+{% comment %}
+    Used in shopifyQueryStrings.liquid
+{% endcomment %}
+    
+<h1>{{ keyAndValue[0] }}</h1>
+
+{% if keyAndValue[0] == "sort_by" and keyAndValue[1] == %}
+    {% assign current_sort_query = keyAndValue[1] %}
+{% else %}
+    {% assign current_sort_query = false %}
+{% endif %}

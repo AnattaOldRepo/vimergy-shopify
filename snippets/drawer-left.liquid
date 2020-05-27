@@ -1,0 +1,53 @@
+<div id="offcanvas-left" class="c-offcanvas c-offcanvas--left" aria-hidden="true">
+    <button type="button" class="c-offcanvas__close" aria-label="Close Menu">
+        {% include 'icon-searchClose' %}
+    </button>
+    <div class="c-mobileNavContainer">
+        <nav class="c-mobileNav">
+            <ul class="c-mobileNav__menu">
+                {% comment %} <li class="c-mobileNav__item">
+                    <div class="c-search-box c-mobile-search">
+                        <form action="/search" method="get" class="input-group search-bar" role="search" >
+                            <input type="hidden" name="type" value="product">
+                            <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" class="input-group-field search-input" aria-label="{{ 'general.search.placeholder' | t }}">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn icon-fallback-text c-search-button">
+                                    <span class="icon icon-search" aria-hidden="true">
+                                        {% include 'icon-search' %}
+                                    </span>
+                                    {% comment %} <span class="fallback-text">{{ 'general.search.submit' | t }}</span> {% endcomment %}
+                                </button>
+                            </span>
+                        </form>
+                    </div>
+                </li> {% endcomment %}
+
+                {% for link in linklists.new-menu.links %}
+                    <li class="c-mobileNav__item">
+                        <a class="c-mobileNav__itemLink {% if link.active %} is-active {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+                    </li>
+                {% endfor %}
+
+                <li class="c-mobileNav__item">
+                    <a class="c-mobileNav__itemLink c-menu__item--help" href="https://vimergy.myshopify.com/pages/customer-service">Help</a>
+                </li>
+
+                <li class="c-mobileNav__item">
+                    <a class="c-mobileNav__itemLink c-menu__item--signin"
+                        {% if customer %}
+                            href="https://vimergy.myshopify.com/account"
+                        {% else %}
+                            href="https://vimergy.myshopify.com/account/login"
+                        {% endif %}
+                    >
+                        {% if customer %}
+                            My Account
+                        {% else %}
+                            Log In
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

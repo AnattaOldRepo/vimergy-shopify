@@ -1,9 +1,0 @@
-/*================ Custom selectors ================*/
-
-@custom-selector :--enter :hover, :focus, :active;
-
-@custom-selector :--headings h1, h2, h3, h4, h5, h6;
-
-@custom-selector :--input input, textarea, button;
-
-@custom-selector :--placeholder &:placehoder-shown, &::-webkit-input-placeholder, &::-moz-placeholder, &:-ms-input-placeholder;

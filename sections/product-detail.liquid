@@ -1,0 +1,38 @@
+<div class="c-product-detail">
+    <h2 class="c-heading">Product info</h2>
+    <div class="c-product__text">
+        <p>{{ product.metafields.c_f.prod-info-new }}</p>
+
+        <div class="c-iconSection">
+            {% if product.metafields.c_f.prod-icon-grid %}
+                {{ product.metafields.c_f.prod-icon-grid }}
+            {% endif %}
+        </div>
+    </div>
+    <div class="c-product__features">
+        <div class="c-product__featureImg">
+            {{ product.metafields.c_f.feature-image }}
+        </div>
+        <div class="c-product__featureList">
+            {{ product.metafields.c_f.feature-list }}
+            <a class=" view-citation  js-modal-inline" href="fallback.html" aria-controls="content" data-modal-src="#content">View Citations</a>
+        </div>
+    </div>
+
+    {% if product.metafields.c_f.usage-text %}
+        <div class="c-product__usage">
+            <div class="c-product__usageLeft">
+                <div class="c-product__usagetext">
+                    <h3>How to Use</h3>
+                    <p>{{ product.metafields.c_f.usage-text }}</p>
+                </div>
+            </div>
+            <div class="c-product__usageImg">
+                {{ product.metafields.c_f.usage-image }}
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+

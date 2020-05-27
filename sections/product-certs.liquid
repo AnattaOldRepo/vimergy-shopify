@@ -1,0 +1,43 @@
+<div class="c-product-certs">
+
+    {% for block in section.blocks %}
+            <div class="c-about-cert">
+               <div class="c-certification__icon">
+                <img src="{{ block.settings.icon | img_url}}"  alt="">
+               </div>
+               <p class="c-certification__name">{{ block.settings.icon-title }}</p>
+            </div>
+
+    {% endfor %}
+
+</div>
+
+{% schema %}
+  {
+      "name": "Product Cert Icon",
+    "blocks": [
+      {
+        "type": "contentcolumn",
+        "name": "icons",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "icon",
+                "label": "Icon"
+            },
+            {
+                "type": "text",
+                "id": "icon-title",
+                "label": "Icon Title"
+            }
+        ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "Product Cert Icon",
+            "category": "Custom"
+        }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,1333 @@
+{
+  "current": {
+    "type_base_size": "16px",
+    "color_primary": "#000",
+    "color_body_text": "#000",
+    "social_sharing_blog": true,
+    "share_facebook": true,
+    "share_twitter": true,
+    "share_pinterest": true,
+    "social_twitter_link": "www.twitter.com\/vimergy",
+    "social_facebook_link": "www.facebook.com\/vimergy",
+    "social_pinterest_link": "",
+    "social_instagram_link": "www.instagram.com\/vimergy",
+    "social_snapchat_link": "",
+    "social_tumblr_link": "",
+    "social_youtube_link": "",
+    "social_vimeo_link": "",
+    "cart_notes_enable": true,
+    "favicon": "shopify:\/\/shop_images\/v-logo-new.png",
+    "checkout_header_image": "",
+    "checkout_logo_image": "shopify:\/\/shop_images\/v-logo-new.png",
+    "checkout_logo_position": "left",
+    "checkout_logo_size": "small",
+    "checkout_body_background_image": "",
+    "checkout_body_background_color": "#fff",
+    "checkout_input_background_color_mode": "white",
+    "checkout_sidebar_background_image": "",
+    "checkout_sidebar_background_color": "#fafafa",
+    "checkout_heading_font": "Helvetica Neue",
+    "checkout_body_font": "Helvetica Neue",
+    "checkout_accent_color": "#1990c6",
+    "checkout_button_color": "#000000",
+    "checkout_error_color": "#ff6d6d",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "1511810713558": {
+            "type": "footer-menu",
+            "settings": {
+              "footer_linklist": ""
+            }
+          },
+          "1511810718194": {
+            "type": "footer-menu",
+            "settings": {
+              "footer_linklist": ""
+            }
+          },
+          "1511810724005": {
+            "type": "footer-menu",
+            "settings": {
+              "footer_linklist": ""
+            }
+          },
+          "1511810727961": {
+            "type": "footer-images",
+            "settings": {
+              "footer-image": ""
+            }
+          }
+        },
+        "block_order": [
+          "1511810713558",
+          "1511810718194",
+          "1511810724005",
+          "1511810727961"
+        ],
+        "settings": {}
+      },
+      "1511901449542": {
+        "type": "home-hero-section",
+        "settings": {
+          "background-image-left-mobile": "",
+          "background-image-left-desktop": "",
+          "background-image-right-mobile": "",
+          "background-image-right-desktop": "",
+          "hero-text": "Who Made<br> \nThese Rules<br>Anyway",
+          "cta-link": "https:\/\/www.suburbanriot.com\/collections\/women",
+          "cta-text": "treat yourself"
+        }
+      },
+      "1511985349344": {
+        "type": "home-two-image-section",
+        "settings": {
+          "image-one": "",
+          "image-one-mobile": "",
+          "image-two": "",
+          "image-two-mobile": "",
+          "display-text": "ALL NEW! <br>\nStar Signs",
+          "title": "Baby What's Your Sign",
+          "cta-link": "\/collections\/women-star-signs",
+          "cta-text": "Shop The Stars"
+        }
+      },
+      "1511995216114": {
+        "type": "home-custom-grid-section",
+        "blocks": {
+          "1512506520486": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "products\/w3018-23-hgr"
+            }
+          },
+          "1512506502726": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "\/products\/w1024-2-blk"
+            }
+          },
+          "1512506599915": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": ""
+            }
+          },
+          "1512506570833": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "\/products\/w3018-292-blata"
+            }
+          },
+          "1512506559019": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "\/products\/w3018-116-wht"
+            }
+          },
+          "1512506529178": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "\/products\/w3018-137-wht"
+            }
+          },
+          "1512506586349": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "\/products\/w4049-10-nvy"
+            }
+          },
+          "1512506538274": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "\/products\/w3018-77-wht"
+            }
+          }
+        },
+        "block_order": [
+          "1512506520486",
+          "1512506502726",
+          "1512506599915",
+          "1512506570833",
+          "1512506559019",
+          "1512506529178",
+          "1512506586349",
+          "1512506538274"
+        ],
+        "settings": {}
+      },
+      "1512081090226": {
+        "type": "home-products-section",
+        "blocks": {
+          "1512081112330": {
+            "type": "product-item",
+            "settings": {
+              "product": ""
+            }
+          },
+          "1512081104154": {
+            "type": "product-item",
+            "settings": {
+              "product": ""
+            }
+          },
+          "1512081116409": {
+            "type": "product-item",
+            "settings": {
+              "product": ""
+            }
+          },
+          "1512081109069": {
+            "type": "product-item",
+            "settings": {
+              "product": ""
+            }
+          }
+        },
+        "block_order": [
+          "1512081112330",
+          "1512081104154",
+          "1512081116409",
+          "1512081109069"
+        ],
+        "settings": {
+          "title": "Be Like Everyone"
+        }
+      },
+      "newsletter-signup-section": {
+        "type": "newsletter-signup-section",
+        "settings": {
+          "small-cta-text": "First Time Shopper?<br> Sign Up For The Weekly RIOT and Receive",
+          "large-cta-text": "20% Off Your First Order",
+          "placeholder-text": "Enter Email",
+          "submit-text": "Submit"
+        }
+      },
+      "1512145857567": {
+        "type": "home-single-image-section",
+        "settings": {
+          "intro-text": "Winter, we<br>\nwill sea u later",
+          "title": "New Spring Drops<br>",
+          "cta-link": "https:\/\/www.suburbanriot.com\/collections\/new",
+          "cta-text": "shopping is fun",
+          "image-mobile": "",
+          "image-desktop": ""
+        }
+      },
+      "1512163185935": {
+        "type": "home-instagram-grid-section",
+        "settings": {
+          "title": "#suburbanriot"
+        }
+      },
+      "notification-bar": {
+        "type": "notification-bar",
+        "settings": {
+          "notification-is-active": true,
+          "text": "U.S. Orders Over $75 Ship Free"
+        }
+      },
+      "collection-women": {
+        "type": "collection-women",
+        "settings": {
+          "parent-collection": "",
+          "use-hero-image": true,
+          "hero-image": "",
+          "hero-image-mobile": "",
+          "hero-text": "The Good Life",
+          "info-box-content": "<p>Sub_Urban Riot believes in the good life - reinvented. The good life 2.0 is about fresh juice, daily philosophy, dogs and cats living together, coffee breaks, farmer’s markets, yoga, croquet battles, art shows, kale, camping, craft brews, and t-shirts.<\/p>\n            <p>There’s a wink and a smile to the brand; a subtle humor. A deeper dive uncovers a unique viewpoint on the world and times. The zeitgeist will be broadcast on your body.<\/p>",
+          "sub-collection-list": ""
+        }
+      },
+      "product": {
+        "type": "product",
+        "blocks": {
+          "1513282539637": {
+            "type": "color-option",
+            "settings": {
+              "color-name": "Navy Blue",
+              "color-value": "#1a346e"
+            }
+          }
+        },
+        "block_order": [
+          "1513282539637"
+        ],
+        "settings": {}
+      },
+      "product-colors": {
+        "type": "product-colors",
+        "blocks": {
+          "1513284535905": {
+            "type": "color-option",
+            "settings": {
+              "color-name": "Heather Grey",
+              "color-value": "#a5a5a5"
+            }
+          },
+          "1513809232732": {
+            "type": "color-option",
+            "settings": {
+              "color-name": "Faded Black",
+              "color-value": "#333333"
+            }
+          },
+          "1513883275467": {
+            "type": "color-option",
+            "settings": {
+              "color-name": "Navy Blue",
+              "color-value": "#004999"
+            }
+          },
+          "1517008567561": {
+            "type": "color-option",
+            "settings": {
+              "color-name": "BLUSH",
+              "color-value": "#dec9ce"
+            }
+          },
+          "1517008874323": {
+            "type": "color-option",
+            "settings": {
+              "color-name": "BURGUNDY",
+              "color-value": "#6d1414"
+            }
+          }
+        },
+        "block_order": [
+          "1513284535905",
+          "1513809232732",
+          "1513883275467",
+          "1517008567561",
+          "1517008874323"
+        ],
+        "settings": {}
+      },
+      "related-products": {
+        "type": "related-products",
+        "settings": {
+          "related_title": "You May Also Like"
+        }
+      },
+      "size-guide": {
+        "type": "size-guide",
+        "blocks": {
+          "1513289747233": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Women's",
+              "chart-section-title": "Loose Tee",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Chest<\/th>\n<th>Bottom Hem<\/th>\n<th>Length From Shoulder<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>X-Small<\/td>\n<td>34\"<\/td>\n<td>38\"<\/td>\n<td>24\"<\/td>\n<\/tr>\n<tr>\n<td>Small<\/td>\n<td>36\"<\/td>\n<td>40\"<\/td>\n<td>25\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>38\"<\/td>\n<td>42\"<\/td>\n<td>26\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>40\"<\/td>\n<td>44\"<\/td>\n<td>27\"<\/td>\n<\/tr>                      \n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513289821015": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Women's",
+              "chart-section-title": "Muscle Tank test",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Chest<\/th>\n<th>Bottom Hem<\/th>\n<th>Length From Shoulder<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>X-Small<\/td>\n<td>33\"<\/td>\n<td>36\"<\/td>\n<td>25\"<\/td>\n<\/tr>\n<tr>\n<td>Small<\/td>\n<td>35\"<\/td>\n<td>38\"<\/td>\n<td>26\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>37\"<\/td>\n<td>40\"<\/td>\n<td>27\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>39\"<\/td>\n<td>42\"<\/td>\n<td>28\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513289859370": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Women's",
+              "chart-section-title": "Race Tank Size Chart",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Chest<\/th>\n<th>Bottom Hem<\/th>\n<th>Length From Shoulder<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>X-Small<\/td>\n<td>30\"<\/td>\n<td>43\"<\/td>\n<td>31\"<\/td>\n<\/tr>\n<tr>\n<td>Small<\/td>\n<td>32\"<\/td>\n<td>45\"<\/td>\n<td>31.5\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>34\"<\/td>\n<td>47\"<\/td>\n<td>32\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>36\"<\/td>\n<td>49\"<\/td>\n<td>32.5\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1516230839153": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Women's",
+              "chart-section-title": "Cambridge Sweatpants",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Waist<\/th>\n<th>Inseam<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>X-Small<\/td>\n<td>29\"<\/td>\n<td>24\"<\/td>\n<\/tr>\n<tr>\n<td>Small<\/td>\n<td>31\"<\/td>\n<td>24 1\/2\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>33\"<\/td>\n<td>25 1\/2\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>35\"<\/td>\n<td>26 1\/2\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513289925900": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Women's",
+              "chart-section-title": "Undergrad Sweatpants",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Waist<\/th>\n<th>Inseam<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>X-Small<\/td>\n<td>29\"<\/td>\n<td>24\"<\/td>\n<\/tr>\n<tr>\n<td>Small<\/td>\n<td>31\"<\/td>\n<td>24 3\/8\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>33\"<\/td>\n<td>24 1\/2\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>35\"<\/td>\n<td>24 5\/8\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513289951947": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Women's",
+              "chart-section-title": "Leggings",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Waist<\/th>\n<th>Inseam<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>X-Small<\/td>\n<td>24\"<\/td>\n<td>29\"<\/td>\n<\/tr>\n<tr>\n<td>Small<\/td>\n<td>25-26\"<\/td>\n<td>30\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>27-28\"<\/td>\n<td>32\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>30-32\"<\/td>\n<td>33\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513289894822": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Women's",
+              "chart-section-title": "Taos Button Down",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Chest<\/th>\n<th>Bottom Hem<\/th>\n<th>Length From Shoulder<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>X-Small<\/td>\n<td>36\"<\/td>\n<td>48\"<\/td>\n<td>26.5\"<\/td>\n<\/tr>\n<tr>\n<td>Small<\/td>\n<td>37\"<\/td>\n<td>49\"<\/td>\n<td>27.5\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>38.5\"<\/td>\n<td>40\"<\/td>\n<td>28\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>41\"<\/td>\n<td>42.5\"<\/td>\n<td>29\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513353995374": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Men's",
+              "chart-section-title": "Tee \/ Tank",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Chest<\/th>\n<th>Shoulders (Seam to Seam)<\/th>\n<th>Length (From Top Shoulder)<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>Small<\/td>\n<td>38\"<\/td>\n<td>17\"<\/td>\n<td>27\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>40\"<\/td>\n<td>18\"<\/td>\n<td>28\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>42\"<\/td>\n<td>19\"<\/td>\n<td>29\"<\/td>\n<\/tr>\n<tr>\n<td>XL<\/td>\n<td>44\"<\/td>\n<td>20\"<\/td>\n<td>30\"<\/td>\n<\/tr>\n<tr>\n<td>XXL<\/td>\n<td>46\"<\/td>\n<td>21\"<\/td>\n<td>31\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513354449409": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Tween's",
+              "chart-section-title": "T-SHIRT & MUSCLE TANK",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Chest<\/th>\n<th>Bottom Hem<\/th>\n<th>Length From Shoulder<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>Small<\/td>\n<td>27.5\"<\/td>\n<td>29.5\"<\/td>\n<td>20\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>29\"<\/td>\n<td>31\"<\/td>\n<td>21\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>30\"<\/td>\n<td>32\"<\/td>\n<td>22\"<\/td>\n<\/tr>\n<tr>\n<td>X Large<\/td>\n<td>31.5\"<\/td>\n<td>33.5\"<\/td>\n<td>23\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513354908814": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Tween's",
+              "chart-section-title": "Leggings",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Waist<\/th>\n<th>Inseam<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>Small<\/td>\n<td>21\"<\/td>\n<td>24\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>23\"<\/td>\n<td>25\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>25\"<\/td>\n<td>26\"<\/td>\n<\/tr>\n<tr>\n<td>X Large<\/td>\n<td>27\"<\/td>\n<td>26 1\/4\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          },
+          "1513354979505": {
+            "type": "size-section",
+            "settings": {
+              "chart-section-type": "Unisex",
+              "chart-section-title": "SWEATSHIRT",
+              "chart-section-image": "",
+              "chart-table": "<table>\n<thead>\n<tr>\n<th>Size<\/th>\n<th>Chest<\/th>\n<th>Bottom Hem<\/th>\n<th>Length From Shoulder<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>X Small<\/td>\n<td>38\"<\/td>\n<td>35\"<\/td>\n<td>25.5\"<\/td>\n<\/tr>    \n<tr>\n<td>Small<\/td>\n<td>40\"<\/td>\n<td>37\"<\/td>\n<td>26.5\"<\/td>\n<\/tr>\n<tr>\n<td>Med<\/td>\n<td>42\"<\/td>\n<td>39\"<\/td>\n<td>27.5\"<\/td>\n<\/tr>\n<tr>\n<td>Large<\/td>\n<td>44\"<\/td>\n<td>41\"<\/td>\n<td>28.5\"<\/td>\n<\/tr>\n<tr>\n<td>XL<\/td>\n<td>48\"<\/td>\n<td>44\"<\/td>\n<td>30\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"
+            }
+          }
+        },
+        "block_order": [
+          "1513289747233",
+          "1513289821015",
+          "1513289859370",
+          "1516230839153",
+          "1513289925900",
+          "1513289951947",
+          "1513289894822",
+          "1513353995374",
+          "1513354449409",
+          "1513354908814",
+          "1513354979505"
+        ],
+        "settings": {
+          "title": "Size Charts"
+        }
+      },
+      "about-hero-one-section": {
+        "type": "about-hero-one-section",
+        "settings": {
+          "image-desktop": "",
+          "image-mobile": "",
+          "hero-text": "A Riotus Attitude"
+        }
+      },
+      "about-single-image-section": {
+        "type": "about-single-image-section",
+        "settings": {
+          "intro-text": "Fun people<br>\ncrank out quality",
+          "title": "The Good Life",
+          "cta-link": "\/",
+          "cta-text": "Come Laugh With Us",
+          "image-mobile": "",
+          "image-desktop": ""
+        }
+      },
+      "about-custom-grid-section": {
+        "type": "about-custom-grid-section",
+        "blocks": {
+          "1513641047088": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "\/"
+            }
+          },
+          "1513641061500": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": "\/"
+            }
+          },
+          "1513641070985": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": ""
+            }
+          },
+          "1513641083939": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": ""
+            }
+          },
+          "1513641094495": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": ""
+            }
+          },
+          "1513641103824": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": ""
+            }
+          },
+          "1513641116100": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": ""
+            }
+          },
+          "1513641157120": {
+            "type": "image-grid-item",
+            "settings": {
+              "image": "",
+              "link": ""
+            }
+          }
+        },
+        "block_order": [
+          "1513641047088",
+          "1513641061500",
+          "1513641070985",
+          "1513641083939",
+          "1513641094495",
+          "1513641103824",
+          "1513641116100",
+          "1513641157120"
+        ],
+        "settings": {}
+      },
+      "about-hero-two-section": {
+        "type": "about-hero-two-section",
+        "settings": {
+          "image-desktop": "",
+          "image-mobile": "",
+          "hero-text": "Ideas From<br>\nA Coffee Run"
+        }
+      },
+      "about-content-grid-section": {
+        "type": "about-content-grid-section",
+        "blocks": {
+          "1513641246154": {
+            "type": "content-item",
+            "settings": {
+              "image": "",
+              "title": "Letters From Somewhere",
+              "subtitle": "The best of what people sent us this month.",
+              "link": ""
+            }
+          },
+          "1513641283294": {
+            "type": "content-item",
+            "settings": {
+              "image": "",
+              "title": "Tonight's Show",
+              "subtitle": "Look for us at the Wilshire Ebell Theatre from 7pm to 9pm.",
+              "link": ""
+            }
+          },
+          "1513641317866": {
+            "type": "content-item",
+            "settings": {
+              "image": "",
+              "title": "This Guy Likes Our Tees",
+              "subtitle": "He wears a different Sub_Urban Riot tee everyday of the week.",
+              "link": ""
+            }
+          },
+          "1513641359096": {
+            "type": "content-item",
+            "settings": {
+              "image": "",
+              "title": "Slow Mo Tee Design",
+              "subtitle": "See us in action this week.",
+              "link": ""
+            }
+          }
+        },
+        "block_order": [
+          "1513641246154",
+          "1513641283294",
+          "1513641317866",
+          "1513641359096"
+        ],
+        "settings": {
+          "title": "Know No Resolutions"
+        }
+      },
+      "about-hero-section": {
+        "type": "about-hero-section",
+        "settings": {
+          "background-image-left-mobile": "",
+          "background-image-left-desktop": "",
+          "background-image-right-mobile": "",
+          "background-image-right-desktop": "",
+          "hero-text": "Never Bored"
+        }
+      },
+      "about-single-image-one": {
+        "type": "about-single-image-one",
+        "settings": {
+          "intro-text": "Ignore the rules",
+          "title": "The <br> New Luxury",
+          "content": "From the office - to the gym - to the road trip - we make clothes that you want to wear over and over and over again.",
+          "image-mobile": "",
+          "image-desktop": ""
+        }
+      },
+      "about-double-image-one": {
+        "type": "about-double-image-one",
+        "settings": {
+          "intro-text": "Get into trouble",
+          "title": "Origin",
+          "content": "<p>Sub_Urban Riot was born in 2006 in Venice, California.<\/p>\n\n<p>Two college friends realized that the cubicle life wasn’t for them so they quit their corporate day jobs. Following the rules that someone else made up no longer made sense.<\/p>\n\n<p>Instead of settling for a good life, they decided to go against the grain to pursue a great one. So, at the beginning of the largest financial crisis ever, they risked everything to start a company. A company that would allow them to ignore the rules, have fun and not take themselves too seriously.<\/p>\n\n<p>10 plus years later, Sub_Urban Riot is a global brand with an appreciation for the absurd and a commitment to re-imagine the good life.<\/p>",
+          "image-one-mobile": "",
+          "image-one-desktop": "",
+          "image-one-caption": "The First Logo",
+          "image-two-mobile": "",
+          "image-two-desktop": "",
+          "image-two-caption": "First Store"
+        }
+      },
+      "about-single-image-two": {
+        "type": "about-single-image-two",
+        "settings": {
+          "intro-text": "Appreciate the absurd",
+          "title": "We Believe In...",
+          "content": "Books, fresh juice, not taking yourself too seriously, dogs and cats living together, standing out from the crowd, kale, not needing permission to begin, daily philosophy, honesty, coffee breaks, positive energy, democracy, farmer’s markets, living better, craft brews, having fun, yoga, breaking rules, camping, SPF 100 sunscreen, croquet battles\nart shows, and t-shirts.",
+          "image-mobile": "",
+          "image-desktop": ""
+        }
+      },
+      "about-double-image-two": {
+        "type": "about-double-image-two",
+        "settings": {
+          "intro-text": "Start your own riot",
+          "title": "Environment<br>\n&amp; Transparency",
+          "content": "<p>We didn’t start Sub_Urban Riot to sell $85 dollar t-shirts. Making expensive shirts just because we can never made sense. We’re not here to buy mansions and Ferraris.<\/p>\n \n<p>We also didn’t start Sub_Urban Riot to sell $9 dollar t-shirts. $9 t-shirts come at a major cost to others. We prefer to do things the right way so we can sleep in peace at night.<\/p>\n \n<p>At the core of all we do is democracy, inclusiveness and integrity. That’s why we believe in responsible labor and sourcing practices. Everyday we do all we can to minimize the environmental and human cost of doing business.<\/p>\n \n<p>Simply put, we started Sub_Urban Riot inspire others to start their own suburban riot.<\/p>",
+          "image-one-mobile": "",
+          "image-one-desktop": "",
+          "image-one-caption": "",
+          "image-two-mobile": "",
+          "image-two-desktop": "",
+          "image-two-caption": ""
+        }
+      },
+      "collection-men": {
+        "type": "collection-men",
+        "settings": {
+          "parent-collection": "",
+          "use-hero-image": true,
+          "hero-image": "",
+          "hero-image-mobile": "",
+          "hero-text": "",
+          "info-box-content": "<p>Sub_Urban Riot makes clothes that look good, feel good, and make people laugh — the new luxury goods.  Without the price tag or the attitude.  Sub_Urban Riot promises that they will rarely, if ever, take themselves too seriously.<\/p>",
+          "sub-collection-list": ""
+        }
+      },
+      "collection-new": {
+        "type": "collection-new",
+        "settings": {
+          "parent-collection": "",
+          "use-hero-image": true,
+          "hero-image": "",
+          "hero-image-mobile": "",
+          "hero-text": "What's<br>Poppin",
+          "info-box-content": "You can find our newest drops and ideas here. From basic pieces to small run graphic tees, sometimes this is the only place you'll find the absolute latest. Keep an eye out for some exciting new stuff launching soon!",
+          "sub-collection-list": ""
+        }
+      },
+      "collection-tweens": {
+        "type": "collection-tweens",
+        "settings": {
+          "parent-collection": "",
+          "use-hero-image": true,
+          "hero-image": "",
+          "hero-image-mobile": "",
+          "hero-text": "Always Dreaming",
+          "info-box-content": "",
+          "sub-collection-list": ""
+        }
+      },
+      "collection-general-store": {
+        "type": "collection-general-store",
+        "settings": {
+          "parent-collection": "",
+          "use-hero-image": true,
+          "hero-image": "",
+          "hero-image-mobile": "",
+          "hero-text": "The<br>Good<br>Life<br>2.0",
+          "info-box-content": "",
+          "sub-collection-list": ""
+        }
+      },
+      "collection-sale": {
+        "type": "collection-sale",
+        "settings": {
+          "parent-collection": "",
+          "use-hero-image": true,
+          "hero-image": "",
+          "hero-image-mobile": "",
+          "hero-text": "Stock up",
+          "info-box-content": "",
+          "sub-collection-list": ""
+        }
+      },
+      "collection-plus": {
+        "type": "collection-plus",
+        "settings": {
+          "parent-collection": "",
+          "use-hero-image": false,
+          "hero-image": "",
+          "hero-image-mobile": "",
+          "hero-text": "",
+          "info-box-content": "",
+          "sub-collection-list": ""
+        }
+      },
+      "home-info": {
+        "type": "home-info",
+        "blocks": {
+          "1521192988347": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-vegan2.png",
+              "icon-title": "Vegan"
+            }
+          },
+          "1521197371745": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/Gluten-free.png",
+              "icon-title": "Gluten-Free"
+            }
+          },
+          "1521197421943": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-nogmo.png",
+              "icon-title": "Non-GMO"
+            }
+          },
+          "1521197501401": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-corn-free.png",
+              "icon-title": "Corn-Free"
+            }
+          },
+          "1521197535614": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-soy-free.png",
+              "icon-title": "Soy-Free"
+            }
+          },
+          "1521197557137": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-pure.png",
+              "icon-title": "100% Pure"
+            }
+          }
+        },
+        "block_order": [
+          "1521192988347",
+          "1521197371745",
+          "1521197421943",
+          "1521197501401",
+          "1521197535614",
+          "1521197557137"
+        ],
+        "settings": {
+          "heading": "100% ORGANIC GREENS, MUSHROOMS &amp; SUPPLEMENTS",
+          "desc": "Our products take care of you, while you take care of everything else.",
+          "link": "https:\/\/vimergy.myshopify.com\/collections\/shop"
+        }
+      },
+      "home-products": {
+        "type": "home-products",
+        "blocks": {
+          "1520949661706": {
+            "type": "contentcolumn",
+            "settings": {
+              "heading": "RECOMMENDED PRODUCT",
+              "title": "Chaga",
+              "paragraph-copy": "“It has been observed by contemporary Russians that in the districts where chaga was regularly used, there was no cancer.”",
+              "author": "- Cass Ingram, MD & Author",
+              "image": "shopify:\/\/shop_images\/Pdp_Template_Chaga.png",
+              "button-title": "Shop Chaga",
+              "button-link": "https:\/\/vimergy.myshopify.com\/products\/chaga",
+              "alignment": "left"
+            }
+          },
+          "1521020142893": {
+            "type": "contentcolumn",
+            "settings": {
+              "heading": "RECOMMENDED PRODUCT",
+              "title": "Barleygrass Juice",
+              "paragraph-copy": "“Barley grass acts as a free radical scavenger that also reduces inflammation and pain.”",
+              "author": "- Dr. Nicholas V. Perricone",
+              "image": "shopify:\/\/shop_images\/Pdp_Template_Barleygrass.png",
+              "button-title": "Shop Barleygrass",
+              "button-link": "https:\/\/vimergy.myshopify.com\/products\/barleygrass-juice",
+              "alignment": "right"
+            }
+          },
+          "1521103999238": {
+            "type": "contentcolumn",
+            "settings": {
+              "heading": "RECOMMENDED PRODUCT",
+              "title": "Wild Blueberry",
+              "paragraph-copy": "“The most powerful fruit on the planet is the wild blueberry. They can prevent and reverse disease. They are the most powerful brain food in existence.”",
+              "author": "- Anthony William, NY Times Best Selling Author",
+              "image": "shopify:\/\/shop_images\/Pdp_Template_Wildblueberry.png",
+              "button-title": "Shop Blueberry",
+              "button-link": "https:\/\/vimergy.myshopify.com\/products\/wild-blueberry",
+              "alignment": "left"
+            }
+          }
+        },
+        "block_order": [
+          "1520949661706",
+          "1521020142893",
+          "1521103999238"
+        ],
+        "settings": {}
+      },
+      "home-banner-collection": {
+        "type": "home-banner-collection",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/bike-couple.jpg",
+          "heading": "PURE WHOLE FOOD NUTRITION YOUR BODY DESERVES.",
+          "text": "100% Pure. No fillers and preservatives",
+          "button-link": "SHOP COLLECTION",
+          "link": "https:\/\/vimergy.myshopify.com\/collections\/shop"
+        }
+      },
+      "home-testimonials": {
+        "type": "home-testimonials",
+        "blocks": {
+          "1520942016946": {
+            "type": "contentcolumn",
+            "settings": {
+              "heading": "",
+              "image": "shopify:\/\/shop_images\/Testimonial-home-desktop_23376d89-c9ae-4a65-8312-fda77852c625.png",
+              "desc": "\"I absolutely believe Vimergy products have changed my health for the better and assisted me in recovering from severe chronic illness. Chaga and Barley Grass Juice Powder, are all part of my daily enriching rituals and the quality\/flavor supersedes anything else. Huge fan!\"",
+              "author": "",
+              "link": ""
+            }
+          },
+          "1520942164976": {
+            "type": "contentcolumn",
+            "settings": {
+              "heading": "",
+              "image": "shopify:\/\/shop_images\/2_copy_2138f60b-1542-4781-ac29-2acbabf3da09.png",
+              "desc": "\"One of my favorite added nutritional boosts to my long term vegan diet is Vimergy Barley Grass Juice! It gives me an energy boost and adds a creaminess to my juices that I really like. It is the only green powder I have ever used that I absolutely love the flavor of, I actually crave the taste of it!\"",
+              "author": "",
+              "link": ""
+            }
+          },
+          "1520942766279": {
+            "type": "contentcolumn",
+            "settings": {
+              "heading": "",
+              "image": "shopify:\/\/shop_images\/2_12424c5c-92f5-4723-b666-60edad928020.png",
+              "desc": "\"Vimergy Barley Grass Juice powder is the best one out there on the market. I have tasted quite a few barley grass juice powders and have yet to find one as smooth as Vimergy's. Sometimes I just eat it right off the spoon. I add the Barley Grass Juice and Wild Blueberry Powder to my breakfast smoothies every day.\"",
+              "author": "",
+              "link": ""
+            }
+          }
+        },
+        "block_order": [
+          "1520942016946",
+          "1520942164976",
+          "1520942766279"
+        ],
+        "settings": {}
+      },
+      "home-instagram": {
+        "type": "home-instagram",
+        "settings": {}
+      },
+      "about-banner": {
+        "type": "about-banner",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/aboutbanner1_35219d58-a51d-4243-bdb4-d5179c8d678d.png",
+          "heading": "Ready to use products to make your life easier",
+          "desc": "Nature provides us with the perfect foods for our health and wellbeing, but they’re not always convenient to get. At Vimergy, we aim to simplify your health without sacrificing the purity and nutrients your body deserves. We provide you with the highest quality supplements in an easy to use powder, capsule and liquid form.",
+          "side-text": "100% Vegan & Paleo Friendly"
+        }
+      },
+      "about-certi": {
+        "type": "about-certi",
+        "blocks": {
+          "1521199690754": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-vegan2.png",
+              "icon-title": "Vegan"
+            }
+          },
+          "1521202575392": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/Gluten-free.png",
+              "icon-title": "Gluten-Free"
+            }
+          },
+          "1521202598207": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-nogmo.png",
+              "icon-title": "Non-GMO"
+            }
+          },
+          "1521202630946": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-corn-free.png",
+              "icon-title": "Corn-Free"
+            }
+          },
+          "1521202647828": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-soy-free.png",
+              "icon-title": "Soy-Free"
+            }
+          },
+          "1521202664850": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-pure.png",
+              "icon-title": "100% Pure"
+            }
+          }
+        },
+        "block_order": [
+          "1521199690754",
+          "1521202575392",
+          "1521202598207",
+          "1521202630946",
+          "1521202647828",
+          "1521202664850"
+        ],
+        "settings": {}
+      },
+      "about-product-cards": {
+        "type": "about-product-cards",
+        "blocks": {
+          "1521038176475": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/aboutproduct_1.jpg",
+              "name": "Superior Quality USDA Organic Greens & Mushroom Extracts",
+              "desc": "We care deeply about the quality and effectiveness of the supplements you use and are committed to providing you with the highest quality products. We have spent years researching and sourcing the best products so that you can rely on them and make your life easier."
+            }
+          },
+          "1521038253972": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/aboutproduct_2.jpg",
+              "name": "No Fillers or Preservatives",
+              "desc": "Vimergy products contain just one ingredient. No fillers, additives, excipients, sweeteners, or preservatives are added - ever. Vimergy products are 100% natural and 100% pure. You know exactly what you’re getting every time."
+            }
+          },
+          "1521038289761": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/aboutproduct_3.jpg",
+              "name": "A Convenient Solution",
+              "desc": "If you’re unwell or lead a busy lifestyle, we know how hard it can be to look after yourself. We want your life to be as simple as possible so we found a way to get the highest quality foods extracted into easy-to-use powders. For our organic greens and wild blueberry powders, just add to water, juice, or a smoothie. For our organic mushrooms extracts, just add to hot water for an instant tea. Simple. Fast. Easy."
+            }
+          }
+        },
+        "block_order": [
+          "1521038176475",
+          "1521038253972",
+          "1521038289761"
+        ],
+        "settings": {}
+      },
+      "about-banner-1": {
+        "type": "about-banner-1",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/aboutbanner2_1360x_e6d4dddc-083e-4023-a890-293af4dbbf52.png",
+          "heading": "Why Vimergy?",
+          "desc": "At Vimergy, nothing matters more to us than your health. Our heart’s work is to support you to feel strong and healthy. Quality and integrity are everything to us and you and your family deserve nothing but the best. We rigorously research and test all of our products. Since our start in 2012, our supplements have always been Non GMO, Gluten Free, Vegan and Paleo Friendly. Our products take care of you, while you take care of everything else.",
+          "alignment": "right"
+        }
+      },
+      "about-banner-2": {
+        "type": "about-banner-2",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/aboutbanner_3.jpg",
+          "side-text": "",
+          "text": ""
+        }
+      },
+      "product-certs": {
+        "type": "product-certs",
+        "blocks": {
+          "1522672825753": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-organic.png",
+              "icon-title": "Organic"
+            }
+          },
+          "1522672033700": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-vegan2.png",
+              "icon-title": "Vegan"
+            }
+          },
+          "1522673007421": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-nogmo.png",
+              "icon-title": "Non-GMO"
+            }
+          },
+          "1522672856801": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/Gluten-free.png",
+              "icon-title": "Gluten-Free"
+            }
+          },
+          "1522673033195": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-corn-free.png",
+              "icon-title": "Corn-Free"
+            }
+          },
+          "1522673055587": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-soy-free.png",
+              "icon-title": "Soy-Free"
+            }
+          },
+          "1522673073770": {
+            "type": "contentcolumn",
+            "settings": {
+              "icon": "shopify:\/\/shop_images\/icon-pure.png",
+              "icon-title": "100% Pure"
+            }
+          }
+        },
+        "block_order": [
+          "1522672825753",
+          "1522672033700",
+          "1522673007421",
+          "1522672856801",
+          "1522673033195",
+          "1522673055587",
+          "1522673073770"
+        ],
+        "settings": {}
+      },
+      "product-detail": {
+        "type": "product-detail",
+        "settings": {}
+      },
+      "home-hero-new": {
+        "type": "home-hero-new",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/Hero-home-desktop-2.jpg",
+          "side-text": "100%  Vegan & Paleo Friendly",
+          "text": "Our products take care of you, while you take care of everything else."
+        }
+      },
+      "home-recommended-new": {
+        "type": "home-recommended-new",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/vimergy_micro_c.png",
+          "heading": "Micro-C",
+          "text": "Supports a healthy immune system!",
+          "desc": "Micro-C is a special blend of buffered vitamin C that’s easier to digest than traditional forms of vitamin C. Our unique formula is enhanced with Rose Hips, Grape Seed Extract, Rutin, and Acerola Fruit Extract. Vitamin C is an antioxidant that supports a healthy immune system, cardiovascular system and skin health.",
+          "button-link": "https:\/\/vimergy.com\/products\/micro-c"
+        }
+      },
+      "home-collection-new": {
+        "type": "home-collection-new",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/Leaf-home-desktop-min.png",
+          "text": "Pure supplements and vitamins your body deserves.",
+          "desc": "Whole Food Powders, Vegetarian Capsules, Liquid Extracts and Medicinal Mushrooms.",
+          "button-link": "shopify:\/\/collections\/shop"
+        }
+      },
+      "home-recommended-2": {
+        "type": "home-recommended-2",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/Vimergy_TINCTURES_2018_B12_30mL_mock_front_copy_8631a354-5afb-4aa3-b341-870c3864c032.png",
+          "heading": "Organic B-12",
+          "text": "The Right Kind Matters!",
+          "desc": "Everyone wants to have energy and thrive. B-12 is essential for the production of energy from carbohydrates, fats, and proteins. It's also essential for a healthy nervous system, metabolic function, and red blood cell production.",
+          "button-text": "",
+          "button-link": "https:\/\/vimergy.com\/products\/b12",
+          "side-text": "Boosts your health"
+        }
+      },
+      "home-shop-all": {
+        "type": "home-shop-all",
+        "blocks": {
+          "1526300071208": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_POUCHES_2018_BarleyGrass_250g_mock_front_6116ba49-936f-41cf-a34f-8b78d3338e57.png",
+              "name": "Organic Barleygrass",
+              "price": "$ 50",
+              "link": "shopify:\/\/products\/barleygrass-juice"
+            }
+          },
+          "1526300217131": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_POUCHES_2018_Blueberry_250g_mock_front_5af40220-e386-435b-b20d-f7b05d2de1e0.png",
+              "name": "Wild Blueberry",
+              "price": "$50",
+              "link": "shopify:\/\/products\/wild-blueberry"
+            }
+          },
+          "1547306097895": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_POUCHES_2018_Spirulina_250g_mock_front.png",
+              "name": "USA Grown Spirulina",
+              "price": "$30",
+              "link": "shopify:\/\/products\/usa-grown-spirulina"
+            }
+          },
+          "1526300187107": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_CAPSULES_2020_400cc-MICRO-C-mock-front_d5d87c2b-7983-4039-a5a1-9d78697ccc84.png",
+              "name": "Micro-C",
+              "price": "$48",
+              "link": "shopify:\/\/products\/micro-c"
+            }
+          },
+          "1547306813706": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_CAPSULES_2018_625cc-L-LYSINE_mock_front_bb570254-cf6a-404c-827a-c75e23141de6.png",
+              "name": "L Lysine",
+              "price": "$28",
+              "link": "shopify:\/\/products\/l-lysine"
+            }
+          },
+          "1526300254394": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_TINCTURES_2018_B12_30mL_mock_front_c7e4b07a-1e45-4c11-8544-4f3c5afee905.png",
+              "name": "Organic B-12",
+              "price": "$28",
+              "link": "shopify:\/\/products\/b12"
+            }
+          },
+          "1526300158707": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_TINCTURES_2018_ZINC_115mL_mock_center.png",
+              "name": "Organic Zinc",
+              "price": "$30",
+              "link": "shopify:\/\/products\/organic-zinc"
+            }
+          },
+          "1547306641781": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_TINCTURES_2018_LemonBalm_30mL_mock_front_54d9887d-f421-4012-a71d-3bca5be4057b.png",
+              "name": "Lemon Balm 4:1",
+              "price": "$8",
+              "link": "shopify:\/\/products\/lemon-balm"
+            }
+          },
+          "1547307010177": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/curcumin-5938255691818.png",
+              "name": "Curcumin",
+              "price": "$30",
+              "link": "shopify:\/\/products\/curcumin"
+            }
+          },
+          "1547306289138": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_CAPSULES_2019_DHAEPA-mock-front3.png",
+              "name": "Vegan EPA \/ DHA",
+              "price": "$28",
+              "link": "shopify:\/\/products\/vegan-epa-dha"
+            }
+          },
+          "1547307119033": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_TINCTURES_2019_OrganicCATSCLAW_115mL_mock_FRONT_e9c1c0c8-32c9-4f20-8f70-7ee92c9bd626.png",
+              "name": "Organic Cat's Claw",
+              "price": "$26",
+              "link": "shopify:\/\/products\/cats-claw"
+            }
+          },
+          "1547306387351": {
+            "type": "contentcolumn",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Vimergy_CAPSULES_2019_120cc-Celeryforce_mock_front_a5a68d63-76d0-4cd0-ad24-20b4665caef7.png",
+              "name": "Celeryforce®",
+              "price": "$20",
+              "link": "shopify:\/\/products\/celeryforce"
+            }
+          }
+        },
+        "block_order": [
+          "1526300187107",
+          "1526300158707",
+          "1526300254394",
+          "1547306641781",
+          "1526300071208",
+          "1526300217131",
+          "1547306097895",
+          "1547306813706",
+          "1547307010177",
+          "1547306289138",
+          "1547306387351",
+          "1547307119033"
+        ],
+        "settings": {
+          "desc": "Just A Few Of Our Customer Favorites!"
+        }
+      },
+      "home-main-testimonial": {
+        "type": "home-main-testimonial",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/Anthony_Williams-home-desktop_7932149b-36af-49de-a176-b1e98c052aac.png",
+          "heading": "A healthy outside starts from the Inside",
+          "desc": "\"The most powerful fruit on the planet is the wild blueberry. They can prevent and reverse disease. They are the most powerful brain food in existence.\"\n<br>\n<br>\nAnthony William, NY Times Best Selling Author",
+          "author": ""
+        }
+      },
+      "home-hero-2": {
+        "type": "home-hero-2",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/Campaign-home-desktop_0b9d07d1-5306-4cdf-b266-16efbe4fd390.png",
+          "side-text": "True nutrition & healing from within",
+          "text": "Only the very best for the health of your entire family."
+        }
+      },
+      "about-bottomBanner": {
+        "type": "about-bottomBanner",
+        "settings": {
+          "image": "shopify:\/\/shop_images\/aboutbanner_3_9fd1330f-9945-47ce-b45c-df6ebcaa1121.jpg",
+          "side-text": "We care about your health",
+          "heading": "Vimergy is a family owned business.",
+          "text": "We're health crusaders, and we care deeply about helping others to live a healthier and easier life."
+        }
+      },
+      "related-products-new": {
+        "type": "related-products-new",
+        "settings": {}
+      },
+      "related-products-by-tag": {
+        "type": "related-products-by-tag",
+        "settings": {
+          "limited_essentials_main_product": ""
+        }
+      }
+    },
+    "content_for_index": [
+      "1511901449542",
+      "1511985349344",
+      "1511995216114",
+      "1512145857567",
+      "1512081090226",
+      "1512163185935"
+    ]
+  },
+  "presets": {
+    "Default": {
+      "sections": {
+        "collection-list": {
+          "type": "collection-list",
+          "blocks": {
+            "collection-list-0": {
+              "type": "collection",
+              "settings": {}
+            },
+            "collection-list-1": {
+              "type": "collection",
+              "settings": {}
+            },
+            "collection-list-2": {
+              "type": "collection",
+              "settings": {}
+            }
+          },
+          "block_order": [
+            "collection-list-0",
+            "collection-list-1",
+            "collection-list-2"
+          ],
+          "settings": {}
+        },
+        "featured-collection": {
+          "type": "featured-collection",
+          "settings": {
+            "collection": "frontpage"
+          }
+        },
+        "featured-product": {
+          "type": "featured-product",
+          "settings": {}
+        }
+      },
+      "content_for_index": [
+        "collection-list",
+        "featured-collection",
+        "featured-product"
+      ]
+    }
+  }
+}

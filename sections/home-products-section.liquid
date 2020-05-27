@@ -1,0 +1,82 @@
+<div class="c-hpProductsSection o-wrapper">
+
+    {% if section.settings.title %}
+        <h2 class="c-hpProductsTitle">{{ section.settings.title}}</h2>
+    {% endif %}
+
+    <div class="c-hpProductsInner c-hpProductsInner--desktop">
+        <div class="c-hpProductsSplitSection c-hpProductsSplitSection--left">
+            {% for block in section.blocks limit: 2 %}
+                {% assign product_item = all_products[block.settings.product] %}           
+                <a href="{{ product_item.url }}" class="c-hpProducts__item c-hpProducts__item--left{{ forloop.index }}">
+                    <img class="c-hpProductsItem__image lazy-load" src="{{ product_item.images[0] | img_url: 'master' }}')">
+
+                    <div class="c-hpProducts__productInfo">
+                        <span class="c-hpProducts__productTitle">{{ product_item.title }}</span>
+                        <span class="c-hpProducts__productPrice">${{ product_item.price | money_without_currency }}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="c-hpProductsSplitSection c-hpProductsSplitSection--right">
+            {% for block in section.blocks offset:2 %}
+                {% assign product_item = all_products[block.settings.product] %}
+                <a href="{{ product_item.url }}" class="c-hpProducts__item c-hpProducts__item--right{{ forloop.index }}">
+                    <img class="c-hpProductsItem__image lazy-load" src="{{ product_item.images[0] | img_url: 'master' }}')">
+
+                    <div class="c-hpProducts__productInfo">
+                        <span class="c-hpProducts__productTitle">{{ product_item.title }}</span>
+                        <span class="c-hpProducts__productPrice">${{ product_item.price | money_without_currency }}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>        
+    </div>
+
+    <div class="js-hp-products-slider c-hpProductsInner c-hpProductsInner--mobile">
+        {% for block in section.blocks %}
+            {% assign product_item = all_products[block.settings.product] %}
+
+            <a href="{{ product_item.url }}" class="c-hpProducts__item">
+                <img class="c-hpProductsItem__image lazy-load" src="{{ product_item.images[0] | img_url: 'master' }}')">
+
+                <div class="c-hpProducts__productInfo">
+                    <span class="c-hpProducts__productTitle">{{ product_item.title }}</span>
+                    <span class="c-hpProducts__productPrice">${{ product_item.price | money_without_currency }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Home Products Section",
+    "class": "index-section",
+    "settings": [
+        {
+            "type": "text",
+            "label": "Title",
+            "id": "title"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "product-item",
+            "name": "Product Item",
+            "settings": [
+                {
+                    "type": "product",
+                    "label": "Product",
+                    "id": "product"
+                }             
+            ]
+        }
+    ],
+    "presets": [{
+        "name": "Home Products Section",
+        "category": "Home Page"
+    }]    
+}
+{% endschema %}

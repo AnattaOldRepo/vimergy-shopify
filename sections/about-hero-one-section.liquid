@@ -1,0 +1,34 @@
+<div class="c-aboutHero o-wrapper">
+    {% if section.settings.hero-text %}
+        <h1 class="c-aboutHero__title">{{ section.settings.hero-text }}</h1>
+    {% endif %}
+    <picture>
+        <source media="(max-width: 767px)" srcset="{{ section.settings.image-mobile | img_url: 'master' }}">
+        <source media="(min-width: 768px)" srcset="{{ section.settings.image-desktop | img_url: 'master' }}">
+        <img class="c-aboutHero__image" src="{{ section.settings.image-mobile | img_url: 'master' }}">
+    </picture>     
+</div>
+
+
+{% schema %}
+{
+    "name": "About Hero One",
+    "settings": [
+        {
+            "type": "image_picker",
+            "label": "Desktop Image",
+            "id": "image-desktop"
+        },
+        {
+            "type": "image_picker",
+            "label": "Mobile Image",
+            "id": "image-mobile"
+        },        
+        {
+            "type": "html",
+            "label": "Hero Title",
+            "id": "hero-text"
+        }
+    ]
+}
+{% endschema %}

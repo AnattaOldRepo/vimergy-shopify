@@ -1,0 +1,87 @@
+<div class="c-hpSingleImgSection o-wrapper">
+    <div class="c-hpSingleImg__contentSection">
+        {% if section.settings.intro-text %}
+            <h3 class="c-hpSingleImg__introText">{{ section.settings.intro-text}}</h3>
+        {% endif %}
+
+        {% if section.settings.title %}
+            <h2 class="c-hpSingleImg__title">{{ section.settings.title }}</h2>
+        {% endif %}
+
+        {% if section.settings.cta-text %}
+            <a class="c-hpSingleImg__cta" href="{{ section.settings.cta-link }}">
+                {{ section.settings.cta-text }}
+                <svg class="c-hpSingleImg__ctaArrow" width="23px" height="12px" viewBox="0 0 23 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Symbols" class="c-hpSingleImg__ctaArrowPath" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                        <g  id="375-happy-alcoholidays" transform="translate(-316.000000, -244.000000)">
+                            <g id="happy-alcoholidays">
+                                <g id="text" transform="translate(309.000000, 0.000000)">
+                                    <g id="arrow" transform="translate(18.500000, 250.000000) rotate(-90.000000) translate(-18.500000, -250.000000) translate(13.000000, 239.000000)">
+                                        <path d="M5.20127143,21.6102857 L5.20127143,0" id="Stroke-420"></path>
+                                        <polyline id="Stroke-421" points="10.4028571 16.4087 5.20142857 21.6101286 0 16.4087"></polyline>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+            </a>
+        {% endif %}            
+    </div>
+
+    <div class="c-hpSingleImg__imageSection">
+        {% if section.settings.image-mobile %}
+            <img class="c-hpSingleImg__imageMobile lazy-load" src="{{ section.settings.image-mobile | img_url: 'master' }}" />
+        {% endif %}
+
+        {% if section.settings.image-desktop %}
+            <img class="c-hpSingleImg__imageDesktop lazy-load" src="{{ section.settings.image-desktop | img_url: 'master' }}" />
+        {% endif %}
+    </div>
+</div>
+
+
+{% schema %}
+{
+    "name": "Home Image CTA Section",
+    "class": "index-section",
+    "settings": [
+        {
+            "type": "html",
+            "label": "Intro Text",
+            "id": "intro-text",
+            "info": "Place line breaks with '<br>'"
+        },     
+        {
+            "type": "html",
+            "label": "Title",
+            "id": "title",
+            "info": "Place line breaks with '<br>'"
+        },            
+        {
+            "type": "text",
+            "label": "CTA Link",
+            "id": "cta-link"
+        },              
+        {
+            "type": "text",
+            "label": "CTA Text",
+            "id": "cta-text"
+        },
+        {
+            "type": "image_picker",
+            "label": "Image Mobile",
+            "id": "image-mobile"
+        },
+        {
+            "type": "image_picker",
+            "label": "Image Desktop",
+            "id": "image-desktop"
+        }      
+    ],
+    "presets": [{
+        "name": "Home Single Image Section",
+        "category": "Home Page"
+    }]    
+}
+{% endschema %}

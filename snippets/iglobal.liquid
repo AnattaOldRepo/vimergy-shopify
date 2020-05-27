@@ -1,0 +1,241 @@
+{% comment %}
+For Redirecting to the Zonos International Checkout
+  In your Shopify theme files, place the onclick="zonosCheckout(event)" atrribute
+  on any buttons and links you would like to redirect to the Zonos International Checkout.
+
+Hide Elements for International Customers
+  In the style tag below, place the .z-intl selector before the element you want to hide.
+  .z-intl will style the selector using the CSS rules when
+  Zonos Hello is on an international country.
+  Seperate elements by commas and place the .z-intl selector before the element's selector.
+
+  Example:
+  <style>.z-intl .element-to-hide, .z-intl .other-element-to-hide {display: none;}</style>
+
+Currency Conversion
+  To manually update currency conversion, call znDisplayCurrency().
+{% endcomment %}
+
+{% if shop.metafields.iglobal.enabled %}
+<script>
+  var z_store = {
+    store: "{{ shop.metafields.iglobal.store }}",
+    live: {{ shop.metafields.iglobal.live | default: false }},
+    foreignCurrency: {{ shop.metafields.iglobal.foreignCurrency | default: false }},
+    currencySelectors: "{{ shop.metafields.iglobal.currencySelectors | default: '.money' }}",
+    quoteProduct: {{ shop.metafields.zonos.quoteProduct | default: false }} && {% if product %} true {% else %} false {% endif %},
+    quoteCart: {{ shop.metafields.zonos.quoteCart | default: false }},
+    urlPath: "{{ request.path }}",
+    customerId: "{{ customer.id }}"
+  };
+  var zonosConfig = {
+    currencySelectors: z_store.foreignCurrency && z_store.currencySelectors || '', 
+    currencyConverter: (formatter, converter) => {
+  
+  let allPrices = document.querySelectorAll(zonosConfig.currencySelectors);
+  for (let i = 0; i < allPrices.length; i++) {
+    let price = allPrices[i];    
+    //checking for nested prices (parent > child prices)
+    if(price.querySelectorAll(zonosConfig.currencySelectors).length >0) {
+       continue;
+     }
+    if (!price.getAttribute('data-USD')) {
+      price.setAttribute('data-USD', price.textContent.replace(/[^\d.]/g, ''));
+    }
+    if (price.getAttribute('data-USD')) {
+    	price.setAttribute('data-zIntl', formatter(price.getAttribute('data-USD')));
+    	price.textContent = formatter(price.getAttribute('data-USD'));
+    }}
+    }
+  };
+  
+  var zonosTimer;
+  function checkConvert() {
+    clearTimeout(zonosTimer);
+	if (this.getAttribute('data-zIntl') != this.textContent) { 
+      zonosTimer = setTimeout( () => {this.removeAttribute('data-USD'); zonos.displayCurrency()}, 100)}
+	};
+
+  document.querySelector('#productPrice').addEventListener('DOMSubtreeModified', checkConvert);
+  
+</script>
+{% if shop.metafields.iglobal.live == "true" %}
+  <script src="https://hello.zonos.com/hello.js?siteKey={{ shop.metafields.iglobal.helloSiteKey }}"></script>
+{% endif %}
+
+{% assign domesticSelectors = shop.metafields.zonos.domesticSelectors | split: ',' %}
+<style>
+  .z-intl .additional-checkout-buttons, .z-intl .additional-checkout-button,
+  {% for domesticSelector in domesticSelectors %}
+  .z-intl {{domesticSelector}}{% if forloop.last == false %},{% endif %}
+  {% endfor %}
+  { display: none; }
+</style>
+
+{% comment %}
+Remove the if statment from arrive if you uncomment out the code for the side cart
+{% endcomment %}
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js"></script>
+
+
+<script>
+
+  function znGetCookie(cookieName) {
+    var getCookieValue = "(?:(?:^|.*;\\s*)" + cookieName + "\\s*\\=\\s*([^;]*).*$)|^.*$";
+    var regex = new RegExp(getCookieValue);
+    return document.cookie.replace(regex, "$1");
+  }
+
+  var zTestModeUrlIndex = window.location.toString().indexOf('zTestMode');
+  var zTestModeCookie = znGetCookie('zTestMode') === "true";
+  var zTestModeParam = window.location.toString().indexOf('zonos=true') !== -1;
+
+  if (zTestModeUrlIndex !== -1) {
+    var testModeEnabled = window.location.toString().indexOf('zTestMode=true') !== -1;
+    document.cookie = 'zTestMode=' + testModeEnabled + ';path=/;domain=' + window.location.host;
+    zTestModeCookie = testModeEnabled;
+  }
+
+  function znLoadHello() {
+    var script = document.createElement('script');
+    script.src = "https://hello.zonos.com/hello.js?siteKey={{ shop.metafields.iglobal.helloSiteKey }}";
+    document.head.appendChild(script);
+  }
+
+  if (!z_store.live && (zTestModeParam || zTestModeCookie)) {
+    znLoadHello();
+  }
+
+
+  function znGoogleAnalyticsClientTracking(tracker) {
+    z_store.clientId = t.get('clientId');
+  }
+
+  // Sets up a Google Analytics function if one isn't already set on the site
+  typeof ga != 'undefined' && ga(znGoogleAnalyticsClientTracking);
+
+  function znSubmitForm(cart) {
+    var form = document.createElement('form');
+    form.method = 'post';
+    form.action = '/a/iglobal/cart';
+
+    var tempCart = {
+      cart: cart,
+      country: znGetCookie("zCountry"),
+      currency: znGetCookie("zCurrency"),
+      c: z_store && z_store.customerId,
+      clientId: z_store.clientId
+    };
+
+    for (var item in tempCart) {
+      var input = document.createElement('input');
+      input.type = "hidden";
+      input.name = item;
+      input.value = tempCart[item];
+      form.appendChild(input);
+    }
+
+    document.querySelector('body').appendChild(form);
+    form.submit();
+  }
+
+  function znCheckout() {
+    var httpRequest = new XMLHttpRequest;
+    httpRequest.open("GET", "/cart.json", true);
+    httpRequest.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status >= 200 && this.status < 400) {
+        znSubmitForm(this.responseText);
+      }
+    }
+    httpRequest.send();
+  }
+
+  function znIsCountryDomestic() {
+    // Uses igCountry for backwards compatibility
+    return (znGetCookie("zCountry") || znGetCookie("igCountry")) && typeof zonos !== 'undefined' && !zonos.isDomestic(znGetCookie("zCountry") || znGetCookie("igCountry"));
+  }
+
+  zonosCheckout = function(event) {
+    if ((z_store.live || zTestModeParam || zTestModeCookie) && znIsCountryDomestic()) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+      }
+      znCheckout();
+    }
+  }
+
+  function znDutyTaxEstimateOnDetailPage() {
+    if (z_store.quoteProduct) {
+      zonos.quote({
+        items: [{ price: {{ product.price | divided_by: 100 }}, name: "{{product.title | replace: '"', '\"'}}", url: "{{ shop.secure_url }}{{ product.url }}", image: "https:{{ product.featured_image | product_img_url: 'medium' }}"}],
+        currencyCode: '{{ shop.currency }}'
+      });
+    }
+  }
+
+  function znDutyTaxEstimateOnCartPage() {
+    if (z_store.quoteCart && z_store.urlPath.indexOf("cart") >= 0) {
+      zonos.quote({
+        items: [
+          {% for item in cart.items %}
+          { price: {{ item.price}} /100, quantity: {{item.quantity}}, name: "{{ item.title | replace: '"', '\"'}}", url: "{{ shop.secure_url }}{{item.url}}", image: "https:{{item.image| product_img_url: 'medium'}}"},
+          {% endfor %}
+        ],currencyCode: '{{ shop.currency }}'});
+    }
+  }
+
+  function znCustomizations() {
+    // All calls to Zonos should be made in this function to guarantee that Zonos Hello has been loaded.
+    znCurrencyConversionEnabled();
+
+    // This code is for the side cart. If you uncomment it, make sure to delete the if statement from arrive script
+    //document.arrive("[value*=Checkout], [name*=checkout]", {existing: true}, function(event) {
+    //  event.setAttribute("onclick", "zonosCheckout(event)"); 
+    //});
+
+    znDutyTaxEstimateOnCartPage();
+    znDutyTaxEstimateOnDetailPage();
+  }
+
+  var znIntervalID = null;
+  znDisplayCurrency = function() {
+    if (typeof zonos !== 'undefined' && zonos.config) {
+      znIntervalID && clearInterval(znIntervalID);
+    } else if (znIntervalID === null) {
+      znIntervalID = setInterval(znDisplayCurrency, 100);
+    }
+  }
+
+  function znCurrencyConversionEnabled() {
+    znDisplayCurrency();
+    if (z_store.foreignCurrency == true && z_store.currencySelectors) {
+      document.arrive(z_store.currencySelectors, znDisplayCurrency);
+    }
+  }
+
+  var znListenForCountryChange = true;
+  function zonosLoaded() {
+    if (!znListenForCountryChange) {
+      document.removeEventListener('z-country-change', zonosLoaded);
+      return;
+    }
+
+    document.arrive(".money", {existing: true}, function(event) {
+      zonos.displayCurrency();
+    });
+    znListenForCountryChange = false;
+    znCustomizations();
+  }
+
+  function znOnPageLoad() {
+    document.addEventListener('z-country-change', zonosLoaded);
+  }
+
+  znOnPageLoad();
+
+</script>
+
+{% endif %}

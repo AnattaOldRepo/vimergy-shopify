@@ -1,0 +1,10 @@
+<div class="c-nav">
+    <span class="c-nav__head">
+        {% include 'icon-hamburger' %}<span class="u-hideTabletLargeDown">{{ section.settings.menu-title }}</span>
+    </span>
+    <div class="c-nav__dropdown c-nav__dropdown--mainNav u-hide">
+        {% for link in linklists.main-menu.links %}
+              <a href="{{ link.url }}" class="c-nav__link {% if link.active %}is-active{% endif %} u-wrapperGutter">{{ link.title }}</a>
+        {% endfor %}
+    </div>
+</div>

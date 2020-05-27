@@ -1,0 +1,32 @@
+<div class="c-nav u-static u-hideTabletLargeDown">
+    <span class="c-nav__head">
+        <span>{{ section.settings.shop-title }}</span>&nbsp;{% include 'icon-down-arrow' %}
+    </span>
+    <div class="c-nav__dropdown c-nav__dropdown--collection u-hide">
+        <div class="c-collectionMenu">
+            <div class="c-collectionMenu__row">
+                <div class="c-collectionMenu__item">
+                    <div class="c-collectionMenu__wrap c-collectionMenu__wrap--allModal">
+                        <img class="c-collectionMenu__image c-collectionMenu__image--allModal" src="{{ 'shop-filter-all-small.png' | asset_url }}" alt="">
+                        <p class="c-collectionMenu__title">Shop</p>
+                        <h2 class="c-collectionMenu__subTitle">All Models</h2>
+                    </div>
+                </div>
+                <div class="c-collectionMenu__item">
+                    <div class="c-collectionMenu__wrap">
+                        <img class="c-collectionMenu__image" src="{{ 'shop-filter-flat-small.png' | asset_url }}" alt="">
+                        <p class="c-collectionMenu__title">MODEL 001</p>
+                        <h2 class="c-collectionMenu__subTitle">The Flat <small>&nbsp;/&nbsp; $125</small></h2>
+                    </div>
+                </div>
+                <div class="c-collectionMenu__item">
+                    <div class="c-collectionMenu__wrap">
+                        <img class="c-collectionMenu__image" src="{{ 'shop-filter-point-small.png' | asset_url }}" alt="">
+                        <p class="c-collectionMenu__title">MODEL 002</p>
+                        <h2 class="c-collectionMenu__subTitle">All Point <small>&nbsp;/&nbsp; $145</small></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

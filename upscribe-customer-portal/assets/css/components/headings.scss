@@ -1,0 +1,25 @@
+.c-heading1 {
+  font-family: $font-primary-regular;
+}
+
+.c-heading2 {
+  font-family: $font-primary-regular;
+}
+
+.c-heading3 {
+  font-family: $font-primary-regular;
+}
+
+.c-heading4 {
+  font-family: $font-primary-medium;
+  font-size: 17px;
+  font-weight: 500;
+
+  @include bp(tablet) {
+    font-size: 22px;
+  }
+}
+
+.c-heading5 {
+  font-family: $font-primary-regular;
+}

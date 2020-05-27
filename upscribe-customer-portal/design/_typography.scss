@@ -1,0 +1,34 @@
+$font-primary-bold: 'Avenir LT Pro', BlinkMacSystemFont, -apple-system, Segoe UI,
+  Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+  Helvetica, Arial, sans-serif !default;
+
+$font-primary-semi-bold: 'Avenir LT Pro', BlinkMacSystemFont, -apple-system,
+  Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+  Helvetica Neue, Helvetica, Arial, sans-serif !default;
+
+$font-primary-medium: 'Avenir LT Pro', BlinkMacSystemFont, -apple-system,
+  Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+  Helvetica Neue, Helvetica, Arial, sans-serif !default;
+
+$font-primary-regular: 'Avenir LT Pro', BlinkMacSystemFont, -apple-system,
+  Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+  Helvetica Neue, Helvetica, Arial, sans-serif !default;
+
+$fonts-primary: (
+  'bold': $font-primary-bold,
+  'semi-bold': $font-primary-semi-bold,
+  'medium': $font-primary-medium,
+  'regular': $font-primary-regular,
+) !default;
+
+@function __font($name, $fonts) {
+  @if map-has-key($fonts, $name) {
+    @return map-get($fonts, $name);
+  } @else {
+    @return throw-error('Color "#{$name}" is not defined');
+  }
+}
+
+@function fontPrimary($name) {
+  @return __font($name, $fonts-primary);
+}

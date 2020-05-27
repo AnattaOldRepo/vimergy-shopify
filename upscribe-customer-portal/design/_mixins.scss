@@ -1,0 +1,9 @@
+@mixin border-focus {
+  border-bottom: 3px solid $color-blue-brand;
+}
+
+@mixin hover-focus {
+  &:hover {
+    border-bottom: 3px solid $color-blue-brand;
+  }
+}

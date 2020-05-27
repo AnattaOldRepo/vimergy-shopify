@@ -1,0 +1,155 @@
+<!-- Upscribe -->
+{% assign cart_has_subscription_item = 'false' %}
+{% for i in cart.items %}
+    {% for p in i.properties %}
+        {% if p.first == 'Subscription' %}
+            {% assign cart_has_subscription_item = 'true' %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+{% if cart_has_subscription_item == 'true' %}
+    <style>
+        .extra-checkout-buttons,
+        .additional-checkout-button,
+        .additional-checkout-buttons,
+        .amazon-payments-pay-button,
+        .google-wallet-button-holder,
+        #additional-checkout-buttons,
+        #a_p_c {
+            display: none !important;
+        }
+    </style>
+
+    <script>
+
+        (function() {
+            // Basic function to load script files, will be used to include jQuery
+            var loadScript = function(url, callback) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                // If the browser is Internet Explorer
+                if (script.readyState){
+                    script.onreadystatechange = function() {
+                        if (script.readyState == "loaded" || script.readyState == "complete") {
+                            script.onreadystatechange = null;
+                            callback();
+                        }
+                    };
+                // For any other browser
+                } else {
+                    script.onload = function() {
+                        callback();
+                    };
+                }
+                script.src = url;
+                document.getElementsByTagName("head")[0].appendChild(script);
+            };
+
+            // This is our JavaScript that we'll run after jQuery is included
+            var upscribeCartFooterJS = function($) {
+
+                function upscribeGetCookie(name) {
+                    return (document.cookie.match('(^|; )' + name + '=([^;]*)')||0)[2];
+                }
+                function upscribeReDirection(redirect_url) {
+                    // Re-direct customer to desired URL
+                    window.location.href = redirect_url;
+                }
+                function upscribeBuildCheckoutURL(cartToken) {
+                    // Build the Checkout URL
+                    var myshopify_domain = '{{ shop.permanent_domain }}';
+                    var token = upscribeGetCookie('cart');
+                    try {
+                        // Cross-domain tracking with Google Analytics
+                        var ga_linker = ga.getAll()[0].get('linkerParam');
+                    } catch (e) {
+                        // 'ga' is not available
+                        var ga_linker = '';
+                    }
+
+                    var checkout_url = 'https://checkout.vimergy.com/checkout?store=' + myshopify_domain + '&token=' + token + '&is_first_load=true'
+
+                    {% comment %} Refersion Tracking  {% endcomment %}
+                    var rfsnAidParam = localStorage.getItem('rfsn_aid')
+                    var rfsnCiParam = localStorage.getItem('rfsn_ci')
+                    var rfsnCsparam = localStorage.getItem('rfsn_cs')
+                    var rfsnCurrentCart = localStorage.getItem('current_rfsn_cart')
+
+                    if (rfsnAidParam) checkout_url += '&rfsn_aid=' + rfsnAidParam
+                    if (rfsnCiParam) checkout_url += '&rfsn_ci=' + rfsnCiParam
+                    if (rfsnCsparam) checkout_url += '&rfsn_cs=' + rfsnCsparam
+                    if (rfsnCurrentCart) checkout_url += '&current_rfsn_cart=' + rfsnCurrentCart
+
+                    return checkout_url;
+                }
+                function cartHasSubscriptionItems(cart) {
+                    if (cart.hasOwnProperty('items')) {
+                        return cart.items.some(function(item) {
+                            return item.properties && item.properties.hasOwnProperty('Subscription')
+                        })
+                    } else {
+                        return false
+                    }
+                }
+                function upscribeBuildCheckout() {
+                    $.ajax('/cart.json')
+                    .done(function(cart) {
+                        console.log('get cart done res', cart)
+
+                        var cartToken = cart.token
+
+                        if (cartHasSubscriptionItems(cart)) {
+                            cart.url = window.Shopify.shop
+                            cart.analytics = window.ShopifyAnalytics
+                            $.ajax({
+                                url: "https://endpoint.upscribe.io/cart",
+                                type: "POST",
+                                // contentType: "application/json",
+                                data: JSON.stringify(cart)
+                            })
+                            .done(function(res) {
+                                console.log('post done: ', res)
+                                var checkoutUrl = upscribeBuildCheckoutURL(cartToken);
+                                upscribeReDirection(checkoutUrl);
+                            })
+                            .fail(function(e) {
+                                console.log('post error: ', e)
+                                return e
+                            })
+                        }
+                    })
+                    .fail(function(e) {
+                        console.log('get cart error', e);
+                        return e
+                    })
+                }
+
+                $(document).ready(function() {
+                    // Can use this by default or the onclick attribute directly
+                    var checkout_button_selectors = '[name="checkout"], [href="/checkout"], form[action="/checkout"] input[type="submit"], .checkout_button, .btn-checkout';
+
+                    $(document).on('click', checkout_button_selectors, function(e) {
+                        e.preventDefault();
+
+                        upscribeBuildCheckout()
+                    })
+                });
+            }
+            // Check if jQuery is added, if not, then we'll loadScript, otherwise, run upscribeJS
+            if ((typeof(jQuery) == 'undefined') || (parseInt(jQuery.fn.jquery) == 1 && parseFloat(jQuery.fn.jquery.replace(/^1\./,"")) < 7.2)) {
+                // We'll get our jQuery from Google APIs
+                loadScript('//code.jquery.com/jquery-3.4.0.min.js', function() {
+
+                    jQuery34 = jQuery.noConflict(true);
+                    upscribeCartFooterJS(jQuery34);
+                });
+            } else {
+                upscribeCartFooterJS(jQuery);
+            }
+        })();
+           // If page is loaded from cache (browser back/forward button), force page reload
+        window.addEventListener('pageshow', function (event) { if (event.persisted || window.performance &&
+        window.performance.navigation.type == 2) { window.location.reload(); } }, false);
+    </script>
+{% endif %}
+<!-- End Upscribe  -->

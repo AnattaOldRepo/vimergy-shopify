@@ -1,0 +1,17 @@
+@import 'true';
+@import 'colors';
+
+@include describe('colors') {
+  @include it('should throw error for unknown color') {
+    @include assert-equal(color('xxx'), '[ERROR] Color "xxx" is not defined');
+  }
+}
+
+@include describe('theme-colors') {
+  @include it('should throw error for unknown color') {
+    @include assert-equal(
+      theme-color('xxx'),
+      '[ERROR] Color "xxx" is not defined'
+    );
+  }
+}

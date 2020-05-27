@@ -1,3 +1,4 @@
+{% include 'upscribe-cart-logic' %}
 <div class="c-cartTable__wrapper o-wrapper">
     {% if cart.item_count > 0 %}
       <h1 class="c-cartTable__title">Your Shopping Cart</h1>
@@ -122,7 +123,7 @@
 
             <div class="c-cartTable__buttonContainer">
                 <input class="c-btn c-cartTable__button--update" type="submit" name="update" value="Update Cart">
-                <input type="submit" name="checkout" onclick="zonosCheckout(event)" class="c-btn" value="Checkout">
+                <input type="submit" name="checkout" class="c-btn" value="Checkout">
             </div>
         </div>
       </form>
@@ -134,4 +135,3 @@
 
     {% endif %}
 </div>
-{% include 'subscription-cart-footer' %}

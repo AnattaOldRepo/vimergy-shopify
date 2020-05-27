@@ -1,0 +1,38 @@
+/* Base Colors */
+.u-bgColor--black {
+  background-color: #000;
+}
+.u-bgColor--white {
+  background-color: #fff;
+}
+.u-bgColor--red {
+  background-color: #ee2e2d;
+}
+.u-bgColor--green {
+  background-color: #7fc563;
+}
+.u-bgColor--orange {
+  background-color: #faa846;
+}
+
+/* State Colors */
+.u-bgColor--active {
+  background-color: $color-red;
+}
+.u-bgColor--success {
+  background-color: $color-green;
+}
+.u-bgColor--warning {
+  background-color: $color-orange;
+}
+.u-bgColor--error {
+  background-color: $color-red;
+}
+
+/* Palette Colors */
+.u-bgColor--primary {
+  background-color: $color-red;
+}
+.u-bgColor--secondary {
+  background-color: $color-black;
+}

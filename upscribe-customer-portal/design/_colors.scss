@@ -1,0 +1,63 @@
+$color-white: #fff !default;
+$color-gray-100: #f4f4f4 !default;
+$color-gray-200: #e9ecef !default;
+$color-gray-250: #ededed !default;
+$color-gray-300: #d8d8d8 !default;
+$color-gray-400: #ced4da !default;
+$color-gray-500: #b6b7b7 !default;
+$color-gray-600: #666 !default;
+$color-gray-700: #495057 !default;
+$color-gray-800: #333 !default;
+$color-gray-900: #212529 !default;
+$color-black: #000 !default;
+
+$color-blue-light-background: #f5f8fa !default;
+$color-blue-brand: #b9680c !default;
+$color-blue-light-border: #eaf1f4 !default;
+$color-blue-secondary: #9a5a12 !default;
+$color-danger: #f77 !default;
+
+$color-background-light: #fbfcfc !default;
+
+$color-placeholder: #a3b5bf !default;
+$color-icons: #a3b5bf !default;
+$color-border: #eaf1f4 !default;
+$color-input-border: #dcdcdf !default;
+
+$color-indigo: #6610f2 !default;
+$color-purple: #6f42c1 !default;
+$color-pink: #e83e8c !default;
+$color-red: #c21111 !default;
+$color-orange: #fd7e14 !default;
+$color-yellow: #ffc107 !default;
+$color-green: #6dbc73 !default;
+$color-teal: #20c997 !default;
+$color-cyan: #17a2b8 !default;
+
+$color-primary: $color-blue-brand !default;
+$color-secondary: $color-gray-600 !default;
+$color-success: $color-green !default;
+$color-info: $color-blue-brand !default;
+$color-pending: $color-blue-brand !default;
+$color-warning: $color-yellow !default;
+$color-danger: $color-red !default;
+$color-error: $color-red !default;
+$color-light: $color-gray-100 !default;
+$color-dark: $color-gray-800 !default;
+$color-active: $color-red !default;
+
+$color-primary-light: lighten($color-primary, 20%) !default;
+
+$color-accent-one: $color-red !default;
+$color-accent-two: $color-red !default;
+$color-accent-three: $color-red !default;
+
+$color-text: $color-gray-600 !default;
+$color-text-light: $color-gray-500 !default;
+$color-border: $color-gray-300 !default;
+$color-border-dark: $color-gray-500 !default;
+
+$color-button: $color-primary !default;
+$color-button-hover: $color-blue-secondary !default;
+$color-link: $color-primary !default;
+$color-link-hover: $color-blue-secondary !default;

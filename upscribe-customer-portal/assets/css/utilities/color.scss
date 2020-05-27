@@ -1,0 +1,38 @@
+/* Base Colors */
+.u-color--black {
+  color: $color-black;
+}
+.u-color--white {
+  color: $color-white;
+}
+.u-color--red {
+  color: $color-red;
+}
+.u-color--green {
+  color: $color-green;
+}
+.u-color--orange {
+  color: $color-orange;
+}
+
+/* Palette Colors */
+.u-color--primary {
+  color: $color-primary;
+}
+.u-color--secondary {
+  color: $color-secondary;
+}
+
+/* State Colors */
+.u-color--active {
+  color: $color-active;
+}
+.u-color--success {
+  color: $color-green;
+}
+.u-color--warning {
+  color: $color-orange;
+}
+.u-color--error {
+  color: $color-red;
+}

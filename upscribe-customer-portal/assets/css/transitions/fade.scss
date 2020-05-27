@@ -1,0 +1,12 @@
+.fade-enter-active,
+.fade-leave-active {
+  margin-top: 0;
+  transition: all 0.3s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  margin-top: -10px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}

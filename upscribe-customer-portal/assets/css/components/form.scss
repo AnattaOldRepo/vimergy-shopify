@@ -1,0 +1,31 @@
+.c-formBlock {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 24px 0;
+  // background: $color-white;
+
+  @include bp(tablet) {
+    padding: 24px 20px;
+  }
+}
+
+.c-formBlock--noPadding {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  // background: $color-white;
+}
+
+.c-form__submitBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  &.form__submitBox--left {
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,126 @@
+.c-drawer__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100% - 25px);
+  padding-bottom: 20px;
+  background-color: #f7f9fb;
+
+  @include bp(tablet) {
+    padding-top: 75px;
+  }
+}
+
+.c-drawer {
+  flex: 1;
+  width: 100%;
+  padding: 0 30px;
+
+  @include bp(tablet) {
+    max-width: 450px;
+  }
+
+  &--white {
+    background-color: $color-white;
+  }
+
+  &--paddingDefault {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+
+.c-drawer__inner {
+  padding: 0;
+}
+
+.c-drawer__title {
+  margin-bottom: 22px;
+  font-family: $font-primary-regular;
+  font-size: 31px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 42px;
+  text-transform: capitalize;
+}
+
+.c-drawer__subtitle {
+  margin-bottom: 20px;
+  font-family: $font-primary-medium;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: $color-blue-secondary;
+  text-align: center;
+
+  &--info {
+    margin-bottom: 35px;
+  }
+}
+
+.c-drawer__actionButtons {
+  width: 100%;
+  padding: 24px;
+  margin-top: 16px;
+  background-color: $color-white;
+  border: 1px solid $color-blue-light-border;
+}
+
+.c-form__submitButton {
+  font-weight: bold !important;
+  text-transform: uppercase;
+  letter-spacing: 0.12px;
+  border-radius: 4px;
+}
+
+.c-option__select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid $color-gray-300;
+  border-radius: 50%;
+  transition: all 0.2s linear;
+
+  .c-option__inner {
+    width: 10px;
+    height: 10px;
+    background-color: $color-white;
+    border-radius: 50%;
+
+    &--editing {
+      width: 60%;
+      height: 5px;
+      border-radius: 3px;
+    }
+  }
+
+  &--picked {
+    pointer-events: none;
+    background-color: $color-blue-brand;
+    border: 0;
+  }
+
+  &--editing {
+    background-color: $color-danger;
+    border: 0;
+
+    &:hover,
+    &:focus {
+      background-color: $color-danger;
+      border: 0;
+    }
+  }
+}
+
+.c-drawerCard__button-bottom {
+  padding: 20px;
+  background-color: $color-white;
+  border: 1px solid $color-blue-light-border;
+  border-radius: 4px;
+}
+
+.c-darwer__edittingAddress {
+  max-width: 392px;
+}

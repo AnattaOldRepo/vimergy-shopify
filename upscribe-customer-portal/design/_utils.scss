@@ -1,0 +1,9 @@
+$-is-running-tests: false !default;
+
+@function throw-error($message: 'Unknown error') {
+  @if $-is-running-tests == true {
+    @return '[ERROR] #{$message}';
+  }
+
+  @error $message;
+}

@@ -1,0 +1,127 @@
+.c-table {
+  color: #666;
+  background-color: #fff;
+}
+
+.c-table td,
+.c-table th {
+  padding: 0.5em 0.75em;
+  vertical-align: top;
+  border: 1px solid #fafafa;
+  border-width: 0 0 1px;
+}
+
+.c-table td.is-narrow,
+.c-table th.is-narrow {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.c-table td.is-selected,
+.c-table th.is-selected {
+  color: #363636;
+  background-color: #363636;
+}
+
+.c-table td.is-selected a,
+.c-table td.is-selected strong,
+.c-table th.is-selected a,
+.c-table th.is-selected strong {
+  color: currentColor;
+}
+
+.c-table th {
+  color: #363636;
+}
+
+.c-table th:not([align]) {
+  text-align: left;
+}
+
+.c-table tr.is-selected {
+  color: #363636;
+  background-color: #363636;
+}
+
+.c-table tr.is-selected a,
+.c-table tr.is-selected strong {
+  color: currentColor;
+}
+
+.c-table tr.is-selected td,
+.c-table tr.is-selected th {
+  color: currentColor;
+  border-color: #363636;
+}
+
+.c-table thead {
+  background-color: transparent;
+}
+
+.c-table thead td,
+.c-table thead th {
+  color: #363636;
+  border-width: 0 0 2px;
+}
+
+.c-table tfoot {
+  background-color: transparent;
+}
+
+.c-table tfoot td,
+.c-table tfoot th {
+  color: #363636;
+  border-width: 2px 0 0;
+}
+
+.c-table tbody {
+  background-color: transparent;
+}
+
+.c-table tbody tr:last-child td,
+.c-table tbody tr:last-child th {
+  border-bottom-width: 0;
+}
+
+.c-table.is-bordered td,
+.c-table.is-bordered th {
+  border-width: 1px;
+}
+
+.c-table.is-bordered tr:last-child td,
+.c-table.is-bordered tr:last-child th {
+  border-bottom-width: 1px;
+}
+
+.c-table.is-fullwidth {
+  width: 100%;
+}
+
+.c-table.is-hoverable tbody tr:not(.is-selected):hover {
+  background-color: #363636;
+}
+
+.c-table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+  background-color: #363636;
+}
+
+.c-table.is-hoverable.is-striped
+  tbody
+  tr:not(.is-selected):hover:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.c-table.is-narrow td,
+.c-table.is-narrow th {
+  padding: 0.25em 0.5em;
+}
+
+.c-table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+  background-color: #fafafa;
+}
+
+.c-tableContainer {
+  max-width: 100%;
+  overflow: auto;
+  overflow-y: hidden;
+}

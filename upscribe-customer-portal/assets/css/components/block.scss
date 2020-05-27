@@ -1,0 +1,31 @@
+.c-mainBlock {
+  padding: 34px 20px 24px;
+  background-color: $color-white;
+
+  @include bp(tablet) {
+    padding: 60px 68px 24px;
+  }
+}
+
+.c-block {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto 54px;
+}
+
+.c-blockHead {
+  position: relative;
+  margin-bottom: 25px;
+
+  @include bp(tablet) {
+    margin-bottom: 20px;
+  }
+}
+
+.c-blockTitle {
+}
+
+.c-blockTitle__info {
+  font-size: 11px;
+  color: $color-text-light;
+}

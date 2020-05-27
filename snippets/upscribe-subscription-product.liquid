@@ -1,0 +1,754 @@
+<!-- Upscribe -->
+{% if product.metafields.sf_upscribe.enable_subscription %}
+
+    <style>
+    .cu-upscribe {
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+        padding: 0 5px;
+    }
+
+        .cu-productTypeSelect{
+            flex-wrap: wrap;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .cu-productTypeSelect__itemWrap {
+            width:50%;
+            display: flex;
+        }
+
+        .cu-productTypeSelect__itemLabel {
+            position: relative;
+            margin: 0;
+            font-size: 16px;
+            letter-spacing: .23px;
+            line-height: 21px;
+            color: #21211e;
+            font-weight: 400;
+            text-transform: capitalize;
+            border: 1px solid #d1cfcc;
+            padding: 4px;
+            background: #fff;
+            width: 100%;
+            line-height: normal;
+            cursor: pointer;
+            display: block;
+        }
+
+         .cu-productTypeSelect__itemLabel input{
+            opacity: 0;
+            visibility: hidden;
+            height:0 !important;
+            width:0 !important;
+            overflow: hidden;
+         }
+
+        .cu-productTypeSelect__itemWrap.is-active .cu-productTypeSelect__itemLabel{
+            border-color: #b9680c;    
+        }
+
+        .cu-productTypeSelect__itemWrap.is-active .cu-productTypeSelect__itemLabel .cu-productTypeSelect__itemBox{
+            background: #f7f6f3; 
+        }
+
+        .cu-productTypeSelect__itemBox{
+            background: #fff;
+            min-height: 90px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cu-option__mainText:before,
+        .cu-productTypeSelect__itemBox:before{
+            content: "";
+            width:16px;
+            height:16px;
+            left:13px;
+            top:12px;
+            background:url(https://cdn.shopify.com/s/files/1/0079/7193/0170/t/126/assets/icon-check.svg) no-repeat 0 0;
+            background-size:16px auto;
+            z-index: 10;
+            position:absolute;
+            opacity: 0;
+        }
+
+        .cu-productTypeSelect__itemWrap.is-active .cu-productTypeSelect__itemBox:before{
+            opacity: 1;
+        }
+
+
+        .cu-productTypeSelect__itemContent {
+            font-size: 16px;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            padding: 0;
+            font-weight: 700;
+        }
+
+        .cu-productTypeSelect__itemText{
+            position: relative;
+        }
+
+        .cu-options {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .cu-options--frequency {
+            margin-top: 40px;
+        }
+
+        .cu-optionsTitle {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .cu-optionsGrid {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .cu-option {
+            font-size: 16px;
+            letter-spacing: .23px;
+            line-height: 21px;
+            color: #21211e;
+            font-weight: 400;
+            text-transform: capitalize;
+            border: 1px solid #d1cfcc;
+            padding: 4px;
+            background: #fff;
+            width: 33.3333%;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cu-option:active,
+        .cu-option:hover,
+        .cu-option:focus,
+        .cu-option.is-active {
+            border-color: #b9680c;
+            background: none;
+        }
+
+        .cu-option.is-active .cu-option__check {
+            display: block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cu-option.is-active .cu-option__check svg {
+            width: 13px;
+            fill-color: white;
+            fill: white;
+            margin-left: -1px;
+            margin-bottom: -1px;
+        }
+
+            .cu-option__check {
+                display: none;
+                position: absolute;
+                transform: translateX(-50%) translateY(-50%);
+                left: 50%;
+                top: -2px;
+                background-color: #7FC464;
+                border-radius: 100px;
+                color: #fff;
+                width: 24px;
+                height: 24px;
+            }
+
+            .cu-option__mainText {
+                background: #fff;
+                min-height: 70px;
+                text-align: center;
+                position: relative;
+                display: block;
+            }
+
+            .cu-option.is-active .cu-option__mainText {
+                background: #f7f6f3;
+                position: :relative;
+            }
+
+            .cu-option.is-active .cu-option__mainText:before {
+                opacity:1;
+            }
+
+            .cu-option__mainText span{
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 100%;
+                padding: 0 20px;
+                font-weight: 700;
+            }
+
+            .cu-option__subText {
+                font-size: 16px;
+                width: 100%;
+                max-width: 250px;
+                margin-ttop: 6px;
+                letter-spacing: 0;
+                font-weight: 400;
+                text-align: center;
+            }
+
+
+        .cu-popup {
+            display: inline-block;
+            padding: 8px;
+        }
+        .cu-popup__hover {
+            display: inline-block;
+            position: relative;
+            height: 35px;
+            clear: both;
+            cursor: pointer;
+        }
+        .cu-popup__block {
+            display: none;
+            position: absolute;
+            text-align: left;
+            left: -200px;
+            right: auto;
+            bottom: 160%;
+            font-size: 13px;
+            top: inherit;
+            background-color: #222;
+            width: 300px;
+            border-radius: 5px;
+            z-index: 50;
+        }
+        @media (min-width: 500px) {
+            .cu-popup__block {
+                left: -3px;
+                right: auto;
+            }
+        }
+        .cu-popup__block--isOpen {
+            display: block;
+        }
+        .cu-popup__block:before {
+            display: none;
+            content: "";
+            width: 1px;
+            border: 10px solid transparent;
+            border-bottom-color: black;
+            position: absolute;
+            top: -20px;
+            left: 0;
+            border-bottom-color: #212221;
+            border-bottom-color: transparent;
+            border-top-color: #212221;
+            top: inherit;
+            left: 3px;
+            bottom: -20px;
+        }
+        @media (min-width: 500px) {
+            .cu-popup__block:before {
+                display: block;
+            }
+        }
+        .cu-popup__block__content {
+            line-height: 1.5;
+            padding: 16px;
+            font-size: 13px;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: 0;
+        }
+        .cu-popup__block__content a {
+            color: #32a6fb;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .cu-popup__block__footer {
+            padding: 0;
+            margin-bottom: 25px;
+            text-align: right;
+            height: 28px;
+        }
+        .cu-popup__icon {
+            vertical-align: middle;
+            position: relative;
+            height: 40px;
+            top: 2px;
+        }
+        .cu-popup__popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            cursor: default;
+            left: 0;
+        }
+        .cu-infoOpener {
+            display: inline-block;
+            position: relative;
+            transform: translateY(3px);
+            cursor: pointer;
+        }
+
+        .cu-infoOpener svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .cu-infoOpener:hover .cu-popup__block,
+        .cu-infoOpener:active .cu-popup__block,
+        .cu-infoOpener:focus .cu-popup__block {
+            display: block;
+        }
+    </style>
+
+    {% comment %} Vue for Upscribe logic {% endcomment %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+
+
+    <section id="upscribe-subscription-product" class="cu-upscribe">
+
+        <div class="cu-subscription-inputs" v-if="subscriptionSelected">
+        	
+        	<input v-if="finalSubscriptionProperty" type="hidden" :value="finalSubscriptionProperty" name="properties[Subscription]">
+
+            <input v-if="subscriptionProductTitleDisplay" type="hidden" :value="subscriptionProductTitleDisplay" name="properties[Subscription Product Title]">
+
+            <input v-if="subscriptionAmount" type="hidden" :value="subscriptionAmount" name="properties[Subscription Amount]">
+
+            <input v-if="activeDiscountAmount" type="hidden" :value="activeDiscountAmount" name="properties[Discount Amount]">
+
+            <!--input v-if="chargeLimit" type="hidden" :value="chargeLimit" name="properties[Charge Limit]"-->
+
+            <input v-if="recurringDiscountAmount" type="hidden" :value="recurringDiscountAmount" name="properties[Recurring Discount Amount]">
+
+            <input v-if="recurringDiscountAfterOrder" type="hidden" :value="recurringDiscountAfterOrder" name="properties[Recurring Discount After Order]">
+
+            <input v-if="intervalFrequency" type="hidden" :value="intervalFrequency" name="properties[Interval Frequency]">
+
+            <input v-if="intervalUnit" type="hidden" :value="intervalUnit" name="properties[Interval Unit]">
+
+        </div>
+
+        <div class="cu-productTypeSelect">
+            <div class="cu-productTypeSelect__itemWrap cu-productTypeSelect__itemSub" :class="{ 'is-active': productPurchaseType === 'subscription' }">
+                <label class="cu-productTypeSelect__itemLabel" for="subscription">
+                    <div class="cu-productTypeSelect__itemBox">
+                        <div class="cu-productTypeSelect__itemContent">
+                            <input type="radio" id="subscription" value="subscription" v-model="productPurchaseType">
+                            <span class="cu-productTypeSelect__itemText">${ subscriptionMessage || 'Subscribe & Save' }</span>
+                        </div>
+                    </div>
+                </label>
+            </div>
+            <div class="cu-productTypeSelect__itemWrap cu-productTypeSelect__itemOneTime" :class="{ 'is-active': productPurchaseType === 'onetime' }">
+                <label class="cu-productTypeSelect__itemLabel" for="onetime">
+                    <div class="cu-productTypeSelect__itemBox">
+                        <div class="cu-productTypeSelect__itemContent">
+                            <input type="radio" id="onetime" value="onetime" v-model="productPurchaseType">
+                            <span class="cu-productTypeSelect__itemText">${ oneTimeMessage || 'One-time Order' }</span>    
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div
+            v-if="selectFrequencyOptions && subscriptionSelected"
+            class="cu-options cu-options--frequency"
+        >
+            <div class="rc_label_frequency__header">
+                <div class="cu-optionsTitle">choose frequency</div>
+                <div class="c-productFrequency c-productFrequencyNeedHelp">
+                    <div class="c-productFrequency__text c-productFrequency__textQuiz" data-quiz-click>
+                        <span class="c-quizText__desktop">Unsure of frequency? Take quiz.</span>
+                        <span class="c-quizText__mobile">Take frequency quiz.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="cu-optionsGrid">
+                <v-option
+                    v-for="(option, index) in selectFrequencyOptions"
+                    :key="option.frequency"
+                    :index="index"
+                    :option="option"
+                    :selected-index="selectedFrequencyIndex"
+                    class="cu-option"
+                    v-on:click-option="setFrequency"
+                ></v-option>
+            </div>
+        </div>
+    </section>
+
+    {% raw %}
+    <script>
+
+        // Option select component
+        var VOption = {
+            template: `
+                <div class="cu-option__option"
+                    v-if="option"
+                    :class="{'is-active': isActive}"
+                    @click="clickOption"
+                >
+                    <span class="cu-option__mainText"
+                        v-if="option.mainText"
+                    ><span>{{ option.mainText }} Days</span></span>
+                    <span class="cu-option__subText"
+                        v-if="option.subText"
+                    >{{ option.subText }}</span>
+                </div>
+            `,
+            computed: {
+                isActive() {
+                    return this.selectedIndex === this.index
+                }
+            },
+            props:{
+                option: {
+                    type: [Object, Boolean],
+                    default: false
+                },
+                index: {
+                    type: Number,
+                    required: true
+                },
+                selectedIndex: {
+                    type: Number,
+                    required: true
+                }
+            },
+            methods: {
+                // emit selected val
+                clickOption() {
+                    this.$emit('click-option', this.index)
+                }
+            }
+        }
+
+        var upscribeSubscriptionProduct = new Vue ({
+
+            el: '#upscribe-subscription-product',
+
+            delimiters: ['${', '}'],
+
+            components: {
+                'v-option': VOption,
+            },
+
+            data: {
+                moneyFormat: '${{amount}}',
+
+                // Initialize vue component with shopify liquid data rendered in state
+                {% endraw %}
+                product: {{ product | json }},
+
+                subscriptionProductTitle: '{{ product.metafields.sf_upscribe.subscription_product_title | format_money }}',
+                intervalFrequncyMetafield: '{{ product.metafields.sf_upscribe.interval_frequency }}',
+                intervalUnitMetafield: '{{ product.metafields.sf_upscribe.interval_unit }}',
+
+                defaultGlobalDiscountAmount: '{{ shop.metafields.sf_upscribe.default_discount_amount }}',
+
+                discountAmount: '{{ product.metafields.sf_upscribe.discount_amount }}',
+                //chargeLimit: '{{ product.metafields.sf_upscribe.charge_limit }}',
+
+                recurringDiscountAmount: '{{ product.metafields.sf_upscribe.recurring_discount_amount }}',
+                recurringDiscountAfterOrder: '{{ product.metafields.sf_upscribe.recurring_discount_after_order }}',
+
+                oneTimeMessage: '{{ shop.metafields.sf_upscribe.one_time_message }}',
+                subscriptionMessage: '{{ shop.metafields.sf_upscribe.subscribe_message }}',
+                learnMoreUrl: '{{ shop.metafields.sf_upscribe.learn_more_url }}',
+                howItWorksTitle: '{{ shop.metafields.sf_upscribe.how_it_works_title }}',
+                howItWorksText: '{{ shop.metafields.sf_upscribe.how_it_works_text }}',
+
+                // update on variant changes, this is used for initial setting
+                activeSubsriptionDisplayPrice: '{{ product.selected_or_first_available_variant.price }}',
+                activeSubsriptionDisplayComparePrice: '{{ product.selected_or_first_available_variant.compare_at_price }}',
+                {% raw %}
+
+                selectedFrequencyIndex: 0,
+                productPurchaseType: 'onetime',
+                infoIsOpen: false,
+                subscriptionPrice: null,
+
+                activeCurrencyString: null,
+                activeCurrencyRate: null,
+                subscriptionAmount: null
+            },
+            mounted() {
+                // reset
+                this.selectedFrequencyIndex = 0
+                this.productPurchaseType = 'onetime'
+                this.infoIsOpen = false
+                this.subscriptionPrice = null
+
+                // add listener for variant update, set in theme.js
+                // this listener could be different depeneding on if the theme uses the same base setup
+                var vm = this
+                window.addEventListener("upscribeVariantUpdate", function(event) {
+                    vm.handleVariantUpdateEvent(event)
+                }, false);
+
+                this.activeCurrencyString = window.Shopify.currency.active
+                this.activeCurrencyRate = parseFloat(window.Shopify.currency.rate)
+            },
+            watch: {
+                // when onetime vs subscription is toggled
+                productPurchaseType(newVal) {
+
+                    // if one time
+                    if (newVal === 'onetime') {
+                        // use stored non-discount prices from previous changes
+                        var originalPrice = this.activeSubsriptionDisplayPrice || false
+                        var comparePrice = this.activeSubsriptionDisplayComparePrice || false
+
+                        // put into money format
+                        var formatOriginalPrice = originalPrice ? this.formatMoney(originalPrice) : false
+                        var formatComparePrice = comparePrice ? this.formatMoney(comparePrice) : false
+
+                        // replace pricing elements with new vals
+                        this.setPricingDisplayEls(formatOriginalPrice,formatComparePrice)
+                    }
+
+                    // if subscription
+                    else {
+                        // use stored non-discount prices from previous changes
+                        var originalPrice = this.activeSubsriptionDisplayPrice || false
+                        var comparePrice = this.activeSubsriptionDisplayComparePrice || false
+
+                        // calculate subscription discount and replace pricing elements with new vals
+                        this.calculateVariantPrices(originalPrice, comparePrice)
+                    }
+                }
+            },
+            computed: {
+                // helper for if current state is subscription
+                subscriptionSelected() {
+                    return this.productPurchaseType === 'subscription'
+                },
+                // subscription title, used in cart and sent to checkout for replacement
+                subscriptionProductTitleDisplay() {
+                    let display = ''
+                    display += this.subscriptionProductTitle ? this.subscriptionProductTitle : this.product.title
+                    display += this.discountDisplay ? ' - ' + this.discountDisplay + ' off' : ''
+                    return display
+                },
+                activeDiscountType() {
+                    var discountAmount = this.discountAmount
+                    var defaultGlobalDiscountAmount = this.defaultGlobalDiscountAmount
+                    var activeDiscount = discountAmount ? discountAmount : defaultGlobalDiscountAmount
+
+                    return activeDiscount.indexOf('$') > -1 ? '$' : '%'
+                },
+                activeDiscountAmount() {
+                    var discountAmount = this.discountAmount
+                    var defaultGlobalDiscountAmount = this.defaultGlobalDiscountAmount
+
+                    return discountAmount ? discountAmount :
+                        defaultGlobalDiscountAmount ? defaultGlobalDiscountAmount : 0
+                },
+                /*chargeLimit() {
+                    var chargeLimit = this.chargeLimit ? this.chargeLimit : 0
+                },*/
+                // build frequency options for select boxes
+                selectFrequencyOptions() {
+                    var intervalFrequency = this.intervalFrequency
+                    var intervalUnit = this.intervalUnit
+
+                    if (!intervalFrequency || ! intervalUnit) return false
+
+                    return intervalFrequency.split(',').map(function(frequency) {
+                        return {
+                            value: frequency.trim(),
+                            mainText: frequency.trim(),
+                            subText: false
+                        }
+                    })
+                },
+                // plural unit display check
+                finalSubscriptionProperty() {
+                    var selectedFrequency = this.selectedFrequency
+                    var unit = this.intervalUnit
+                    if (!this.subscriptionSelected) return false
+
+                    if (selectedFrequency > 1) {
+                        return selectedFrequency + ' ' + unit + 's'
+                    } else {
+                        return selectedFrequency + ' ' + unit
+                    }
+                },
+                selectedFrequency() {
+                    return this.selectFrequencyOptions[this.selectedFrequencyIndex].value
+                },
+                intervalUnit() {
+                    return this.intervalUnitMetafield ? this.intervalUnitMetafield : 'day'
+                },
+                intervalFrequency() {
+                    return this.intervalFrequncyMetafield ? this.intervalFrequncyMetafield : '15,30,45,60'
+                },
+            },
+            methods: {
+                setFrequency(val) {
+                    this.selectedFrequencyIndex = val
+                },
+                discountCalculatedValue(total) {
+                    var discountType = this.activeDiscountType
+                    var discountAmount = this.activeDiscountAmount.replace('%', '');
+
+                    var calcDiscountAmount = 0
+
+                    if (discountType === '$') { // fixed
+                        calcDiscountAmount = discountAmount
+                    } else if (discountType === '%') { //percentage
+                        calcDiscountAmount = (total * discountAmount) / 100
+
+                    } else {
+                        console.log('discount_amount should include % for "percentage" or $ for "fixed"')
+                    }
+                    return total - calcDiscountAmount
+                },
+                // replace pricing values, for compare and regular pricing
+                setPricingDisplayEls(original, compare) {
+
+                    var regularEl = document.querySelector(".upscribe-price-item-regular");
+                    var saleEl = document.querySelector(".upscribe-price-item-sale");
+
+                    if (compare) {
+                        regularEl.innerHTML = compare;
+                        saleEl.innerHTML = original.replace('.00', '');
+                    }
+
+                    else {
+                        regularEl.innerHTML = original.replace('.00', '');
+                        saleEl.innerHTML = '';
+                    }
+                },
+                // on event triggered from variant change in select boxes
+                handleVariantUpdateEvent(event) {
+                    var variant = event.detail
+                    var originalPrice = variant.price || false
+                    var originalComparePrice = variant.compare_at_price || false
+
+                    // calculate and set new values
+                    this.calculateVariantPrices(originalPrice, originalComparePrice)
+
+                    // store values if subscription isn't currently selected
+                    this.activeSubsriptionDisplayPrice = originalPrice
+                    this.activeSubsriptionDisplayComparePrice = originalComparePrice
+                },
+                getFinalCurrencyRate(amount) {
+                    return ((amount / this.activeCurrencyRate)).toFixed(2)
+                },
+                calculateVariantPrices(originalPrice, originalComparePrice) {
+                    var displayDiscountPrice = false
+                    var displayDiscountComparePrice = false
+
+                    if (originalPrice) {
+                        var originalPriceEl = document.querySelector(".upscribe-price-item-regular");
+                        var discountPrice = originalPrice - this.discountCalculatedValue(originalPrice)
+
+                        // set for passing in cart property to checkout - not formatted
+                        //this.subscriptionAmount = this.getFinalCurrencyRate(originalPrice - discountPrice)
+
+                        displayDiscountPrice = this.formatMoney(originalPrice - discountPrice)
+                        this.subscriptionAmount = displayDiscountPrice
+                        
+                        //displayDiscountPrice = displayDiscountPriceValue.replace(/[^0-9]+00/g, '');
+
+                        
+                    }
+
+                    if (originalComparePrice) {
+                        var discountComparePrice = originalComparePrice - this.discountCalculatedValue(originalComparePrice)
+
+                        displayDiscountComparePrice = this.formatMoney(originalComparePrice - discountComparePrice)
+
+                    }
+
+                    // replace price elements if subscription selected
+                    if (this.subscriptionSelected) {
+                        this.setPricingDisplayEls(displayDiscountPrice, displayDiscountComparePrice)
+                    }
+
+                    // if onetime selected, store to use if selected next
+                    else{
+                        this.activeSubsriptionDisplayPrice = displayDiscountPrice
+                        this.activeSubsriptionDisplayComparePrice = displayDiscountComparePrice
+                    }
+                },
+                // shopify format money
+                formatMoney(cents, format) {
+                    if (typeof cents === 'string') {
+                    cents = cents.replace('.', '');
+                    }
+                    var value = '';
+                    var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+                    var formatString = format || this.moneyFormat;
+
+                    function formatWithDelimiters(number, precision, thousands, decimal) {
+                    thousands = thousands || ',';
+                    decimal = decimal || '.';
+
+                    if (isNaN(number) || number === null) {
+                        return 0;
+                    }
+
+                    number = (number / 100.0).toFixed(precision);
+
+                    var parts = number.split('.');
+                    var dollarsAmount = parts[0].replace(
+                        /(\d)(?=(\d\d\d)+(?!\d))/g,
+                        '$1' + thousands
+                    );
+                    var centsAmount = parts[1] ? decimal + parts[1] : '';
+
+                    return dollarsAmount + centsAmount;
+                    }
+
+                    switch (formatString.match(placeholderRegex)[1]) {
+                    case 'amount':
+                        value = formatWithDelimiters(cents, 2);
+                        break;
+                    case 'amount_no_decimals':
+                        value = formatWithDelimiters(cents, 0);
+                        break;
+                    case 'amount_with_comma_separator':
+                        value = formatWithDelimiters(cents, 2, '.', ',');
+                        break;
+                    case 'amount_no_decimals_with_comma_separator':
+                        value = formatWithDelimiters(cents, 0, '.', ',');
+                        break;
+                    case 'amount_no_decimals_with_space_separator':
+                        value = formatWithDelimiters(cents, 0, ' ');
+                        break;
+                    case 'amount_with_apostrophe_separator':
+                        value = formatWithDelimiters(cents, 2, "'");
+                        break;
+                    }
+
+                    return formatString.replace(placeholderRegex, value);
+                }
+            },
+            // remove listener
+            destroyed() {
+                window.removeEventListener('upscribeVariantUpdate', this.handleVariantUpdateEvent);
+            }
+        })
+    </script>
+    {% endraw %}
+{% endif %}
+

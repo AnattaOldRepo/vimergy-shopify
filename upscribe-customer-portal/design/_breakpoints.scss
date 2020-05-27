@@ -1,0 +1,54 @@
+$mobile: 375px !default;
+$mobile-large: 640px !default;
+$mobile-large-max: 767px !default;
+$tablet: 768px !default;
+$tablet-large: 1024px !default;
+$desktop: 1180px !default;
+$desktop-med: 1280px !default;
+$desktop-large: 1440px !default;
+
+@mixin bp($break) {
+  @if $break == mobile {
+    @media (min-width: $mobile) {
+      @content;
+    }
+  } @else if $break == mobile-large {
+    @media (min-width: $mobile-large) {
+      @content;
+    }
+  } @else if $break == mobile-large-max {
+    @media (max-width: $tablet - 1) {
+      @content;
+    }
+  } @else if $break == tablet {
+    @media (min-width: $tablet) {
+      @content;
+    }
+  } @else if $break == tablet-max {
+    @media (max-width: $tablet-large - 1) {
+      @content;
+    }
+  } @else if $break == tablet-large {
+    @media (min-width: $tablet-large) {
+      @content;
+    }
+  } @else if $break == tablet-large-max {
+    @media (min-width: $desktop - 1) {
+      @content;
+    }
+  } @else if $break == desktop {
+    @media (min-width: $desktop) {
+      @content;
+    }
+  } @else if $break == desktop-med {
+    @media (min-width: $desktop-med) {
+      @content;
+    }
+  } @else if $break == desktop-large {
+    @media (min-width: $desktop-large) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint mixin doesn't support '#{$break}' - is not defined";
+  }
+}

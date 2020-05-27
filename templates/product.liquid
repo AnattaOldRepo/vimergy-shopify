@@ -209,7 +209,8 @@
                         <div class="product-options-bottom">
                             {% if product.available %}
                                 <h2 class="del-interval__heading">Pick a delivery option</h2>
-                                {% include 'subscription-product' %}
+                                {% include 'upscribe-subscription-product' %}
+                                {%comment%}{% include 'subscription-product' %}{%endcomment%}
                             {% endif %}
                         </div>
                     {% endif %}

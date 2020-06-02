@@ -1,137 +1,252 @@
 {% include 'upscribe-cart-logic' %}
 <div class="c-cartTable__wrapper o-wrapper">
     {% if cart.item_count > 0 %}
-      <h1 class="c-cartTable__title">Your Shopping Cart</h1>
-
-      <form action="/cart" method="post" novalidate>
-        <table class="c-cartTable">
-          <thead class="small--hide">
-            <tr>
-            <th class="c-cartTable__th" colspan="1" ></th>
-              <th class="c-cartTable__th" colspan="1" >{{ 'cart.label.product' | t }}</th>
-              {% comment %}<th class="c-cartTable__th" >{{ 'cart.label.price' | t }}</th>{% endcomment %}
-              <th class="c-cartTable__th" >{{ 'cart.label.quantity' | t }}</th>
-              <th class="c-cartTable__th" >{{ 'cart.label.total' | t }}</th>
-              <th class="c-cartTable__th " ></th>
-            </tr>  
-          </thead>
-          <tbody>
-
-            {% for item in cart.items %}
-    
-            {% comment %}
-
-            Cart Item Template
-            =====================
-            The data-label attributes on <td> elements are mobile-friendly
-            helpers used for responsive-table labels
-            {% endcomment %}
-
-              <tr class="c-cartTable__row responsive-table-row">
-                <td class="c-cartTable__td" data-label="{{ 'customer.order.product' | t }}">
-                  <a href="{{ item.url | within: collections.all }}">
-                    <img src="{{ item | img_url: '240x240' }}" alt="{{ item.title | escape }}">
-                  </a>
-                </td>
-                <td class="c-cartTable__td">
-                  <a href="{{ item.url }}">{{ item.product.title }}
-<span class='booster-cart-item-success-notes' data-key='{{item.key}}'></span><span class='booster-cart-item-upsell-notes' data-key='{{item.key}}'></span></a>
-
-                  {% unless item.product.has_only_default_variant %}
-                    <p>{{ item.variant.title }}</p>
-                  {% endunless %}
-
-                  {% comment %} <p>{{ item.vendor }}</p> {% endcomment %}
-
-                 
-                </td>
-{% comment %}                <td class="c-cartTable__td c-cartTable__cell--center" data-label="{{ 'cart.label.price' | t }}">
-                  {% if item.original_line_price != item.line_price %}
-                    <span class="visually-hidden">{{ 'cart.label.discounted_price' | t }}</span>
-                    {{ item.price | money }}
-                    <span class="visually-hidden">{{ 'cart.label.original_price' | t }}</span>
-                    <s>{{ item.original_price | money }}</s>
-                  {% else %}
-                    {{ item.price | money }}
-                  {% endif %}
-                </td>{% endcomment %}
-                <td class="c-cartTable__td c-cartTable__cell--center c-cartTable__cell--quantity" data-label="{{ 'cart.label.quantity' | t }}">
-                  <input type="number"
-                         name="updates[]"
-                         id="updates_{{ item.key }}"
-                         value="{{ item.quantity }}"
-                         min="0"
-                         aria-label="{{ 'cart.general.item_quantity' | t }}">
-                </td>
-                <td class="c-cartTable__td c-cartTable__cell--center" data-label="{{ 'cart.label.total' | t }}">
-                  <span class='booster-cart-item-line-price' data-key='{{item.key}}'>{{ item.line_price | money }}</span>
-    
-                   {%- assign property_size = item.properties | size -%}
-
-                  {% if property_size > 0 %}
-                    {% for p in item.properties %}
-                     {% unless p.last == blank or p.first == 'subscription_id' or p.first == 'shipping_interval_frequency' or p.first == 'shipping_interval_unit_type'%}
-                      {{ p.first }}:
-
-                      {% if p.last contains '/uploads/' %}
-                        <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
-                      {% else %}
-                        {{ p.last }}
-                      {% endif %}
-
-                      {% endunless %}
-                    {% endfor %}
-                  {% endif %}
-
-                </td>
-                <td style="text-align:center;"> 
-                <a  href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
-                    <small>{{ 'cart.general.remove' | t }}</small>
-                </a>
-                </td>
-              </tr>
-
+        <h1 class="c-cartTable__title">Your Shopping Cart</h1>
+        <form action="/cart" method="post" novalidate>
+            <table class="c-cartTable" width="100%" cellspacing="0" cellpadding="0">
+                <thead class="small--hide">
+                    <tr>
+                        <th class="c-cartTable__th" colspan="1" ></th>
+                        <th class="c-cartTable__th" colspan="1" >{{ 'cart.label.product' | t }}</th>
+                        {% comment %}<th class="c-cartTable__th" >{{ 'cart.label.price' | t }}</th>{% endcomment %}
+                        <th class="c-cartTable__th" >{{ 'cart.label.quantity' | t }}</th>
+                        <th class="c-cartTable__th" >{{ 'cart.label.total' | t }}</th>
+                        <th class="c-cartTable__th " ></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% assign upscribe_total = 0 %}
+                    {% assign subscription_in_cart = false %}
+                    {% for item in cart.items %}
+                        <!-- Upscribe hidden properties assign -->
+                        {%- assign property_size = item.properties | size -%}
+                        {% if property_size > 0 %}
+                            {% for p in item.properties %}
+                                {% if p.first == 'Subscription Product Title' %}
+                                    {%- assign subscription_product_title = p.last -%}
+                                {% endif %}
+                                {% if p.first == 'Subscription Amount' %}
+                                    {%- assign subscription_product_amount = p.last -%}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if subscription_product_amount %}
+                            {% assign subscription_in_cart = true %}
+                            {% assign line_price_total = subscription_product_amount | times: item.quantity %}
+                        {% else %}
+                            {% assign line_price_total = item.discounted_price | times: item.quantity %}
+                        {% endif %}
+                    {% comment %} Add total to Upscribe {% endcomment %}
+                    {% assign upscribe_total = upscribe_total | plus: line_price_total %}
+                    
+                    
+                    {% comment %}
+                    Cart Item Template
+                    =====================
+                    The data-label attributes on <td> elements are mobile-friendly
+                        helpers used for responsive-table labels
+                    {% endcomment %}
+                    <tr class="c-cartTable__row responsive-table-row js-cart-item">
+                        <td class="c-cartTable__td" data-label="{{ 'customer.order.product' | t }}">
+                            <a href="{{ item.url | within: collections.all }}">
+                                <img src="{{ item | img_url: '240x240' }}" alt="{{ item.title | escape }}">
+                            </a>
+                        </td>
+                        <td class="c-cartTable__td">
+                            {% if subscription_product_title %}
+                                {{ subscription_product_title }}
+                            {% else %}
+                                <a href="{{ item.url }}">
+                                    {{ item.product.title}}
+                                    <span class='booster-cart-item-success-notes' data-key='{{item.key}}'></span><span class='booster-cart-item-upsell-notes' data-key='{{item.key}}'></span>
+                                </a>
+                            {% endif %}
+                            {% unless item.product.has_only_default_variant %}
+                                <p>{{ item.variant.title }}</p>
+                            {% endunless %}
+                            {% unless item.properties == blank %}
+                              <div class="cart__row-subscription">
+                                <p class="text--accent">
+                                  Delivery Every
+                                  {% for property in item.properties %}
+                                    {% if property.first == 'Subscription' %}
+                                      {{ property.last }}
+                                    {% endif %}
+                                  {% endfor %}
+                                </p>
+                              </div>
+                            {% endunless %}
+                        </td>
+                    
+                        <td class="c-cartTable__td c-cartTable__cell--center c-cartTable__cell--quantity" data-label="{{ 'cart.label.quantity' | t }}">
+                            <input type="number"
+                            name="updates[]"
+                            id="updates_{{ item.key }}"
+                            value="{{ item.quantity }}"
+                            min="0"
+                            aria-label="{{ 'cart.general.item_quantity' | t }}">
+                        </td>
+                        <td class="c-cartTable__td c-cartTable__cell--center" data-label="{{ 'cart.label.total' | t }}">
+                            {% if property_size > 0 %}
+                                {% for p in item.properties %}
+                                    {% if p.first == 'Subscription Product Title' %}
+                                        {%- assign subscription_product_title = p.last -%}
+                                    {% endif %}
+                                    {% if p.first == 'Subscription Amount' %}
+                                        {%- assign subscription_product_amount = p.last -%}
+                                    {% endif %}
+                                    {% if p.first == 'Discount Amount' %}
+                                        {%- assign discount_amount = p.last -%}
+                                    {% endif %}
+                                    {% if p.first == 'Subscription Amount' %}
+                                        {%- assign subscription_amount = p.last -%}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% if subscription_product_title and
+                                subscription_product_amount and
+                                discount_amount and
+                                subscription_amount
+                                %}
+                                <p style="display: none" class="c-cart-singleprice js-calculate-subscription-price"
+                                    data-original-price="{{item.price}}"
+                                    data-discount-amount="{{ discount_amount }}"
+                                    data-subscription-amount="{{ subscription_amount | remove: '$' | remove: '.00' }}"
+                                    data-currency-symbol="{{ currency.symbol }}"
+                                >{{ item.price | money }}</p>
+                            {% else %}
+                                <p style="display: none" class="c-cart-singleprice">{{ item.line_price | money }}</p>
+                            {% endif %}
+                            {% if subscription_product_title and
+                                subscription_product_amount and
+                                discount_amount and
+                                subscription_amount
+                                %}
+                                <span class="js-line-price js-calculate-subscription-line-price"
+                                    data-original-price="{{item.line_price}}"
+                                    data-discount-amount="{{ discount_amount }}"
+                                    data-line-quantity="{{ item.quantity }}"
+                                    data-subscription-amount="{{ subscription_amount | remove: '$' | remove: '.00' }}"
+                                    data-currency-symbol="{{ currency.symbol }}"
+                                    data-final-price
+                                >{{ item.line_price | money }}</span>
+                            {% else %}
+                                <span class="js-line-price"
+                                    data-final-price="{{ item.line_price | divided_by: 100 }}"
+                                >{{ item.line_price | money_with_currency }}</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:center;">
+                            <a  href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
+                                <small>{{ 'cart.general.remove' | t }}</small>
+                            </a>
+                        </td>
+                    </tr>
+            {% comment %} Reset Upscribe Values {% endcomment %}
+            {%- assign subscription_product_amount = false -%}
+            {%- assign subscription_product_title = false -%}
             {% endfor %}
-          </tbody>
+            </tbody>
         </table>
 
-        {% comment %}
-        {% if settings.cart_notes_enable %}
-          <label for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
-          <textarea name="note" id="CartSpecialInstructions">{{ cart.note }}</textarea>
-        {% endif %}
-        {% endcomment %}
-
-        <div class="c-cart__footer c-cartTable__footer">
-            <div class="c-cartTable__pricingBox">
-                <p class="c-cartTable__shippingInfo">Shipping & taxes calculated at checkout</p>
-
-                <div class="c-cart__subtotal c-cartTable__subtotal">
-                    <span class="c-cart__subtotalText">Subtotal</span>
-                    <span class="c-cart__subtotalPrice"><span id="bk-cart-subtotal-price"><span class="wh-original-cart-total"><span class='wh-original-price'>{{ cart.total_price | money  }}</span></span><span class="wh-cart-total"></span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note"></span></div></span></span>
-                </div>
-
-                {% comment %} 
-                {% if cart.total_discounts > 0 %}
-                <div class="c-cart__savings">
-                    <p>Total Savings: {{ cart.total_discounts | money }}</p>
-                </div>
-                {% endif %}
-                {% endcomment %}
-
-            </div>
-
-            <div class="c-cartTable__buttonContainer">
-                <input class="c-btn c-cartTable__button--update" type="submit" name="update" value="Update Cart">
-                <input type="submit" name="checkout" class="c-btn" value="Checkout">
-            </div>
-        </div>
-      </form>
-    {% else %}
-
-      <h1>Your Shopping Bag</h1>
-
-      <p class="c-cart__emptyText">Your cart is currently empty</p>
-
-    {% endif %}
+<div class="c-cart__footer c-cartTable__footer">
+<div class="c-cartTable__pricingBox">
+    <p class="c-cartTable__shippingInfo">Shipping & taxes calculated at checkout</p>
+    <div class="c-cart__subtotal c-cartTable__subtotal">
+        <span class="c-cart__subtotalText">Subtotal</span>
+        <span class="c-cart__subtotalPrice">
+            {% if subscription_in_cart %}
+                <span class="cart__subtotal js-calculate-subscription-subtotal"
+                  data-upscribe-total="{{ upscribe_total }}"
+                >{{ upscribe_total | money_with_currency }}</span>
+            {% else %}
+                <span class="cart__subtotal">{{ cart.total_price | money_with_currency }}</span>
+            {% endif %}
+        </span>
+    </div>
 </div>
+<div class="c-cartTable__buttonContainer">
+<input class="c-btn c-cartTable__button--update" type="submit" name="update" value="Update Cart">
+<input type="submit" name="checkout" class="c-btn" value="Checkout">
+</div>
+</div>
+</form>
+{% else %}
+<h1>Your Shopping Bag</h1>
+<p class="c-cart__emptyText">Your cart is currently empty</p>
+{% endif %}
+</div>
+
+<script>
+
+  $(document).ready(function() {
+    window.currencySymbolMap = {
+      AUD: '$',
+      CAD: '$',
+      DKK: 'kr',
+      EUR: '€',
+      HKD: '$',
+      JPY: '¥',
+      NZD: '$',
+      GBP: '£',
+      SGD: '$',
+      USD: '$',
+    }
+
+    function translateToUSDAmount(val) {
+      var activeCurrencyRate = parseFloat(window.Shopify.currency.rate)
+      return value = ((val / activeCurrencyRate)).toFixed(2)
+    }
+
+    function translateToCurrentCurrencyAmount(val) {
+      var activeCurrencyRate = parseFloat(window.Shopify.currency.rate)
+      return value = ((val * activeCurrencyRate) / 100 ).toFixed(2)
+    }
+
+    function formatPriceWithCurrency(value) {
+      var activeCurrencyString = window.Shopify.currency.active
+      return window.currencySymbolMap[activeCurrencyString] + value + ' ' + activeCurrencyString
+    }
+
+    function updateCartItemDisplay(item) {
+      var replacePriceElement = $(item).find('.js-calculate-subscription-price')
+
+      
+      var subscriptionAmount = replacePriceElement.data('subscription-amount')
+      var newPrice = subscriptionAmount
+      var formattedNewPrice = formatPriceWithCurrency(newPrice)
+      replacePriceElement.text(formattedNewPrice)
+
+      var replaceLinePriceElement = $(item).find('.js-calculate-subscription-line-price')
+      var subscriptionLinePriceElementAmount = replaceLinePriceElement.attr('data-subscription-amount')
+      
+
+      var quantity = replaceLinePriceElement.attr('data-line-quantity')
+      var replaceLinePriceElementNewPrice = subscriptionAmount * quantity
+
+      var formattedLinePriceNewPrice = formatPriceWithCurrency(replaceLinePriceElementNewPrice)
+
+      replaceLinePriceElement.text(formattedLinePriceNewPrice)
+      replaceLinePriceElement.attr('data-final-price', replaceLinePriceElementNewPrice)
+
+    }
+
+    $('.js-cart-item').each(function(index, item) {
+      setTimeout(function () {
+        updateCartItemDisplay(item)
+      }, 100);
+    })
+
+    setTimeout(function () {
+      // totals
+      var replaceSubtotalElement = $('.js-calculate-subscription-subtotal')
+      var getTotalCurrentCurrencyLineItemsPrice = 0
+      $('.c-cartTable .js-cart-item').each(function() {
+        getTotalCurrentCurrencyLineItemsPrice += parseInt($(this).find('.js-line-price').attr('data-final-price'))
+      })
+      
+      var formattedSubtotalNewPrice = formatPriceWithCurrency(getTotalCurrentCurrencyLineItemsPrice)
+      replaceSubtotalElement.text(formattedSubtotalNewPrice)
+     }, 1000);
+  })
+</script>

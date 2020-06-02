@@ -7,10 +7,12 @@
     - There are separate 'add new' and 'edit' address forms
 
 {% endcomment %}
-
+{% for tag in customer.tags %}
+    {% if tag == 'SubscriptionActive' or tag == 'SubscriptionInactive'%}
+        {% assign isUpscribeCustomer = true %}
+    {% endif %}
+{% endfor %}
 {% paginate customer.addresses by 5 %}
-
-
 <div class="c-accounts c-account--account account-dashboard ">
    <div class="o-flex">
       <div class="o-flex__item o-flex__col-4">
@@ -19,13 +21,18 @@
            <li class="c-index__underline"><span><a href="/account">My Account</a></span></li>
             <li><a href="/account/addresses">Address Book</a></li>
            <li><a href="#" id="myOrder">My Orders</a></li>
-            <li class="c-index__underline">
-               {% if customer.metafields.subscriptions.customer_string %}
-               <!--BeginRechargeCode-->
-               <a href="/tools/recurring/customer/{{customer.metafields.subscriptions.customer_string}}/subscriptions/">Manage Subscriptions</a>
-               <!--EndRechargeCode-->
-               {% endif %}
-            </li>
+            {% if isUpscribeCustomer %}
+                <li class="c-index__underline">
+                    <a href="https://{{ shop.domain }}/account?view=subscriptions#/">Manage Subscriptions</a></li>
+            {% else %}
+                {% if customer.metafields.subscriptions.customer_string %}
+                    <li class="c-index__underline">
+                        <!--BeginRechargeCode-->
+                        <a href="/tools/recurring/portal/{{customer.metafields.subscriptions.customer_string}}/subscriptions/">Manage Subscriptions</a>
+                        <!--EndRechargeCode-->
+                    </li>
+                {% endif %}
+            {% endif %}
             <li><a href="https://vimergy.myshopify.com/pages/privacy-policy">Privacy Policy </a></li>
             <li class="c-index--refer u-hide"><button class="c-btn c-btn--index">REFER-A-FRIEND</button></li>
             <li class="c-index--index"><a class="c-btn c-btn--index c-btn--logout account-dashboard__logout" href="account/logout">Log Out</a></li>

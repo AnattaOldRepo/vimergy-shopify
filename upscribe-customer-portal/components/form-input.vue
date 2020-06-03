@@ -577,6 +577,8 @@ export default {
 	display: none
 }
 
+
+.c-formGroup .vs__search,
 .vs__search,
 .vs__search:focus {
 	-webkit-appearance: none;

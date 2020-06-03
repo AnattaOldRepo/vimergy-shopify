@@ -70,9 +70,9 @@ export default {
 
 .c-header {
   width: 100%;
-  height: 100px;
+  //height: 100px;
   margin: 0 auto;
-  background-color: $color-white;
+  //background-color: $color-white;
 }
 
 .c-header__inner {
@@ -86,7 +86,7 @@ export default {
   margin: 0 auto;
 }
 
-.c-header__nav {
+.c-header__navUp {
   display: flex;
   align-items: center;
   justify-content: flex-start;

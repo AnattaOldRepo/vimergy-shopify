@@ -1,6 +1,6 @@
 <template>
    <div class="c-header__inner">
-      <nav class="c-header__nav">
+      <nav class="c-header__navUp">
         <a class="c-header__navLink c-header__backToAccount" :href="shopifyAccountUrl">
           <icon-chevron-right
             class="c-header__navLinkIcon c-header__navLinkIcon--backToAccount"

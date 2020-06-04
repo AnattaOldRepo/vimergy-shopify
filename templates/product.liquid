@@ -170,6 +170,22 @@
                     {% endif %}
                 {% endfor %}
 
+                {%comment%}
+                {% for option in product.options_with_values %}
+                    {% unless option.name == 'Subscription' %}
+                      <div class="selector-wrapper js product-form__item">
+                        <label {% if option.name == 'default' %}class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
+                          {{ option.name }}
+                        </label>
+                        <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input" id="SingleOptionSelector-{{ forloop.index0 }}" data-index="option{{ forloop.index }}">
+                          {% for value in option.values %}
+                            <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    {% endunless %}
+                {% endfor %}
+                {%endcomment%}
                 <div class="c-quantit c-quantity--select" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
                     {% if product.options.size == 1 %}
                         <label><strong>Quantity &amp; saving Options</label>
@@ -210,18 +226,29 @@
                             {% if product.available %}
                                 <h2 class="del-interval__heading">Pick a delivery option</h2>
                                 {% include 'upscribe-subscription-product' %}
-                                {%comment%}{% include 'subscription-product' %}{%endcomment%}
+                                {%comment%}
+                                <div style="display: none;">
+                                    {% include 'subscription-product' %}    
+                                </div>
+                                {%endcomment%}
                             {% endif %}
                         </div>
                     {% endif %}
 
                 </div>
 
-                <div class="c-product__priceBox c-product-price" data-price-wrapper>
-                    <span id="productPrice" class="c-product__price " data-product-price>
-                        {{ current_variant.price | money }}
-                    </span>
+                {%- assign money_price = current_variant.price | money -%}
+                <div class="c-product__priceBox c-product-price">
+                    <span class="upscribe-price-item-regular c-product__price price-item price-item--regular" data-regular-price>
+                        {% if compare_at_price > price %}
+                            {{ compare_at_price | money }}
+                        {% else %}
+                            {{ money_price }}
+                        {% endif %}
+                    </span>  
+                    <span class="upscribe-price-item-sale price-item price-item--regular"></span>
                     {% if product.compare_at_price_max >  product.price %}
+                        
                         <s class="c-product__price c-product__price--nosale" data-compare-price>
                             {% if current_variant.compare_at_price > current_variant.price %}
                                 {{ current_variant.compare_at_price   | money }}
@@ -229,6 +256,19 @@
                         </s>
                     {% endif %}
                 </div>
+                <!--div class="c-product__priceBox c-product-price" data-price-wrapper>
+                    <span id="productPrice" class="c-product__price " data-product-price>
+                        {{ current_variant.price | money }}
+                    </span>
+                    {% if product.compare_at_price_max >  product.price %}
+                        
+                        <s class="c-product__price c-product__price--nosale" data-compare-price>
+                            {% if current_variant.compare_at_price > current_variant.price %}
+                                {{ current_variant.compare_at_price   | money }}
+                            {% endif %}
+                        </s>
+                    {% endif %}
+                </div-->
                 <button
                     id="AddToCart"
                     class="c-btn c-add-to-cart-buttons c-product__submit"
@@ -374,6 +414,7 @@
           setTimeout(znDisplayCurrency, 2000);
         }
 		window.triggerSwymVariantEvent(this.dataset.value);
+
     });
 
     $('.c-product__slideItem img').on("click", function(e) {

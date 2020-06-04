@@ -101,6 +101,10 @@
         try{
           if(window.triggerSwymVariantEvent){
             window.triggerSwymVariantEvent(variant.id);
+            window.dispatchEvent(new CustomEvent("upscribeVariantUpdate", {
+              detail: variant,
+            }));
+            console.log('Amrinder')
           }
         }catch(err){
           console.warn("Swym selectCallback", err);

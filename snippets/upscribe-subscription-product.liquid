@@ -5,133 +5,73 @@
     .cu-upscribe {
         position: relative;
         width: 100%;
-        margin-top: 20px;
-        padding: 0 5px;
     }
 
         .cu-productTypeSelect{
-            flex-wrap: wrap;
-            display: flex;
-            flex-direction: row;
+            border:1px solid #c4c4ae;
         }
 
-        .cu-productTypeSelect__itemWrap {
-            width:50%;
-            display: flex;
+        .cu-productTypeSelect__itemOneTime{
+            border-bottom:1px solid #c4c4ae;
         }
 
-        .cu-productTypeSelect__itemLabel {
-            position: relative;
+        .c-product-shop .cu-productTypeSelect__itemLabel {
+            width: 100%;
             margin: 0;
-            font-size: 16px;
-            letter-spacing: .23px;
-            line-height: 21px;
-            color: #21211e;
-            font-weight: 400;
-            text-transform: capitalize;
-            border: 1px solid #d1cfcc;
-            padding: 4px;
-            background: #fff;
-            width: 100%;
-            line-height: normal;
-            cursor: pointer;
-            display: block;
+            padding: 8px;
         }
 
-         .cu-productTypeSelect__itemLabel input{
-            opacity: 0;
-            visibility: hidden;
-            height:0 !important;
-            width:0 !important;
-            overflow: hidden;
-         }
-
-        .cu-productTypeSelect__itemWrap.is-active .cu-productTypeSelect__itemLabel{
-            border-color: #b9680c;    
-        }
-
-        .cu-productTypeSelect__itemWrap.is-active .cu-productTypeSelect__itemLabel .cu-productTypeSelect__itemBox{
-            background: #f7f6f3; 
-        }
-
-        .cu-productTypeSelect__itemBox{
-            background: #fff;
-            min-height: 90px;
-            text-align: center;
+        .cu-productTypeSelect__itemLabel input{
             position: relative;
+            top:3px;
         }
 
-        .cu-option__mainText:before,
-        .cu-productTypeSelect__itemBox:before{
-            content: "";
-            width:16px;
-            height:16px;
-            left:13px;
-            top:12px;
-            background:url(https://cdn.shopify.com/s/files/1/0079/7193/0170/t/126/assets/icon-check.svg) no-repeat 0 0;
-            background-size:16px auto;
-            z-index: 10;
-            position:absolute;
-            opacity: 0;
-        }
-
-        .cu-productTypeSelect__itemWrap.is-active .cu-productTypeSelect__itemBox:before{
-            opacity: 1;
-        }
-
-
-        .cu-productTypeSelect__itemContent {
-            font-size: 16px;
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100%;
-            padding: 0;
-            font-weight: 700;
+        .cu-productTypeSelect__itemWrap.is-active .cu-productTypeSelect__itemText{
+            font-family: 'Mark-pro-m',Arial,sans-serif;
         }
 
         .cu-productTypeSelect__itemText{
-            position: relative;
+            vertical-align: middle;
+            padding-left:5px;
+            color:#393D4E;
+            font-size: 1.0625rem;
+            font-weight: 700;
         }
 
         .cu-options {
             width: 100%;
-            margin-bottom: 20px;
+            padding:0 8px 8px 8px;
         }
 
-        .cu-options--frequency {
-            margin-top: 40px;
-        }
 
-        .cu-optionsTitle {
+        .cu-optionsLabel{
+            color:#393D4E;
+            font-size: 1.0625rem;
+            font-weight: 700;
+            font-family: 'Mark-pro-m',Arial,sans-serif;
             display: block;
-            margin-bottom: 5px;
-            font-size: 13px;
-            letter-spacing: 2px;
-            font-weight: bold;
-            text-transform: uppercase;
-            text-align: left;
+            margin:0 0 5px 0;
+        }
+
+        @media (min-width: 768px) {
+            .cu-options {
+                display: flex;
+            }
+
+            .cu-optionsLabel{
+                margin:8px 10px 0px 23px;
+            }
         }
 
         .cu-optionsGrid {
             display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
         }
 
-        .cu-option {
-            font-size: 16px;
-            letter-spacing: .23px;
-            line-height: 21px;
-            color: #21211e;
-            font-weight: 400;
-            text-transform: capitalize;
-            border: 1px solid #d1cfcc;
-            padding: 4px;
-            background: #fff;
-            width: 33.3333%;
-            position: relative;
+        .cu-option__option{
+            padding: 10px;
+            border:1px solid #c4c4ae;
+            font-size:15px;
+            margin:0 5px;
             cursor: pointer;
         }
 
@@ -139,76 +79,10 @@
         .cu-option:hover,
         .cu-option:focus,
         .cu-option.is-active {
-            border-color: #b9680c;
-            background: none;
+            border-color: #253237;
+            background: #253237;
+            color:#fff;
         }
-
-        .cu-option.is-active .cu-option__check {
-            display: block;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cu-option.is-active .cu-option__check svg {
-            width: 13px;
-            fill-color: white;
-            fill: white;
-            margin-left: -1px;
-            margin-bottom: -1px;
-        }
-
-            .cu-option__check {
-                display: none;
-                position: absolute;
-                transform: translateX(-50%) translateY(-50%);
-                left: 50%;
-                top: -2px;
-                background-color: #7FC464;
-                border-radius: 100px;
-                color: #fff;
-                width: 24px;
-                height: 24px;
-            }
-
-            .cu-option__mainText {
-                background: #fff;
-                min-height: 70px;
-                text-align: center;
-                position: relative;
-                display: block;
-            }
-
-            .cu-option.is-active .cu-option__mainText {
-                background: #f7f6f3;
-                position: :relative;
-            }
-
-            .cu-option.is-active .cu-option__mainText:before {
-                opacity:1;
-            }
-
-            .cu-option__mainText span{
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 100%;
-                padding: 0 20px;
-                font-weight: 700;
-            }
-
-            .cu-option__subText {
-                font-size: 16px;
-                width: 100%;
-                max-width: 250px;
-                margin-ttop: 6px;
-                letter-spacing: 0;
-                font-weight: 400;
-                text-align: center;
-            }
-
 
         .cu-popup {
             display: inline-block;
@@ -300,13 +174,13 @@
         .cu-infoOpener {
             display: inline-block;
             position: relative;
-            transform: translateY(3px);
+            transform: translateY(4px);
             cursor: pointer;
         }
 
         .cu-infoOpener svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
         }
 
         .cu-infoOpener:hover .cu-popup__block,
@@ -345,51 +219,71 @@
         </div>
 
         <div class="cu-productTypeSelect">
-            <div class="cu-productTypeSelect__itemWrap cu-productTypeSelect__itemSub" :class="{ 'is-active': productPurchaseType === 'subscription' }">
-                <label class="cu-productTypeSelect__itemLabel" for="subscription">
-                    <div class="cu-productTypeSelect__itemBox">
-                        <div class="cu-productTypeSelect__itemContent">
-                            <input type="radio" id="subscription" value="subscription" v-model="productPurchaseType">
-                            <span class="cu-productTypeSelect__itemText">${ subscriptionMessage || 'Subscribe & Save' }</span>
-                        </div>
-                    </div>
-                </label>
-            </div>
+            
             <div class="cu-productTypeSelect__itemWrap cu-productTypeSelect__itemOneTime" :class="{ 'is-active': productPurchaseType === 'onetime' }">
                 <label class="cu-productTypeSelect__itemLabel" for="onetime">
-                    <div class="cu-productTypeSelect__itemBox">
-                        <div class="cu-productTypeSelect__itemContent">
-                            <input type="radio" id="onetime" value="onetime" v-model="productPurchaseType">
-                            <span class="cu-productTypeSelect__itemText">${ oneTimeMessage || 'One-time Order' }</span>    
+                    <input type="radio" id="onetime" value="onetime" v-model="productPurchaseType">
+                    <span class="cu-productTypeSelect__itemText">${ oneTimeMessage || 'One-time Order' }:
+                        {{ current_variant.price | money }}
+                    </span>
+                    
+                </label>
+            </div>
+            <div class="cu-productTypeSelect__itemWrap cu-productTypeSelect__itemSub" :class="{ 'is-active': productPurchaseType === 'subscription' }"> 
+                <label class="cu-productTypeSelect__itemLabel" for="subscription">
+                    <input type="radio" id="subscription" value="subscription" v-model="productPurchaseType">
+                    <span class="cu-productTypeSelect__itemText">${ subscriptionMessage || 'Subscribe & Save' } (${ activeDiscountAmount }): ${subscriptionAmount}
+                    </span>
+                    <div class="cu-infoOpener"
+                        @click="infoIsOpen = !infoIsOpen"
+                    >
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 437.6 437.6" style="enable-background:new 0 0 437.6 437.6;" xml:space="preserve">
+                            <path d="M194,142.8c0.8,1.6,1.6,3.2,2.4,4.4c0.8,1.2,2,2.4,2.8,3.6c1.2,1.2,2.4,2.4,4,3.6c1.2,0.8,2.8,2,4.8,2.4
+                                c1.6,0.8,3.2,1.2,5.2,1.6c2,0.4,3.6,0.4,5.2,0.4c1.6,0,3.6,0,5.2-0.4c1.6-0.4,3.2-0.8,4.4-1.6h0.4c1.6-0.8,3.2-1.6,4.8-2.8
+                                c1.2-0.8,2.4-2,3.6-3.2l0.4-0.4c1.2-1.2,2-2.4,2.8-3.6s1.6-2.4,2-4c0-0.4,0-0.4,0.4-0.8c0.8-1.6,1.2-3.6,1.6-5.2
+                                c0.4-1.6,0.4-3.6,0.4-5.2s0-3.6-0.4-5.2c-0.4-1.6-0.8-3.2-1.6-5.2c-1.2-2.8-2.8-5.2-4.8-7.2c-0.4-0.4-0.4-0.4-0.8-0.8
+                                c-1.2-1.2-2.4-2-4-3.2c-1.6-0.8-2.8-1.6-4.4-2.4c-1.6-0.8-3.2-1.2-4.8-1.6c-2-0.4-3.6-0.4-5.2-0.4c-1.6,0-3.6,0-5.2,0.4
+                                c-1.6,0.4-3.2,0.8-4.8,1.6H208c-1.6,0.8-3.2,1.6-4.4,2.4c-1.6,1.2-2.8,2-4,3.2c-1.2,1.2-2.4,2.4-3.2,3.6
+                                c-0.8,1.2-1.6,2.8-2.4,4.4c-0.8,1.6-1.2,3.2-1.6,4.8c-0.4,2-0.4,3.6-0.4,5.2c0,1.6,0,3.6,0.4,5.2
+                                C192.8,139.6,193.6,141.2,194,142.8z"/>
+                            <path d="M249.6,289.2h-9.2v-98c0-5.6-4.4-10.4-10.4-10.4h-42c-5.6,0-10.4,4.4-10.4,10.4v21.6c0,5.6,4.4,10.4,10.4,10.4h8.4v66.4
+                                H188c-5.6,0-10.4,4.4-10.4,10.4v21.6c0,5.6,4.4,10.4,10.4,10.4h61.6c5.6,0,10.4-4.4,10.4-10.4V300
+                                C260,294,255.2,289.2,249.6,289.2z"/>
+                            <path d="M218.8,0C98,0,0,98,0,218.8s98,218.8,218.8,218.8s218.8-98,218.8-218.8S339.6,0,218.8,0z M218.8,408.8
+                                c-104.8,0-190-85.2-190-190s85.2-190,190-190s190,85.2,190,190S323.6,408.8,218.8,408.8z"/>
+                        </svg>
+
+                        <div class="cu-popup__block"
+                            :class="{'cu-popup__block--isOpen': infoIsOpen}"
+                        >
+                            <div class="cu-popup__block__content">
+                            <div>
+                                <strong>${ howItWorksTitle || 'How Subscriptions Work'}</strong>
+                            </div>
+                                ${ howItWorksText || 'Products are automatically delivered on your schedule. No obligation, modify or cancel your subscription anytime.'}
+                                <br><a v-if="learnMoreUrl" :href="learnMoreUrl" target="_blank">Learn more</a>
+                            </div>
                         </div>
                     </div>
                 </label>
-            </div>
-        </div>
 
-        <div
-            v-if="selectFrequencyOptions && subscriptionSelected"
-            class="cu-options cu-options--frequency"
-        >
-            <div class="rc_label_frequency__header">
-                <div class="cu-optionsTitle">choose frequency</div>
-                <div class="c-productFrequency c-productFrequencyNeedHelp">
-                    <div class="c-productFrequency__text c-productFrequency__textQuiz" data-quiz-click>
-                        <span class="c-quizText__desktop">Unsure of frequency? Take quiz.</span>
-                        <span class="c-quizText__mobile">Take frequency quiz.</span>
+                <div
+                    v-if="selectFrequencyOptions && subscriptionSelected"
+                    class="cu-options cu-options--frequency"
+                >
+                    <div class="cu-optionsLabel">Deliver Every</div>
+                    <div class="cu-optionsGrid">
+                        <v-option
+                            v-for="(option, index) in selectFrequencyOptions"
+                            :key="option.frequency"
+                            :index="index"
+                            :option="option"
+                            :selected-index="selectedFrequencyIndex"
+                            class="cu-option"
+                            v-on:click-option="setFrequency"
+                        ></v-option>
                     </div>
                 </div>
-            </div>
-            <div class="cu-optionsGrid">
-                <v-option
-                    v-for="(option, index) in selectFrequencyOptions"
-                    :key="option.frequency"
-                    :index="index"
-                    :option="option"
-                    :selected-index="selectedFrequencyIndex"
-                    class="cu-option"
-                    v-on:click-option="setFrequency"
-                ></v-option>
             </div>
         </div>
     </section>
@@ -405,9 +299,8 @@
                     :class="{'is-active': isActive}"
                     @click="clickOption"
                 >
-                    <span class="cu-option__mainText"
-                        v-if="option.mainText"
-                    ><span>{{ option.mainText }} Days</span></span>
+                    <span v-if="option.mainText"
+                    >{{ option.mainText }} Days</span>
                     <span class="cu-option__subText"
                         v-if="option.subText"
                     >{{ option.subText }}</span>
@@ -505,6 +398,9 @@
 
                 this.activeCurrencyString = window.Shopify.currency.active
                 this.activeCurrencyRate = parseFloat(window.Shopify.currency.rate)
+
+                var initialVariant = this.activeVariantId = this.product.variants[0]
+                this.handleVariantUpdateEvent({detail: initialVariant})
             },
             watch: {
                 // when onetime vs subscription is toggled
@@ -629,11 +525,11 @@
 
                     if (compare) {
                         regularEl.innerHTML = compare;
-                        saleEl.innerHTML = original.replace('.00', '');
+                        saleEl.innerHTML = original;
                     }
 
                     else {
-                        regularEl.innerHTML = original.replace('.00', '');
+                        regularEl.innerHTML = original;
                         saleEl.innerHTML = '';
                     }
                 },

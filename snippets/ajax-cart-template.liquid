@@ -30,6 +30,7 @@
 
 
                     <div class="c-cart__itemInfoContainer">
+
                         <a href="{{url}}" class="c-cart__itemName" data-product-type="{{GiftInCart}}">{{name}}</a>
 
                         {{#if GiftInCart}}
@@ -63,10 +64,34 @@
 
                         <div class="c-cart__itemPriceBox">
                             {{#if discountsApplied}}
-                               <small class="c-cart__itemPrice--noSale">Price: <s>{{{originalLinePrice}}}</s></small>
+                               <small class="c-cart__itemPrice--noSale js-subscription-price"
+                                    data-original-price="{{linePrice}}"
+                                    data-discount-amount="{{propertiesAmount}}"
+                                    data-subscription-amount="{{propertiesSubscriptionAmount}}"
+                                    data-currency-symbol="USD"
+                                    data-cart-quantity="{{itemQty}}"
+                               >Price: <s>{{{originalLinePrice}}}</s></small>
                                <span class="c-cart__itemPrice">{{{linePrice}}}</span>
                             {{else}}
-                                <span class="c-cart__itemPrice">Price: {{{linePrice}}}</span>
+
+                                {{#if propertiesSubscription}}
+                                    <span class="js-subscription-price c-cart__itemPrice"
+                                        data-original-price="{{linePrice}}"
+                                        data-discount-amount="{{propertiesAmount}}"
+                                        data-subscription-amount="{{propertiesSubscriptionAmount}}"
+                                        data-currency-symbol="USD"
+                                        data-cart-quantity="{{itemQty}}"
+                                    >Price: {{propertiesSubscriptionAmount}}</span>
+                                {{else}}
+                                    <span class="js-onetime-price c-cart__itemPrice" 
+                                        data-discount-amount="{{propertiesAmount}}"
+                                        data-subscription-amount="{{propertiesSubscriptionAmount}}"
+                                        data-currency-symbol="USD"
+                                        data-cart-quantity="{{itemQty}}"
+                                    >
+                                    Price: {{{linePrice}}}
+                                    </span>
+                                {{/if}}
                             {{/if}}
                         </div>
 

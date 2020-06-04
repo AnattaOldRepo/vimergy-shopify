@@ -332,6 +332,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     variantSize: cartItem.variant_options[0],
                     variantColor: cartItem.variant_options[1],
                     properties: cartItem.properties,
+                    propertiesAmount: cartItem.properties['Discount Amount'],
+                    propertiesFrequency: cartItem.properties['Discount Frequency'],
+                    propertiesUnit: cartItem.properties['Interval Unit'],
+                    propertiesSubscription: cartItem.properties['Subscription'],
+                    propertiesSubscriptionAmount: cartItem.properties['Subscription Amount'],
+                    propertiesSubscriptionTitle: cartItem.properties['Subscription Product Title'],
+                    
                     itemAdd: cartItem.quantity + 1,
                     itemMinus: cartItem.quantity - 1,
                     itemQty: cartItem.quantity,

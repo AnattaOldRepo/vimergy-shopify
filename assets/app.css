@@ -1871,14 +1871,15 @@ body.offcanvas-open {
     padding: 0px 0 0;
     height: 60px;
     font-size: 20px;
-    line-height: 22px;
+    line-height: 60px;
     font-family: 'Mark-pro-b',Arial,sans-serif;
     letter-spacing: 0;
     background-color:#253237;
     outline:none;
     color:#fff;
     border:none;
-    letter-spacing:1px
+    letter-spacing:1px;
+    text-align: center;
 }
 .c-cart__checkout:hover, .c-cart__checkout:focus, .c-cart__checkout:active {
 	color:#75D08C;
@@ -7185,6 +7186,11 @@ table {
     line-height: 2.9375rem;
     padding-left: 0;
 }
+
+.c-product-shop .c-product-price-older{
+    display: none;
+}
+
 @media (min-width: 64em) {
 	.c-product-shop .c-product-price {
 		font-size: 1.875rem;
@@ -7533,7 +7539,11 @@ div.rc_popup__block {
     margin-bottom: 1.75rem;
 }
 .c-product__detail .c-quantity--select {
-    display: none;
+    /*display: none;*/
+}
+
+#product-select{
+    display: block !important;
 }
 .c-variant {
     margin-bottom: 20px;

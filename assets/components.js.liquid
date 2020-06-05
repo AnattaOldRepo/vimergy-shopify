@@ -26,6 +26,218 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
 
     /*============================================================================
+      Upscribe Functions
+    ==============================================================================*/
+
+    window.currencySymbolMap = {
+          AUD: '$',
+          CAD: '$',
+          DKK: 'kr',
+          EUR: '€',
+          HKD: '$',
+          JPY: '¥',
+          NZD: '$',
+          GBP: '£',
+          SGD: '$',
+          USD: '$',
+        }
+
+    function formatPriceWithCurrency(value) {
+      var activeCurrencyString = window.Shopify.currency.active
+      return window.currencySymbolMap[activeCurrencyString] + value + ' ' 
+    }
+
+
+    function upscribeBuildCheckout() {
+        $.ajax('/cart.json')
+        .done(function(cart) {
+            console.log('get cart done res', cart)
+
+            var cartToken = cart.token
+
+            cart.url = window.Shopify.shop
+            cart.analytics = window.ShopifyAnalytics
+            $.ajax({
+                url: "https://endpoint.upscribe.io/cart",
+                type: "POST",
+                data: JSON.stringify(cart)
+            })
+            .done(function(res) {
+                console.log('post done: ', res)
+            })
+            .fail(function(e) {
+                console.log('post error: ', e)
+                return e
+            })
+        })
+        .fail(function(e) {
+            console.log('get cart error', e);
+            return e
+        })
+    }
+
+
+    function upscribeGetCookie(name) {
+        return (document.cookie.match('(^|; )' + name + '=([^;]*)')||0)[2];
+    }
+
+    function upscribeBuildCheckoutURL() {
+
+        var myshopify_domain = 'vimergy.myshopify.com';
+        var token = upscribeGetCookie('cart');
+        
+        try {
+            // Cross-domain tracking with Google Analytics
+            var ga_linker = ga.getAll()[0].get('linkerParam');
+        } catch (e) {
+            // 'ga' is not available
+            var ga_linker = '';
+        }
+
+        var checkout_url = 'https://checkout.vimergy.com/checkout?store=' + myshopify_domain + '&token=' + token + '&is_first_load=true'
+
+        var rfsnAidParam = localStorage.getItem('rfsn_aid')
+        var rfsnCiParam = localStorage.getItem('rfsn_ci')
+        var rfsnCsparam = localStorage.getItem('rfsn_cs')
+        var rfsnCurrentCart = localStorage.getItem('current_rfsn_cart')
+
+        if (rfsnAidParam) checkout_url += '&rfsn_aid=' + rfsnAidParam
+        if (rfsnCiParam) checkout_url += '&rfsn_ci=' + rfsnCiParam
+        if (rfsnCsparam) checkout_url += '&rfsn_cs=' + rfsnCsparam
+        if (rfsnCurrentCart) checkout_url += '&current_rfsn_cart=' + rfsnCurrentCart
+
+        upscribeBuildCheckout();
+
+
+        $('.js-cart-checkout-btn').hide();
+        $('.js-cart-checkout-recharge-btn').css('display' , 'inline-block');
+        $('.js-cart-checkout-recharge-btn').attr('href' , checkout_url);
+    }
+
+
+    function UpdateTotalPrice(){
+
+        if ($('.js-subscription-price').length){
+            console.log('sub product')
+
+            var discountQuantity = 0
+            var discountAmount = $('.js-subscription-price').attr('data-subscription-amount')
+            console.log(discountAmount , '1')
+
+            var discountOriginalPrice= $('.js-subscription-price').attr('data-original-price')
+
+            var originalPrice = $('.c-cart__product').attr('data-original-price')
+
+            var discountAmountBreak = discountAmount.replace('$', '');
+            var discountAmountFinal = discountAmountBreak.replace('.', '');
+
+
+            var main = discountAmountFinal;
+            var disc = 5;
+            var dec = (disc/100).toFixed(2);
+            var mult = main*dec;
+
+            var main1 = discountAmountFinal;
+            var disc1 = 10;
+            var dec1 = (disc1/100).toFixed(2);
+            var mult1 = main1*dec1;
+        
+            console.log(mult , 'mult');
+            console.log(mult1 , 'mult1');
+            
+            $( ".c-cart__product" ).each(function() {
+                if ($(this).hasClass("js-subscription-price")) {
+                    discountQuantity += parseInt($(this).attr('data-cart-quantity'))
+
+                    var qtyUpdate = $(this).attr('data-cart-quantity')
+
+                    var productPrice = discountAmountFinal * qtyUpdate
+
+                    var divideProductPrice = productPrice / 100
+                    
+                    var productTotalPrice = formatPriceWithCurrency(divideProductPrice)
+                    
+                    $(this).find('.js-subscription-price').text(productTotalPrice)
+                }
+            });
+
+            var cartDiscount = $('.c-cart__discounts .money').text();
+            var cartDiscountBreak = cartDiscount.replace('$', '');
+            var cartDiscountFinal = cartDiscountBreak.replace('.', '');
+
+            console.log('discountAmountFinal' , discountAmountFinal)
+
+            if(discountQuantity == 1){
+                var calcAmount = originalPrice - discountAmountFinal
+                var finalcalcAmount = calcAmount * discountQuantity
+                var totalOriginalPrice = $('#cart-subtotal').attr('data-total-price')
+                var totalPrice = totalOriginalPrice - finalcalcAmount            
+                var divideTotalPrice = totalPrice / 100
+                var finalTotalPrice = formatPriceWithCurrency(divideTotalPrice)
+                var discountCalcOriginalPrice = discountOriginalPrice - finalcalcAmount
+                $('[data-total-price]').text(finalTotalPrice);
+
+            }else if( (discountQuantity >= 2) && ( discountQuantity <= 3)){
+                var cartDiscountTotal = mult * discountQuantity
+                var discountPrice = discountAmountFinal-mult
+                var calcAmount = discountPrice * discountQuantity    
+                var dividecartTotalPrice = cartDiscountTotal / 100
+                var finalcartPrice = formatPriceWithCurrency(dividecartTotalPrice)
+                $('.c-cart__discounts .money').text(finalcartPrice);
+
+                var divideTotalPrice = calcAmount / 100
+                var finalTotalPrice = formatPriceWithCurrency(divideTotalPrice)
+                $('[data-total-price]').text(finalTotalPrice);
+            }else if( discountQuantity >= 4){
+
+                var cartDiscountTotal = mult1 * discountQuantity
+                var discountPrice = discountAmountFinal-mult1
+                var calcAmount = discountPrice * discountQuantity    
+                var dividecartTotalPrice = cartDiscountTotal / 100
+                var finalcartPrice = formatPriceWithCurrency(dividecartTotalPrice)
+                $('.c-cart__discounts .money').text(finalcartPrice);
+                var divideTotalPrice = calcAmount / 100
+                var finalTotalPrice = formatPriceWithCurrency(divideTotalPrice)
+                $('[data-total-price]').text(finalTotalPrice);
+            }
+
+
+            
+
+            /*var finalcalcAmount = calcAmount * discountQuantity
+            var totalOriginalPrice = $('#cart-subtotal').attr('data-total-price')
+            var totalPrice = totalOriginalPrice - finalcalcAmount            
+            var divideTotalPrice = totalPrice / 100
+            var finalTotalPrice = formatPriceWithCurrency(divideTotalPrice)
+            var discountCalcOriginalPrice = discountOriginalPrice - finalcalcAmount
+            */
+
+            
+            
+        
+            $('.c-drawer__subscribeProduct').removeClass('is-active');
+            $('.c-drawer__subscribeProduct').hide();
+            $('.c-cart__additionalButtons').hide();
+            $('.js-cart-checkout-btn').hide();
+            $('.js-cart-checkout-recharge-btn').show();
+            $('.swell-mini-cart').hide();
+            
+            upscribeBuildCheckoutURL();
+            
+
+        } else if ($('.js-onetime-price').length){
+            console.log('One Time product')
+            $('.c-drawer__subscribeProduct').addClass('is-active');
+            $('.c-drawer__subscribeProduct').show();
+            $('.c-cart__additionalButtons').show();
+            $('.js-cart-checkout-btn').show();
+            $('.js-cart-checkout-recharge-btn').hide();
+            $('.swell-mini-cart').show();
+        }
+    }
+
+
+    /*============================================================================
       API Helper Functions
     ==============================================================================*/
     function attributeToString(attribute) {
@@ -278,6 +490,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }
         };
 
+        setTimeout(function () {
+            UpdateTotalPrice();
+        }, 100);
+
         cartUpdateCallback = function cartUpdateCallback(cart) {
             // Update quantity and price
             updateCountPrice(cart);
@@ -287,7 +503,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         buildCart = function buildCart(cart) {
             // Start with a fresh cart div
             $cartContainer.empty();
-
             // Show empty cart
             if (cart.item_count === 0) {
                 $cartContainer.append('<p class="c-cart__emptyText">Your cart is currently empty.</p>');
@@ -338,7 +553,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     propertiesSubscription: cartItem.properties['Subscription'],
                     propertiesSubscriptionAmount: cartItem.properties['Subscription Amount'],
                     propertiesSubscriptionTitle: cartItem.properties['Subscription Product Title'],
-                    
+                    productLinePrice: cartItem.line_price,
+
                     itemAdd: cartItem.quantity + 1,
                     itemMinus: cartItem.quantity - 1,
                     itemQty: cartItem.quantity,
@@ -357,6 +573,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 items: items,
                 note: cart.note,
                 totalPrice: Shopify.formatMoney(cart.total_price, settings.moneyFormat),
+                datatotalPrice: cart.total_price,
                 totalCartDiscount: cart.total_discount === 0 ? 0 : '[savings]'.replace('[savings]', Shopify.formatMoney(cart.total_discount, settings.moneyFormat)),
                 totalCartDiscountApplied: cart.total_discount === 0 ? false : true
             };
@@ -364,6 +581,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             $cartContainer.append(template(data));
 
             cartCallback(cart);
+
+            setTimeout(function () {
+                UpdateTotalPrice();
+            }, 500);
+            
         };
 
         cartCallback = function cartCallback(cart) {
@@ -377,6 +599,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         adjustCart = function adjustCart() {
             // Delegate all events because elements reload with the cart
+
+
 
             $body.on('click', '.ajaxcart__qty--remove', function () {
                 if (isUpdating) {
@@ -596,6 +820,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     window.ajaxCart = ajaxCart;
 })();
+
+
 
 (function () {
     if (typeof Shopify === 'undefined') {

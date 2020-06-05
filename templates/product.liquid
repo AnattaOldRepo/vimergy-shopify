@@ -138,7 +138,8 @@
                                     {% else %}
                                         <span></span>
                                     {% endif %}
-                                {% endunless %} <span data-value="{{ variant.title }}">{{ variant.title }}</span>
+                                {% endunless %} 
+                                <span data-value="{{ variant.title }}" data-variant-id="{{ variant.id }}" data-price="{{ variant.price }}">{{ variant.title }}</span>
                             </div>
                         {% endfor %}
                         {% if product.metafields.c_f.product_size != blank %}
@@ -170,22 +171,9 @@
                     {% endif %}
                 {% endfor %}
 
-                {%comment%}
-                {% for option in product.options_with_values %}
-                    {% unless option.name == 'Subscription' %}
-                      <div class="selector-wrapper js product-form__item">
-                        <label {% if option.name == 'default' %}class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
-                          {{ option.name }}
-                        </label>
-                        <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input" id="SingleOptionSelector-{{ forloop.index0 }}" data-index="option{{ forloop.index }}">
-                          {% for value in option.values %}
-                            <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
-                          {% endfor %}
-                        </select>
-                      </div>
-                    {% endunless %}
-                {% endfor %}
-                {%endcomment%}
+                
+                
+                
                 <div class="c-quantit c-quantity--select" {% unless product.variants.size > 1 %} style="display:none" {% endunless %} >
                     {% if product.options.size == 1 %}
                         <label><strong>Quantity &amp; saving Options</label>
@@ -224,7 +212,6 @@
                     {% if product.metafields.subscriptions.has_subscription  %}
                         <div class="product-options-bottom">
                             {% if product.available %}
-                                <h2 class="del-interval__heading">Pick a delivery option</h2>
                                 {% include 'upscribe-subscription-product' %}
                                 {%comment%}
                                 <div style="display: none;">
@@ -256,7 +243,7 @@
                         </s>
                     {% endif %}
                 </div>
-                <!--div class="c-product__priceBox c-product-price" data-price-wrapper>
+                <div class="c-product__priceBox c-product-price c-product-price-older" data-price-wrapper>
                     <span id="productPrice" class="c-product__price " data-product-price>
                         {{ current_variant.price | money }}
                     </span>
@@ -268,7 +255,7 @@
                             {% endif %}
                         </s>
                     {% endif %}
-                </div-->
+                </div>
                 <button
                     id="AddToCart"
                     class="c-btn c-add-to-cart-buttons c-product__submit"
@@ -375,7 +362,7 @@
    var selectCallback = function(variant, selector) {
 
 //        console.log(variant);
-        console.log(selector);
+        console.log(variant);
 
         if(selector.selectors.length == 2) {
             if('Size' === selector.selectors[0].name && 'Bundles' === selector.selectors[1].name) {
@@ -404,10 +391,8 @@
         $('.c-variant__boxItem').removeClass('is-active');
         $(this).addClass('is-active');
         $("#product-select").val($(this).data("value"));
-        {% comment %} $(".single-option-selector").val($(this).find('span').data("value")); {% endcomment %}
-        {% if product.type == "Gift Card" %}
-            $(".c-product__price").text($(this).find('span').data("value"));
-        {% endif %}
+        $(".single-option-selector").val($(this).find('span').data("value"));
+        $(".c-product__price").text($(this).find('span').data("price"));
      	if (typeof znDisplayCurrency === "function") {
           setTimeout(znDisplayCurrency, 500);
           setTimeout(znDisplayCurrency, 1000);
@@ -415,6 +400,10 @@
         }
 		window.triggerSwymVariantEvent(this.dataset.value);
 
+        console.log(variant , 'test'); 
+        window.dispatchEvent(new CustomEvent("upscribeVariantUpdate", {
+            detail: variant,
+        }));
     });
 
     $('.c-product__slideItem img').on("click", function(e) {

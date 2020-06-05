@@ -3,7 +3,19 @@
     <form action="/cart" method="post" novalidate class="cart ajaxcart" id="cartform">
         <div class="c-cart__inner">
         {{#items}}
-        <div class="c-cart__product">
+        <div 
+            data-original-price="{{productLinePrice}}"
+            data-discount-amount="{{propertiesAmount}}"
+            data-subscription-amount="{{propertiesSubscriptionAmount}}"
+            data-currency-symbol="USD"
+            data-cart-quantity="{{itemQty}}"
+
+            {{#if propertiesSubscription}}
+                class="c-cart__product js-subscription-price" 
+            {{else}}
+                class="c-cart__product js-onetime-price"
+            {{/if}}
+            >
             <div class="c-cart__row" data-line="{{line}}">
                 <div class="c-cart__itemImageBox">
                     <a href="{{url}}" class="c-cart__itemImageLink">
@@ -62,32 +74,18 @@
                             </button>
                         </div>
 
-                        <div class="c-cart__itemPriceBox">
+                        <div class="c-cart__itemPriceBox c-cart__subTime">
                             {{#if discountsApplied}}
-                               <small class="c-cart__itemPrice--noSale js-subscription-price"
-                                    data-original-price="{{linePrice}}"
-                                    data-discount-amount="{{propertiesAmount}}"
-                                    data-subscription-amount="{{propertiesSubscriptionAmount}}"
-                                    data-currency-symbol="USD"
-                                    data-cart-quantity="{{itemQty}}"
-                               >Price: <s>{{{originalLinePrice}}}</s></small>
+                               <span class="c-cart__itemPrice c-cart__itemPrice--noSale"
+                               >Price: <s>{{{originalLinePrice}}}</s></span>
                                <span class="c-cart__itemPrice">{{{linePrice}}}</span>
                             {{else}}
 
                                 {{#if propertiesSubscription}}
-                                    <span class="js-subscription-price c-cart__itemPrice"
-                                        data-original-price="{{linePrice}}"
-                                        data-discount-amount="{{propertiesAmount}}"
-                                        data-subscription-amount="{{propertiesSubscriptionAmount}}"
-                                        data-currency-symbol="USD"
-                                        data-cart-quantity="{{itemQty}}"
+                                    <span class="c-cart__itemPrice"
                                     >Price: {{propertiesSubscriptionAmount}}</span>
                                 {{else}}
-                                    <span class="js-onetime-price c-cart__itemPrice" 
-                                        data-discount-amount="{{propertiesAmount}}"
-                                        data-subscription-amount="{{propertiesSubscriptionAmount}}"
-                                        data-currency-symbol="USD"
-                                        data-cart-quantity="{{itemQty}}"
+                                    <span class="c-cart__itemPrice" 
                                     >
                                     Price: {{{linePrice}}}
                                     </span>
@@ -127,14 +125,14 @@
                 </div>
 
                 <div class="c-cart__total">
-                    <p>{{{totalPrice}}}</p>
+                    <p id="cart-subtotal" data-total-price="{{{datatotalPrice}}}">{{{totalPrice}}}</p>
                 </div>
         </div>
 
-            <button type="submit" class="c-btn c-cart__checkout cart__checkout" onclick="zonosCheckout(event)" name="checkout" style="display:block !important;">
+            <button type="submit" class="c-btn c-cart__checkout cart__checkout js-cart-checkout-btn" onclick="zonosCheckout(event)" name="checkout">
               Checkout
             </button>
-
+            <a href="#" class="c-btn c-cart__checkout cart__checkout js-cart-checkout-recharge-btn">Checkout</a>
       
         </div>
     </form>
@@ -173,8 +171,9 @@
 
 
 </script>
- {% include 'subscription-theme-footer' %}
-
+{%comment%} 
+{% include 'subscription-theme-footer' %}
+{%endcomment%} 
 {% if template != 'cart'  %}
     <script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 	<script>

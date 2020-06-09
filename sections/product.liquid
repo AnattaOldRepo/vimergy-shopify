@@ -40,7 +40,7 @@
                  <link itemprop="availability" href="http://  schema.org/{% if current_variant.available   %}InStock{% else %}OutOfStock{% endif %}">
           
                 <form class="c-product__form" action="/cart/add" data-productid="{{product.id}}" method="post" enctype=  "multipart/form-data"> 
-{% if product.available %}{% include 'subscription-product' %}{% endif %} 
+                    {% if product.available %}{% include 'subscription-product' %}{% endif %} 
 
 {% comment %}                {% unless product.has_only_default_variant %}
                     {% for option in product.options_with_values %}

@@ -129,6 +129,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             $( ".c-cart__product" ).each(function() {
                 if ($(this).hasClass("js-subscription-price")) {
+                    var subAmountPercentage = $(this).attr('data-discount-percentage')
+                    var subAmountFinalPercentage = subAmountPercentage.replace('%', '');
                     var subAmount = $(this).attr('data-subscription-amount')
                     var subAmountBreak = subAmount.replace('$', '');
                     var subAmountFinal = subAmountBreak.replace('.', '');
@@ -137,8 +139,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     var originalPrice = $(this).attr('data-product-price') 
                     var subAmountDiscount = originalPrice - subAmountFinal
                     var subAmountTotalDiscount = subAmountDiscount * subQty
-                    var subDiscount = subOriginalAmount - subAmountTotalDiscount
-                    var divideSubDiscount = (subDiscount / 100).toFixed(2)
+                    var subDiscount = subOriginalAmount * subAmountFinalPercentage
+                    var subDiscountDivide = (subDiscount / 100)
+                    var subDiscountFinal = subOriginalAmount - subDiscountDivide 
+                    var divideSubDiscount = (subDiscountFinal / 100).toFixed(2)
                     var subDiscountPrice = formatPriceWithCurrency(divideSubDiscount)
                     $(this).find('.c-cart__itemPriceDiscount').text(subDiscountPrice)
                 }

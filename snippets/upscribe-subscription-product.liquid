@@ -223,8 +223,8 @@
             <div class="cu-productTypeSelect__itemWrap cu-productTypeSelect__itemOneTime" :class="{ 'is-active': productPurchaseType === 'onetime' }">
                 <label class="cu-productTypeSelect__itemLabel" for="onetime">
                     <input type="radio" id="onetime" value="onetime" v-model="productPurchaseType">
-                    <span class="cu-productTypeSelect__itemText">${ oneTimeMessage || 'One-time Order' }:
-                        {{ current_variant.price | money }}
+                    <span class="cu-productTypeSelect__itemText ">${ oneTimeMessage || 'One-time Order' }:
+                        <span class="upscribe-price-item-original">{{ current_variant.price | money }}</span>
                     </span>
                     
                 </label>
@@ -523,6 +523,9 @@
                     var regularEl = document.querySelector(".upscribe-price-item-regular");
                     var saleEl = document.querySelector(".upscribe-price-item-sale");
 
+                    
+
+
                     if (compare) {
                         regularEl.innerHTML = compare;
                         saleEl.innerHTML = original;
@@ -541,11 +544,22 @@
 
                     // calculate and set new values
                     this.calculateVariantPrices(originalPrice, originalComparePrice)
+                    // update original price if available
+                    this.calculateOriginalVariantPrices(variant)
 
                     // store values if subscription isn't currently selected
                     this.activeSubsriptionDisplayPrice = originalPrice
                     this.activeSubsriptionDisplayComparePrice = originalComparePrice
                 },
+
+                calculateOriginalVariantPrices(variant) {
+                    var price = variant.price 
+                    var originalNoDiscountPriceEl = document.querySelector(".upscribe-price-item-original");
+                    if (originalNoDiscountPriceEl) {
+                        originalNoDiscountPriceEl.innerHTML = this.formatMoney(price)
+                    }
+                },
+
                 getFinalCurrencyRate(amount) {
                     return ((amount / this.activeCurrencyRate)).toFixed(2)
                 },

@@ -7539,11 +7539,11 @@ div.rc_popup__block {
     margin-bottom: 1.75rem;
 }
 .c-product__detail .c-quantity--select {
-    /*display: none;*/
+    display: none;
 }
 
 #product-select{
-    display: block !important;
+   /* display: block !important;*/
 }
 .c-variant {
     margin-bottom: 20px;

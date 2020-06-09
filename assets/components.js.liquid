@@ -120,101 +120,39 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if ($('.js-subscription-price').length){
             console.log('sub product')
 
-            var discountQuantity = 0
             var discountAmount = $('.js-subscription-price').attr('data-subscription-amount')
-            console.log(discountAmount , '1')
-
-            var discountOriginalPrice= $('.js-subscription-price').attr('data-original-price')
-
-            var originalPrice = $('.c-cart__product').attr('data-original-price')
-
             var discountAmountBreak = discountAmount.replace('$', '');
             var discountAmountFinal = discountAmountBreak.replace('.', '');
 
+            var originalPrice = $('.c-cart__product').attr('data-original-price')
+            var sum = 0
 
-            var main = discountAmountFinal;
-            var disc = 5;
-            var dec = (disc/100).toFixed(2);
-            var mult = main*dec;
-
-            var main1 = discountAmountFinal;
-            var disc1 = 10;
-            var dec1 = (disc1/100).toFixed(2);
-            var mult1 = main1*dec1;
-        
-            console.log(mult , 'mult');
-            console.log(mult1 , 'mult1');
-            
             $( ".c-cart__product" ).each(function() {
                 if ($(this).hasClass("js-subscription-price")) {
-                    discountQuantity += parseInt($(this).attr('data-cart-quantity'))
-
-                    var qtyUpdate = $(this).attr('data-cart-quantity')
-
-                    var productPrice = discountAmountFinal * qtyUpdate
-
-                    var divideProductPrice = productPrice / 100
-                    
-                    var productTotalPrice = formatPriceWithCurrency(divideProductPrice)
-                    
-                    $(this).find('.js-subscription-price').text(productTotalPrice)
+                    var subAmount = $(this).attr('data-subscription-amount')
+                    var subAmountBreak = subAmount.replace('$', '');
+                    var subAmountFinal = subAmountBreak.replace('.', '');
+                    var subOriginalAmount = $(this).attr('data-originalsub-price')
+                    var subQty = $(this).attr('data-cart-sub-quantity')
+                    var originalPrice = $(this).attr('data-product-price') 
+                    var subAmountDiscount = originalPrice - subAmountFinal
+                    var subAmountTotalDiscount = subAmountDiscount * subQty
+                    var subDiscount = subOriginalAmount - subAmountTotalDiscount
+                    var divideSubDiscount = (subDiscount / 100).toFixed(2)
+                    var subDiscountPrice = formatPriceWithCurrency(divideSubDiscount)
+                    $(this).find('.c-cart__itemPriceDiscount').text(subDiscountPrice)
                 }
+
+                var totalRawValue =$(this).find('[data-line-final-price]').text()
+                var totalBreakValue = totalRawValue.replace('$', '');
+                var totalBreakValueFinal = totalBreakValue.replace('.', '');
+                sum += parseInt(totalBreakValueFinal);
+
             });
 
-            var cartDiscount = $('.c-cart__discounts .money').text();
-            var cartDiscountBreak = cartDiscount.replace('$', '');
-            var cartDiscountFinal = cartDiscountBreak.replace('.', '');
-
-            console.log('discountAmountFinal' , discountAmountFinal)
-
-            if(discountQuantity == 1){
-                var calcAmount = originalPrice - discountAmountFinal
-                var finalcalcAmount = calcAmount * discountQuantity
-                var totalOriginalPrice = $('#cart-subtotal').attr('data-total-price')
-                var totalPrice = totalOriginalPrice - finalcalcAmount            
-                var divideTotalPrice = totalPrice / 100
-                var finalTotalPrice = formatPriceWithCurrency(divideTotalPrice)
-                var discountCalcOriginalPrice = discountOriginalPrice - finalcalcAmount
-                $('[data-total-price]').text(finalTotalPrice);
-
-            }else if( (discountQuantity >= 2) && ( discountQuantity <= 3)){
-                var cartDiscountTotal = mult * discountQuantity
-                var discountPrice = discountAmountFinal-mult
-                var calcAmount = discountPrice * discountQuantity    
-                var dividecartTotalPrice = cartDiscountTotal / 100
-                var finalcartPrice = formatPriceWithCurrency(dividecartTotalPrice)
-                $('.c-cart__discounts .money').text(finalcartPrice);
-
-                var divideTotalPrice = calcAmount / 100
-                var finalTotalPrice = formatPriceWithCurrency(divideTotalPrice)
-                $('[data-total-price]').text(finalTotalPrice);
-            }else if( discountQuantity >= 4){
-
-                var cartDiscountTotal = mult1 * discountQuantity
-                var discountPrice = discountAmountFinal-mult1
-                var calcAmount = discountPrice * discountQuantity    
-                var dividecartTotalPrice = cartDiscountTotal / 100
-                var finalcartPrice = formatPriceWithCurrency(dividecartTotalPrice)
-                $('.c-cart__discounts .money').text(finalcartPrice);
-                var divideTotalPrice = calcAmount / 100
-                var finalTotalPrice = formatPriceWithCurrency(divideTotalPrice)
-                $('[data-total-price]').text(finalTotalPrice);
-            }
-
-
-            
-
-            /*var finalcalcAmount = calcAmount * discountQuantity
-            var totalOriginalPrice = $('#cart-subtotal').attr('data-total-price')
-            var totalPrice = totalOriginalPrice - finalcalcAmount            
-            var divideTotalPrice = totalPrice / 100
-            var finalTotalPrice = formatPriceWithCurrency(divideTotalPrice)
-            var discountCalcOriginalPrice = discountOriginalPrice - finalcalcAmount
-            */
-
-            
-            
-        
+            var divideProductPrice = (sum / 100).toFixed(2)
+            var productTotalPrice = formatPriceWithCurrency(divideProductPrice)
+            $('#cart-subtotal').text(productTotalPrice);
             $('.c-drawer__subscribeProduct').removeClass('is-active');
             $('.c-drawer__subscribeProduct').hide();
             $('.c-cart__additionalButtons').hide();
@@ -554,6 +492,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     propertiesSubscriptionAmount: cartItem.properties['Subscription Amount'],
                     propertiesSubscriptionTitle: cartItem.properties['Subscription Product Title'],
                     productLinePrice: cartItem.line_price,
+                    productPrice: cartItem.price,
 
                     itemAdd: cartItem.quantity + 1,
                     itemMinus: cartItem.quantity - 1,

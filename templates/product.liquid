@@ -361,15 +361,15 @@
 
    var selectCallback = function(variant, selector) {
 
-//        console.log(variant);
-        console.log(variant);
+        window.dispatchEvent(new CustomEvent("upscribeVariantUpdate", {
+            detail: variant,
+        }));
 
         if(selector.selectors.length == 2) {
             if('Size' === selector.selectors[0].name && 'Bundles' === selector.selectors[1].name) {
                 var value = $(selector.selectors[0].element).val();
                 $(selector.selectors[1].element).find('option').prop('disabled', 'disabled');
                 $.each (selector.product.variants, function (key, variant) {
-        //            console.log(variant);
                     if (variant.option1 == value) {
                         var option2 = variant.option2;
                         $(selector.selectors[1].element).find('option[value="'+$.escapeSelector(option2)+'"]').prop('disabled', false);
@@ -377,7 +377,6 @@
                 })
             }
         }
-
    };
 
    // jQuery(function($) {
@@ -387,12 +386,42 @@
        enableHistoryState: true
    });
 
+
+   window.currencySymbolMap = {
+          AUD: '$',
+          CAD: '$',
+          DKK: 'kr',
+          EUR: '€',
+          HKD: '$',
+          JPY: '¥',
+          NZD: '$',
+          GBP: '£',
+          SGD: '$',
+          USD: '$',
+        }
+
+    function translateToCurrentCurrencyAmount(val) {
+      var activeCurrencyRate = parseFloat(window.Shopify.currency.rate)
+      return value = ((val * activeCurrencyRate) / 100 ).toFixed(2)
+    }    
+
+    function formatPriceWithCurrency(value) {
+      var activeCurrencyString = window.Shopify.currency.active
+      return window.currencySymbolMap[activeCurrencyString] + value + ' ' 
+    }
+
    $(".c-variant__boxItem").on("click", function(e) {
         $('.c-variant__boxItem').removeClass('is-active');
         $(this).addClass('is-active');
-        $("#product-select").val($(this).data("value"));
-        $(".single-option-selector").val($(this).find('span').data("value"));
-        $(".c-product__price").text($(this).find('span').data("price"));
+        $("#product-select").val($(this).data("value")).change();
+        $(".single-option-selector").val($(this).find('span').data("value")).change();
+        $(".c-product__price").text();
+
+        var productPrice = $(this).find('span').data("price")
+        var divideProductPrice = translateToCurrentCurrencyAmount(productPrice)
+        var productTotalPrice = formatPriceWithCurrency(divideProductPrice)
+        $(".c-product__price").text(productTotalPrice);
+
      	if (typeof znDisplayCurrency === "function") {
           setTimeout(znDisplayCurrency, 500);
           setTimeout(znDisplayCurrency, 1000);
@@ -400,11 +429,11 @@
         }
 		window.triggerSwymVariantEvent(this.dataset.value);
 
-        console.log(variant , 'test'); 
-        window.dispatchEvent(new CustomEvent("upscribeVariantUpdate", {
+       /* window.dispatchEvent(new CustomEvent("upscribeVariantUpdate", {
             detail: variant,
-        }));
+        }));*/   
     });
+
 
     $('.c-product__slideItem img').on("click", function(e) {
         $('.c-product__slideItem').removeClass('active');

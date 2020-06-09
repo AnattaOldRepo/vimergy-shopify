@@ -4,12 +4,17 @@
         <div class="c-cart__inner">
         {{#items}}
         <div 
-            data-original-price="{{productLinePrice}}"
-            data-discount-amount="{{propertiesAmount}}"
-            data-subscription-amount="{{propertiesSubscriptionAmount}}"
+            {{#if propertiesSubscription}}
+                data-originalsub-price="{{productLinePrice}}"
+                data-discount-amount="{{propertiesAmount}}"
+                data-subscription-amount="{{propertiesSubscriptionAmount}}"
+                data-cart-sub-quantity="{{itemQty}}"
+            {{else}}
+                data-original-price="{{productLinePrice}}"
+                data-cart-quantity="{{itemQty}}"
+            {{/if}}            
             data-currency-symbol="USD"
-            data-cart-quantity="{{itemQty}}"
-
+            data-product-price={{productPrice}}
             {{#if propertiesSubscription}}
                 class="c-cart__product js-subscription-price" 
             {{else}}
@@ -78,16 +83,17 @@
                             {{#if discountsApplied}}
                                <span class="c-cart__itemPrice c-cart__itemPrice--noSale"
                                >Price: <s>{{{originalLinePrice}}}</s></span>
-                               <span class="c-cart__itemPrice">{{{linePrice}}}</span>
+                               <span class="c-cart__itemPrice c-cart__itemPriceDiscount" data-line-final-price>{{{linePrice}}}</span>
                             {{else}}
 
                                 {{#if propertiesSubscription}}
                                     <span class="c-cart__itemPrice"
-                                    >Price: {{propertiesSubscriptionAmount}}</span>
+                                    >Price: <span data-line-final-price>{{propertiesSubscriptionAmount}}</span>
+                                    </span>
                                 {{else}}
                                     <span class="c-cart__itemPrice" 
                                     >
-                                    Price: {{{linePrice}}}
+                                    Price: <span data-line-final-price>{{{linePrice}}}</span>
                                     </span>
                                 {{/if}}
                             {{/if}}
@@ -108,16 +114,6 @@
         {{/items}}
 
       </div>
-         <div class="">
-            <div class="c-cart__footerPriceBox c-discount">
-            {{#if totalCartDiscount}}
-              <p>Discount</p>
-                    <p class="c-cart__discounts">
-                        <span>{{{totalCartDiscount}}}</span>
-                    </p>
-                {{/if}}
-        </div>
-        </div>
         <div class="c-cart__footer">
             <div class="c-cart__footerPriceBox">
                 <div class="c-cart__subtotal">

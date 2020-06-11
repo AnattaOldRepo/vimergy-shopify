@@ -6,11 +6,11 @@ export const state = () => ({
   shopData: null,
   shopLoaded: false,
   stripePublicKey: null,
+  braintreeClientToken: null,
   storeLogo: null,
   shopifyStorefrontAccessToken: null,
   cancellationReasons: null,
   currencySymbol: null,
-  featuredPortalCollection: null,
 })
 
 export const mutations = {
@@ -19,11 +19,14 @@ export const mutations = {
     state.store = data
 
     state.shopData = data.shop
-    state.featuredPortalCollection = data.featured_portal_collections
+
     state.stripePublicKey = data.stripe_public_key
+    state.braintreeClientToken = data.braintree_client_token
+
     state.storeLogo = data.logo_url
     state.shopifyStorefrontAccessToken = data.shopify_storefront_access_token
     state.cancellationReasons = data.cancellation_reasons
+
     state.cname = data.cname
     state.google_analytics_id = data.google_analytics_id
     state.google_tag_manager_id = data.google_tag_manager_id

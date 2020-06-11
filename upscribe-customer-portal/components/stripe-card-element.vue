@@ -56,11 +56,6 @@ export default {
       }
       this.$emit('handleChange', $event)
     },
-
-    handleClear(){
-      this.card.clear()
-    },
-
     createPaymentMethod() {
       console.log('createPaymentMethod')
       const vm = this
@@ -106,7 +101,7 @@ export default {
         <!-- A Stripe Element will be inserted here. -->
       </div>
 
-      <div v-if="error" id="card-errors" role="alert" class="c-stripeErrors">{{ error }}</div>
+      <div v-if="error" id="card-errors" role="alert" class="c-paymentMethodErrors">{{ error }}</div>
     </div>
   </form>
 </template>

@@ -1,53 +1,42 @@
 <template>
-<div>
-  <portal to="header">
-    <the-header />
-  </portal>
+  <div v-if="products && productImages && initedAddAction" class="c-oneTimeProductAdd">
+    <one-time-thank-you
+      v-if="oneTimeAdded"
+      :active-subscription="activeSubscription"
+      :active-charge="activeSubscription.next"
+      :oto-product="otoProduct"
+      :oto-variant="otoVariant"
+      class="c-oneTimeProductAdd__thankYou"
+    />
 
-  <div
-    v-if="products && productImages && activeSubscription"
-      class="c-oneTimeProductAdd"
-    >
-      <one-time-thank-you
-        v-if="oneTimeAdded"
-        :active-subscription="activeSubscription"
-        :active-charge="activeSubscription.next"
-        :oto-product="otoProduct"
-        :oto-variant="otoVariant"
-        class="c-oneTimeProductAdd__thankYou"
-      />
+    <drawer-shipping-method-list
+      v-else-if="showShippingMethodUpdateModal"
+      class="c-drawerShippingMethodList c-drawerProducts c-drawer"
+      select-during-product-update
+      :oto-shipping-update-add="showShippingMethodUpdateModal"
+      @completedSavedUpdated="handleCompletedOtoAdd"
+      @error="handleOtoAddShippingUpdateError"
+    />
 
-      <drawer-shipping-method-list
-        v-else-if="showShippingMethodUpdateModal"
-        class="c-drawerShippingMethodList c-drawerProducts c-drawer"
-        select-during-product-update
-        :oto-shipping-update-add="showShippingMethodUpdateModal"
-        @completedSavedUpdated="handleCompletedOtoAdd"
-      />
+    <div v-else class="c-oneTimeProductAdd__loading">
+      <h2 v-if="error" class="c-oneTimeProductAdd__loadingText">{{ error.message === 'NETWORK ERROR' ? 'Network Error, please wait a moment and then refresh the page.' : error.message }}</h2>
+      <h2 v-else class="c-oneTimeProductAdd__loadingText">{{ oneTimeOrderAddingMessage }}</h2>
+      <loader-icon class="c-oneTimeProductAdd__loadingIcon" />
+    </div>
+  </div>
 
-      <div v-else class="c-oneTimeProductAdd__loading">
-        <h2 class="c-oneTimeProductAdd__loadingText"
-          >{{ oneTimeOrderAddingMessage }}</h2
-        >
-        <loader-icon class="c-oneTimeProductAdd__loadingIcon" />
-      </div>
+  <div v-else class="c-oneTimeProductAdd">
+    <div  v-if="allDataLoaded && !oneTimeAdded" class="c-oneTimeProductAdd__loading">
+      <h3 class="c-oneTimeProductAdd__loadingText">{{ addOtoProductToNextOrderMessage }}</h3>
+      <v-button :text="atc['buttons.addProductGridItem'] || 'Add'" auto @click.native="addOtoProduct" />
+
     </div>
 
-    <div v-else class="c-oneTimeProductAdd">
-      <div class="c-oneTimeProductAdd__loading">
-        <h2 class="c-oneTimeProductAdd__loadingText"
-          >{{ atc['portal.oneTimeOrderLoadingMessage'] || 'Fetching your one-time product...' }}</h2
-        >
-        <loader-icon class="c-oneTimeProductAdd__loadingIcon" />
-      </div>
-
-      <!-- <drawer-shipping-method-list
-        class="c-drawerShippingMethodList c-drawerProducts c-drawer"
-        select-during-product-update
-        :updating=""
-        @setMode="handleSetMode"
-        @setDrawerStatus="handleDrawerStatus"
-      />     -->
+    <div v-else class="c-oneTimeProductAdd__loading">
+      <h2
+        class="c-oneTimeProductAdd__loadingText"
+      >{{ atc['portal.oneTimeOrderLoadingMessage'] || 'Fetching your one-time product...' }}</h2>
+      <loader-icon class="c-oneTimeProductAdd__loadingIcon" />
     </div>
   </div>
 </template>
@@ -58,21 +47,27 @@ import OneTimeThankYou from '@components/one-time-thank-you.vue'
 import LoaderIcon from '@components/loader-icon.vue'
 import productChangeRequest from '@utils/product-change-request.js'
 import DrawerShippingMethodList from '@components/drawer-shipping-method-list.vue'
-import TheHeader from '@components/the-header.vue'
+import { buildNewCheckoutUpdatePayload } from '@utils/newCheckoutUpdateHelpers'
+import VButton from '@components/v-button.vue'
+
 
 export default {
   components: {
-    TheHeader,
     OneTimeThankYou,
     LoaderIcon,
     DrawerShippingMethodList,
+    VButton,
   },
   data: () => {
     return {
+      initedAddAction: false,
       isLoading: false,
       oneTimeAdded: false,
       otoVariablesSet: false,
       showShippingMethodUpdateModal: false,
+      error: null,
+      customerId: null,
+      storeDomain: null,
     }
   },
   computed: {
@@ -91,12 +86,37 @@ export default {
 
     ...mapState('products', ['products', 'productImages']),
 
-    oneTimeOrderAddingMessage() {
-      const { atc, otoProduct, otoVariant} = this
-      if (atc['portal.oneTimeOrderAddingMessage']) {
-        return atc['portal.oneTimeOrderAddingMessage'].replace('<oto-product-title>', otoProduct.title).replace('<oto-variant-title>', otoVariant.title)
+    allDataLoaded() {
+      if (this.otoVariablesSet && this.activeSubscription && this.activeSubscription.id && this.products) {
+        return true
       } else {
-       return `Adding ${ otoProduct.title } (${ otoVariant.title }) to your next shipment...`
+        return false
+      }
+    },
+
+    addOtoProductToNextOrderMessage() {
+      const { atc, otoProduct, otoVariant } = this
+      if (atc['portal.oneTimeOrderAddMessage']) {
+        return atc['portal.oneTimeOrderAddMessage']
+          .replace('<oto-product-title>', otoProduct.title)
+          .replace('<oto-variant-title>', otoVariant.title)
+      } else {
+        return `Add ${otoProduct.title} (${
+          otoVariant.title
+        }) to your next shipment`
+      }
+    },
+
+    oneTimeOrderAddingMessage() {
+      const { atc, otoProduct, otoVariant } = this
+      if (atc['portal.oneTimeOrderAddingMessage']) {
+        return atc['portal.oneTimeOrderAddingMessage']
+          .replace('<oto-product-title>', otoProduct.title)
+          .replace('<oto-variant-title>', otoVariant.title)
+      } else {
+        return `Adding ${otoProduct.title} (${
+          otoVariant.title
+        }) to your next shipment...`
       }
     },
 
@@ -150,38 +170,60 @@ export default {
     },
   },
 
-  watch: {
+	async created() {
+		const query = this.$route.query
 
-    // Add OTO when products available
-    products: {
-      immediate: true,
-      handler: function(newVal) {
-        console.log('watch products', this.newVal)
+		let customerId = false
+		let storeDomain = false
 
-        if (!this.oneTimeAdded && this.otoVariablesSet) {
-          console.log('products and !oneTimeAdded')
-          this.addOtoProduct()
-        }
-      },
-    },
+		// set from liquid account profile
+		if (window.upscribeCustomerId) {
+			customerId = window.upscribeCustomerId
+		}
 
-    otoVariablesSet: {
-      handler: function(set) {
-        if (set && this.products && !this.oneTimeAdded) {
-          this.addOtoProduct()
-        }
-      },
-    },
-  },
+		// set from liquid account profile
+		if (window.upscribeStoreDomain) {
+			storeDomain = window.upscribeStoreDomain
+		}
 
-  mounted() {
+		// set from query params
+		if (query && query.customerId) {
+			customerId = query.customerId
+		}
+
+		// set from query params
+		if (query && query.storeDomain) {
+			storeDomain = query.storeDomain
+		}
+
+		this.customerId = customerId
+		this.storeDomain = storeDomain
+	},
+
+  async mounted() {
     const { query } = this.$route
-    console.log({query})
+
     if (!query) return
 
-    this.showShippingMethodUpdateModal = false
+		const { storeDomain, customerId } = this
 
-    // https://shop.foursigmatic.com/pages/account-subscriptions#/one-time-product-add?storeDomain=foursigmastore-us.myshopify.com&customerId=2715671265316&otoSubscriptionId=13346&otoQueueId=13851&otoAddProduct=true&otoProductVariantId=1033588909
+		if (!storeDomain || !customerId) {
+			return this.$nuxt.error({
+				statusCode: 404,
+				message: `Error Loading Portal. ${
+					!storeDomain ? 'Invalid store domain.' : 'Invalid customer ID.'
+				}`,
+			})
+		} else {
+			this.setStoreDomain(storeDomain)
+			this.setCustomerId(customerId)
+
+			this.$loadStoreSegment()
+			this.$loadStoreGtm()
+		}
+
+    this.showShippingMethodUpdateModal = false
+    this.error = null
 
     const {
       otoProductVariantId,
@@ -202,11 +244,12 @@ export default {
       })
     }
 
-
     this.setOtoProductVariantId(otoProductVariantId)
     this.setOtoQueueId(otoQueueId)
     this.setOtoSubscriptionId(otoSubscriptionId)
     this.setOtoAddProduct(true)
+
+    this.setActiveSubscriptionId(parseInt(otoSubscriptionId))
 
     console.log({
       otoProductVariantId: this.otoProductVariantId,
@@ -218,9 +261,32 @@ export default {
     this.$nextTick(() => {
       this.otoVariablesSet = true
     })
+
+			try {
+				await Promise.all([
+					this.GET_CUSTOMER(),
+					this.GET_SUBSCRIPTIONS(),
+          this.GET_PRODUCTS(),
+					this.GET_SHOP(),
+        ])
+      } catch(e) {
+        console.log(e)
+      }
   },
 
   methods: {
+    ...mapActions('shop', ['GET_SHOP']),
+
+		...mapActions('customer', ['GET_CUSTOMER']),
+
+    ...mapMutations('route', ['setCustomerId', 'setStoreDomain']),
+
+    ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
+
+		...mapActions('subscriptions', ['GET_SUBSCRIPTIONS']),
+
+    ...mapActions('products', ['GET_PRODUCTS']),
+
     ...mapActions('oneTimeOrder', ['ADD_OTO_PRODUCT_TO_OTO_QUEUE']),
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
@@ -232,11 +298,13 @@ export default {
       'setOtoAddProduct',
     ]),
 
-    ...mapActions('subscriptions', ['UPDATE_NEXT_ORDER']),
+    ...mapMutations('newCheckoutUpdates', ['setSavedNewCheckoutUpdate']),
 
     ...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
 
     ...mapMutations('shippingMethods', ['SET_SHIPPING_METHODS']),
+
+    ...mapActions('subscriptions', ['UPDATE_NEXT_ORDER']),
 
     ...mapMutations('editMode', ['setEditNextOrder']),
 
@@ -245,16 +313,50 @@ export default {
       this.oneTimeAdded = true
     },
 
-    handleUpdateError(e, updatePayload) {
-      console.log('e.response', e)
-      if (e && e.data && e.data.shipping_update_required) {
+    handleOtoAddShippingUpdateError(error) {
+      this.error = error
+    },
+
+    handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
+      console.log('e', e)
+      if (
+        e &&
+        e.data &&
+        e.data.shipping_update_required
+      ) {
         this.SET_SHIPPING_METHODS(e.data.rates)
-        this.setSavedProductUpdatePayload(updatePayload)
+        this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+
         this.showShippingMethodUpdateModal = true
       } else {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
-        this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
+        console.log('subscription/OTO_ADD_PRODUCT error: ', e)
+        this.error = { state: 'FAILURE', message: this.stripHtml(e.message) }
       }
+    },
+
+    handleNewCheckoutUpdate(updateArray) {
+      return new Promise((resolve, reject) => {
+
+        let updateCount = updateArray.length
+        let successes = 0
+
+          // for each update
+          updateArray.forEach(async (update) => {
+            try {
+              await update.updateAction
+              successes += 1
+
+            } catch (e) {
+              this.handleNewCheckoutUpdateError(e, update)
+            }
+
+            if (successes === updateCount) {
+              this.$emit('setDrawerStatus', 'SUCCESS')
+              this.$emit('setMode', 'edit')
+              resolve(true)
+            }
+          })
+      })
     },
 
     async addOtoProduct() {
@@ -262,18 +364,17 @@ export default {
       const {
         otoProductVariantId,
         activeSubscription,
+        otoProduct,
       } = this
+      this.initedAddAction = true
 
-      console.log('addOtoProduct')
-
-      console.log(        {otoProductVariantId},
-        {activeSubscription})
-
-      const { addPayload: nextAddItemPayload} = productChangeRequest({
+      const productChangeRequestResponse = productChangeRequest({
         variantId: otoProductVariantId,
         editNextOrder: true,
         subscription: activeSubscription,
       })
+
+      const nextAddItemPayload = productChangeRequestResponse.addPayload
 
       const nextOrderUpdatePayload = {
         requestPayload: {
@@ -281,28 +382,25 @@ export default {
         },
       }
 
-      // let analyticsEventName
-
-      console.log('addOtoProduct', otoProductVariantId)
-
-      let updateAction = this.ADD_OTO_PRODUCT_TO_OTO_QUEUE(nextOrderUpdatePayload)
+      const handleNewCheckoutUpdatePayload = [
+        buildNewCheckoutUpdatePayload(
+          this.ADD_OTO_PRODUCT_TO_OTO_QUEUE(nextOrderUpdatePayload),
+          nextOrderUpdatePayload,
+          'subscriptions',
+          'UPDATE_NEXT_ORDER',
+          `${otoProduct.title} added to next order.`
+        ),
+      ]
 
       this.isLoading = true
 
       try {
-        await updateAction
+        await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
         this.oneTimeAdded = true
-
-        // this.triggerAnalyticsEvent({
-        //   event: analyticsEventName,
-        //   payload: { product: variantSelectProduct },
-        // })
-
       } catch (e) {
         console.log('addOtoProduct error: ', e)
         this.handleUpdateError(e, {
-          ...nextOrderUpdatePayload,
-          successMessage: 'Product Added',
+          ...handleNewCheckoutUpdatePayload,
         })
       } finally {
         this.isLoading = false
@@ -355,13 +453,12 @@ export default {
   margin-top: 40px;
   padding: 20px;
   text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .c-oneTimeProductAdd__loadingText {
   line-height: 1.5;
-}
-
-.c-oneTimeProductAdd__loadingIcon {
-  margin-top: 40px;
+  margin-bottom: 30px;
 }
 </style>

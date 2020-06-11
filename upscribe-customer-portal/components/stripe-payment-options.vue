@@ -48,15 +48,6 @@ export default {
       console.log('stripe payment options: ', {$event})
       this.$emit('handleChange', $event)
     },
-
-    handleClear(){
-      if(this.$refs['active-payment-type-stripe_card']){
-        this.$refs['active-payment-type-stripe_card'].handleClear()
-      } else if(this.$refs['active-payment-type-stripe_sepa_direct_debit']){
-        this.$refs['active-payment-type-stripe_sepa_direct_debit'].handleClear()
-      }
-    },
-
     handleCreateStripeCardToken(token) {
       console.log({token})
     },
@@ -132,7 +123,7 @@ export default {
 <style lang="scss">
 @import '@design';
 
-.c-stripeErrors, {
+.c-paymentMethodErrors, {
   margin: 20px 0;
   color: $color-error;
   padding: 20px;
@@ -163,7 +154,7 @@ export default {
   display: block;
 }
 
-.c-stripeFormGroup {
+.c-paymentMethodFormGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
@@ -269,7 +260,7 @@ export default {
   display: block;
 }
 
-.c-stripeFormGroup {
+.c-paymentMethodFormGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;

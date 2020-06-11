@@ -2,17 +2,8 @@
   <div class="c-cardForm">
     <form-wrapper :validator="$v.form">
       <form novalidate @submit.prevent="submit">
-        <!-- <form-input
-          v-if="newCard"
-          id="cardNumber"
-          v-model="form.cardNumber"
-          name="cardNumber"
-          type="number"
-          label="Card Number"
-          required
-        /> -->
 
-        <div v-if="paymentMethodType === 'stripe_card'"
+        <div v-if="paymentMethodType.includes('card')"
           class="c-formGroupWrapper"
         >
           <form-input
@@ -20,7 +11,7 @@
             v-model="form.expirationMonth"
             class="c-formGroup--half"
             type="text"
-            label="Exp Month"
+            :label="atc['forms.cardExpirationMonthLabel'] || 'Exp Month'"
             maxlength="2"
             name="expirationMonth"
             required
@@ -32,20 +23,20 @@
             class="c-formGroup--half"
             type="text"
             maxlength="4"
-            label="Exp Year"
+            :label="atc['forms.cardExpirationYearLabel'] || 'Exp Year'"
             name="expirationYear"
             required
           />
 
-          <!-- <form-input
+          <form-input
             id="zipcode"
             v-model="form.zipcode"
             class="c-formGroup--third"
             type="text"
-            label="Zipcode"
+            :label="atc['forms.cardZipcodeLabel'] || 'Zipcode'"
             name="zipcode"
             required
-          /> -->
+          />
         </div>
 
         <div v-else class="notification">
@@ -164,7 +155,7 @@ export default {
         // cardNumber: null,
         expirationMonth: null,
         expirationYear: null,
-        // zipcode: null,
+        zipcode: null,
       },
     }
   },
@@ -173,7 +164,7 @@ export default {
       // cardNumber: { numeric },
       expirationMonth: { numeric, required },
       expirationYear: { numeric, required },
-      // zipcode: { required },
+      zipcode: { required },
     },
   },
 
@@ -185,7 +176,7 @@ export default {
       return {
         cardMonth: form.expirationMonth,
         cardYear: form.expirationYear,
-        // cardZipcode: form.zipcode,
+        cardZipcode: form.zipcode,
         cardDefault: makeDefault,
       }
     },

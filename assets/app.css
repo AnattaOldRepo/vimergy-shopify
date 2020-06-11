@@ -9846,3 +9846,8 @@ opacity: 0.8;
     background-size: 2rem;
     font-size: 14px;
 }
+
+
+.c-cart__checkout.js-cart-checkout-recharge-btn{
+    display: none;
+}

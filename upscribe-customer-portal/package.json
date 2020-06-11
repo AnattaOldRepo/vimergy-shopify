@@ -6,6 +6,7 @@
     "@shopify/address": "^2.8.2",
     "add": "^2.0.6",
     "axios": "^0.18.0",
+    "braintree-web": "^3.62.1",
     "cheerio": "^1.0.0-rc.3",
     "countrycitystatejson": "^0.2.13",
     "cpy": "^7.3.0",

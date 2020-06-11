@@ -11,19 +11,16 @@ export const getters = {
       rootGetters['activeSubscription/activeSubscription']
     const activeQueue = rootGetters['activeSubscription/activeQueue']
     const { editNextOrder } = rootState.editMode
-    // console.log(activeQueue, 11212)
-    // console.log(activeSubscription, 1212)
+
     return editNextOrder
       ? activeQueue.payment_method_id
       : activeSubscription.payment_method_id
   },
   activeCard(state, getters, rootState, rootGetters) {
-    // console.log(getters)
     const { activeCardId } = getters
-    // console.log(activeCardId, 12312)
     const { cards } = state
 
-    if (!cards || !activeCardId) return false
+    if (!cards || !cards.length || !activeCardId) return false
 
     return cards.filter((card) => {
       return card.id === activeCardId
@@ -40,6 +37,7 @@ export const mutations = {
       console.log('No cards available customer.')
     }
   },
+
 
   SET_UPDATED_CARD(state, updatedCard) {
     const updateIndex = state.cards.findIndex(
@@ -61,7 +59,7 @@ export const actions = {
   async GET_CARDS({ rootState, commit, dispatch }, payload) {
     const { storeDomain } = rootState.route
     const { customerShopifyId } = rootState.customer
-    console.log('IM GETTING CARDS')
+
     const lastItem = payload && payload.lastItem ? payload.lastItem : false
 
     let url = null
@@ -95,11 +93,22 @@ export const actions = {
     })
   },
 
-  async CREATE_PAYMENT_METHOD({ rootState, commit, dispatch }, paymentMethod) {
+  async CREATE_PAYMENT_METHOD({ rootState, commit, dispatch }, {paymentMethod, paymentType}) {
     const { storeDomain } = rootState.route
-    const { customerStripeId } = rootState.customer
+    const { customerShopifyId } = rootState.customer
 
-    const url = `/paymentmethod/${storeDomain}/${customerStripeId}`
+    if (!paymentType) {
+      console.log('paymentType required in CREATE_PAYMENT_METHOD')
+      return
+    }
+
+    if (!customerShopifyId) {
+      console.log('no matching customerPaymentId')
+      return
+    }
+
+    const url = `/paymentmethod/${storeDomain}/${customerShopifyId}?type=${paymentType}`
+
 
     return new Promise((resolve, reject) => {
       request({
@@ -111,11 +120,9 @@ export const actions = {
         },
       })
         .then((response) => {
-          console.log('CREATE_PAYMENT_METHOD response', response)
+          console.log('crate method', response)
           commit('SET_CARDS', response.items)
-
-
-          resolve(response)
+          resolve(response.items)
         })
         .catch((error) => {
           reject(error)
@@ -126,16 +133,23 @@ export const actions = {
   /**
    *
    * @param {*} stripeCardId
-   * @param {*} updatePayload - any items listed here: https://stripe.com/docs/api/cards/update
+   * @param {*} updatePayload - any items listed here: https://stripe.com/docs/api/paymentmethods/update
    */
   async UPDATE_PAYMENT_METHOD(
+
     { rootState, commit, dispatch },
-    { paymentMethodId, updatePayload }
+    { paymentMethodId, updatePayload, paymentCustomerId }
   ) {
     const { storeDomain } = rootState.route
-    const { customerStripeId } = rootState.customer
 
-    const url = `/paymentmethod/update/${storeDomain}/${customerStripeId}/${paymentMethodId}`
+
+    if (!paymentCustomerId) {
+      console.log('no matching paymentCustomerId')
+      return
+    }
+
+    const url = `/paymentmethod/update/${storeDomain}/${paymentCustomerId}/${paymentMethodId}`
+
 
     return new Promise((resolve, reject) => {
       request({
@@ -158,14 +172,44 @@ export const actions = {
     })
   },
 
-  async REMOVE_PAYMENT_METHOD(
-    { rootState, commit, dispatch },
-    paymentMethodId
-  ) {
+  async REMOVE_PAYMENT_METHOD({ rootState, commit, dispatch }, {paymentMethodId, paymentType}) {
     const { storeDomain } = rootState.route
-    const { customerStripeId } = rootState.customer
 
-    const url = `/paymentmethod/delete/${storeDomain}/${customerStripeId}/${paymentMethodId}`
+    const { paymentCustomers } = rootState.customer
+
+    console.log({paymentCustomers})
+
+    if (!paymentCustomers) {
+      console.log('paymentCustomers required')
+      return
+    }
+
+    console.log({paymentMethodId, paymentType})
+
+    if (!paymentType) {
+      console.log('paymentType required in REMOVE_PAYMENT_METHOD')
+      return
+    }
+
+    const newPaymentMethodGatewayType = paymentType.includes('stripe') ? 'stripe' : 'braintree'
+    console.log({newPaymentMethodGatewayType})
+
+    let customerPaymentId = false
+
+    paymentCustomers.forEach(paymentCustomer => {
+      console.log('loopit', paymentCustomer, newPaymentMethodGatewayType)
+      if (paymentCustomer.type.includes(newPaymentMethodGatewayType)) {
+        customerPaymentId = paymentCustomer.id
+      }
+    })
+
+    if (!customerPaymentId) {
+      console.log('no matching customerPaymentId: ', {newPaymentMethodGatewayType}, )
+      return
+    }
+
+    const url = `/paymentmethod/delete/${storeDomain}/${customerPaymentId}/${paymentMethodId}`
+
 
     return new Promise((resolve, reject) => {
       request({
@@ -173,10 +217,8 @@ export const actions = {
         url,
       })
         .then((response) => {
-          console.log('jksasdfjksadfjasd;', response)
+          console.log('remove response ', response)
           commit('SET_CARDS', response.items)
-
-
           resolve(response)
         })
         .catch((error) => {

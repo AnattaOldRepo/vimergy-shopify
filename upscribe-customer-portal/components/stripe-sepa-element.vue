@@ -68,14 +68,6 @@ export default {
       this.bankName = $event.bankName || ''
       this.$emit('handleChange', $event)
     },
-
-    handleClear(){
-      console.log('UOUOUOUO')
-      this.iban.clear()
-      this.name=''
-      this.email=''
-    },
-
     createPaymentMethod() {
       const vm = this
 
@@ -111,13 +103,13 @@ export default {
 <template>
 <form class="c-stripeIban" @submit.prevent="$emit('submitPaymentForm')">
   <div class="form-row inline c-stripeFormSplitGroups">
-    <div class="col c-stripeFormGroup">
+    <div class="col c-paymentMethodFormGroup">
       <!-- <label for="name" class="c-stripeFormLabel">
         Name
       </label> -->
       <input v-model="name" class="c-stripeFormInput" placeholder="Full Name" required>
     </div>
-    <div class="col c-stripeFormGroup">
+    <div class="col c-paymentMethodFormGroup">
       <!-- <label for="email" class="c-stripeFormLabel">
         Email Address
       </label> -->
@@ -136,7 +128,7 @@ export default {
   <div v-if="bankName" id="bank-name" class="c-stripeBankName">{{ bankName }}</div>
 
   <!-- Used to display form errors. -->
-  <div v-if="error" id="sepa-error-message" class="c-stripeErrors" role="alert">{{ error }}</div>
+  <div v-if="error" id="sepa-error-message" class="c-paymentMethodErrors" role="alert">{{ error }}</div>
 
   <!-- Display mandate acceptance text. -->
   <div id="mandate-acceptance" class="c-stripeInfo">
@@ -158,7 +150,7 @@ export default {
   display: block;
 }
 
-.c-stripeFormGroup {
+.c-paymentMethodFormGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
@@ -199,5 +191,18 @@ input:focus,
 
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
+}
+
+.c-stripeFormSplitGroups {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 20px;
+  width: 100%;
+}
+
+.c-stripeBankName {
+  color: $color-black;
+  font-size: 14px;
+  margin-top: 4px;
 }
 </style>

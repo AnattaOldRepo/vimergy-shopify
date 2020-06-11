@@ -19,11 +19,12 @@ export const mutations = {
     state.customerStripeId = payload.payment_customer.id
     state.customerShopifyId = payload.shopify.id
     state.customerDefaultPaymentId = payload.payment_customer.default_source
+
   },
 }
 
 export const actions = {
-  async GET_CUSTOMER({ rootState, commit }, payload) {
+  async GET_CUSTOMER({ rootState, commit }) {
     const { storeDomain, customerId } = rootState.route
 
     return new Promise((resolve, reject) => {
@@ -34,6 +35,7 @@ export const actions = {
         .then((data) => {
           commit('SET_CUSTOMER', data)
           const cards = data.payment_methods
+          console.log({ cards })
 
           // set cards in cards store
           commit('cards/SET_CARDS', cards, { root: true })

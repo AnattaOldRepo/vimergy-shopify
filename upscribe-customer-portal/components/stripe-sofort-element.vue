@@ -191,7 +191,7 @@ export default {
 <template>
 <form class="c-stripeIban" @submit.prevent="$emit('submitPaymentForm')">
   <div class="form-row inline c-stripeFormSplitGroups">
-    <div class="col c-stripeFormGroup">
+    <div class="col c-paymentMethodFormGroup">
       <!-- <label for="name" class="c-stripeFormLabel">
         Name
       </label> -->
@@ -218,7 +218,7 @@ export default {
   </div>
 
   <!-- Used to display form errors. -->
-  <div v-if="error" id="sepa-error-message" class="c-stripeErrors" role="alert">{{ error }}</div>
+  <div v-if="error" id="sepa-error-message" class="c-paymentMethodErrors" role="alert">{{ error }}</div>
 
   <!-- Display mandate acceptance text. -->
   <div id="mandate-acceptance" class="c-stripeInfo">

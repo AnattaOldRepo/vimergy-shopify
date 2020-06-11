@@ -7,142 +7,139 @@ import PaymentMethodsBlock from '@components/payment-methods-block.vue'
 import detectBrowser from '@utils/detectBrowser.js'
 
 export default {
-  components: {
-    // Card,
-    PaymentMethodsBlock,
-    // DrawerWrap,
-  },
-  props: {
-    show: {
-      type: Boolean,
-      default: false,
+	components: {
+		// Card,
+		PaymentMethodsBlock,
+		// DrawerWrap,
+	},
+	props: {
+		show: {
+			type: Boolean,
+			default: false,
     },
+	},
+	data: () => {
+		return {
+			browser: null,
 
-  },
-  data: () => {
-    return {
-      browser: null,
+			loadedStripe: false,
+			completeStripeCardInfo: false,
+			activeExistingCard: null,
+			useNewPaymentState: true,
 
-      loadedStripe: false,
-      completeStripeCardInfo: false,
-      activeExistingCard: null,
-      useNewPaymentState: true,
+			orderSuccessfullyPlaced: false,
+			placeOrderPending: null,
+			placeOrderError: null,
 
-      orderSuccessfullyPlaced: false,
-      placeOrderPending: null,
-      placeOrderError: null,
+			activePaymentType: null,
 
-      activePaymentType: null,
+			stripePaymentRequestEnabled: false,
+			processingRedirectPaymentVerification: false,
 
-      stripePaymentRequestEnabled: false,
-      processingRedirectPaymentVerification: false,
+			// what
+			updating: false,
+		}
+	},
 
-
-      // what
-      updating: false,
-    }
-  },
-
-  computed: {
+	computed: {
     ...mapState('customer', ['paymentCards', 'customerShopifyId']),
+
 
     ...mapState('translations', ['atc']),
 
     ...mapState('editMode', ['editNextOrder']),
 
-    ...mapState('shop', [
-      'stripePublicKey',
-      'payment_type',
-    ]),
-
-    ...mapState('payment', [
-      'paymentType',
-      'paymentSource',
-      'savedSourceData',
+		...mapState('shop', [
+			'stripePublicKey',
+			'payment_type',
     ]),
 
     ...mapGetters('cards', ['activeCard']),
 
-    paymentRequestText() {
-      const { browser } = this
-      if (!browser) return 'Payment Request'
+		...mapState('account', ['accountData', 'guestCheckout']),
 
-      const {
-        // isFirefox,
-        isChrome,
-        isSafari,
-        // isOpera,
-        isIE,
-        isEdge,
-        // isBlink,
-      } = browser
+		...mapState('payment', ['paymentType', 'paymentSource', 'savedSourceData']),
 
-      if (isChrome) return 'Google Pay'
-      if (isSafari) return 'Apple Pay'
-      if (isIE || isEdge) return 'Microsoft Pay'
+		paymentRequestText() {
+			const { browser } = this
+			if (!browser) return 'Payment Request'
 
-      return 'Payment Request'
-    },
+			const {
+				// isFirefox,
+				isChrome,
+				isSafari,
+				// isOpera,
+				isIE,
+				isEdge,
+				// isBlink,
+			} = browser
 
-    paymentTypes() {
-      const { payment_type } = this
-      return payment_type || []
-    },
-  },
+			if (isChrome) return 'Google Pay'
+			if (isSafari) return 'Apple Pay'
+			if (isIE || isEdge) return 'Microsoft Pay'
 
-  watch: {
-    useNewPaymentState: {
-      immediate: true,
-      handler: function(useNewPayment) {
-        if (!useNewPayment) {
-          this.activePaymentType = null
-        }
+			return 'Payment Request'
+		},
 
-        else if (useNewPayment === true && this.paymentCards && this.paymentCards.length) {
-          this.activeExistingCard = this.paymentCards[0]
-        }
-      },
-    },
-  },
+		paymentTypes() {
+			const { payment_type } = this
+			return payment_type || []
+		},
+	},
 
-  mounted() {
-    const { paymentCards } = this
+	watch: {
+		useNewPaymentState: {
+			immediate: true,
+			handler: function(useNewPayment) {
+				if (!useNewPayment) {
+					this.activePaymentType = null
+				} else if (
+					useNewPayment === true &&
+					this.paymentCards &&
+					this.paymentCards.length
+				) {
+					this.activeExistingCard = this.paymentCards[0]
+				}
+			},
+		},
+	},
 
-    this.setBrowser()
+	mounted() {
+		const { paymentCards } = this
 
-    // this.resetCheckoutUiState()
-    // reset on new load
-    this.orderSuccessfullyPlaced = false
+		this.setBrowser()
 
-    if (process.browser) {
-      let domElement = document.createElement('script')
-      domElement.setAttribute('src', 'https://js.stripe.com/v3/')
-      domElement.onload = () => {
-        this.loadedStripe = true
-      }
-      document.body.appendChild(domElement)
-    }
+		// this.resetCheckoutUiState()
+		// reset on new load
+		this.orderSuccessfullyPlaced = false
 
-    if (paymentCards && paymentCards.length) {
-      this.activeExistingCard = paymentCards[0]
-      this.useNewPaymentState = false
-    } else {
-      this.useNewPaymentState = true
-    }
+		if (process.browser) {
+			let domElement = document.createElement('script')
+			domElement.setAttribute('src', 'https://js.stripe.com/v3/')
+			domElement.onload = () => {
+				this.loadedStripe = true
+			}
+			document.body.appendChild(domElement)
+		}
 
-    this.handlePotentialPaymentVerificationRedirects()
+		if (paymentCards && paymentCards.length) {
+			this.activeExistingCard = paymentCards[0]
+			this.useNewPaymentState = false
+		} else {
+			this.useNewPaymentState = true
+		}
 
-  },
+		this.handlePotentialPaymentVerificationRedirects()
+	},
 
-  methods: {
-    setBrowser() {
-      const result = detectBrowser()
-      this.browser = result
-      console.log(result)
+	methods: {
+		setBrowser() {
+			const result = detectBrowser()
+			this.browser = result
+			console.log(result)
     },
 
     ...mapActions('customer', ['GET_CUSTOMER']),
-
 
 		...mapActions('subscriptions', [
 			'UPDATE_SUBSCRIPTION',
@@ -153,86 +150,101 @@ export default {
 
     ...mapMutations('cards', ['setActiveEditCard', 'setNewSwapCard']),
 
-    ...mapMutations('payment', [
-      'setPaymentValidationClientSecret',
-      'setPaymentValidationSource',
-      'setPaymentValidationLiveMode',
-    ]),
+		...mapMutations('payment', [
+			'setPaymentValidationClientSecret',
+			'setPaymentValidationSource',
+			'setPaymentValidationLiveMode',
+		]),
 
-    handlePotentialPaymentVerificationRedirects() {
-      const { $route, paymentType } = this
-      const queryParams = $route.query || {}
-      const { client_secret, livemode, source } = queryParams
+		handlePotentialPaymentVerificationRedirects() {
+			const { $route, paymentType } = this
+			const queryParams = $route.query || {}
+			const { client_secret, livemode, source } = queryParams
 
-      console.log({ queryParams })
+			console.log({ queryParams })
 
-      if (client_secret || livemode || source) {
-          this.setPaymentValidationClientSecret(client_secret)
-          this.setPaymentValidationSource(source)
-          this.setPaymentValidationLiveMode(livemode)
+			if (client_secret || livemode || source) {
+				this.setPaymentValidationClientSecret(client_secret)
+				this.setPaymentValidationSource(source)
+				this.setPaymentValidationLiveMode(livemode)
 
-        // not using existing card
-        this.useNewPayment()
-        console.log('use new payment')
-      }
+				// not using existing card
+				this.useNewPayment()
+				console.log('use new payment')
+			}
 
-      // set payment type selection
-      if (paymentType) {
-        this.setActivePaymentType(paymentType)
-      }
-    },
+			// set payment type selection
+			if (paymentType) {
+				this.setActivePaymentType(paymentType)
+			}
+		},
 
-    toggleActivePaymentType(type) {
-      const { activePaymentType } = this
-      if (activePaymentType === type) {
-        this.activePaymentType = null
-      } else {
-        this.activePaymentType = type
-      }
-    },
+		toggleActivePaymentType(type) {
+			const { activePaymentType } = this
+			if (activePaymentType === type) {
+				this.activePaymentType = null
+			} else {
+				this.activePaymentType = type
+			}
+		},
 
-    displayPaymentType(type) {
-      const { paymentTypes, activePaymentType } = this
-      let paymentTypeEnabled = false
-      let displayPaymentType = false
+		displayPaymentType(type) {
+			const { paymentTypes, activePaymentType } = this
+			let paymentTypeEnabled = false
+			let displayPaymentType = false
 
-      if (paymentTypes.includes(type)) {
-        paymentTypeEnabled = true
-      }
-      if (!activePaymentType || activePaymentType === type) {
-        console.log({type })
-        displayPaymentType = true
-      }
+			if (paymentTypes.includes(type)) {
+				paymentTypeEnabled = true
+			}
+			if (!activePaymentType || activePaymentType === type) {
+				console.log({ type })
+				displayPaymentType = true
+			}
 
-      return paymentTypeEnabled && displayPaymentType
-    },
+			return paymentTypeEnabled && displayPaymentType
+		},
 
-    handleFinalPaymentPayloadResponse({fullResponse, newPaymentData, updatePaymentData, paymentType}) {
-      console.log({fullResponse, newPaymentData, updatePaymentData, paymentType})
-      this.addPaymentMethod(newPaymentData)
-    },
+		handleFinalPaymentPayloadResponse({
+			fullResponse,
+			newPaymentData,
+			updatePaymentData,
+			paymentType,
+		}) {
+			console.log({
+				fullResponse,
+				newPaymentData,
+				updatePaymentData,
+				paymentType,
+			})
+      this.addPaymentMethod(newPaymentData, paymentType)
+		},
 
-    async addPaymentMethod(newPaymentData) {
+    async addPaymentMethod(paymentMethod, paymentType) {
       const {editNextOrder, customerShopifyId } = this
 
-			console.log('addPaymentMethod', { newPaymentData })
+      console.log('addPaymentMethod', {paymentMethod})
+
       this.$emit('setDrawerStatus', 'PENDING')
 			this.updating = true
 
 			try {
-        const newPaymentMethodId = newPaymentData.card ? newPaymentData.card.id : newPaymentData.id
-        const allPaymentMethods = await this.CREATE_PAYMENT_METHOD(newPaymentData)
+        const allPaymentMethods = await this.CREATE_PAYMENT_METHOD({paymentMethod, paymentType})
 
         console.log({allPaymentMethods})
+        // get newest updated payment method - that's how we know that's the one we
+        // need to update on the active subscription (and potentially queue)
+        const sortedPaymentMethods = allPaymentMethods.slice().sort((a, b) => a.updated_at - b.updated_at)
+
+        console.log({sortedPaymentMethods})
+
+
+        const newPaymentMethodId = sortedPaymentMethods[sortedPaymentMethods.length -1].id
         console.log({newPaymentMethodId})
 
-        const newPaymentMethodReturned = allPaymentMethods.items.filter(method => method.id === newPaymentMethodId)[0]
-
-        console.log({newPaymentMethodReturned})
 
         const updatePayload = {
           requestPayload: {
-            payment_method_id: newPaymentMethodReturned.id,
+            payment_method_id: newPaymentMethodId,
           },
         }
 
@@ -260,7 +272,6 @@ export default {
         } catch (e) {
           console.log('`New payment method added to subscription: ', e)
   				this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message.message ? e.message.message : e.message})
-
         }
 
 			} catch (e) {
@@ -268,107 +279,130 @@ export default {
 				this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message.message ? e.message.message : e.message})
 
 			}
-    },
+		},
 
-    handleStripeElementChange(payload) {
-      console.log('handleStripeElementChangePayload: ', payload)
-      this.completeStripeCardInfo = payload.complete
-      if (payload.error) {
-        console.log({error: payload.error})
-      } else {
-        console.log('no error')
-      }
-    },
+		handleStripeElementChange(payload) {
+			console.log('handleStripeElementChangePayload: ', payload)
+			this.completeStripeCardInfo = payload.complete
+			if (payload.error) {
+				console.log({ error: payload.error })
+			} else {
+				console.log('no error')
+			}
+		},
 
-    handleSubmitPaymentForm() {
-      console.log('handleSubmitPaymentForm')
-    },
+		handleSubmitPaymentForm() {
+			console.log('handleSubmitPaymentForm')
+		},
 
-    createPaymentMethodHandler() {
-      console.log('createPaymentMethod top')
-      // const vm = this
+		createPaymentMethodHandler() {
+			console.log('createPaymentMethod top')
+			// const vm = this
 
-      if (!this.activePaymentType) {
-        console.log('not complete')
-        this.placeOrderError = {
-          status: 'ERROR',
-          message: 'Please select payment type',
-        }
-        return
-      }
+			if (!this.activePaymentType) {
+				console.log('not complete')
+				this.placeOrderError = {
+					status: 'ERROR',
+					message: 'Please select payment type',
+				}
+				return
+			}
 
-      if (!this.completeStripeCardInfo) {
-        console.log('not complete')
-        this.placeOrderError = {
-          status: 'ERROR',
-          message: 'Please complete the payment form',
-        }
-        return
+			if (!this.completeStripeCardInfo) {
+				console.log('not complete')
+				this.placeOrderError = {
+					status: 'ERROR',
+					message: 'Please complete the payment form',
+				}
+				return
+			} else {
+				this.creatingPaymentMethodPendingError = false
+				this.creatingPaymentMethodPending = false
+			}
 
-      } else {
-        this.creatingPaymentMethodPendingError = false
-        this.creatingPaymentMethodPending = false
-      }
+			const stripePaymentOptions = this.$refs['stripe-payment-options']
+			console.log({ stripePaymentOptions })
 
-      const stripePaymentOptions = this.$refs['stripe-payment-options']
-      console.log({stripePaymentOptions})
+			const activePaymentTypeEl =
+				stripePaymentOptions.$refs[
+					'active-payment-type-' + this.activePaymentType
+				]
+			console.log({ activePaymentTypeEl })
 
-      const activePaymentTypeEl = stripePaymentOptions.$refs['active-payment-type-' + this.activePaymentType]
-      console.log({activePaymentTypeEl})
+			this.creatingPaymentMethodPending = true
+			activePaymentTypeEl.createPaymentMethod()
+		},
 
-      this.creatingPaymentMethodPending = true
-      activePaymentTypeEl.createPaymentMethod()
-    },
+		handlePlaceOrderResponseFromRedirect({
+			fullResponse,
+			paymentData,
+			paymentType,
+		}) {
+			console.log('handlePlaceOrderResponseFromRedirect', {
+				fullResponse,
+				paymentData,
+				paymentType,
+			})
+		},
 
-    handlePlaceOrderResponseFromRedirect({fullResponse, paymentData, paymentType}) {
-      console.log('handlePlaceOrderResponseFromRedirect', {fullResponse, paymentData, paymentType})
-    },
+		handleCreatePaymentMethodResponse({
+			fullResponse,
+			paymentData,
+			paymentType,
+		}) {
+			console.log('handleCreatePaymentMethodResponse', {
+				fullResponse,
+				paymentData,
+				paymentType,
+			})
+			this.addPaymentMethod(fullResponse)
+		},
 
-    handleCreatePaymentMethodResponse({fullResponse, paymentData, paymentType}) {
-      console.log('handleCreatePaymentMethodResponse', {fullResponse, paymentData, paymentType})
-      this.addPaymentMethod(fullResponse)
-    },
+		handleEnableStripePaymentRequest(val) {
+			console.log('enableStripePaymentRequest top level', val)
+			this.stripePaymentRequestEnabled = true
+		},
 
-    handleEnableStripePaymentRequest(val) {
-      console.log('enableStripePaymentRequest top level', val)
-      this.stripePaymentRequestEnabled = true
-    },
-
-    handleProcessingRedirectPaymentVerification(val) {
-      this.processingRedirectPaymentVerification = val
-    },
-  },
+		handleProcessingRedirectPaymentVerification(val) {
+			this.processingRedirectPaymentVerification = val
+		},
+	},
 }
 </script>
 
 <template>
-  <!-- <drawer-wrap class="c-drawer" :show="show" @close="$emit('close')"> -->
-    <div class=" c-drawer">
-      <div class="c-drawer__inner">
-        <h2 class="c-drawer__title">{{ atc['portal.addCardDrawerTitle'] || 'Add Payment Method' }}</h2>
-
-        <payment-methods-block
-          :updating="updating"
-          :submit-button-text="atc['buttons.addCard'] || 'Add New Payment Method'"
-          @cancel="$emit('setMode', 'default')"
-          @finalPaymentPayloadResponse="handleFinalPaymentPayloadResponse"
-        />
-      </div>
-    </div>
-  <!-- </drawer-wrap> -->
+	<!-- <drawer-wrap class="c-drawer" :show="show" @close="$emit('close')"> -->
+		<div class=" c-drawer">
+			<div class="c-drawer__inner" style="padding:0">
+				<h2 class="c-drawer__title">{{
+					atc['portal.addCardDrawerTitle'] || 'Add Payment Method'
+				}}</h2>
+				<div style="padding: 0 20px;">
+					<payment-methods-block
+						:updating="updating"
+						:submit-button-text="
+							atc['buttons.addCard'] || 'Add New Payment Method'
+						"
+						@cancel="$emit('setMode', 'default')"
+						@finalPaymentPayloadResponse="handleFinalPaymentPayloadResponse"
+					/>
+				</div>
+			</div>
+		</div>
+	<!-- </drawer-wrap> -->
 </template>
 
 <style lang="scss">
 @import '@design';
 
 .c-modalCardAdd__stripeCard {
-  background-color: $color-gray-100;
-  padding: 10px;
-  border-radius: 5px;
+	background-color: $color-gray-100;
+	padding: 10px;
+	border-radius: 5px;
 }
 
 .c-modalCardAdd__addCardButton {
-  margin-top: 40px;
-  margin-bottom: 20px;
+	margin-top: 40px;
+	margin-bottom: 20px;
 }
 </style>

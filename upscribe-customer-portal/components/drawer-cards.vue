@@ -3,8 +3,6 @@ import { mapGetters, mapState } from 'vuex'
 import DrawerWrap from '@components/drawer-wrap.vue'
 
 import DrawerCardList from '@components/drawer-card-list.vue'
-// import DrawerCardAdd from '@components/drawer-card-add.vue'
-// import DrawerCardEdit from '@components/drawer-card-edit.vue'
 import DrawerCardRemove from '@components/drawer-card-remove.vue'
 import DrawerCardSwap from '@components/drawer-card-swap.vue'
 
@@ -16,8 +14,6 @@ export default {
   components: {
     DrawerWrap,
     DrawerCardList,
-    // DrawerCardAdd,
-    // DrawerCardEdit,
     DrawerCardRemove,
     DrawerCardSwap,
     DrawerPaymentMethodAdd,
@@ -54,16 +50,13 @@ export default {
     if (initialMode) {
       this.mode = initialMode
     }
-    console.log(this.cards, 222)
   },
   methods: {
     handleSetMode(mode) {
       this.mode = mode
     },
     handleDrawerStatus(status) {
-      console.log(status)
       this.status = status
-      console.log(this.status)
     },
   },
 }

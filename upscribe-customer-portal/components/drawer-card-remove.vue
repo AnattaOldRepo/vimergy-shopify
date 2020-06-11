@@ -32,6 +32,8 @@ export default {
 
     async removePaymentMethod() {
       const paymentMethodId = this.activeEditCard.id
+      const paymentType = this.activeEditCard.type
+      const paymentCustomerId = this.activeEditCard.payment_customer_id
 
       let analyticsEventName = 'Upscribe Remove Card'
 
@@ -41,7 +43,7 @@ export default {
 
       this.$emit('setDrawerStatus', 'PENDING')
       try {
-        await this.REMOVE_PAYMENT_METHOD(paymentMethodId)
+        await this.REMOVE_PAYMENT_METHOD({paymentMethodId, paymentType, paymentCustomerId})
         this.$emit('setDrawerStatus', 'SUCCESS')
         this.$emit('setMode', 'default')
 
@@ -77,8 +79,7 @@ export default {
       />
 
       <v-button class="c-drawerCardRemove__removeButton" @onClick="removePaymentMethod"
-        >{{ atc['buttons.removeCard'] || 'Remove Payment Method' }}</v-button
-      >
+        >{{ atc['buttons.removeCard'] || 'Remove Payment Method' }}</v-button>
 
       <v-button
         class="c-drawerCardRemove__cancelButton"

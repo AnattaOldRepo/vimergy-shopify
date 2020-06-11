@@ -265,6 +265,7 @@ export default {
 
     async updateCard({ cardName, cardMonth, cardYear, cardZipcode, cardDefault }) {
       console.log({ cardName, cardMonth, cardYear, cardZipcode })
+      const { activePaymentType, activeEditCard } = this
 
       const updatePayload = {}
       if (cardName) updatePayload.name = cardName
@@ -273,7 +274,7 @@ export default {
       if (cardZipcode) updatePayload.address_zip = cardZipcode
       if (cardDefault) updatePayload.default = cardDefault ? 1 : 0
 
-      this.$emit('finalPaymentPayloadResponse', {updatePaymentData: updatePayload, paymentType: 'stripe_card'})
+      this.$emit('finalPaymentPayloadResponse', {updatePaymentData: updatePayload, paymentType: activePaymentType, paymentCustomerId: activeEditCard.payment_customer_id })
     },
 
     handleCreatePaymentMethodResponse({fullResponse, newPaymentData, updatePaymentData, paymentType}) {
@@ -367,6 +368,18 @@ export default {
         <span class="c-newPaymentOptions__optionText">{{ paymentRequestText }}</span>
         <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
       </a>
+
+      <a
+        v-if="displayPaymentType('braintree_card')"
+        href
+        class="c-newPaymentOptions__option c-heading4"
+        :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'braintree_card' }"
+        @click.prevent="toggleActivePaymentType('braintree_card')"
+        >
+        <span class="c-newPaymentOptions__optionText">Braintree Card</span>
+        <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
+        </a>
+
     </div>
   </div>
 
@@ -681,9 +694,9 @@ export default {
 
 
 .c-paymentMethods__innerBlock {
-  // border: 1px solid $color-border;
-  // background: #F7F9FB;
-  // border: 1px solid #EAF1F4;
+  border: 1px solid $color-border;
+  background: #F7F9FB;
+  border: 1px solid #EAF1F4;
 }
 .c-paymentMethods__innerOptions {
   padding-left: 44px;
@@ -698,9 +711,9 @@ export default {
 
 .c-paymentMethods__options {
   display: none;
-  // padding: 16px;
-  // background: #F7F9FB;
-  // border: 1px solid #EAF1F4;
+  padding: 16px;
+  background: #F7F9FB;
+  border: 1px solid #EAF1F4;
 
   &--visible {
     display: block;

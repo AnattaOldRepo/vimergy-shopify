@@ -84,7 +84,7 @@
                     <div class="c-variant c-variantCf">
                        <label><strong>Size</strong></label>
                        <div class="c-variant__box">
-                            <div class="c-variant__boxItem  is-active">
+                            <div class="c-variant__boxItem c-variant__item  is-active">
                                 {% if product.metafields.c_f.icon  == 'capsule' %}
                                     <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
                                 {% elsif product.metafields.c_f.icon  == 'spoon' %}
@@ -125,7 +125,7 @@
 
                     <div id="size-box" class="c-variant__box"   data-productid="{{product.id}}">
                         {% for variant in product.variants %}
-                            <div class="c-variant__boxItem {% if variant == current_variant   %} is-active {% endif %}" data-value="{{ variant.id }}">
+                            <div class="c-variant__boxItem c-variant__item {% if variant == current_variant   %} is-active {% endif %}" data-value="{{ variant.id }}">
                                 {% unless product.title == 'Gift Card' %}
                                     {% if product.metafields.c_f.icon  == 'capsule' %}
                                         <img class="c-variant__icon c-variant__icon--capsule" src="{{ 'icon-capsule.png' | asset_img_url }}"  alt="capsule"/>
@@ -410,8 +410,8 @@
       return window.currencySymbolMap[activeCurrencyString] + value + ' ' 
     }
 
-   $(".c-variant__boxItem").on("click", function(e) {
-        $('.c-variant__boxItem').removeClass('is-active');
+   $(".c-variant__item").on("click", function(e) {
+        $('.c-variant__item').removeClass('is-active');
         $(this).addClass('is-active');
         $("#product-select").val($(this).data("value")).change();
         $(".single-option-selector").val($(this).find('span').data("value")).change();

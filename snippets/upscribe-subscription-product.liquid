@@ -290,374 +290,375 @@
 
     {% raw %}
     <script>
-
-        // Option select component
-        var VOption = {
-            template: `
-                <div class="cu-option__option"
-                    v-if="option"
-                    :class="{'is-active': isActive}"
-                    @click="clickOption"
-                >
-                    <span v-if="option.mainText"
-                    >{{ option.mainText }} Days</span>
-                    <span class="cu-option__subText"
-                        v-if="option.subText"
-                    >{{ option.subText }}</span>
-                </div>
-            `,
-            computed: {
-                isActive() {
-                    return this.selectedIndex === this.index
-                }
-            },
-            props:{
-                option: {
-                    type: [Object, Boolean],
-                    default: false
+        setTimeout(function(){ 
+            // Option select component
+            var VOption = {
+                template: `
+                    <div class="cu-option__option"
+                        v-if="option"
+                        :class="{'is-active': isActive}"
+                        @click="clickOption"
+                    >
+                        <span v-if="option.mainText"
+                        >{{ option.mainText }} Days</span>
+                        <span class="cu-option__subText"
+                            v-if="option.subText"
+                        >{{ option.subText }}</span>
+                    </div>
+                `,
+                computed: {
+                    isActive() {
+                        return this.selectedIndex === this.index
+                    }
                 },
-                index: {
-                    type: Number,
-                    required: true
+                props:{
+                    option: {
+                        type: [Object, Boolean],
+                        default: false
+                    },
+                    index: {
+                        type: Number,
+                        required: true
+                    },
+                    selectedIndex: {
+                        type: Number,
+                        required: true
+                    }
                 },
-                selectedIndex: {
-                    type: Number,
-                    required: true
-                }
-            },
-            methods: {
-                // emit selected val
-                clickOption() {
-                    this.$emit('click-option', this.index)
+                methods: {
+                    // emit selected val
+                    clickOption() {
+                        this.$emit('click-option', this.index)
+                    }
                 }
             }
-        }
 
-        var upscribeSubscriptionProduct = new Vue ({
+            var upscribeSubscriptionProduct = new Vue ({
 
-            el: '#upscribe-subscription-product',
+                el: '#upscribe-subscription-product',
 
-            delimiters: ['${', '}'],
+                delimiters: ['${', '}'],
 
-            components: {
-                'v-option': VOption,
-            },
-
-            data: {
-                moneyFormat: '${{amount}}',
-
-                // Initialize vue component with shopify liquid data rendered in state
-                {% endraw %}
-                product: {{ product | json }},
-
-                subscriptionProductTitle: '{{ product.metafields.sf_upscribe.subscription_product_title | format_money }}',
-                intervalFrequncyMetafield: '{{ product.metafields.sf_upscribe.interval_frequency }}',
-                intervalUnitMetafield: '{{ product.metafields.sf_upscribe.interval_unit }}',
-
-                defaultGlobalDiscountAmount: '{{ shop.metafields.sf_upscribe.default_discount_amount }}',
-
-                discountAmount: '{{ product.metafields.sf_upscribe.discount_amount }}',
-                //chargeLimit: '{{ product.metafields.sf_upscribe.charge_limit }}',
-
-                recurringDiscountAmount: '{{ product.metafields.sf_upscribe.recurring_discount_amount }}',
-                recurringDiscountAfterOrder: '{{ product.metafields.sf_upscribe.recurring_discount_after_order }}',
-
-                oneTimeMessage: '{{ shop.metafields.sf_upscribe.one_time_message }}',
-                subscriptionMessage: '{{ shop.metafields.sf_upscribe.subscribe_message }}',
-                learnMoreUrl: '{{ shop.metafields.sf_upscribe.learn_more_url }}',
-                howItWorksTitle: '{{ shop.metafields.sf_upscribe.how_it_works_title }}',
-                howItWorksText: '{{ shop.metafields.sf_upscribe.how_it_works_text }}',
-
-                // update on variant changes, this is used for initial setting
-                activeSubsriptionDisplayPrice: '{{ product.selected_or_first_available_variant.price }}',
-                activeSubsriptionDisplayComparePrice: '{{ product.selected_or_first_available_variant.compare_at_price }}',
-                {% raw %}
-
-                selectedFrequencyIndex: 0,
-                productPurchaseType: 'onetime',
-                infoIsOpen: false,
-                subscriptionPrice: null,
-
-                activeCurrencyString: null,
-                activeCurrencyRate: null,
-                subscriptionAmount: null
-            },
-            mounted() {
-                // reset
-                this.selectedFrequencyIndex = 0
-                this.productPurchaseType = 'onetime'
-                this.infoIsOpen = false
-                this.subscriptionPrice = null
-
-                // add listener for variant update, set in theme.js
-                // this listener could be different depeneding on if the theme uses the same base setup
-                var vm = this
-                window.addEventListener("upscribeVariantUpdate", function(event) {
-                    vm.handleVariantUpdateEvent(event)
-                }, false);
-
-                this.activeCurrencyString = window.Shopify.currency.active
-                this.activeCurrencyRate = parseFloat(window.Shopify.currency.rate)
-
-                var initialVariant = this.activeVariantId = this.product.variants[0]
-                this.handleVariantUpdateEvent({detail: initialVariant})
-            },
-            watch: {
-                // when onetime vs subscription is toggled
-                productPurchaseType(newVal) {
-
-                    // if one time
-                    if (newVal === 'onetime') {
-                        // use stored non-discount prices from previous changes
-                        var originalPrice = this.activeSubsriptionDisplayPrice || false
-                        var comparePrice = this.activeSubsriptionDisplayComparePrice || false
-
-                        // put into money format
-                        var formatOriginalPrice = originalPrice ? this.formatMoney(originalPrice) : false
-                        var formatComparePrice = comparePrice ? this.formatMoney(comparePrice) : false
-
-                        // replace pricing elements with new vals
-                        this.setPricingDisplayEls(formatOriginalPrice,formatComparePrice)
-                    }
-
-                    // if subscription
-                    else {
-                        // use stored non-discount prices from previous changes
-                        var originalPrice = this.activeSubsriptionDisplayPrice || false
-                        var comparePrice = this.activeSubsriptionDisplayComparePrice || false
-
-                        // calculate subscription discount and replace pricing elements with new vals
-                        this.calculateVariantPrices(originalPrice, comparePrice)
-                    }
-                }
-            },
-            computed: {
-                // helper for if current state is subscription
-                subscriptionSelected() {
-                    return this.productPurchaseType === 'subscription'
+                components: {
+                    'v-option': VOption,
                 },
-                // subscription title, used in cart and sent to checkout for replacement
-                subscriptionProductTitleDisplay() {
-                    let display = ''
-                    display += this.subscriptionProductTitle ? this.subscriptionProductTitle : this.product.title
-                    display += this.discountDisplay ? ' - ' + this.discountDisplay + ' off' : ''
-                    return display
+
+                data: {
+                    moneyFormat: '${{amount}}',
+
+                    // Initialize vue component with shopify liquid data rendered in state
+                    {% endraw %}
+                    product: {{ product | json }},
+
+                    subscriptionProductTitle: '{{ product.metafields.sf_upscribe.subscription_product_title | format_money }}',
+                    intervalFrequncyMetafield: '{{ product.metafields.sf_upscribe.interval_frequency }}',
+                    intervalUnitMetafield: '{{ product.metafields.sf_upscribe.interval_unit }}',
+
+                    defaultGlobalDiscountAmount: '{{ shop.metafields.sf_upscribe.default_discount_amount }}',
+
+                    discountAmount: '{{ product.metafields.sf_upscribe.discount_amount }}',
+                    //chargeLimit: '{{ product.metafields.sf_upscribe.charge_limit }}',
+
+                    recurringDiscountAmount: '{{ product.metafields.sf_upscribe.recurring_discount_amount }}',
+                    recurringDiscountAfterOrder: '{{ product.metafields.sf_upscribe.recurring_discount_after_order }}',
+
+                    oneTimeMessage: '{{ shop.metafields.sf_upscribe.one_time_message }}',
+                    subscriptionMessage: '{{ shop.metafields.sf_upscribe.subscribe_message }}',
+                    learnMoreUrl: '{{ shop.metafields.sf_upscribe.learn_more_url }}',
+                    howItWorksTitle: '{{ shop.metafields.sf_upscribe.how_it_works_title }}',
+                    howItWorksText: '{{ shop.metafields.sf_upscribe.how_it_works_text }}',
+
+                    // update on variant changes, this is used for initial setting
+                    activeSubsriptionDisplayPrice: '{{ product.selected_or_first_available_variant.price }}',
+                    activeSubsriptionDisplayComparePrice: '{{ product.selected_or_first_available_variant.compare_at_price }}',
+                    {% raw %}
+
+                    selectedFrequencyIndex: 0,
+                    productPurchaseType: 'onetime',
+                    infoIsOpen: false,
+                    subscriptionPrice: null,
+
+                    activeCurrencyString: null,
+                    activeCurrencyRate: null,
+                    subscriptionAmount: null
                 },
-                activeDiscountType() {
-                    var discountAmount = this.discountAmount
-                    var defaultGlobalDiscountAmount = this.defaultGlobalDiscountAmount
-                    var activeDiscount = discountAmount ? discountAmount : defaultGlobalDiscountAmount
+                mounted() {
+                    // reset
+                    this.selectedFrequencyIndex = 0
+                    this.productPurchaseType = 'onetime'
+                    this.infoIsOpen = false
+                    this.subscriptionPrice = null
 
-                    return activeDiscount.indexOf('$') > -1 ? '$' : '%'
+                    // add listener for variant update, set in theme.js
+                    // this listener could be different depeneding on if the theme uses the same base setup
+                    var vm = this
+                    window.addEventListener("upscribeVariantUpdate", function(event) {
+                        vm.handleVariantUpdateEvent(event)
+                    }, false);
+
+                    this.activeCurrencyString = window.Shopify.currency.active
+                    this.activeCurrencyRate = parseFloat(window.Shopify.currency.rate)
+
+                    var initialVariant = this.activeVariantId = this.product.variants[0]
+                    this.handleVariantUpdateEvent({detail: initialVariant})
                 },
-                activeDiscountAmount() {
-                    var discountAmount = this.discountAmount
-                    var defaultGlobalDiscountAmount = this.defaultGlobalDiscountAmount
+                watch: {
+                    // when onetime vs subscription is toggled
+                    productPurchaseType(newVal) {
 
-                    return discountAmount ? discountAmount :
-                        defaultGlobalDiscountAmount ? defaultGlobalDiscountAmount : 0
-                },
-                /*chargeLimit() {
-                    var chargeLimit = this.chargeLimit ? this.chargeLimit : 0
-                },*/
-                // build frequency options for select boxes
-                selectFrequencyOptions() {
-                    var intervalFrequency = this.intervalFrequency
-                    var intervalUnit = this.intervalUnit
+                        // if one time
+                        if (newVal === 'onetime') {
+                            // use stored non-discount prices from previous changes
+                            var originalPrice = this.activeSubsriptionDisplayPrice || false
+                            var comparePrice = this.activeSubsriptionDisplayComparePrice || false
 
-                    if (!intervalFrequency || ! intervalUnit) return false
+                            // put into money format
+                            var formatOriginalPrice = originalPrice ? this.formatMoney(originalPrice) : false
+                            var formatComparePrice = comparePrice ? this.formatMoney(comparePrice) : false
 
-                    return intervalFrequency.split(',').map(function(frequency) {
-                        return {
-                            value: frequency.trim(),
-                            mainText: frequency.trim(),
-                            subText: false
+                            // replace pricing elements with new vals
+                            this.setPricingDisplayEls(formatOriginalPrice,formatComparePrice)
                         }
-                    })
-                },
-                // plural unit display check
-                finalSubscriptionProperty() {
-                    var selectedFrequency = this.selectedFrequency
-                    var unit = this.intervalUnit
-                    if (!this.subscriptionSelected) return false
 
-                    if (selectedFrequency > 1) {
-                        return selectedFrequency + ' ' + unit + 's'
-                    } else {
-                        return selectedFrequency + ' ' + unit
+                        // if subscription
+                        else {
+                            // use stored non-discount prices from previous changes
+                            var originalPrice = this.activeSubsriptionDisplayPrice || false
+                            var comparePrice = this.activeSubsriptionDisplayComparePrice || false
+
+                            // calculate subscription discount and replace pricing elements with new vals
+                            this.calculateVariantPrices(originalPrice, comparePrice)
+                        }
                     }
                 },
-                selectedFrequency() {
-                    return this.selectFrequencyOptions[this.selectedFrequencyIndex].value
+                computed: {
+                    // helper for if current state is subscription
+                    subscriptionSelected() {
+                        return this.productPurchaseType === 'subscription'
+                    },
+                    // subscription title, used in cart and sent to checkout for replacement
+                    subscriptionProductTitleDisplay() {
+                        let display = ''
+                        display += this.subscriptionProductTitle ? this.subscriptionProductTitle : this.product.title
+                        display += this.discountDisplay ? ' - ' + this.discountDisplay + ' off' : ''
+                        return display
+                    },
+                    activeDiscountType() {
+                        var discountAmount = this.discountAmount
+                        var defaultGlobalDiscountAmount = this.defaultGlobalDiscountAmount
+                        var activeDiscount = discountAmount ? discountAmount : defaultGlobalDiscountAmount
+
+                        return activeDiscount.indexOf('$') > -1 ? '$' : '%'
+                    },
+                    activeDiscountAmount() {
+                        var discountAmount = this.discountAmount
+                        var defaultGlobalDiscountAmount = this.defaultGlobalDiscountAmount
+
+                        return discountAmount ? discountAmount :
+                            defaultGlobalDiscountAmount ? defaultGlobalDiscountAmount : 0
+                    },
+                    /*chargeLimit() {
+                        var chargeLimit = this.chargeLimit ? this.chargeLimit : 0
+                    },*/
+                    // build frequency options for select boxes
+                    selectFrequencyOptions() {
+                        var intervalFrequency = this.intervalFrequency
+                        var intervalUnit = this.intervalUnit
+
+                        if (!intervalFrequency || ! intervalUnit) return false
+
+                        return intervalFrequency.split(',').map(function(frequency) {
+                            return {
+                                value: frequency.trim(),
+                                mainText: frequency.trim(),
+                                subText: false
+                            }
+                        })
+                    },
+                    // plural unit display check
+                    finalSubscriptionProperty() {
+                        var selectedFrequency = this.selectedFrequency
+                        var unit = this.intervalUnit
+                        if (!this.subscriptionSelected) return false
+
+                        if (selectedFrequency > 1) {
+                            return selectedFrequency + ' ' + unit + 's'
+                        } else {
+                            return selectedFrequency + ' ' + unit
+                        }
+                    },
+                    selectedFrequency() {
+                        return this.selectFrequencyOptions[this.selectedFrequencyIndex].value
+                    },
+                    intervalUnit() {
+                        return this.intervalUnitMetafield ? this.intervalUnitMetafield : 'day'
+                    },
+                    intervalFrequency() {
+                        return this.intervalFrequncyMetafield ? this.intervalFrequncyMetafield : '15,30,45,60'
+                    },
                 },
-                intervalUnit() {
-                    return this.intervalUnitMetafield ? this.intervalUnitMetafield : 'day'
-                },
-                intervalFrequency() {
-                    return this.intervalFrequncyMetafield ? this.intervalFrequncyMetafield : '15,30,45,60'
-                },
-            },
-            methods: {
-                setFrequency(val) {
-                    this.selectedFrequencyIndex = val
-                },
-                discountCalculatedValue(total) {
-                    var discountType = this.activeDiscountType
-                    var discountAmount = this.activeDiscountAmount.replace('%', '');
+                methods: {
+                    setFrequency(val) {
+                        this.selectedFrequencyIndex = val
+                    },
+                    discountCalculatedValue(total) {
+                        var discountType = this.activeDiscountType
+                        var discountAmount = this.activeDiscountAmount.replace('%', '');
 
-                    var calcDiscountAmount = 0
+                        var calcDiscountAmount = 0
 
-                    if (discountType === '$') { // fixed
-                        calcDiscountAmount = discountAmount
-                    } else if (discountType === '%') { //percentage
-                        calcDiscountAmount = (total * discountAmount) / 100
+                        if (discountType === '$') { // fixed
+                            calcDiscountAmount = discountAmount
+                        } else if (discountType === '%') { //percentage
+                            calcDiscountAmount = (total * discountAmount) / 100
 
-                    } else {
-                        console.log('discount_amount should include % for "percentage" or $ for "fixed"')
-                    }
-                    return total - calcDiscountAmount
-                },
-                // replace pricing values, for compare and regular pricing
-                setPricingDisplayEls(original, compare) {
+                        } else {
+                            console.log('discount_amount should include % for "percentage" or $ for "fixed"')
+                        }
+                        return total - calcDiscountAmount
+                    },
+                    // replace pricing values, for compare and regular pricing
+                    setPricingDisplayEls(original, compare) {
 
-                    var regularEl = document.querySelector(".upscribe-price-item-regular");
-                    var saleEl = document.querySelector(".upscribe-price-item-sale");
-
-                    
-
-
-                    if (compare) {
-                        regularEl.innerHTML = compare;
-                        saleEl.innerHTML = original;
-                    }
-
-                    else {
-                        regularEl.innerHTML = original;
-                        saleEl.innerHTML = '';
-                    }
-                },
-                // on event triggered from variant change in select boxes
-                handleVariantUpdateEvent(event) {
-                    var variant = event.detail
-                    var originalPrice = variant.price || false
-                    var originalComparePrice = variant.compare_at_price || false
-
-                    // calculate and set new values
-                    this.calculateVariantPrices(originalPrice, originalComparePrice)
-                    // update original price if available
-                    this.calculateOriginalVariantPrices(variant)
-
-                    // store values if subscription isn't currently selected
-                    this.activeSubsriptionDisplayPrice = originalPrice
-                    this.activeSubsriptionDisplayComparePrice = originalComparePrice
-                },
-
-                calculateOriginalVariantPrices(variant) {
-                    var price = variant.price 
-                    var originalNoDiscountPriceEl = document.querySelector(".upscribe-price-item-original");
-                    if (originalNoDiscountPriceEl) {
-                        originalNoDiscountPriceEl.innerHTML = this.formatMoney(price)
-                    }
-                },
-
-                getFinalCurrencyRate(amount) {
-                    return ((amount / this.activeCurrencyRate)).toFixed(2)
-                },
-                calculateVariantPrices(originalPrice, originalComparePrice) {
-                    var displayDiscountPrice = false
-                    var displayDiscountComparePrice = false
-
-                    if (originalPrice) {
-                        var originalPriceEl = document.querySelector(".upscribe-price-item-regular");
-                        var discountPrice = originalPrice - this.discountCalculatedValue(originalPrice)
-
-                        // set for passing in cart property to checkout - not formatted
-                        //this.subscriptionAmount = this.getFinalCurrencyRate(originalPrice - discountPrice)
-
-                        displayDiscountPrice = this.formatMoney(originalPrice - discountPrice)
-                        this.subscriptionAmount = displayDiscountPrice
-                        
-                        //displayDiscountPrice = displayDiscountPriceValue.replace(/[^0-9]+00/g, '');
+                        var regularEl = document.querySelector(".upscribe-price-item-regular");
+                        var saleEl = document.querySelector(".upscribe-price-item-sale");
 
                         
-                    }
 
-                    if (originalComparePrice) {
-                        var discountComparePrice = originalComparePrice - this.discountCalculatedValue(originalComparePrice)
 
-                        displayDiscountComparePrice = this.formatMoney(originalComparePrice - discountComparePrice)
+                        if (compare) {
+                            regularEl.innerHTML = compare;
+                            saleEl.innerHTML = original;
+                        }
 
-                    }
+                        else {
+                            regularEl.innerHTML = original;
+                            saleEl.innerHTML = '';
+                        }
+                    },
+                    // on event triggered from variant change in select boxes
+                    handleVariantUpdateEvent(event) {
+                        var variant = event.detail
+                        var originalPrice = variant.price || false
+                        var originalComparePrice = variant.compare_at_price || false
 
-                    // replace price elements if subscription selected
-                    if (this.subscriptionSelected) {
-                        this.setPricingDisplayEls(displayDiscountPrice, displayDiscountComparePrice)
-                    }
+                        // calculate and set new values
+                        this.calculateVariantPrices(originalPrice, originalComparePrice)
+                        // update original price if available
+                        this.calculateOriginalVariantPrices(variant)
 
-                    // if onetime selected, store to use if selected next
-                    else{
-                        this.activeSubsriptionDisplayPrice = displayDiscountPrice
-                        this.activeSubsriptionDisplayComparePrice = displayDiscountComparePrice
+                        // store values if subscription isn't currently selected
+                        this.activeSubsriptionDisplayPrice = originalPrice
+                        this.activeSubsriptionDisplayComparePrice = originalComparePrice
+                    },
+
+                    calculateOriginalVariantPrices(variant) {
+                        var price = variant.price 
+                        var originalNoDiscountPriceEl = document.querySelector(".upscribe-price-item-original");
+                        if (originalNoDiscountPriceEl) {
+                            originalNoDiscountPriceEl.innerHTML = this.formatMoney(price)
+                        }
+                    },
+
+                    getFinalCurrencyRate(amount) {
+                        return ((amount / this.activeCurrencyRate)).toFixed(2)
+                    },
+                    calculateVariantPrices(originalPrice, originalComparePrice) {
+                        var displayDiscountPrice = false
+                        var displayDiscountComparePrice = false
+
+                        if (originalPrice) {
+                            var originalPriceEl = document.querySelector(".upscribe-price-item-regular");
+                            var discountPrice = originalPrice - this.discountCalculatedValue(originalPrice)
+
+                            // set for passing in cart property to checkout - not formatted
+                            //this.subscriptionAmount = this.getFinalCurrencyRate(originalPrice - discountPrice)
+
+                            displayDiscountPrice = this.formatMoney(originalPrice - discountPrice)
+                            this.subscriptionAmount = displayDiscountPrice
+                            
+                            //displayDiscountPrice = displayDiscountPriceValue.replace(/[^0-9]+00/g, '');
+
+                            
+                        }
+
+                        if (originalComparePrice) {
+                            var discountComparePrice = originalComparePrice - this.discountCalculatedValue(originalComparePrice)
+
+                            displayDiscountComparePrice = this.formatMoney(originalComparePrice - discountComparePrice)
+
+                        }
+
+                        // replace price elements if subscription selected
+                        if (this.subscriptionSelected) {
+                            this.setPricingDisplayEls(displayDiscountPrice, displayDiscountComparePrice)
+                        }
+
+                        // if onetime selected, store to use if selected next
+                        else{
+                            this.activeSubsriptionDisplayPrice = displayDiscountPrice
+                            this.activeSubsriptionDisplayComparePrice = displayDiscountComparePrice
+                        }
+                    },
+                    // shopify format money
+                    formatMoney(cents, format) {
+                        if (typeof cents === 'string') {
+                        cents = cents.replace('.', '');
+                        }
+                        var value = '';
+                        var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+                        var formatString = format || this.moneyFormat;
+
+                        function formatWithDelimiters(number, precision, thousands, decimal) {
+                        thousands = thousands || ',';
+                        decimal = decimal || '.';
+
+                        if (isNaN(number) || number === null) {
+                            return 0;
+                        }
+
+                        number = (number / 100.0).toFixed(precision);
+
+                        var parts = number.split('.');
+                        var dollarsAmount = parts[0].replace(
+                            /(\d)(?=(\d\d\d)+(?!\d))/g,
+                            '$1' + thousands
+                        );
+                        var centsAmount = parts[1] ? decimal + parts[1] : '';
+
+                        return dollarsAmount + centsAmount;
+                        }
+
+                        switch (formatString.match(placeholderRegex)[1]) {
+                        case 'amount':
+                            value = formatWithDelimiters(cents, 2);
+                            break;
+                        case 'amount_no_decimals':
+                            value = formatWithDelimiters(cents, 0);
+                            break;
+                        case 'amount_with_comma_separator':
+                            value = formatWithDelimiters(cents, 2, '.', ',');
+                            break;
+                        case 'amount_no_decimals_with_comma_separator':
+                            value = formatWithDelimiters(cents, 0, '.', ',');
+                            break;
+                        case 'amount_no_decimals_with_space_separator':
+                            value = formatWithDelimiters(cents, 0, ' ');
+                            break;
+                        case 'amount_with_apostrophe_separator':
+                            value = formatWithDelimiters(cents, 2, "'");
+                            break;
+                        }
+
+                        return formatString.replace(placeholderRegex, value);
                     }
                 },
-                // shopify format money
-                formatMoney(cents, format) {
-                    if (typeof cents === 'string') {
-                    cents = cents.replace('.', '');
-                    }
-                    var value = '';
-                    var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
-                    var formatString = format || this.moneyFormat;
-
-                    function formatWithDelimiters(number, precision, thousands, decimal) {
-                    thousands = thousands || ',';
-                    decimal = decimal || '.';
-
-                    if (isNaN(number) || number === null) {
-                        return 0;
-                    }
-
-                    number = (number / 100.0).toFixed(precision);
-
-                    var parts = number.split('.');
-                    var dollarsAmount = parts[0].replace(
-                        /(\d)(?=(\d\d\d)+(?!\d))/g,
-                        '$1' + thousands
-                    );
-                    var centsAmount = parts[1] ? decimal + parts[1] : '';
-
-                    return dollarsAmount + centsAmount;
-                    }
-
-                    switch (formatString.match(placeholderRegex)[1]) {
-                    case 'amount':
-                        value = formatWithDelimiters(cents, 2);
-                        break;
-                    case 'amount_no_decimals':
-                        value = formatWithDelimiters(cents, 0);
-                        break;
-                    case 'amount_with_comma_separator':
-                        value = formatWithDelimiters(cents, 2, '.', ',');
-                        break;
-                    case 'amount_no_decimals_with_comma_separator':
-                        value = formatWithDelimiters(cents, 0, '.', ',');
-                        break;
-                    case 'amount_no_decimals_with_space_separator':
-                        value = formatWithDelimiters(cents, 0, ' ');
-                        break;
-                    case 'amount_with_apostrophe_separator':
-                        value = formatWithDelimiters(cents, 2, "'");
-                        break;
-                    }
-
-                    return formatString.replace(placeholderRegex, value);
+                // remove listener
+                destroyed() {
+                    window.removeEventListener('upscribeVariantUpdate', this.handleVariantUpdateEvent);
                 }
-            },
-            // remove listener
-            destroyed() {
-                window.removeEventListener('upscribeVariantUpdate', this.handleVariantUpdateEvent);
-            }
-        })
+            })
+        }, 500);
     </script>
     {% endraw %}
 {% endif %}

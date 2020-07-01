@@ -96,6 +96,7 @@
   </div>
 </template>
 
+
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 

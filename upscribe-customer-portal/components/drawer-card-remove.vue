@@ -79,7 +79,8 @@ export default {
       />
 
       <v-button class="c-drawerCardRemove__removeButton" @onClick="removePaymentMethod"
-        >{{ atc['buttons.removeCard'] || 'Remove Payment Method' }}</v-button>
+        >{{ atc['buttons.removeCard'] || 'Remove Payment Method' }}</v-button
+      >
 
       <v-button
         class="c-drawerCardRemove__cancelButton"

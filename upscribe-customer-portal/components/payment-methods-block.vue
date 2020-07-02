@@ -62,17 +62,10 @@ export default {
 
     ...mapState('shop', [
       'stripePublicKey',
-      // 'checkoutStoreDomain',
-      // 'updateBillingAddressPending',
-      // 'updateBillingAddressError',
-      // 'checkoutData',
       'payment_type',
-      // 'cta_color',
     ]),
 
     ...mapState('account', ['accountData', 'guestCheckout']),
-
-    // ...mapGetters('checkout', ['checkoutBillingAddress']),
 
     ...mapState('payment', [
       'paymentType',
@@ -156,10 +149,6 @@ export default {
   },
 
   methods: {
-    handleMakeDefault() {
-      this.makeDefault = !this.makeDefault
-    },
-
     setBrowser() {
       const result = detectBrowser()
       this.browser = result
@@ -172,12 +161,16 @@ export default {
       'setPaymentValidationLiveMode',
     ]),
 
+    handleMakeDefault() {
+      this.makeDefault = !this.makeDefault
+    },
+
     handlePotentialPaymentVerificationRedirects() {
       const { $route, paymentType } = this
       const queryParams = $route.query || {}
       const { client_secret, livemode, source } = queryParams
 
-      console.log({ queryParams })
+      // console.log({ queryParams })
 
       if (client_secret || livemode || source) {
           this.setPaymentValidationClientSecret(client_secret)
@@ -186,13 +179,16 @@ export default {
 
         // not using existing card
         this.useNewPayment()
-        console.log('use new payment')
       }
 
       // set payment type selection
       if (paymentType) {
         this.setActivePaymentType(paymentType)
       }
+    },
+
+    handleClear(){
+      this.$refs['stripe-payment-options'].handleClear()
     },
 
     toggleActivePaymentType(type) {
@@ -213,7 +209,7 @@ export default {
         paymentTypeEnabled = true
       }
       if (!activePaymentType || activePaymentType === type) {
-        console.log({type })
+        // console.log({type })
         displayPaymentType = true
       }
 
@@ -225,8 +221,6 @@ export default {
       this.completeStripeCardInfo = payload.complete
       if (payload.error) {
         console.log({error: payload.error})
-      } else {
-        console.log('no error')
       }
     },
 
@@ -235,7 +229,6 @@ export default {
     },
 
     createPaymentMethodHandler() {
-      console.log('createPaymentMethod top')
       const { activePaymentType } = this
 
       if (!activePaymentType) {
@@ -262,9 +255,6 @@ export default {
 
       const stripePaymentOptions = this.$refs['stripe-payment-options']
       const braintreePaymentOptions = this.$refs['braintree-payment-options']
-
-      const activePaymentTypeEl = stripePaymentOptions.$refs['active-payment-type-' + this.activePaymentType]
-      console.log({activePaymentTypeEl})
 
       this.creatingPaymentMethodPending = true
 
@@ -311,10 +301,11 @@ export default {
 </script>
 
 <template>
-<div v-if="loadedStripe && stripePublicKey" class="c-defaultModal__main">
-  <div v-if="useNewPaymentState || (!paymentCards || !paymentCards.length)" class="c-paymentMethods__innerBlock">
+<div class="c-defaultModal__main">
+  <div v-if="useNewPaymentState || (!paymentCards || !paymentCards.length)"
+  :class="{'c-paymentMethods__innerBlock c-paymentMethods__innerBlock--color': !editPaymentMethodMode}">
 
-    <div v-if="!editPaymentMethodMode" class="c-paymentMethods__innerOptions" style="padding: 0">
+    <div v-if="!editPaymentMethodMode" class="c-paymentMethods__innerOptions c-paymentMethods__innerOptions--add" style="padding: 0">
       <a
         v-if="displayPaymentType('stripe_card')"
         href=""
@@ -324,8 +315,7 @@ export default {
         >
         <span class="c-newPaymentOptions__optionText">Card</span>
         <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
-        </a
-      >
+      </a>
 
       <a
         v-if="displayPaymentType('stripe_sepa_direct_debit')"
@@ -372,7 +362,7 @@ export default {
         >
         <span class="c-newPaymentOptions__optionText">Sofort</span>
         <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
-        </a>
+      </a>
 
         <a
           v-if="displayPaymentType('braintree_card')"
@@ -384,25 +374,12 @@ export default {
           <span class="c-newPaymentOptions__optionText">Braintree Card</span>
           <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
           </a>
-
-
-      <!-- <a
-        v-if="stripePaymentRequestEnabled && displayPaymentType('stripe_payment_request')"
-        href
-        class="c-newPaymentOptions__option c-heading4"
-        :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'stripe_payment_request' }"
-        @click.prevent="toggleActivePaymentType('stripe_payment_request')"
-      >
-        <span class="c-newPaymentOptions__optionText">{{ paymentRequestText }}</span>
-        <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
-      </a> -->
     </div>
   </div>
 
-  <div class="c-paymentMethods__options"
+  <div class="c-paymentMethods__options c-paymentMethods__options--add "
     :class="{ 'c-paymentMethods__options--visible': activePaymentType && loadedStripe }"
   >
-
     <braintree-payment-options
       v-if="activePaymentType && activePaymentType.includes('braintree')"
       ref="braintree-payment-options"
@@ -437,6 +414,7 @@ export default {
     <v-button
       :text="atc['buttons.cancel'] || 'Cancel'"
       type="link"
+      class="c-paymentMethodsBlock__button--white c-paymentMethodsBlock__buttonCancel"
       @onClick="$emit('cancel')"
     />
 
@@ -448,7 +426,7 @@ export default {
   </div>
 
   <stripe-payment-redirect-handling
-    v-if="loadedStripe"
+    v-if="loadedStripe && stripePublicKey"
     @processingRedirectPaymentVerification="handleProcessingRedirectPaymentVerification"
     @enableStripePaymentRequest="handleEnableStripePaymentRequest($event)"
     @handleChange="handleStripeElementChange"
@@ -462,6 +440,12 @@ export default {
 <style lang="scss">
 @import '@design';
 
+.c-defaultModal__main{
+  background-color: $color-white;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #eaf1f4;
+}
 
 .c-block--payment {
   margin-bottom: 22px;
@@ -718,15 +702,15 @@ export default {
   color: $color-text;
 }
 
-
-.c-paymentMethods__innerBlock {
-  border: 1px solid $color-border;
+.c-paymentMethods__innerBlock--color {
   background: #F7F9FB;
   border: 1px solid #EAF1F4;
 }
-.c-paymentMethods__innerOptions {
+
+.c-paymentMethods__innerOptions{
   padding-left: 44px;
 }
+
 
 .c-paymentMethods__innerOption {
   border-bottom: 1px solid #EAF1F4;
@@ -737,13 +721,27 @@ export default {
 
 .c-paymentMethods__options {
   display: none;
-  // padding: 16px;
-  background: #F7F9FB;
-  // border: 1px solid #EAF1F4;
-  margin-top: 20px;
+
+  &--add {
+    margin-top: 20px;
+  }
 
   &--visible {
     display: block;
   }
 }
+
+.c-paymentMethodsBlock__button--white{
+  background-color: $color-white;
+  border-color: $color-white;
+}
+
+.c-paymentMethodsBlock__buttonCancel{
+  display: none;
+  @include bp(tablet){
+    display: block;
+  }
+}
+
+
 </style>

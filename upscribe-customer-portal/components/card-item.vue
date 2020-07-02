@@ -47,7 +47,7 @@ export default {
 
     paymentMethodName() {
       const { card } = this
-      if (card.type === 'stripe_card') {
+      if (card.type.includes('card')) {
         return card.name || card.brand
       } else if ( card.type === 'stripe_sepa_direct_debit') {
         return 'SEPA Direct Debit'
@@ -58,8 +58,8 @@ export default {
 
     paymentMethodDetailText() {
       const { card } = this
-      if (card.type === 'stripe_card') {
-        return `*${card.last4} ${card.exp_month}/${card.exp_year} ${card.zipcode ? 'Zip: ' + card.zipcode : ''}`
+      if (card.type.includes('card')) {
+        return `*${card.last4} ${card.exp_month}/${card.exp_year} ${card.zipcode ? '<br>Zip: ' + card.zipcode : ''}`
 
       } else if (card.type === 'stripe_sepa_direct_debit') {
         return `Acct *${card.last4} / Bank ${card.bank_code}`
@@ -71,7 +71,7 @@ export default {
     cardSvg() {
       const { card } = this
       if (card && card.brand) {
-        return icons[this.card.brand.toLowerCase()]
+        return icons[this.card.brand.toLowerCase().replace(' ', '')]
       } else {
         return false
       }
@@ -100,13 +100,14 @@ export default {
 
       <div class="c-cardItem__left">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div v-if="card.type === 'stripe_card' && cardSvg" class="c-cardItem__cardIcon" v-html="cardSvg"></div>
+        <div v-if="card.type.includes('card') && cardSvg" class="c-cardItem__cardIcon" v-html="cardSvg"></div>
 
         <div class="c-cardItem__info">
           <span v-if="paymentMethodName" class="c-cardItem__name">{{ paymentMethodName }}</span>
 
           <div class="c-cardItem__editText">
-            <span v-if="paymentMethodDetailText">{{ paymentMethodDetailText }}</span>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <span v-if="paymentMethodDetailText" class="c-cardItem__editTextInner" v-html="paymentMethodDetailText"/>
 
             <div v-if="!noEdit" class="c-cardItem__edit" @click="$emit('editPaymentMethod')">
               <span v-if="atc['actions.editActionText']" class="c-cardItem__editText">{{ atc['actions.editActionText'] }}</span>
@@ -146,7 +147,8 @@ export default {
         <div class="c-cardItem__info">
           <span v-if="paymentMethodName" class="c-cardItem__name">{{ paymentMethodName }}</span>
 
-          <div v-if="paymentMethodDetailText" class="c-cardItem__editText c-cardItem__editText--mobile">{{ paymentMethodDetailText }}</div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-if="paymentMethodDetailText" class="c-cardItem__editText c-cardItem__editText--mobile" v-html="paymentMethodDetailText"/>
         </div>
       </div>
 
@@ -192,6 +194,8 @@ export default {
 
 .c-cardItem__edit {
   display: flex;
+  align-items: center;
+  justify-content: center;
   min-width: 60px;
   padding: 0 10px 0 20px;
   cursor: pointer;
@@ -206,6 +210,14 @@ export default {
   }
 }
 
+.c-cardItem__editText--mobile {
+  color: $color-text;
+
+  br {
+    display: none;
+  }
+}
+
 .c-cardItem__editIcon {
   width: 16px;
   height: 16px;
@@ -217,9 +229,13 @@ export default {
   display: block;
   font-size: 14px;
   color: $color-blue-secondary;
-  text-align: left;
+  text-align: center;
   transition: all 0.2s ease;
   margin-right: 8px;
+}
+
+.c-cardItem__editTextInner {
+  text-align: left;
 }
 
 .c-cardItem__inner {
@@ -246,19 +262,20 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  width: 100%;
 }
 
 .c-cardItem__name {
   display: block;
+  margin-bottom: 4px;
   text-transform: capitalize;
   color: $color-black;
-  font-size: 14px;
-  font-weight: bold;
-  margin: 5px 0 0 0;
 }
 
 .c-cardItem__editText {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   color: $color-blue-secondary;
 
@@ -290,6 +307,7 @@ export default {
 .c-cardItem__left{
   display: flex;
   width: 80%;
+  align-items: center;
 }
 
 .c-cardItem__lock{

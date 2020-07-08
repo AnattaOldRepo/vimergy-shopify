@@ -54,6 +54,17 @@ export default {
 
     ...mapState('shop', ['currencySymbol']),
 
+    atleastOneItemInStock() {
+      const { activeSubscription } = this
+      let willShip = false
+      activeSubscription.items.forEach(item => {
+        if (item.in_stock === null || item.in_stock === undefined || item.in_stock) {
+          willShip = true
+        }
+      })
+      return willShip
+    },
+
     deliveryEveryText() {
       const { activeSubscription } = this
       if (!activeSubscription) return false
@@ -301,6 +312,11 @@ export default {
             :key="product.id + '-' + index"
             :product="product"
           />
+          
+          <strong v-if="!atleastOneItemInStock" class="c-outOfStockBlock">
+            {{ atc['portal.allItemsOutOfStockMessage'] || 'All items are out of stock. This charge will be skipped and attempted again next cycle.' }}
+          </strong>
+
         </div>
 
         <content-placeholders v-else>

@@ -20,9 +20,10 @@
   </div>
 
   <div v-else class="c-details__shippingOptions">
-      <span class="c-details__loadingText"
-        >{{ atc['portal.shippingMethodsLoadingMethods'] || 'Loading Shipping Methods...' }}
-    </span>
+      <span v-if="atc['portal.shippingMethodsLoadingMethods']" class="c-details__loadingText"
+        >{{ atc['portal.shippingMethodsLoadingMethods'] }}
+     </span>
+
   </div>
 </template>
 
@@ -51,7 +52,7 @@ export default {
 
     activeShippingMethod() {
       const { activeSubscription, activeQueue, editNextOrder } = this
-
+      console.log(this.shippingMethods)
       let shippingLines = null
 
       if (editNextOrder) {
@@ -129,5 +130,6 @@ export default {
   font-weight: 500;
   color: $color-primary;
   text-align: center;
+  display: block;
 }
 </style>

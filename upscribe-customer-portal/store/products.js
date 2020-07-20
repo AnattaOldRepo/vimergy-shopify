@@ -185,15 +185,17 @@ export const getters = {
       (each) => each.variant_id === state.productVariantId
     )
 
-    if (firstPTag && firstPTag.length > 100) {
+    if (activeProduct && firstPTag && firstPTag.length > 100) {
       firstPTag = firstPTag.slice(0, 100) + '...'
       activeProduct['full_description'] = descriptionHolder
-    } else if (firstPTag && descriptionHolder.length > 100) {
+    } else if (activeProduct && firstPTag && descriptionHolder.length > 100) {
       firstPTag = firstPTag + '...'
       activeProduct['full_description'] = descriptionHolder
     }
 
-    activeProduct['description'] = firstPTag
+    if (activeProduct) {
+      activeProduct['description'] = firstPTag
+    }
 
     return activeProduct
   },

@@ -195,8 +195,8 @@ export default {
 .c-cardItem__edit {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-width: 60px;
+  justify-content: space-between;
+  min-width: 80px;
   padding: 0 10px 0 20px;
   cursor: pointer;
 

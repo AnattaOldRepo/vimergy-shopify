@@ -11,15 +11,16 @@ $color-gray-800: #333 !default;
 $color-gray-900: #212529 !default;
 $color-black: #000 !default;
 
-$color-blue-light-background: #f5f8fa !default;
-$color-blue-brand: #253237 !default;
+$color-blue-light-background: #F5F8FA !default;
+$color-blue-brand: #1ebefe !default;
 $color-blue-light-border: #eaf1f4 !default;
-$color-blue-secondary: #253237 !default;
-$color-danger: #f77 !default;
+$color-blue-secondary: #658597 !default;
+$color-danger: #FF7777 !default;
 
-$color-background-light: #fbfcfc !default;
+$color-background: #f7f9fb !default;
+$color-background-light: #FBFCFC !default;
 
-$color-placeholder: #a3b5bf !default;
+$color-placeholder: #A3B5BF !default;
 $color-icons: #a3b5bf !default;
 $color-border: #eaf1f4 !default;
 $color-input-border: #dcdcdf !default;
@@ -27,10 +28,10 @@ $color-input-border: #dcdcdf !default;
 $color-indigo: #6610f2 !default;
 $color-purple: #6f42c1 !default;
 $color-pink: #e83e8c !default;
-$color-red: #c21111 !default;
+$color-red: #FF7777 !default;
 $color-orange: #fd7e14 !default;
-$color-yellow: #ffc107 !default;
-$color-green: #6dbc73 !default;
+$color-yellow: #FFC954 !default;
+$color-green: #08BD7C !default;
 $color-teal: #20c997 !default;
 $color-cyan: #17a2b8 !default;
 
@@ -58,11 +59,6 @@ $color-border: $color-gray-300 !default;
 $color-border-dark: $color-gray-500 !default;
 
 $color-button: $color-primary !default;
-$color-button-hover: $color-blue-secondary !default;
+$color-button-hover: lighten($color-primary, 10%) !default;
 $color-link: $color-primary !default;
-$color-link-hover: $color-blue-secondary !default;
-
-$color-background-light: #fbfcfc !default;
-$color-background: #f7f9fb !default;
-
-$color-font-portal: #002856 !default;
+$color-link-hover: lighten($color-primary, 10%) !default;

@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 export const mutations = {
-  stateChanged: function(data) {
+  stateChanged: function (data) {
     window.dataLayer = window.dataLayer || []
     window._rsq = window._rsq || []
 
@@ -24,7 +24,7 @@ export const mutations = {
     }
 
     if ('upscribeAnalytics/pushAnalyticsEvent' === data.mutation.type) {
-      console.log('tracking pushAnalyticsEvent', data.mutation)
+      // console.log('tracking pushAnalyticsEvent', data.mutation)
 
       const { event, segmentEventName, payload, analytics } = data.mutation
       // const { customerId, subscriptionId, queueId } = payload
@@ -40,11 +40,10 @@ export const mutations = {
         })
       }
 
-      console.log('window.analytics', window.analytics)
+      // console.log('window.analytics', window.analytics)
 
       //  Segment
       if (window.analytics) {
-        if (!window || !window.analytics || !window.analytics.track) return
         // Segment Identify Event
         if (segmentEventName && segmentEventName === 'Identify') {
           const { customer } = window.UpscribeAnalytics
@@ -62,7 +61,7 @@ export const mutations = {
 
           // Default Segment Event
         } else {
-          console.log('track', { event, segmentEventName, payload, analytics })
+          // console.log('track', { event, segmentEventName, payload, analytics })
           window.analytics.track(payload.event, {
             ...payload.payload,
             analytics: { ...window.UpscribeAnalytics },

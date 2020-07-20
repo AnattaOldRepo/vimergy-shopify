@@ -18,6 +18,36 @@ export default {
     activeSubscriptionProducts() {
       return this.activeSubscription.items
     },
+
+    intervalUnitDisplay() {
+      const { activeSubscription, atc } = this
+      let intervalUnit = activeSubscription.period
+      let plural = activeSubscription.interval > 1
+
+      let displayUnit = ''
+      if (intervalUnit === 'day') {
+        if (plural) {
+          displayUnit = atc['date-time.days-unit'] || 'days'
+        } else {
+          displayUnit = atc['date-time.day-unit'] || 'day'
+        }
+      } else if (intervalUnit === 'week') {
+        if (plural) {
+          displayUnit = atc['date-time.weeks-unit'] || 'weeks'
+        } else {
+          displayUnit = atc['date-time.week-unit'] || 'week'
+        }
+      } else if (intervalUnit === 'month') {
+        if (plural) {
+          displayUnit = atc['date-time.months-unit'] || 'months'
+        } else {
+          displayUnit = atc['date-time.month-unit'] || 'month'
+        }
+      } else {
+        displayUnit = atc['date-time.days-unit'] || 'days'
+      }
+      return displayUnit
+    },
   },
   methods: {
     ...mapMutations('variantSelectProduct', ['setVariantSelectProduct']),
@@ -38,7 +68,7 @@ export default {
       v-if="activeSubscription.interval && activeSubscription.period"
       class="c-drawer__subtitle"
       >{{ atc['portal.editProductsDrawerInfoText'] || 'These products ship every'}} {{ activeSubscription.interval }}
-      {{ activeSubscription.period }}</p
+      {{ intervalUnitDisplay }}</p
     >
 
     <div class="c-drawerDeliveryFrequency__options">

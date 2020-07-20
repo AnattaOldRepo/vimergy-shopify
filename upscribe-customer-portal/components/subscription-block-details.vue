@@ -171,7 +171,7 @@ export default {
 
     <subscription-block-option-wrap @onClick="drawerCardsOpen = true">
       <subscription-block-option
-        v-if="activeSubscription && paymentInfo"
+				v-if="activeSubscription && paymentInfo"
         :title="atc['portal.subscriptionDetailsPaymentMethodLabel'] || 'Payment Method'"
         :text-med="true"
         @onClick="drawerCardsOpen = true"
@@ -182,13 +182,13 @@ export default {
 
       </subscription-block-option>
 
-      <subscription-block-option
-        v-else-if="activeSubscription && !activeCard"
-        @onClick="drawerCardsOpen = true"
-      >
-        <span class="c-portalBlockOption__text--small">{{ atc['portal.subscriptionDetailsPaymentMethodLabelNoPayment'] ||
-            'No Payment Method attached to this Subscription. Click here to add one.' }}</span>
-      </subscription-block-option>
+			<subscription-block-option
+				v-else-if="activeSubscription && !activeCard"
+				@onClick="drawerCardsOpen = true"
+			>
+				<span class="c-portalBlockOption__text--small">{{ atc['portal.subscriptionDetailsPaymentMethodLabelNoPayment'] ||
+						'No Payment Method attached to this Subscription. Click here to add one.' }}</span>
+			</subscription-block-option>
 
 
       <content-placeholders v-else>
@@ -233,7 +233,7 @@ export default {
 }
 
 .c-portalBlockOption__text{
-  font-size: 13px;
+  font-size: 18px;
   line-height: 23px;
 }
 

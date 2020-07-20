@@ -221,8 +221,20 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 15px;
   width: 100%;
+  max-height: 46px;
+
+  &:last-of-type {
+    margin-bottom: 0px;
+  }
+
+  &:last-child{
+    margin-bottom: 0px;
+  }
+
+  @include bp(tablet){
+    margin-bottom: 15px;
+  }
 
   &--error {
   }
@@ -242,10 +254,6 @@ export default {
         font-size: 12px;
       }
     }
-  }
-
-  &:last-of-type {
-    margin-bottom: 0;
   }
 
   &--half {
@@ -281,18 +289,19 @@ export default {
 .c-formGroup__label {
   z-index: 1;
   pointer-events: none;
-  color: $color-text-light;
+  color: $color-blue-secondary;
   padding-left: 5px;
   margin-bottom: 6px;
-  font-family: $font-primary-regular;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
   transition: all 0.3s ease;
-
   position: absolute;
   top: 15px;
   left: 8px;
 
+  @include bp(tablet){
+    color: $color-placeholder;
+  }
 
   &--required {
     &:after {
@@ -303,7 +312,7 @@ export default {
   &--optionalText {
     font-size: 12px;
     margin-left: 4px;
-    color: $color-text-light;
+    color: $color-placeholder;
   }
 
   &--withIcon {
@@ -353,6 +362,11 @@ export default {
   padding-top: 8px;
   font-size: 12px;
   color: $color-error;
+  display: none;
+
+  @include bp(tablet){
+    display: block;
+  }
 }
 
 .c-formGroup__inputErrorIcon {
@@ -368,15 +382,7 @@ export default {
   }
 
   .c-formGroup {
-    &:last-of-type {
-      margin-bottom: 15px;
-    }
-
     @include bp(mobile-large-max) {
-      &:last-of-type {
-        margin-bottom: 20px;
-      }
-
       &--half {
         width: 100%;
       }

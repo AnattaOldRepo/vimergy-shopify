@@ -68,7 +68,7 @@ export default {
     deliveryEveryText() {
       const { activeSubscription } = this
       if (!activeSubscription) return false
-      return `${activeSubscription.interval} Days`
+      return `${activeSubscription.interval}`
     },
 
     intervalUnitDisplay() {
@@ -285,7 +285,7 @@ export default {
       <subscription-block-option
         v-if="deliveryEveryText"
         :title="atc['portal.subscriptionSettingsDeliverEveryLabel'] || 'Deliver Every'"
-        :text="deliveryEveryText"
+        :text="deliveryEveryText + ' ' + intervalUnitDisplay"
         text-large
       />
 
@@ -312,11 +312,10 @@ export default {
             :key="product.id + '-' + index"
             :product="product"
           />
-          
+
           <strong v-if="!atleastOneItemInStock" class="c-outOfStockBlock">
             {{ atc['portal.allItemsOutOfStockMessage'] || 'All items are out of stock. This charge will be skipped and attempted again next cycle.' }}
           </strong>
-
         </div>
 
         <content-placeholders v-else>
@@ -402,7 +401,6 @@ export default {
 
   @include bp(tablet-large){
     flex-direction: row;
-    justify-content: space-between;
   }
 
   button{
@@ -410,6 +408,11 @@ export default {
       margin-bottom: 15px;
       @include bp(tablet-large){
         margin-bottom: 0;
+        margin-right: 3px;
+      }
+
+      @include bp(desktop){
+          margin-right: 6px;
       }
     }
   }

@@ -1,4 +1,6 @@
 <script>
+/* eslint-disable eqeqeq */
+
 import { mapState } from 'vuex'
 import VButton from '@components/v-button.vue'
 
@@ -31,6 +33,10 @@ export default {
   data: () => {
     return {
       selectedVariantId: null,
+      unavailable: false,
+      activeOption1: false,
+      activeOption2: false,
+      activeOption3: false,
     }
   },
 
@@ -40,6 +46,8 @@ export default {
     ...mapState('products', ['productImages']),
 
     ...mapState('shop', ['currencySymbol']),
+
+    ...mapState('editMode', ['editNextOrder']),
 
     productBuiltProperties() {
       const { product } = this
@@ -52,6 +60,26 @@ export default {
         })
       }
       return finalProps
+    },
+
+    allApplicableVariants() {
+      // we don't care if the variants are applicable or not if it's a onetime add
+      if (this.editNextOrder) return true
+
+      if (!this.productBuiltProperties.applicable_variants) {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    applicableVariantsArray() {
+      const { productBuiltProperties } = this
+      if (productBuiltProperties && productBuiltProperties.applicable_variants) {
+        return productBuiltProperties.applicable_variants.split(',')
+      } else {
+        return []
+      }
     },
 
     subscriptionDiscountAmount() {
@@ -97,16 +125,38 @@ export default {
 
     variantsObj() {
       const { variants } = this.product
+      const { applicableVariantsArray, allApplicableVariants } = this
       let variantsObj = {}
       variants.forEach((variant) => {
-        variantsObj[variant.id] = variant
+        if (allApplicableVariants) {
+          variantsObj[variant.id] = variant
+        }
+
+        // check against applicable variants array
+        else {
+          if (applicableVariantsArray.includes(variant.id.toString())) {
+            variantsObj[variant.id] = variant
+          }
+        }
       })
       return variantsObj
     },
 
     selectedVariant() {
-      const { variantsObj, selectedVariantId } = this
-      return variantsObj[selectedVariantId]
+      const { variantsObj, selectedVariantId, unavailable, activeOption1, activeOption2, activeOption3 } = this
+      if (unavailable) {
+        // face variant to show unavailable
+        return {
+          title: 'Unavailable',
+          price: '',
+          option1: activeOption1,
+          option2: activeOption2,
+          option3: activeOption3,
+        }
+
+      } else {
+        return variantsObj[selectedVariantId]
+      }
     },
 
     variantPrice() {
@@ -140,7 +190,11 @@ export default {
     },
 
     inStock() {
-      const { selectedVariant } = this
+      const { selectedVariant, unavailable } = this
+      if (unavailable) {
+        return false
+      }
+
       return (
         selectedVariant.inventory_policy === 'continue' ||
         selectedVariant.inventory_quantity > 0 ||
@@ -149,9 +203,23 @@ export default {
     },
   },
 
+  watch: {
+    selectedVariant(val) {
+      console.log({val})
+      if (val.option1) this.activeOption1 = val.option1
+      if (val.option2) this.activeOption2 = val.option2
+      if (val.option3) this.activeOption3 = val.option3
+    },
+  },
+
+
   mounted() {
-    const { variants } = this.product
-    this.selectedVariantId = variants[0].id
+    const { variantsObj } = this
+    console.log({variantsObj})
+
+    if (!this.isEmptyObject(variantsObj)) {
+      this.selectedVariantId = variantsObj[Object.keys(variantsObj)[0]].id
+    }
   },
 
   methods: {
@@ -169,8 +237,16 @@ export default {
     handleSelectOption({ value, position }) {
       if (this.updating) return
 
-      const { variants } = this.product
-      const { selectedVariant } = this
+      const { selectedVariant, variantsObj } = this
+
+      // set for if unavailable to display
+      this[`activeOption${position}`] = value
+      console.log('JUST SET ACTIVE OPTION', `activeOption[${position}]`, value)
+
+      console.log({variantsObj})
+
+      console.log({ value, position })
+      console.log({selectedVariant})
 
       // keep same options as current selected variant
       const checkOptions = {
@@ -182,14 +258,58 @@ export default {
       // replace the option check with the one selected in variant select option
       checkOptions[`option${position}`] = value
 
-      let matchingVariants = variants.filter((variant) => {
-        if (variant.option1 !== checkOptions.option1) return false
-        if (variant.option2 !== checkOptions.option2) return false
-        if (variant.option3 !== checkOptions.option3) return false
-        return true
+      let matchingVariants = []
+
+      Object.keys(variantsObj).forEach((key) => {
+        let variant = variantsObj[key]
+        console.log({variant})
+        console.log(
+          variant.option1,
+          variant.option2,
+          variant.option3,
+        )
+
+        let match1 = true
+        let match2 = true
+        let match3 = true
+
+        if (variant.option1) {
+          console.log({ 'var1':variant.option1 , 'new1':checkOptions.option1})
+          if (variant.option1 != checkOptions.option1) {
+            match1 = false
+          }
+        }
+
+        if (variant.option2) {
+          console.log({ 'var2':variant.option2 , 'new2':checkOptions.option2})
+
+          if (variant.option2 != checkOptions.option2) {
+            match2 = false
+          }
+        }
+
+        if (variant.option3) {
+          console.log({ 'var3':variant.option3 , 'new3':checkOptions.option3})
+
+          if (variant.option3 != checkOptions.option3) {
+            match3 = false
+          }
+        }
+
+        console.log({match1, match2, match3})
+
+        if (match1 && match2 && match3) {
+          console.log('it\'s a match')
+          matchingVariants.push(variant)
+        }
       })
 
-      this.selectedVariantId = matchingVariants[0].id
+      if (matchingVariants[0]) {
+        this.selectedVariantId = matchingVariants[0].id
+        this.unavailable = false
+      } else {
+        this.unavailable = true
+      }
     },
   },
 }
@@ -213,25 +333,24 @@ export default {
         product.title
       }}</h3>
 
-        <span v-if="subscriptionDiscountAmount" class="c-variantSelectBlock__discountInfo"
-          >{{ atc['labels.autoRenew'] || 'Auto Renew' }} ({{ subscriptionDiscountAmount }})</span
+        <span v-if="subscriptionDiscountAmount" class="c-variantSelectBlock__discountInfo">{{ atc['labels.autoRenew'] || 'Auto Renew' }} ({{ subscriptionDiscountAmount }})</span
         >
 
       <span v-if="selectedVariant && selectedVariantPrice" class="c-variantSelectBlock__price"
         >{{ currencySymbol }}{{ selectedVariantPrice }}</span
       >
 
+      <span v-else class="c-variantSelectBlock__price"
+        >{{ atc['labels.unavailable'] || 'Unavailable' }}</span>
+
       <div
         v-if="product && (product.options > 1 || (product.variants && product.variants.length > 1))"
         class="c-variantSelectBlock__optionSelectors"
       >
         <product-variant-selector
-          v-for="option in product.options"
-          :key="option.position"
           :product="product"
           :variants-obj="variantsObj"
           :selected-variant="selectedVariant"
-          :option="option"
           :updating="updating"
           @selectOption="handleSelectOption"
         />

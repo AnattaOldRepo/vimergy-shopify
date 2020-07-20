@@ -268,7 +268,10 @@ export default {
     cardDisplayCancelledRoute(){
       const { activeCard } = this
 
-      return `<span class="c-addressPayment__formatted--large black">CARD *${ activeCard.last4 } ${ activeCard.exp_month }/${ activeCard.exp_year } ${activeCard.zipcode ? 'Zip: ' + activeCard.zipcode : ''}</span>`
+      if(activeCard){
+        return `<span class="c-addressPayment__formatted--large black">CARD *${ activeCard.last4 } ${ activeCard.exp_month }/${ activeCard.exp_year } ${activeCard.zipcode ? 'Zip: ' + activeCard.zipcode : ''}</span>`
+      }
+      return 'No payment method attached to this subscription'
     },
 
     isCancelledSubscriptionRoute(){

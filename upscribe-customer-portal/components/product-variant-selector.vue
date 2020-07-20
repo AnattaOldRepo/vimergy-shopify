@@ -1,10 +1,13 @@
 <script>
+
+import ProductVariantSelectorOptions from '@components/product-variant-selector-options'
+
 export default {
+  components: {
+    ProductVariantSelectorOptions,
+  },
+
   props: {
-    option: {
-      type: Object,
-      required: true,
-    },
     product: {
       type: Object,
       required: true,
@@ -17,6 +20,10 @@ export default {
       type: Object,
       required: true,
     },
+    editNextOrder: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -27,108 +34,122 @@ export default {
     }
   },
 
+  computed: {
+    optionOneValue() {
+      return this.selectedVariant.option1
+    },
+    optionTwoValue() {
+      return this.selectedVariant.option2
+    },
+    optionThreeValue() {
+      return this.selectedVariant.option3
+    },
+    optionOneOptions() {
+      const { product, variantsObj } = this
+      const initialOptions = product.options[0]
+      if (!initialOptions) return false
+
+      return this.buildOptionOptions(product, variantsObj, initialOptions)
+    },
+
+    optionTwoOptions() {
+      const { product, variantsObj } = this
+      const initialOptions = product.options[1]
+      if (!initialOptions) return false
+
+      return this.buildOptionOptions(product, variantsObj, initialOptions)
+    },
+
+    optionThreeOptions() {
+      const { product, variantsObj } = this
+      const initialOptions = product.options[2]
+      if (!initialOptions) return false
+
+      return this.buildOptionOptions(product, variantsObj, initialOptions)
+    },
+  },
+
   methods: {
+    buildOptionOptions(product, variantsObj, initialOptions) {
+      let final = []
+
+      Object.keys(variantsObj).forEach(key => {
+        let variant = variantsObj[key]
+        if (!final.includes(variant[`option${initialOptions.position}`])) {
+          final.unshift(variant[`option${initialOptions.position}`])
+        }
+      })
+
+      return final
+    },
     toggle() {
       this.isOpen = !this.isOpen
       this.hoverIndex = this.selectedindex
     },
-    select(value) {
-      const { option } = this
-      console.log('value', value)
+    select({value, position}) {
+      // console.log('select', { value, position })
       this.$emit('selectOption', {
         value,
-        position: option.position,
+        position,
       })
-    },
-    selectedOptionValue(option) {
-      const { selectedVariant } = this
-      return this.titleCase(selectedVariant[`option${option.position}`])
-    },
-    isItemSelected(position, value) {
-      const { selectedVariant } = this
-      return selectedVariant[`option${position}`] === value
-    },
-    moveUp() {
-      this.hoverIndex =
-        this.hoverIndex === 0
-          ? this.option.values.length - 1
-          : this.hoverIndex - 1
-    },
-    moveDown() {
-      this.hoverIndex = (this.hoverIndex + 1) % this.option.values.length
-    },
-    selectFromKeyboard() {
-      this.select(this.hoverIndex)
-      this.toggle()
-    },
-    handleBlur() {
-      if (this.isOpen) {
-        this.toggle()
-      }
     },
   },
 }
 </script>
 
 <template>
-  <div
-    v-if="product && variantsObj && selectedVariant && option"
-    class="c-productVariantSelector"
-  >
-    <span class="c-productVariantSelector__label">
-      {{ titleCase(option.name) }}
-    </span>
-    <div
-      class="c-productVariantSelector__selector"
-      :aria-expanded="[isOpen ? 'true' : 'false']"
-      :aria-owns="'lbox_' + _uid"
-      aria-autocomplete="none"
-      role="combobox"
-      tabindex="0"
-      :class="[
-        'c-vueSelect__dropdown',
-        isOpen ? 'c-vueSelect__dropdown--open' : 'c-vueSelect__dropdown--close',
-      ]"
-      @blur="handleBlur"
-      @click="toggle"
-      @keyup.space="toggle"
-      @keyup.up="moveUp"
-      @keyup.down="moveDown"
-      @keyup.enter="selectFromKeyboard"
-    >
-      <span class="c-vueSelect__value">{{ selectedOptionValue(option) }}</span>
-      <ul
-        :id="'lbox_' + _uid"
-        :class="[
-          'c-vueSelect__optionlist',
-          isOpen ? '' : 'c-vueSelect__optionlist--close',
-        ]"
-        role="listbox"
-      >
-        <li
-          v-for="(optionValue, index) in option.values"
-          :key="index"
-          :aria-selected="[
-            isItemSelected(option.position, optionValue) ? 'true' : 'false',
-          ]"
-          :class="[
-            'c-vueSelect__option',
-            isItemSelected(option.position, optionValue)
-              ? 'c-vueSelect__option--selected'
-              : '',
-            hoverIndex === index ? 'c-vueSelect__optionlist--hover' : '',
-          ]"
-          role="option"
-          @click="select(optionValue)"
-          >{{ titleCase(optionValue) }}</li
-        >
-      </ul>
-    </div>
-  </div>
+<div v-if="product && variantsObj && selectedVariant" class="c-productVariantSelectorWrapper"
+  :class="{
+    'c-productVariantSelectorWrapper--two': optionOneOptions && optionTwoOptions && !optionThreeOptions,
+    'c-productVariantSelectorWrapper--three': optionOneOptions && optionTwoOptions && optionThreeOptions
+  }"
+>
+
+  <product-variant-selector-options
+    v-if="optionOneOptions"
+    :option-group="optionOneOptions"
+    :selected-option="optionOneValue"
+    :options-name="product.options[0].name"
+    :option-position="1"
+    @select="select"
+  />
+
+  <product-variant-selector-options
+    v-if="optionTwoOptions"
+    :option-group="optionTwoOptions"
+    :selected-option="optionTwoValue"
+    :options-name="product.options[1].name"
+    :option-position="2"
+    @select="select"
+  />
+
+  <product-variant-selector-options
+    v-if="optionThreeOptions"
+    :option-group="optionThreeOptions"
+    :selected-option="optionThreeValue"
+    :options-name="product.options[2].name"
+    :option-position="3"
+    @select="select"
+  />
+</div>
 </template>
 
 <style lang="scss">
 @import '@design';
+
+.c-productVariantSelectorWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+
+  &--two {
+    grid-row-gap: 20px;
+  }
+
+  &--three {
+    grid-template-columns: 1fr;
+  }
+}
 
 .c-productVariantSelector {
   width: 100%;
@@ -177,15 +198,16 @@ export default {
     height: 0;
     content: '';
     border-right: 6px solid transparent;
-    border-bottom: 6px solid $color-blue-light-border;
+    border-bottom: 6px solid $color-border-dark;
     border-left: 6px solid transparent;
   }
 }
 .c-vueSelect__value {
   display: block;
   height: 45px;
-  padding: 16px;
-  color: $color-blue-secondary;
+  padding: 10px 16px;
+  border: 1px solid $color-border-dark;
+  border-radius: 5px;
   outline: none;
   &:focus {
     border-color: $color-primary;
@@ -200,7 +222,7 @@ export default {
 .c-vueSelect__optionlist {
   position: absolute;
   background-color: $color-white;
-  border: 1px solid $color-blue-light-border;
+  border: 1px solid $color-border-dark;
   border-radius: 0 0 5px 5px;
   list-style: none;
   padding: 0;
@@ -224,12 +246,5 @@ export default {
 .c-vueSelect__optionlist--hover,
 .c-vueSelect__option:hover {
   background-color: $color-gray-100;
-}
-.c-vueSelect__option--selected {
-  // background-color: $color-gray-300;
-
-  &:hover {
-    // background-color: $color-primary-light;
-  }
 }
 </style>

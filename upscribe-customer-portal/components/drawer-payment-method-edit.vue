@@ -4,7 +4,6 @@ import { mapMutations, mapState, mapActions } from 'vuex'
 // import DrawerWrap from '@components/drawer-wrap.vue'
 import CardItem from '@components/card-item.vue'
 import EditPaymentMethodsBlock from '@components/edit-payment-methods-block.vue'
-
 // import VButton from '@components/v-button.vue'
 
 import detectBrowser from '@utils/detectBrowser.js'
@@ -51,31 +50,20 @@ export default {
 			stripePaymentRequestEnabled: false,
 			processingRedirectPaymentVerification: false,
 
-			// what
 			updating: false,
 		}
 	},
 
 	computed: {
-    ...mapState('customer', ['paymentCards', 'customerShopifyId']),
+		...mapState('customer', ['paymentCards', 'customerShopifyId']),
 
 		...mapState('cards', ['activeEditCard']),
 
 		...mapState('translations', ['atc']),
 
-		...mapState('shop', [
-			'stripePublicKey',
-			// 'checkoutStoreDomain',
-			// 'updateBillingAddressPending',
-			// 'updateBillingAddressError',
-			// 'checkoutData',
-			'payment_type',
-			// 'cta_color',
-		]),
+		...mapState('shop', ['stripePublicKey', 'payment_type']),
 
 		...mapState('account', ['accountData', 'guestCheckout']),
-
-		// ...mapGetters('checkout', ['checkoutBillingAddress']),
 
 		...mapState('payment', ['paymentType', 'paymentSource', 'savedSourceData']),
 
@@ -157,10 +145,9 @@ export default {
 		setBrowser() {
 			const result = detectBrowser()
 			this.browser = result
-			console.log(result)
-    },
+		},
 
-    ...mapActions('customer', ['GET_CUSTOMER']),
+		...mapActions('customer', ['GET_CUSTOMER']),
 
 		...mapActions('cards', ['UPDATE_PAYMENT_METHOD']),
 
@@ -175,7 +162,7 @@ export default {
 			const queryParams = $route.query || {}
 			const { client_secret, livemode, source } = queryParams
 
-			console.log({ queryParams })
+			// console.log({ queryParams })
 
 			if (client_secret || livemode || source) {
 				this.setPaymentValidationClientSecret(client_secret)
@@ -222,42 +209,41 @@ export default {
 			fullResponse,
 			newPaymentData,
 			updatePaymentData,
-      paymentType,
-      paymentCustomerId,
+			paymentType,
 		}) {
-      this.updatePaymentMethod(updatePaymentData, paymentType, paymentCustomerId)
+      this.updatePaymentMethod(updatePaymentData, paymentType)
 		},
 
-    async updatePaymentMethod(updatePaymentData, paymentType, customerPaymentId, paymentCustomerId) {
-      const { customerShopifyId } = this
-			console.log('updatePaymentMethod', { updatePaymentData })
+		async updatePaymentMethod(updatePaymentData, paymentType) {
+			const { customerShopifyId } = this
+
+      // console.log('updatePaymentMethod', {updatePaymentData})
+      const paymentCustomerId = this.activeEditCard.payment_customer_id
 			const paymentMethodId = this.activeEditCard.id
 			const updatePayload = updatePaymentData
-
-      this.$emit('setDrawerStatus', 'PENDING')
-			this.updating = true
+			this.$emit('setDrawerStatus', 'PENDING')
 			try {
-        await this.UPDATE_PAYMENT_METHOD({updatePayload, paymentMethodId, paymentCustomerId})
-        await this.GET_CUSTOMER(customerShopifyId)
+        await this.UPDATE_PAYMENT_METHOD({updatePayload, paymentMethodId, paymentType, paymentCustomerId})
+				await this.GET_CUSTOMER(customerShopifyId)
 
 				this.$emit('setDrawerStatus', 'SUCCESS')
-				// this.$emit('setMode', 'default')
+				this.$emit('setMode', 'default')
 			} catch (e) {
-				console.log('card/UPDATE_PAYMENT_METHOD edit error: ', e)
-  			this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message.message ? e.message.message : e.message})
-
+				console.log('card/UPDATE_PAYMENT_METHOD error: ', e)
+				this.$emit('setDrawerStatus', {
+					state: 'FAILURE',
+					message: e.message.message ? e.message.message : e.message,
+				})
 			} finally {
 				this.updating = false
 			}
 		},
 
 		handleStripeElementChange(payload) {
-			console.log('handleStripeElementChangePayloads: ', payload)
+			// console.log('handleStripeElementChangePayload: ', payload)
 			this.completeStripeCardInfo = payload.complete
 			if (payload.error) {
 				console.log({ error: payload.error })
-			} else {
-				console.log('no error')
 			}
 		},
 
@@ -346,51 +332,48 @@ export default {
 
 <template>
 	<!-- <drawer-wrap v-if="activeEditCard" :show="show" @close="$emit('close')"> -->
-		<div
-			v-if="activeEditCard"
-			class="c-drawer c-drawerEditCard"
-			:class="{ 'c-drawer--paddingDefault': !editNextOrder }"
-		>
-			<div class="c-drawer__inner" style="padding:0;">
-				<h2 class="c-drawer__title">{{
-					atc['portal.editCardDrawerTitle'] || 'Edit Payment Method'
-				}}</h2>
-				<div style="padding: 0 20px;">
-					<card-item no-edit :card="activeEditCard" />
+	<div
+		v-if="activeEditCard"
+		class="c-drawer c-drawerEditCard"
+		:class="{ 'c-drawer--paddingDefault': !editNextOrder }"
+	>
+		<div class="c-drawer__inner">
+			<h2 class="c-drawer__title">{{
+				atc['portal.editCardDrawerTitle'] || 'Edit Payment Method'
+			}}</h2>
 
-          <edit-payment-methods-block
-						:updating="updating"
-						:submit-button-text="
-							atc['buttons.updateCard'] || 'Save Updated Payment Method'
-						"
-						edit-payment-method-mode
-						@cancel="$emit('setMode', 'default')"
-            @remove="showRemoveCardPrompt"
-						@finalPaymentPayloadResponse="handleFinalPaymentPayloadResponse"
-					/>
+			<card-item no-edit :card="activeEditCard" />
 
-					<!-- <div class="c-defaultModal__main">
-            <div v-if="removeableCard" class="mt-15 has-text-right">
-              <a
-                class="button is-danger c-removeCardButton "
-                @click.prevent="$emit('setMode', 'remove')"
-                >Remove Card</a
-              >
-            </div>
-          </div> -->
+			<edit-payment-methods-block
+				:updating="updating"
+				:submit-button-text="
+					atc['buttons.updateCard'] || 'Save Updated Payment Method'
+				"
+				edit-payment-method-mode
+				@cancel="$emit('setMode', 'default')"
+				@remove="showRemoveCardPrompt"
+				@finalPaymentPayloadResponse="handleFinalPaymentPayloadResponse"
+			/>
 
-					<!-- <v-button
-						class="c-cardCancelButton"
-						style="margin-top:30px;"
-						type="link"
-						@onClick="showRemoveCardPrompt"
-						>{{
-							atc['buttons.removeCard'] || 'Remove Payment Method'
-						}}</v-button
-					> -->
-				</div>
-			</div>
+			<!-- <div class="c-defaultModal__main">
+          <div v-if="removeableCard" class="mt-15 has-text-right">
+            <a
+              class="button is-danger c-removeCardButton "
+              @click.prevent="$emit('setMode', 'remove')"
+              >Remove Card</a
+            >
+          </div>
+        </div> -->
+
+			<!-- <v-button
+          class="c-cardCancelButton"
+          style="margin-top:30px;"
+          type="link"
+          @onClick="showRemoveCardPrompt"
+          >{{ atc['buttons.removeCard'] || 'Remove Payment Method' }}</v-button
+        > -->
 		</div>
+	</div>
 	<!-- </drawer-wrap> -->
 </template>
 

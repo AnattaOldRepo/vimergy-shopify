@@ -9,6 +9,7 @@
         >
         <img
           class="c-productRow__image"
+          :class="{'c-productRow__image--disabled': isCancelledSubscriptionRoute}"
           :src="
             each.image_url
               .replace('.png', '_320x.png')
@@ -18,7 +19,7 @@
         />
 
         <span
-          v-if = "each.quantity > 1"
+          v-if="each.quantity > 1"
           class="c-productRow__quanity">
             {{ each.quantity }}
         </span>
@@ -29,9 +30,8 @@
         class="c-button c-button--transparent c-productRow__button"
         :to="{
           query: {
-            template: 'order',
+            template: 'order-next-shipment',
             ...returnCancelledSubscriptionRoute,
-            'orderId': shopifyOrderId,
             storeDomain,
             customerId
           }
@@ -41,16 +41,15 @@
       </nuxt-link>
 
       <div class="c-productRow__buttonContainer">
-        <v-button class = "c-productRow__rightButton" @onClick="openAddToSubscriptionModal">
+        <v-button :disabled="isCancelledSubscriptionRoute" class="c-productRow__rightButton" @onClick="openAddToSubscriptionModal">
           <plus-circle />
         </v-button>
 
-        <nuxt-link class = "c-productRow__rightButton"
+        <nuxt-link class="c-productRow__rightButton"
         :to="{
           query: {
-            template: 'order',
+            template: 'order-next-shipment',
             ...returnCancelledSubscriptionRoute,
-            'orderId': shopifyOrderId,
             storeDomain,
             customerId
           }
@@ -156,6 +155,7 @@ export default {
     ...mapMutations('swapProduct', ['setSwapProduct']),
 
     openModal(productVariantId){
+      if(this.isCancelledSubscriptionRoute) return
       if(!productVariantId) return
 
       this.setProductIdAndSubscriptionId(productVariantId)
@@ -234,6 +234,7 @@ export default {
   object-fit: cover;
   height: 100%;
   width: 100%;
+  cursor: pointer;
 }
 
 .c-productRow__button{
@@ -262,5 +263,10 @@ export default {
   &:focus{
     background-color:transparent;
   }
+}
+
+.c-productRow__image--disabled{
+  cursor: none;
+  pointer-events: none;
 }
 </style>

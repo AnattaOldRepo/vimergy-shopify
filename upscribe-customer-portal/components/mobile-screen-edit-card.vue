@@ -72,6 +72,7 @@ export default {
     async updatePaymentMethod({ cardName, cardMonth, cardYear, cardZipcode }) {
       const { activeEditCard, editNextOrder } = this
 
+      const paymentCustomerId = activeEditCard.payment_customer_id
       const paymentMethodId = activeEditCard.id
       const updatePayload = {}
       if (cardName) updatePayload.name = cardName
@@ -99,7 +100,7 @@ export default {
               payment_method_id: paymentMethodId,
             },
           })
-          await this.UPDATE_PAYMENT_METHOD({ updatePayload, paymentMethodId })
+          await this.UPDATE_PAYMENT_METHOD({ updatePayload, paymentMethodId, paymentCustomerId })
         })()
       }
 
@@ -113,7 +114,7 @@ export default {
               payment_method_id: paymentMethodId,
             },
           })
-          await this.UPDATE_PAYMENT_METHOD({ updatePayload, paymentMethodId })
+          await this.UPDATE_PAYMENT_METHOD({ updatePayload, paymentMethodId, paymentCustomerId })
         })()
       }
 

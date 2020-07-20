@@ -95,7 +95,7 @@ export default {
   max-height: 500px;
   min-height: 225px;
   width: 100%;
-  padding: 24px 0px 20px;
+  padding: 0px 0px 20px;
   overflow-y: scroll;
   overflow-x: hidden;
   top: 0;
@@ -115,8 +115,8 @@ export default {
 }
 
 .c-modalWrapMobile__updateStatus{
-  position: absolute;
-  top: 0;
+  position: sticky;
+  top: 0px;
   left: 0;
   width: 100%;
   height: auto;
@@ -129,6 +129,7 @@ export default {
   padding: 2px 5px;
   text-align: center;
   font-size: 12px;
+  z-index: 100;
 
   &--updating{
     background-color: $color-blue-brand;
@@ -172,6 +173,7 @@ export default {
 
 .modal-close__contain{
   position: relative;
-  height: 12px
+  height: 12px;
+  margin-top: 15px;
 }
 </style>

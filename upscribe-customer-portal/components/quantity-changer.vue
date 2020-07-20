@@ -115,8 +115,6 @@ export default {
   font-size: 16px;
   color: $color-black;
   font-weight: bold;
-  position: relative;
-  top:2px;
 }
 
 .smooth-transition{

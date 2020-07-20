@@ -1,5 +1,5 @@
 <template>
-  <div  v-if = "currentOpen" class="c-headlineBanner">
+  <div v-if="currentOpen" class="c-headlineBanner">
       <div class="c-headlineBanner__inner">
         <span
           role = "button"

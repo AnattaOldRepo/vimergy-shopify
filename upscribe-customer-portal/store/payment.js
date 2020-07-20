@@ -52,7 +52,6 @@ export const actions = {
       }
    */
   CREATE_SEPA_DEBIT_SOURCE({ commit, dispatch }, { sepaDebitSourcePayload }) {
-    console.log({ window }, { Window })
     const stripe = window.stripe
 
     stripe.createSource(sepaDebitSourcePayload).then((result) => {

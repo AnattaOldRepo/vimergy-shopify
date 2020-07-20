@@ -1,26 +1,26 @@
 .c-table {
-  color: #666;
   background-color: #fff;
+  color: #666;
 }
 
 .c-table td,
 .c-table th {
-  padding: 0.5em 0.75em;
-  vertical-align: top;
   border: 1px solid #fafafa;
   border-width: 0 0 1px;
+  padding: 0.5em 0.75em;
+  vertical-align: top;
 }
 
 .c-table td.is-narrow,
 .c-table th.is-narrow {
-  width: 1%;
   white-space: nowrap;
+  width: 1%;
 }
 
 .c-table td.is-selected,
 .c-table th.is-selected {
-  color: #363636;
   background-color: #363636;
+  color: #363636;
 }
 
 .c-table td.is-selected a,
@@ -39,8 +39,8 @@
 }
 
 .c-table tr.is-selected {
-  color: #363636;
   background-color: #363636;
+  color: #363636;
 }
 
 .c-table tr.is-selected a,
@@ -50,8 +50,8 @@
 
 .c-table tr.is-selected td,
 .c-table tr.is-selected th {
-  color: currentColor;
   border-color: #363636;
+  color: currentColor;
 }
 
 .c-table thead {
@@ -60,8 +60,8 @@
 
 .c-table thead td,
 .c-table thead th {
-  color: #363636;
   border-width: 0 0 2px;
+  color: #363636;
 }
 
 .c-table tfoot {
@@ -70,8 +70,8 @@
 
 .c-table tfoot td,
 .c-table tfoot th {
-  color: #363636;
   border-width: 2px 0 0;
+  color: #363636;
 }
 
 .c-table tbody {
@@ -121,7 +121,7 @@
 }
 
 .c-tableContainer {
-  max-width: 100%;
   overflow: auto;
   overflow-y: hidden;
+  max-width: 100%;
 }

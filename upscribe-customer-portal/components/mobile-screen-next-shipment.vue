@@ -24,32 +24,26 @@
               <calendar-icon />
           </span>
         </functional-button-block>
-      </div>
 
-      <div class="c-nextShipment__buttonContain">
-        <v-button
-          class="c-button c-button--transparent c-nextShipment__button"
-          @onClick="openModalCalendar"
+        <functional-button-block
+          :internal-link="{
+            query: {
+              template: 'edit-discount',
+              storeDomain,
+              customerId,
+            },
+          }"
+          :title="hasDiscount ? atc['portal.editDiscountDrawerTitle'] || 'Edit Discount' : atc['portal.addDiscountDrawerTitle'] || 'Add Discount'"
         >
-          Ship Now
-        </v-button>
-
-        <v-button
-          class="c-button c-button--transparent c-nextShipment__button"
-          @onClick="openModalCalendar"
-        >
-          Skip Next Shipment
-        </v-button>
-      </div>
-
-      <div>
-
+          <span slot="icon" class="c-functionalButtonBlock__icon c-functionalButtonBlock__icon-slot">
+          </span>
+        </functional-button-block>
       </div>
   </mobile-subscription-template>
 
-  <div v-else>
-
-  </div>
+  <portal to="float-buttons">
+    <mobile-float-buttons />
+  </portal>
 </div>
 </template>
 
@@ -59,7 +53,7 @@ import TheHeader from '@components/the-header.vue'
 import FunctionalButtonBlock from '@components/functional-button-block.vue'
 import CalendarIcon from '@components/Icon/calendar-icon'
 import MobileSubscriptionTemplate from '@components/mobile-subscription-template'
-import VButton from '@components/v-button'
+import MobileFloatButtons from '@components/mobile-float-buttons'
 import moment from 'moment'
 
 export default {
@@ -68,7 +62,7 @@ export default {
     FunctionalButtonBlock,
     CalendarIcon,
     MobileSubscriptionTemplate,
-    VButton,
+    MobileFloatButtons,
   },
 
   computed: {
@@ -76,7 +70,16 @@ export default {
 
     ...mapState('translations', ['atc']),
 
-    ...mapGetters('activeSubscription', ['activeSubscription', 'activeSubscriptionNextDate']),
+    ...mapGetters('activeSubscription', ['activeSubscription', 'activeSubscriptionNextDate', 'activeQueue']),
+
+    hasDiscount() {
+			const { activeQueue } = this
+			if (activeQueue.coupon_discount) {
+				return true
+			} else {
+				return false
+			}
+		},
 
     edit(){
       const { edit } = this.$route.query
@@ -111,38 +114,10 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@design/_colors';
-
-.c-nextShipment__buttonContain{
-  display: flex;
-  margin: 30px auto 0;
-  justify-content: space-between;
-  max-width: 400px;
-  padding: 0 16px;
-
-  @media (min-width: 425px){
-    padding: 0;
-  }
-}
-
-.c-nextShipment__button{
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: bold;
-  font-style: normal;
-  max-width: 167px;
-  background-color: $color-white;
-
-  &:first-child{
-    margin-right: 8px;
-  }
-}
-
-
-
 .c-nextShipment__date{
   color: #888888;
+}
+.c-functionalButtonBlock__icon-slot{
+  min-width: 16px;
 }
 </style>

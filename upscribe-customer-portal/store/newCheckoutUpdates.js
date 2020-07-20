@@ -40,11 +40,11 @@ export const actions = {
       let results = []
 
 
-      savedNewCheckoutUpdates.forEach( async update => {
+      savedNewCheckoutUpdates.forEach(async update => {
         const { updateActionPayload, updateActionStoreName, updateActionName,
           // successMessage
         } = update
-        console.log('completeSavedNewCheckoutUpdate update', { shippingMethod },{ update } )
+        // console.log('completeSavedNewCheckoutUpdate update', { shippingMethod },{ update } )
 
         const savedNewCheckoutUpdateWithShippingUpdate = {
           requestPayload: {
@@ -57,10 +57,10 @@ export const actions = {
           },
         }
 
-        console.log(
-          'savedNewCheckoutUpdateWithShippingUpdate',
-          savedNewCheckoutUpdateWithShippingUpdate
-        )
+        // console.log(
+        //   'savedNewCheckoutUpdateWithShippingUpdate',
+        //   savedNewCheckoutUpdateWithShippingUpdate
+        // )
 
         commit('newCheckoutUpdateUpdating', true)
 
@@ -84,7 +84,6 @@ export const actions = {
           completedUpdates += 1
         }
 
-        console.log('check if finished all updates')
         if (updatesLength === completedUpdates) {
           console.log('finished all updates - results: ', { results })
           resolve(results)

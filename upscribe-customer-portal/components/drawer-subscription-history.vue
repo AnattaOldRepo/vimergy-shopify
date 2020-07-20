@@ -15,7 +15,7 @@
         />
       </div>
 
-      <loader-icon v-else/>
+      <second-loader-icon v-else/>
     </div>
   </drawer-wrap>
 </template>
@@ -24,13 +24,13 @@
 import {  mapState } from 'vuex'
 import DrawerWrap from '@components/drawer-wrap'
 import HistoryOrder from '@components/history-order.vue'
-import LoaderIcon from '@components/loader-icon.vue'
+import SecondLoaderIcon from '@components/second-loader-icon.vue'
 
 export default {
   components: {
     DrawerWrap,
     HistoryOrder,
-    LoaderIcon,
+    SecondLoaderIcon,
   },
 
   props: {
@@ -54,6 +54,6 @@ export default {
 
 <style lang="scss">
 .c-historyOrder__subscription-history{
-  min-width: 680px;
+  // min-width: 680px;
 }
 </style>

@@ -19,19 +19,32 @@
 <script>
 import DatePicker from '@components/date-picker'
 import moment from 'moment'
-import { mapActions } from 'vuex'
+import { mapMutations, mapActions, mapGetters } from 'vuex'
 import TheHeader from '@components/the-header'
 export default {
   components: {
     DatePicker,
     TheHeader,
+  },
 
+  computed: {
+    ...mapGetters('activeSubscription', [
+			'activeSubscription',
+			'activeSubscriptionNextDate',
+		]),
   },
 
   methods:{
+    ...mapMutations('mobileGlobalManagement', ['setMessage', 'setStatus']),
+
     ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION_QUEUE']),
 
+    ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
+
     async handleChangeShipmentDate(unformattedNewDate) {
+      this.setMessage('Updating new Shipment Date')
+      this.setStatus('updating')
+
       const { activeSubscriptionNextDate } = this
       if (!activeSubscriptionNextDate) return false
       let currentDate = activeSubscriptionNextDate
@@ -53,8 +66,12 @@ export default {
           event: 'Upscribe Change Shipment Date',
           payload: analyticsPayload,
         })
+        this.setMessage('Saved new Shipment Date')
+        this.setStatus('success')
       } catch (e) {
         console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        this.setMessage(e.message)
+        this.setStatus('error')
       }
     },
   },

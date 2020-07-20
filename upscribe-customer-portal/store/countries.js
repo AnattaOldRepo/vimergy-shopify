@@ -13,7 +13,6 @@ export const mutations = {
   },
 
   SET_COUNTRIES_FROM_SHIPPING_ZONES(state, shippingZones) {
-    console.log('shippingZones', shippingZones)
     let finalCountries = {}
     shippingZones.forEach((zone) => {
       const zoneCountries = zone.countries
@@ -34,31 +33,3 @@ export const mutations = {
     )
   },
 }
-
-// Need endpoint eventually, currently getting from shipping zones
-// export const actions = {
-//   // Get available shopp shopping zones
-//   GET_COUNTRIES({ commit, rootState }) {
-//     const { storeDomain } = rootState.route
-
-//     if (!storeDomain) {
-//       return console.log('storeDomain not available')
-//     }
-
-//     return new Promise((resolve, reject) => {
-//       request({
-//         method: 'get',
-//         url: `/countries/${storeDomain}`,
-//       })
-//         .then((response) => {
-//           console.log('response', response)
-//           commit('SET_SHIPPING_ZONES', response.data)
-//           resolve(response)
-//         })
-//         .catch((error) => {
-//           console.log('error: ', error)
-//           reject(error)
-//         })
-//     })
-//   },
-// }

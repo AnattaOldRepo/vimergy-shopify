@@ -6,7 +6,7 @@ export const state = () => ({
 
 export const mutations = {
   setActiveSubscriptionId(state, orderId) {
-    console.log(orderId)
+    console.log(orderId, 1212123)
     state.activeSubscriptionId = orderId
   },
 
@@ -97,12 +97,12 @@ export const getters = {
     const { activeSubscriptionId } = state
     if (!subscriptions || !activeSubscriptionId) return false
     let activeSubscription = false
-    // Refactored from O(n**) to O(1) run time by using current hashed table
 
     if (subscriptions[activeSubscriptionId]) {
       activeSubscription = subscriptions[activeSubscriptionId]
     }
 
+    console.log(subscriptions, '1')
     console.log(activeSubscription, '2')
     return activeSubscription
   },
@@ -181,11 +181,14 @@ export const getters = {
   activeTotalPrice(state, getters, rootState, rootGetters) {
     const { editNextOrder } = rootState.editMode
     const { activeSubscription, activeQueue } = getters
-
+    let val
     if (editNextOrder) {
-      return activeQueue.total_price
+      val = activeQueue.total_price
     } else {
-      return activeSubscription.total_price
+      val = activeSubscription.total_price
+    }
+    if (val) {
+      return val.toFixed(2)
     }
   },
 

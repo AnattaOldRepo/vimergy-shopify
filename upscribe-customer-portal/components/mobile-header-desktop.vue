@@ -1,6 +1,6 @@
 <template>
    <div class="c-header__inner">
-      <nav class="c-header__navUp">
+      <nav class="c-header__nav">
         <a class="c-header__navLink c-header__backToAccount" :href="shopifyAccountUrl">
           <icon-chevron-right
             class="c-header__navLinkIcon c-header__navLinkIcon--backToAccount"
@@ -36,6 +36,7 @@
             }}</nuxt-link
           >
            <nuxt-link
+             v-if="subscriptionInActive"
             class="c-header__navLink c-header__navLink--middle"
             :to="{
               name: 'index',
@@ -62,7 +63,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import VButton from '@components/v-button.vue'
 import IconChevronRight from '@components/icon-chevron-right.vue'
 
@@ -75,7 +76,11 @@ export default {
   computed:{
     ...mapState('translations', ['atc']),
 
+    ...mapGetters('subscriptions', ['subscriptionActive', 'subscriptionInActive']),
+
     ...mapState('route', ['storeDomain', 'customerId']),
+
+    ...mapState('shop', ['shopData']),
 
     shopifyAccountUrl() {
       const { shopData } = this

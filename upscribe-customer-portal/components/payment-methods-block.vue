@@ -116,7 +116,7 @@ export default {
   },
 
   mounted() {
-    const { paymentCards, editPaymentMethodMode, activeEditCard } = this
+    const { paymentCards, editPaymentMethodMode, activeEditCard, stripePublicKey} = this
 
     if (editPaymentMethodMode) {
       this.activePaymentType = activeEditCard.type
@@ -128,7 +128,7 @@ export default {
     // reset on new load
     this.orderSuccessfullyPlaced = false
 
-    if (process.browser) {
+    if (process.browser && stripePublicKey) {
       let domElement = document.createElement('script')
       domElement.setAttribute('src', 'https://js.stripe.com/v3/')
       domElement.onload = () => {
@@ -378,10 +378,11 @@ export default {
   </div>
 
   <div class="c-paymentMethods__options c-paymentMethods__options--add "
-    :class="{ 'c-paymentMethods__options--visible': activePaymentType && loadedStripe }"
+    :class="{ 'c-paymentMethods__options--visible': activePaymentType }"
   >
     <braintree-payment-options
-      v-if="activePaymentType && activePaymentType.includes('braintree')"
+      v-if="displayPaymentType('braintree_card')"
+      v-show="activePaymentType && activePaymentType.includes('braintree')"
       ref="braintree-payment-options"
       :active-payment-type="activePaymentType"
       :place-order-pending="placeOrderPending"

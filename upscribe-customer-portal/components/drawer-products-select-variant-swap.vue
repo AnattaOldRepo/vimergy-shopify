@@ -7,271 +7,314 @@ import productChangeRequest from '@utils/product-change-request.js'
 import { buildNewCheckoutUpdatePayload } from '@utils/newCheckoutUpdateHelpers'
 
 export default {
-  components: {
-    VariantSelectBlock,
-    VButton,
-    DrawerProductBlock,
-  },
-  props: {
-    updating: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    ...mapState('translations', ['atc']),
+	components: {
+		VariantSelectBlock,
+		VButton,
+		DrawerProductBlock,
+	},
+	props: {
+		updating: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	computed: {
+		...mapState('translations', ['atc']),
 
-    ...mapGetters('activeSubscription', [
-      'activeSubscription',
-      'activeSubscriptionNextOrder',
-    ]),
+		...mapGetters('activeSubscription', [
+			'activeSubscription',
+			'activeSubscriptionNextOrder',
+		]),
 
-    ...mapState('products', ['products', 'productImages']),
+		...mapState('products', ['products', 'productImages']),
 
-    ...mapState('swapProduct', ['swapProduct']),
+		...mapState('swapProduct', ['swapProduct']),
 
-    ...mapState('variantSelectProduct', ['variantSelectProduct']),
+		...mapState('variantSelectProduct', ['variantSelectProduct']),
 
     ...mapState('editMode', ['editNextOrder']),
 
-    activeSubscriptionProducts() {
-      return this.activeSubscription.items
-    },
-  },
-  methods: {
-    ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
+    intervalUnitDisplay() {
+      const { activeSubscription, atc } = this
+      let intervalUnit = activeSubscription.period
+      let plural = activeSubscription.interval > 1
 
-    ...mapActions('subscriptions', [
-      'UPDATE_SUBSCRIPTION',
-      'UPDATE_NEXT_ORDER',
-    ]),
-
-    ...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
-
-    ...mapMutations('shippingMethods', ['SET_SHIPPING_METHODS']),
-
-    handleNewCheckoutUpdate(updateArray) {
-      console.log('handleNewCheckoutUpdate')
-
-      return new Promise((resolve, reject) => {
-
-        let updateCount = updateArray.length
-        let updatesFinished = 0
-
-          // for each update
-          updateArray.forEach(async (update) => {
-            console.log({update})
-            try {
-              await update.updateAction
-              // this.$toasted.global.success({
-              //   message: update.successMessage,
-              // })
-            } catch (e) {
-              this.handleNewCheckoutUpdateError(e, update)
-            } finally {
-              updatesFinished += 1
-            }
-
-            if (updatesFinished === updateCount) {
-              resolve(true)
-            }
-          })
-      })
+      let displayUnit = ''
+      if (intervalUnit === 'day') {
+        if (plural) {
+          displayUnit = atc['date-time.days-unit'] || 'days'
+        } else {
+          displayUnit = atc['date-time.day-unit'] || 'day'
+        }
+      } else if (intervalUnit === 'week') {
+        if (plural) {
+          displayUnit = atc['date-time.weeks-unit'] || 'weeks'
+        } else {
+          displayUnit = atc['date-time.week-unit'] || 'week'
+        }
+      } else if (intervalUnit === 'month') {
+        if (plural) {
+          displayUnit = atc['date-time.months-unit'] || 'months'
+        } else {
+          displayUnit = atc['date-time.month-unit'] || 'month'
+        }
+      } else {
+        displayUnit = atc['date-time.days-unit'] || 'days'
+      }
+      return displayUnit
     },
 
-    handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-      console.log('')
-      console.log('e', e)
-      if (
-        e &&
-        e.data &&
-        e.data.shipping_update_required
-      ) {
-        this.SET_SHIPPING_METHODS(e.data.rates)
-        this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+		activeSubscriptionProducts() {
+			return this.activeSubscription.items
+		},
+	},
+	methods: {
+		...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
-        this.$emit('setMode', 'shipping-method-list')
-        this.$emit('setDrawerStatus', false)
-      } else {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
-        this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
-      }
-    },
+		...mapActions('subscriptions', [
+			'UPDATE_SUBSCRIPTION',
+			'UPDATE_NEXT_ORDER',
+		]),
 
-    async handleSwapProductVariant({ variantId, product}) {
-      if (this.updating) return
-      const {
-        editNextOrder,
-        activeSubscription,
-      } = this
+		...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
 
-      const productToReplace = this.swapProduct
+		...mapMutations('shippingMethods', ['SET_SHIPPING_METHODS']),
 
-      console.log({productToReplace})
-      console.log({product})
+		handleNewCheckoutUpdate(updateArray) {
+			console.log('handleNewCheckoutUpdate')
 
+			return new Promise((resolve, reject) => {
+				let updateCount = updateArray.length
+				let updatesFinished = 0
 
-      const { addPayload: nextAddSwapItemPayload } = productChangeRequest({
-        variantId,
-        editNextOrder: true,
-        subscription: activeSubscription,
-      })
+				// for each update
+				updateArray.forEach(async (update) => {
+					// console.log({update})
+					try {
+						await update.updateAction
+						// this.$toasted.global.success({
+						//   message: update.successMessage,
+						// })
+					} catch (e) {
+						this.handleNewCheckoutUpdateError(e, update)
+					} finally {
+						updatesFinished += 1
+					}
 
-      const { removePayload: nextRemoveSwappedItemPayload } = productChangeRequest({
-        variantId: productToReplace.variant_id,
-        editNextOrder: true,
-        subscription: activeSubscription,
-      })
+					if (updatesFinished === updateCount) {
+						resolve(true)
+					}
+				})
+			})
+		},
 
-      const { addPayload: subscriptionAddSwapItemPayload } = productChangeRequest({
-        variantId,
-        editNextOrder: false,
-        subscription: activeSubscription,
-      })
+		handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
+			console.log('e', e)
+			if (e && e.data && e.data.shipping_update_required) {
+				this.SET_SHIPPING_METHODS(e.data.rates)
+				this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
 
-      const { removePayload: subscriptionRemoveSwappedItemPayload } = productChangeRequest({
-        variantId: productToReplace.variant_id,
-        editNextOrder: false,
-        subscription: activeSubscription,
-      })
+				this.$emit('setMode', 'shipping-method-list')
+				this.$emit('setDrawerStatus', false)
+			} else {
+				console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+				this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
+			}
+		},
 
-      console.log({nextAddSwapItemPayload, nextRemoveSwappedItemPayload})
-      console.log({subscriptionAddSwapItemPayload, subscriptionRemoveSwappedItemPayload})
+		async handleSwapProductVariant({ variantId, product }) {
+			if (this.updating) return
+			const { editNextOrder, activeSubscription } = this
 
-      // create next swap payload depending on the diff product upday payload options
-      let nextItemPayload = []
-      if (!nextAddSwapItemPayload && !nextRemoveSwappedItemPayload) {
-        nextItemPayload = false
-      } else {
-        if (nextAddSwapItemPayload) {
-          nextItemPayload = [...nextItemPayload, nextAddSwapItemPayload]
-        }
-        if (nextRemoveSwappedItemPayload) {
-          nextItemPayload = [...nextItemPayload, nextRemoveSwappedItemPayload]
-        }
-      }
+			const productToReplace = this.swapProduct
 
-      // create sub swap payload depending on the diff product upday payload options
-      let subscriptionItemPayload = []
-      if (!subscriptionAddSwapItemPayload && !subscriptionRemoveSwappedItemPayload) {
-        subscriptionItemPayload = false
-      } else {
-        if (subscriptionAddSwapItemPayload) {
-          subscriptionItemPayload = [...subscriptionItemPayload, subscriptionAddSwapItemPayload]
-        }
-        if (subscriptionRemoveSwappedItemPayload) {
-          subscriptionItemPayload = [...subscriptionItemPayload, subscriptionRemoveSwappedItemPayload]
-        }
-      }
+			// console.log({productToReplace})
+			// console.log({product})
 
-      const updateSubscriptionPayload = {
-        requestPayload: {
-          items: subscriptionItemPayload || undefined,
-        },
-      }
+			const { addPayload: nextAddSwapItemPayload } = productChangeRequest({
+				variantId,
+				editNextOrder: true,
+				subscription: activeSubscription,
+			})
 
-      const nextOrderUpdatePayload = {
-        requestPayload: {
-          items: nextItemPayload || undefined,
-        },
-      }
+			const {
+				removePayload: nextRemoveSwappedItemPayload,
+			} = productChangeRequest({
+				variantId: productToReplace.variant_id,
+				editNextOrder: true,
+				subscription: activeSubscription,
+			})
 
-      let analyticsEventName, handleNewCheckoutUpdatePayload
-      let analyticsPayload = {
-        newProduct: product,
-        oldProduct: productToReplace,
-      }
+			const {
+				addPayload: subscriptionAddSwapItemPayload,
+			} = productChangeRequest({
+				variantId,
+				editNextOrder: false,
+				subscription: activeSubscription,
+			})
 
-      if (editNextOrder) {
-        analyticsEventName = 'Upscribe Next Order Product Swap'
+			const {
+				removePayload: subscriptionRemoveSwappedItemPayload,
+			} = productChangeRequest({
+				variantId: productToReplace.variant_id,
+				editNextOrder: false,
+				subscription: activeSubscription,
+			})
 
-        // updateMessage = `Quantity updated to ${quantity} on next order.`
-        handleNewCheckoutUpdatePayload = [
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Product swapped on next order.`
-          ),
-        ]
+			// console.log({nextAddSwapItemPayload, nextRemoveSwappedItemPayload})
+			// console.log({subscriptionAddSwapItemPayload, subscriptionRemoveSwappedItemPayload})
 
-      } else {
+			// create next swap payload depending on the diff product upday payload options
+			let nextItemPayload = []
+			if (!nextAddSwapItemPayload && !nextRemoveSwappedItemPayload) {
+				nextItemPayload = false
+			} else {
+				if (nextAddSwapItemPayload) {
+					nextItemPayload = [...nextItemPayload, nextAddSwapItemPayload]
+				}
+				if (nextRemoveSwappedItemPayload) {
+					nextItemPayload = [...nextItemPayload, nextRemoveSwappedItemPayload]
+				}
+			}
 
-        analyticsEventName = 'Upscribe Subscription Product Swap'
+			// create sub swap payload depending on the diff product upday payload options
+			let subscriptionItemPayload = []
+			if (
+				!subscriptionAddSwapItemPayload &&
+				!subscriptionRemoveSwappedItemPayload
+			) {
+				subscriptionItemPayload = false
+			} else {
+				if (subscriptionAddSwapItemPayload) {
+					subscriptionItemPayload = [
+						...subscriptionItemPayload,
+						subscriptionAddSwapItemPayload,
+					]
+				}
+				if (subscriptionRemoveSwappedItemPayload) {
+					subscriptionItemPayload = [
+						...subscriptionItemPayload,
+						subscriptionRemoveSwappedItemPayload,
+					]
+				}
+			}
 
-        handleNewCheckoutUpdatePayload = [
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Product swapped on next order.`
-          ),
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
-            updateSubscriptionPayload,
-            'subscriptions',
-            'UPDATE_SUBSCRIPTION',
-            `Product swapped on subscription.`,
-          ),
-        ]
-      }
+			const updateSubscriptionPayload = {
+				requestPayload: {
+					items: subscriptionItemPayload || undefined,
+				},
+			}
 
-      this.$emit('setDrawerStatus', 'PENDING')
+			const nextOrderUpdatePayload = {
+				requestPayload: {
+					items: nextItemPayload || undefined,
+				},
+			}
 
-      // hande everything in handleNewCheckoutUpdate function
-      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+			let analyticsEventName, handleNewCheckoutUpdatePayload
+			let analyticsPayload = {
+				newProduct: product,
+				oldProduct: productToReplace,
+			}
 
-      this.$emit('setDrawerStatus', 'SUCCESS')
-      this.$emit('setMode', 'edit')
+			if (editNextOrder) {
+				analyticsEventName = 'Upscribe Next Order Product Swap'
 
-      this.triggerAnalyticsEvent({
-        event: analyticsEventName,
-        payload: analyticsPayload,
-      })
-    },
-  },
+				// updateMessage = `Quantity updated to ${quantity} on next order.`
+				handleNewCheckoutUpdatePayload = [
+					buildNewCheckoutUpdatePayload(
+						this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
+						nextOrderUpdatePayload,
+						'subscriptions',
+						'UPDATE_NEXT_ORDER',
+						`Product swapped on next order.`
+					),
+				]
+			} else {
+				analyticsEventName = 'Upscribe Subscription Product Swap'
+
+				handleNewCheckoutUpdatePayload = [
+					buildNewCheckoutUpdatePayload(
+						this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
+						nextOrderUpdatePayload,
+						'subscriptions',
+						'UPDATE_NEXT_ORDER',
+						`Product swapped on next order.`
+					),
+					buildNewCheckoutUpdatePayload(
+						this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+						updateSubscriptionPayload,
+						'subscriptions',
+						'UPDATE_SUBSCRIPTION',
+						`Product swapped on subscription.`
+					),
+				]
+			}
+
+			this.$emit('setDrawerStatus', 'PENDING')
+
+			// hande everything in handleNewCheckoutUpdate function
+			await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+
+			this.$emit('setDrawerStatus', 'SUCCESS')
+			this.$emit('setMode', 'edit')
+
+			this.triggerAnalyticsEvent({
+				event: analyticsEventName,
+				payload: analyticsPayload,
+			})
+		},
+	},
 }
 </script>
 
 <template>
-  <div>
-    <h2 class="c-drawer__title">{{ atc['portal.selectVariantSwapDrawerTitle'] || 'Select Swap Product Options' }}</h2>
+	<div>
+		<h2 class="c-drawer__title">{{
+			atc['portal.selectVariantSwapDrawerTitle'] ||
+				'Select Swap Product Options'
+		}}</h2>
 
-    <p class="c-drawer__subtitle">{{ atc['portal.selectVariantCurrentProductLabel'] || 'Current Product' }}</p>
+		<p class="c-drawer__subtitle">{{
+			atc['portal.selectVariantCurrentProductLabel'] || 'Current Product'
+		}}</p>
 
-    <div class="c-drawerDeliveryFrequency__options">
-      <drawer-product-block :product="swapProduct" existing-product/>
-    </div>
+		<div class="c-drawerDeliveryFrequency__options">
+			<drawer-product-block :product="swapProduct" existing-product />
+		</div>
 
-    <p class="c-drawer__subtitle">{{ atc['portal.selectVariantSwapProductLabel'] || 'Swap Product' }}</p>
+		<p class="c-drawer__subtitle">{{
+			atc['portal.selectVariantSwapProductLabel'] || 'Swap Product'
+		}}</p>
 
-    <p
-      v-if="activeSubscription.interval && activeSubscription.period"
-      class="c-drawer__subtitle"
-      >{{ atc['portal.editProductsDrawerInfoText'] || 'These product will ship every' }} {{ activeSubscription.interval }}
-      {{ activeSubscription.period }}</p
-    >
+		<p
+			v-if="activeSubscription.interval && activeSubscription.period"
+			class="c-drawer__subtitle"
+			>{{
+				atc['portal.editProductsDrawerInfoText'] ||
+					'These product will ship every'
+			}}
+			{{ activeSubscription.interval }} {{ intervalUnitDisplay }}</p
+		>
 
-    <div class="c-drawerDeliveryFrequency__options">
-      <variant-select-block
-        v-if="variantSelectProduct"
-        :product="variantSelectProduct"
-        :button-text="atc['buttons.swapProduct'] || 'Swap'"
-        variant-action="swap"
-        :updating="updating"
-        @swapProductVariant="handleSwapProductVariant"
-      />
-    </div>
+		<div class="c-drawerDeliveryFrequency__options">
+			<variant-select-block
+				v-if="variantSelectProduct"
+				:product="variantSelectProduct"
+				:button-text="atc['buttons.swapProduct'] || 'Swap'"
+				variant-action="swap"
+				:updating="updating"
+				@swapProductVariant="handleSwapProductVariant"
+			/>
+		</div>
 
-    <div class="c-drawer__actionButtons">
-      <v-button
-        class="c-form__submitButton"
-        type="alt"
-        @onClick="$emit('setMode', 'swap')"
-        >{{ atc['buttons.cancel'] || 'Cancel' }}</v-button
-      >
-    </div>
-  </div>
+		<div class="c-drawer__actionButtons">
+			<v-button
+				class="c-form__submitButton"
+				type="alt"
+				@onClick="$emit('setMode', 'swap')"
+				>{{ atc['buttons.cancel'] || 'Cancel' }}</v-button
+			>
+		</div>
+	</div>
 </template>

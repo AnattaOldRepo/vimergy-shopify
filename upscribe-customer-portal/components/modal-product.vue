@@ -43,7 +43,7 @@
             </v-button>
 
             <div class="c-modalProduct__quantityControl">
-              <v-button
+              <!-- <v-button
                 v-if="product.quantity > 1"
                 class="c-modalProduct__quantityBox"
                 aria-label="minus icon"
@@ -51,9 +51,18 @@
                 @onClick="quantityChange('decrease')"
                 >
                 <minus-icon />
-              </v-button>
+              </v-button> -->
 
-              <v-button
+              <quantity-changer-manual-entry
+                v-if="product.quantity"
+                :class="{'control-is-updating': updating}"
+                :disabled="status === 'updating'"
+                class="c-modalProductBlock__quantity c-quantityChangerManual--mobile"
+                :quantity="product.quantity"
+                @updateQuantity="quantityChangeManual"
+              />
+
+              <!-- <v-button
                 v-else
                 class="c-modalProduct__quantityBox"
                 aria-label="trash icon"
@@ -72,7 +81,7 @@
                 @onClick="quantityChange('increase')"
                 >
                 <plus-icon />
-              </v-button>
+              </v-button> -->
             </div>
           </div>
         </div>
@@ -103,23 +112,25 @@
 import ModalMobileWrap from '@components/modal-wrap-mobile.vue'
 import VButton from '@components/v-button'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
-import MinusIcon from '@components/Icon/minus-icon'
-import PlusIcon from '@components/Icon/plus-icon'
-import TrashIcon from '@components/Icon/trash-icon'
+// import MinusIcon from '@components/Icon/minus-icon'
+// import PlusIcon from '@components/Icon/plus-icon'
+// import TrashIcon from '@components/Icon/trash-icon'
 import productChangeRequest from '@utils/product-change-request.js'
 import { buildNewCheckoutUpdatePayload } from '@utils/newCheckoutUpdateHelpers'
 import ModalShippingRequire from '@components/modal-shipping-require.vue'
 import IconChevronRight from '@components/icon-chevron-right.vue'
+import QuantityChangerManualEntry from '@components/quantity-changer-manual-entry.vue'
 
 export default {
   components: {
     ModalMobileWrap,
-    MinusIcon,
-    PlusIcon,
-    TrashIcon,
+    // MinusIcon,
+    // PlusIcon,
+    // TrashIcon,
     ModalShippingRequire,
     VButton,
     IconChevronRight,
+    QuantityChangerManualEntry,
   },
 
   props: {
@@ -144,7 +155,7 @@ export default {
       needUpdating: false,
       updating: false,
       wantToLearnMore: false,
-      transitionComp: 'modal-modal-slideOutIn',
+      transitionComp: 'modal-slideOutIn',
     }
   },
 
@@ -175,6 +186,82 @@ export default {
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
+    quantityChangeManual(quantity) {
+      const { product } = this
+
+      this.handleQuantityChangeManual({
+        quantity: quantity,
+        id: product.id,
+        product,
+      })
+    },
+
+  async handleQuantityChangeManual({quantity, id, product}) {
+      if (this.updating) return
+
+      if (parseInt(quantity) === 0) return this.handleRemove(product)
+
+      const { editNextOrder } = this
+
+      const finalPayload = {
+        requestPayload: {
+          items: [{quantity, id}],
+        },
+      }
+
+      this.updatingId = id
+      this.quantityUpdating = true
+
+       let handleNewCheckoutUpdatePayload, analyticsEventName
+      let analyticsPayload = {
+        quantity,
+        ...product,
+      }
+
+      if (editNextOrder) {
+        // updateMessage = `Quantity updated to ${quantity} on next order.`
+        analyticsEventName = 'Upscribe Next Order Product Quantity Change'
+
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_NEXT_ORDER(finalPayload),
+            finalPayload,
+            'subscriptions',
+            'UPDATE_NEXT_ORDER',
+            `Quantity updated to ${quantity} on next order.`
+          ),
+        ]
+
+      } else {
+        // updateMessage = `Quantity updated to ${quantity}.`
+        analyticsEventName = 'Upscribe Subscription Product Quantity Change'
+
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_NEXT_ORDER(finalPayload),
+            finalPayload,
+            'subscriptions',
+            'UPDATE_NEXT_ORDER',
+            `Quantity updated to ${quantity} on next order.`
+          ),
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_SUBSCRIPTION(finalPayload),
+            finalPayload,
+            'subscriptions',
+            'UPDATE_SUBSCRIPTION',
+            `Quantity updated to ${quantity} on subscription.`,
+          ),
+        ]
+      }
+      // hande everything in handleNewCheckoutUpdate function
+      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+
+      this.triggerAnalyticsEvent({
+        event: analyticsEventName,
+        payload: analyticsPayload,
+      })
+    },
+
     handleLearnMore(){
       this.wantToLearnMore = !this.wantToLearnMore
       if(this.wantToLearnMore){
@@ -204,7 +291,7 @@ export default {
 
           // for each update
           updateArray.forEach(async (update) => {
-            console.log({update})
+            // console.log({update})
             this.updating = true
             try {
               await update.updateAction
@@ -234,11 +321,11 @@ export default {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
         this.needUpdating = true
-        this.status = 'rejected'
-        this.statusText = e.message
       } else {
         console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
       }
+        this.status = 'rejected'
+        this.statusText = e.message
     },
 
     quantityChange(type) {
@@ -293,8 +380,8 @@ export default {
         subscription: activeSubscription,
       })
 
-      console.log({nextIncreaseItemPayload, nextDecreaseItemPayload})
-      console.log({subscriptionIncreaseItemPayload, subscriptionDecreaseItemPayload})
+      // console.log({nextIncreaseItemPayload, nextDecreaseItemPayload})
+      // console.log({subscriptionIncreaseItemPayload, subscriptionDecreaseItemPayload})
 
       // determine increase or decrease payload by the type param
       // coming from the quantity change event
@@ -370,8 +457,6 @@ export default {
 
     async handleRemove(product) {
       if (this.updating) return
-
-      console.log('Triggering me')
       const {
         activeSubscription,
         activeQueue,
@@ -405,8 +490,8 @@ export default {
         subscription: activeSubscription,
       })
 
-      console.log({nextRemoveItemPayload})
-      console.log({subscriptionRemoveItemPayload})
+      // console.log({nextRemoveItemPayload})
+      // console.log({subscriptionRemoveItemPayload})
 
       const updateSubscriptionPayload = {
         requestPayload: {
@@ -471,6 +556,7 @@ export default {
       // hande everything in handleNewCheckoutUpdate function
       try{
         await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+        this.closeModal()
       } catch(e){
         console.log(e)
       }
@@ -545,11 +631,11 @@ export default {
 }
 
 .c-modalProduct__quantityControl{
-  height: 48px;
+  // height: 48px;
   width: auto;
-  box-shadow: 0px 2px 1px 2px rgba(1, 1, 1, 0.1);
+  // box-shadow: 0px 2px 1px 2px rgba(1, 1, 1, 0.1);
   display: inline-flex;
-  border-radius: 4px;
+  // border-radius: 4px;
 }
 
 .c-modalProduct__quantityBox{
@@ -575,6 +661,7 @@ export default {
 .c-modalProduct__swapButton{
   display: inline-block;
   width: 158px;
+  text-align: center;
 }
 
 .c-modalProduct__buttonContain{
@@ -589,6 +676,7 @@ export default {
   letter-spacing: 0.8px;
   font-weight: bold;
   text-transform: uppercase;
+  text-align:center;
   border-radius: 4px;
   color: $color-black;
   border: none;

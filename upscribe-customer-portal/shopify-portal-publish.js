@@ -16,6 +16,7 @@ del.sync(['../assets/upscribe_*'], {
 
 // Copy all built nuxt bundles to Shopify
 cpy('./dist/_nuxt/upscribe_*', '../assets')
+cpy('./dist/_nuxt/upscribe_fonts/*', '../assets')
 
 /**
  * Create altered account.subscriptions.liquid template

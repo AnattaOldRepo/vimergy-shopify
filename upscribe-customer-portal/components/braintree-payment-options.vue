@@ -22,16 +22,15 @@ export default {
       error: '',
    }
   },
-
   computed: {
     ...mapState('shop', ['braintreeClientToken']),
   },
-
   mounted() {
     const { braintreeClientToken } = this
     this.authorization = braintreeClientToken
     this.createHostedFields()
   },
+
   methods: {
 
     clearErrors() {

@@ -238,7 +238,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   z-index: 2422271;
-  background-color: $color-white;
+  background-color: #F7F9FB;
   backface-visibility: hidden;
   transition: transform 300ms ease;
   -webkit-overflow-scrolling: touch;

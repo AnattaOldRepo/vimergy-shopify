@@ -70,9 +70,9 @@ export default {
 
 .c-header {
   width: 100%;
-  //height: 100px;
+  height: 100px;
   margin: 0 auto;
-  //background-color: $color-white;
+  background-color: $color-white;
 }
 
 .c-header__inner {
@@ -86,13 +86,14 @@ export default {
   margin: 0 auto;
 }
 
-.c-header__navUp {
+.c-header__nav {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
   margin-left: -30px;
 }
+
 
 .c-header__navLink {
   display: flex;
@@ -153,6 +154,9 @@ export default {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .c-headerTablet,
@@ -316,7 +320,7 @@ export default {
 
 .c-header__backToAccount{
   &:hover{
-    border-bottom: 0px;
+    border: none;
   }
 }
 

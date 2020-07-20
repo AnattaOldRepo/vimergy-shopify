@@ -68,6 +68,14 @@ export default {
       this.bankName = $event.bankName || ''
       this.$emit('handleChange', $event)
     },
+
+    handleClear(){
+      console.log('UOUOUOUO')
+      this.iban.clear()
+      this.name=''
+      this.email=''
+    },
+
     createPaymentMethod() {
       const vm = this
 
@@ -191,18 +199,5 @@ input:focus,
 
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
-}
-
-.c-stripeFormSplitGroups {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-column-gap: 20px;
-  width: 100%;
-}
-
-.c-stripeBankName {
-  color: $color-black;
-  font-size: 14px;
-  margin-top: 4px;
 }
 </style>

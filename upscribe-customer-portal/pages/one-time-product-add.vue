@@ -1,4 +1,9 @@
 <template>
+<div>
+  <portal to="header">
+    <the-header />
+  </portal>
+
   <div v-if="products && productImages && initedAddAction" class="c-oneTimeProductAdd">
     <one-time-thank-you
       v-if="oneTimeAdded"
@@ -21,7 +26,7 @@
     <div v-else class="c-oneTimeProductAdd__loading">
       <h2 v-if="error" class="c-oneTimeProductAdd__loadingText">{{ error.message === 'NETWORK ERROR' ? 'Network Error, please wait a moment and then refresh the page.' : error.message }}</h2>
       <h2 v-else class="c-oneTimeProductAdd__loadingText">{{ oneTimeOrderAddingMessage }}</h2>
-      <loader-icon class="c-oneTimeProductAdd__loadingIcon" />
+      <second-loader-icon class="c-oneTimeProductAdd__loadingIcon" />
     </div>
   </div>
 
@@ -36,27 +41,29 @@
       <h2
         class="c-oneTimeProductAdd__loadingText"
       >{{ atc['portal.oneTimeOrderLoadingMessage'] || 'Fetching your one-time product...' }}</h2>
-      <loader-icon class="c-oneTimeProductAdd__loadingIcon" />
+      <second-loader-icon class="c-oneTimeProductAdd__loadingIcon" />
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import OneTimeThankYou from '@components/one-time-thank-you.vue'
-import LoaderIcon from '@components/loader-icon.vue'
+import SecondLoaderIcon from '@components/second-loader-icon.vue'
 import productChangeRequest from '@utils/product-change-request.js'
 import DrawerShippingMethodList from '@components/drawer-shipping-method-list.vue'
 import { buildNewCheckoutUpdatePayload } from '@utils/newCheckoutUpdateHelpers'
 import VButton from '@components/v-button.vue'
-
+import TheHeader from '@components/the-header.vue'
 
 export default {
   components: {
+    TheHeader,
     OneTimeThankYou,
-    LoaderIcon,
     DrawerShippingMethodList,
     VButton,
+    SecondLoaderIcon,
   },
   data: () => {
     return {
@@ -170,7 +177,7 @@ export default {
     },
   },
 
-	async created() {
+	async beforeMount() {
 		const query = this.$route.query
 
 		let customerId = false

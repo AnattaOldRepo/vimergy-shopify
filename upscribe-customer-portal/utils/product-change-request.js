@@ -4,7 +4,7 @@ function checkVariantInProductList(variantId, items) {
   let matchingProduct = false
 
   items.forEach(item => {
-    console.log(variantId, item.variant_id)
+    // console.log(variantId, item.variant_id)
     if (item.variant_id === variantId) {
       matchingProduct = item
     }
@@ -21,12 +21,12 @@ function checkVariantInProductList(variantId, items) {
  * @param { editNextOrder } Boolean - whether we're getting payloads for the subscription.next update or main subscription update
  * @param { subscriptoin } Object - full subscription object
  */
-const productChangeRequest = function({variantId, editNextOrder, subscription}) {
-  console.log({
-    variantId,
-    editNextOrder,
-    subscription,
-  })
+const productChangeRequest = function ({ variantId, editNextOrder, subscription }) {
+  // console.log({
+  //   variantId,
+  //   editNextOrder,
+  //   subscription,
+  // })
 
   if (!variantId || !subscription) {
     console.log('productChangeRequest missing required param: !variantId || !subscription')
@@ -44,7 +44,7 @@ const productChangeRequest = function({variantId, editNextOrder, subscription}) 
   let addPayload = {}
 
   // returns false or the product in the list
-  const  productInList = checkVariantInProductList(variantId, productList)
+  const productInList = checkVariantInProductList(variantId, productList)
 
   // chanage
   if (productInList) {
@@ -115,10 +115,10 @@ const productChangeRequest = function({variantId, editNextOrder, subscription}) 
     }
   }
 
-  console.log(    increasePayload,
-    decreasePayload,
-    removePayload,
-    addPayload,)
+  // console.log(increasePayload,
+  //   decreasePayload,
+  //   removePayload,
+  //   addPayload)
 
   return {
     increasePayload,

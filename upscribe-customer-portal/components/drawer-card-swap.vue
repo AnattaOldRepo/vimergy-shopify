@@ -104,7 +104,7 @@ export default {
       <p v-if="activeCard" class="c-drawer__subtitle" style="margin-top:20px;">{{ atc['portal.swapCurrentCardLabel'] || 'Current Card' }}</p>
       <div v-if="activeCard" class="c-drawerCardSwap">
         <card-item
-          :key="activeCarde ? activeCard.id : 'swap'"
+          :key="activeCard ? activeCard.id : 'swap'"
           :card="activeCard || {}"
           class="c-drawerCardSwap__item"
           no-edit

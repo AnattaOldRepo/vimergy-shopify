@@ -102,6 +102,7 @@ export default {
 
   &--med {
     font-size: 18px;
+    line-height: 23px;
   }
 }
 </style>

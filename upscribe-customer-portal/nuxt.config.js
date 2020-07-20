@@ -83,7 +83,7 @@ module.exports = {
       img: ({ isDev }) =>
         isDev ? '[path][name].[ext]' : 'upscribe_img/[hash:7].[ext]',
       font: ({ isDev }) =>
-        isDev ? '[path][name].[ext]' : 'upscribe_fonts/[hash:7].[ext]',
+        isDev ? '[path][name].[ext]' : 'upscribe_fonts/[name].[ext]',
       video: ({ isDev }) =>
         isDev ? '[path][name].[ext]' : 'upscribe_videos/[hash:7].[ext]',
     },

@@ -64,7 +64,6 @@ export default {
 @import '@design';
 
 .c-button {
-  border-radius:0px;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -144,6 +143,7 @@ export default {
     color: $color-white;
     background-color: $color-blue-brand;
     border: none;
+    border-radius: 4px;
 
     &:hover,
     &:active,
@@ -156,6 +156,7 @@ export default {
     color: $color-black;
     background-color: transparent;
     border: 1px solid $color-blue-light-border;
+    border-radius: 4px;
 
     &:hover,
     &:active,
@@ -168,6 +169,7 @@ export default {
     color: $color-black;
     background-color: transparent;
     border: 1px solid $color-danger;
+    border-radius: 4px;
 
     &:hover,
     &:active,

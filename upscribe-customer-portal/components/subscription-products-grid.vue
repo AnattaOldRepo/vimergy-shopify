@@ -100,7 +100,6 @@ export default {
         <div
           v-for = "(each, index) in visibleCollections"
           :key = "index">
-            <h2 class = "c-productsGrid__grid-title">{{ each.title }}</h2>
             <div class="c-productsGrid__grid">
               <product-grid-item
                 v-for="(product, index2) in each.items"
@@ -230,6 +229,7 @@ export default {
       border: none;
       background-color: transparent;
       padding: 0;
+      cursor: pointer;
     }
   }
 }

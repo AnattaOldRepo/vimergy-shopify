@@ -1,12 +1,14 @@
 <script>
 import { mapState } from 'vuex'
 import VButton from '@components/v-button.vue'
-import QuantityChanger from '@components/quantity-changer.vue'
+// import QuantityChanger from '@components/quantity-changer.vue'
+import QuantityChangerManualEntry from '@components/quantity-changer-manual-entry.vue'
 
 export default {
   components: {
     VButton,
-    QuantityChanger,
+    // QuantityChanger,
+    QuantityChangerManualEntry,
   },
   props: {
     product: {
@@ -61,7 +63,6 @@ export default {
       if (!product && !productBuiltProperties) return false
 
       const productProperties = product.properties || productBuiltProperties
-      console.log('productProperties', productProperties)
 
       if (!productProperties['Discount Amount'] && !productProperties['discount_amount']) return false
 
@@ -114,6 +115,18 @@ export default {
     },
   },
   methods: {
+    quantityChangeManual(quantity) {
+      console.log({quantity})
+      const { product } = this
+
+      this.$emit('quantityChangeManual', {
+        quantity: quantity,
+        id: product.id,
+        product,
+      })
+    },
+
+
     quantityChange(type) {
       const { product } = this
       const quantity = product.quantity
@@ -216,14 +229,23 @@ export default {
         />
       </div>
 
-      <quantity-changer
+      <!-- <quantity-changer
         v-if="quantity"
         class="c-drawerProductBlock__quantity"
         :class="{'control-is-updating': updating}"
         :quantity="product.quantity"
         @increaseQuantity="quantityChange('increase')"
         @decreaseQuantity="quantityChange('decrease')"
+      /> -->
+
+      <quantity-changer-manual-entry
+        v-if="quantity"
+        :class="{'control-is-updating': updating}"
+        class="c-modalProductBlock__quantity"
+        :quantity="product.quantity"
+        @updateQuantity="quantityChangeManual"
       />
+
     </div>
   </div>
 </template>
@@ -240,10 +262,6 @@ export default {
   margin-bottom: 22px;
   text-align: center;
   background-color: $color-white;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
 }
 
 .c-drawerProductBlock__top {
@@ -339,6 +357,7 @@ export default {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   font-weight: bold;
+  border-radius: 4px;
   &:last-of-type {
     margin-right: 0;
   }

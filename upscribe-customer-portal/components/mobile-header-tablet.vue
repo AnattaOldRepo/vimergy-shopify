@@ -59,6 +59,7 @@
         >
 
          <nuxt-link
+            v-if="subscriptionInActive"
             class="c-headerTablet__navLink"
             :to="{
               name: 'index',
@@ -79,7 +80,7 @@
 
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import IconChevronRight from '@components/icon-chevron-right.vue'
 import VButton from '@components/v-button.vue'
 
@@ -98,7 +99,11 @@ export default {
   computed:{
     ...mapState('translations', ['atc']),
 
+    ...mapGetters('subscriptions', ['subscriptionActive', 'subscriptionInActive']),
+
     ...mapState('route', ['storeDomain', 'customerId']),
+
+    ...mapState('shop', ['shopData']),
 
     shopifyAccountUrl() {
       const { shopData } = this

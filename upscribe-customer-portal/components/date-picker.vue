@@ -1,6 +1,5 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
-
 import moment from 'moment'
 var Pikaday = null
 
@@ -134,10 +133,6 @@ export default {
       class="c-datePicker__hiddenInput"
       :value="date"
     />
-
-    <span v-else class="c-details__loadingText"
-        >{{ 'Loading Date...' }}
-    </span>
   </div>
 </template>
 

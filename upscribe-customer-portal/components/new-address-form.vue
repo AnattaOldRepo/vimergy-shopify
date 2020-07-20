@@ -22,6 +22,7 @@
             name="lastName"
             type="text"
             label="Last Name"
+            :input-middle="true"
             required
           />
         </div>
@@ -33,6 +34,7 @@
           type="text"
           label="Company"
           name="company"
+          :input-middle="true"
           optional-label-text="(Optional)"
         />
 
@@ -44,6 +46,7 @@
           label="Address 1"
           name="address1"
           required
+          :input-middle="true"
           :emit-focus-event="true"
         />
 
@@ -53,6 +56,7 @@
           v-model="form.address2"
           type="text"
           label="Address 2"
+          :input-middle="true"
           optional-label-text="(Optional)"
           name="address2"
         />
@@ -67,6 +71,7 @@
           required
           select
           :special-validate="['country']"
+          :input-middle="true"
           @updateSelected="handleCountrySelected"
         />
 
@@ -79,6 +84,7 @@
             type="text"
             label="Zipcode"
             name="zipcode"
+            :input-middle="true"
             required
           />
 
@@ -90,6 +96,7 @@
             type="text"
             label="City"
             name="city"
+            :input-middle="true"
             required
           />
 
@@ -102,6 +109,7 @@
             type="text"
             :label="(country && country.name !== 'United States') ? 'Province' : 'State'"
             name="state"
+            :input-middle="true"
             :required="requiresProvince"
           />
 
@@ -115,6 +123,7 @@
             name="state"
             :select-options="stateSelectOptions"
             :required="requiresProvince"
+            :input-middle="true"
             select
             @updateSelected="handleStateSelected"
           />
@@ -126,9 +135,9 @@
           v-model="form.phone"
           type="text"
           label="Phone Number"
-          :optional-label-text="store.checkout_phone_number_required ? '' : '(Optional)'"
+          :optional-label-text="store && store.checkout_phone_number_required ? '' : '(Optional)'"
           name="phone"
-          :required="store.checkout_phone_number_required ? true : false"
+          :required="store && store.checkout_phone_number_required ? true : false"
         />
 
         <form-summary style="display: none" />
@@ -156,7 +165,7 @@
 
       <v-button
         v-if="!multiButton"
-        class="c-form__submitButton c-button--auto"
+        class="c-form__submitButton c-button--auto c-form__fullWidth"
           :class="{ 'is-loading': updating }"
         type="submit"
         @onClick="submit"
@@ -286,7 +295,7 @@ export default {
       form.state = { required }
     }
 
-    if (store.checkout_phone_number_required) {
+    if (store && store.checkout_phone_number_required) {
       form.phone = { numeric, required }
     }
 
@@ -332,8 +341,8 @@ export default {
     countrySelectOptions() {
       const { formName, shippingCountries } = this
 
-      console.log({shippingCountries})
-      console.log('get all', getAllCountryNames())
+      // console.log({shippingCountries})
+      // console.log('get all', getAllCountryNames())
 
       // use any country for billing or
       // use only shippable countries for shipping
@@ -343,7 +352,7 @@ export default {
         console.log('no countrySelectOptions', console.log({countries}))
       }
 
-      console.log('countrySelectOptions', countries)
+      // console.log('countrySelectOptions', countries)
 
       const countriesArray = Object.keys(countries).map(countryName => {
         let country = countries[countryName]
@@ -429,7 +438,7 @@ export default {
       const { shippingCountries } = this
       const countries = (this.formName === 'billing-address') ? getAllCountryNames() : shippingCountries
 
-      console.log('country builder', {countries})
+      // console.log('country builder', {countries})
 
       const name = this.form.country
 
@@ -458,7 +467,7 @@ export default {
       if (!country || !country.name) return false
 
       finalStates = getCountryProvinces(country.name)
-      console.log({finalStates})
+      // console.log({finalStates})
 
       // if (country.country.code === 'US') {
         // finalStates.push('Armed Forces Americas', 'Armed Forces Europe', 'Armed Forces Pacific')
@@ -550,7 +559,7 @@ export default {
     },
 
     async country(country) {
-      console.log({country})
+      // console.log({country})
 
       if (this.countriesNotWorkingWithAutocomplete.includes(country.name)) {
         this.useGoogleMapsAutocomplete = false
@@ -568,62 +577,63 @@ export default {
 
   // fill form data if already saved
   async mounted() {
-
-    console.log('mounted', this.countries)
-
+    // console.log('mounted', this.countries)
     if (!this.countries || this.isEmptyObject(this.countries)) {
       console.log('run GET_SHIPPING_ZONES')
       await this.GET_SHIPPING_ZONES()
     }
 
-    const { dataFill } = this
-
-    let preFilledData = {...dataFill}
-
-    if (dataFill && !this.isEmptyObject(preFilledData)) {
-      let preFilledForm = Object.assign(this.form, preFilledData)
-
-      console.log({ preFilledForm})
-
-      this.form = {
-        firstName: preFilledForm.first_name ? preFilledForm.first_name : preFilledForm.firstName || '',
-        lastName: preFilledForm.last_name ? preFilledForm.last_name : preFilledForm.lastName || '',
-        company: preFilledForm.company || '',
-        address1: preFilledForm.address1 || '',
-        address2: preFilledForm.address2 || '',
-        city: preFilledForm.city || '',
-        country: preFilledForm.country || '',
-        state: preFilledForm.province || '',
-        province: preFilledForm.province || '',
-        provinceCode: preFilledForm.province_code || '',
-        zipcode: preFilledForm.zipcode ? preFilledForm.zipcode : preFilledForm.zip || '',
-        phone: preFilledForm.phone ?  preFilledForm.phone.replace(/\D/g,'') : '',
-      }
-    } else {
-      this.form = {
-        firstName: '',
-        lastName: '',
-        company: '',
-        address1: '',
-        address2: '',
-        city: '',
-        country: '',
-        countryCode: '',
-        state: '',
-        zipcode: '',
-        phone: '',
-      }
-    }
+    this.fillFormWithDefaultData()
   },
 
   methods: {
-
     ...mapActions('shippingZones', ['GET_SHIPPING_ZONES']),
+
+    fillFormWithDefaultData() {
+		  const { dataFill } = this
+
+      let preFilledData = {...dataFill}
+
+      if (dataFill && !this.isEmptyObject(preFilledData)) {
+        let preFilledForm = Object.assign(this.form, preFilledData)
+
+        console.log({ preFilledForm})
+
+        this.form = {
+          firstName: preFilledForm.first_name ? preFilledForm.first_name : preFilledForm.firstName || '',
+          lastName: preFilledForm.last_name ? preFilledForm.last_name : preFilledForm.lastName || '',
+          company: preFilledForm.company || '',
+          address1: preFilledForm.address1 || '',
+          address2: preFilledForm.address2 || '',
+          city: preFilledForm.city || '',
+          country: preFilledForm.country || '',
+          state: preFilledForm.province || '',
+          province: preFilledForm.province || '',
+          provinceCode: preFilledForm.province_code || '',
+          zipcode: preFilledForm.zipcode ? preFilledForm.zipcode : preFilledForm.zip || '',
+          phone: preFilledForm.phone ?  preFilledForm.phone.replace(/\D/g,'') : '',
+        }
+      } else {
+        this.form = {
+          firstName: '',
+          lastName: '',
+          company: '',
+          address1: '',
+          address2: '',
+          city: '',
+          country: '',
+          countryCode: '',
+          state: '',
+          zipcode: '',
+          phone: '',
+        }
+      }
+		},
 
 
     setAddressFields(addressFields) {
       this.addressFields = Array.prototype.concat.apply([], addressFields)
-      console.log({addressFields})
+      // console.log({addressFields})
     },
 
     updateFullform() {
@@ -644,7 +654,7 @@ export default {
         preFilledData = copyShippingAddress
       }
 
-      console.log({preFilledData})
+      // console.log({preFilledData})
 
       if (!this.isEmptyObject(preFilledData)) {
         let preFilledForm = Object.assign(this.form, preFilledData)
@@ -681,7 +691,7 @@ export default {
     },
 
     isValidCountryOption(countryName) {
-      console.log('isValidCountryOption', {countryName})
+      // console.log('isValidCountryOption', {countryName})
       const { countrySelectOptions } = this
       return countrySelectOptions.some(option => {
         return option.value === countryName
@@ -700,7 +710,7 @@ export default {
      */
     handlePlaceChanged(addressData, placeResultData, id) {
 
-      console.log({addressData, placeResultData, id})
+      // console.log({addressData, placeResultData, id})
 
       this.autoaddress = addressData
 
@@ -745,10 +755,10 @@ export default {
 
         // check for city/state matching locality to update (EU issue)
         this.$nextTick(() => {
-          console.log('check for city/state matching locality to update (EU issue)')
-          console.log('stateSelectOptions: ', this.stateSelectOptions)
-          console.log('autoaddress', this.autoaddress)
-          console.log('auto locality: ', this.autoaddress.locality)
+          // console.log('check for city/state matching locality to update (EU issue)')
+          // console.log('stateSelectOptions: ', this.stateSelectOptions)
+          // console.log('autoaddress', this.autoaddress)
+          // console.log('auto locality: ', this.autoaddress.locality)
 
           if (!this.stateSelectOptions) return
 
@@ -758,7 +768,7 @@ export default {
           })
 
           if (localityProvinceMatches.length) {
-            console.log({ localityProvinceMatches })
+            // console.log({ localityProvinceMatches })
             this.form.state = localityProvinceMatches[0].name
             this.form.province = localityProvinceMatches[0].name
           }
@@ -795,7 +805,7 @@ export default {
     },
 
     handleCountrySelected(countryPayload) {
-      console.log({countryPayload})
+      // console.log({countryPayload})
 
       if (!countryPayload || !countryPayload.name) {
         return console.log('handleCountrySelected error: ', countryPayload)
@@ -848,6 +858,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+}
+
+.c-form__fullWidth{
   width: 100%;
 }
 </style>

@@ -44,7 +44,7 @@
               },
             }"
             :title="atc['portal.subscriptionSettingsDeliverEveryLabel'] || 'Deliver Every'"
-            :second-text="activeSubscription.interval + ' Days'"
+            :second-text="activeSubscription.interval + ' ' + intervalUnitDisplay"
           >
             <span slot="icon" class="c-functionalButtonBlock__icon">
                 <repeat-icon />
@@ -56,7 +56,7 @@
             class="disabled-click"
             no-arrow-icon
             :title="atc['portal.subscriptionSettingsDeliverEveryLabel'] || 'Deliver Every'"
-            :second-text="activeSubscription.interval + ' Days'"
+            :second-text="activeSubscription.interval + ' ' + intervalUnitDisplay"
           >
             <span slot="icon" class="c-functionalButtonBlock__icon">
                 <repeat-icon />
@@ -93,25 +93,11 @@
             </span>
           </functional-button-block>
         </div>
-
-        <div class="c-details__buttonContain">
-          <v-button
-            v-if="!isCancelledSubscriptionRoute"
-            class="c-button c-button--transparent c-details__button"
-            @onClick="shipTomorrow"
-          >
-            {{shipmentNowUpdate ?  shipmentNowUpdate : 'Ship Now'}}
-          </v-button>
-
-          <v-button
-            v-if="!isCancelledSubscriptionRoute"
-            class="c-button c-button--transparent c-details__button"
-            @onClick="skipNextShipment"
-          >
-            {{skipShipmentUpdate ?  skipShipmentUpdate : 'Skip Next Shipment'}}
-          </v-button>
-        </div>
     </mobile-subscription-template>
+
+    <portal to="float-buttons">
+       <mobile-float-buttons />
+    </portal>
   </div>
 </template>
 
@@ -122,8 +108,8 @@ import RepeatIcon from '@components/Icon/repeat-icon.vue'
 import ShippingFastIcon from '@components/Icon/shipping-fast-icon.vue'
 import CalendarIcon from '@components/Icon/calendar-icon'
 import MobileSubscriptionTemplate from '@components/mobile-subscription-template'
-import VButton from '@components/v-button'
 import TheHeader from '@components/the-header.vue'
+import MobileFloatButtons from '@components/mobile-float-buttons'
 import moment from 'moment'
 
 export default {
@@ -134,15 +120,10 @@ export default {
     ShippingFastIcon,
     RepeatIcon,
     MobileSubscriptionTemplate,
-    VButton,
+    MobileFloatButtons,
   },
 
-  data(){
-    return {
-      shipmentNowUpdate: '',
-      skipShipmentUpdate: '',
-    }
-  },
+
 
   computed: {
     ...mapState('route', ['storeDomain', 'customerId']),
@@ -181,6 +162,36 @@ export default {
       } else {
         return false
       }
+    },
+
+    intervalUnitDisplay() {
+      const { activeSubscription, atc } = this
+      let intervalUnit = activeSubscription.period
+      let plural = activeSubscription.interval > 1
+
+      let displayUnit = ''
+      if (intervalUnit === 'day') {
+        if (plural) {
+          displayUnit = atc['date-time.days-unit'] || 'days'
+        } else {
+          displayUnit = atc['date-time.day-unit'] || 'day'
+        }
+      } else if (intervalUnit === 'week') {
+        if (plural) {
+          displayUnit = atc['date-time.weeks-unit'] || 'weeks'
+        } else {
+          displayUnit = atc['date-time.week-unit'] || 'week'
+        }
+      } else if (intervalUnit === 'month') {
+        if (plural) {
+          displayUnit = atc['date-time.months-unit'] || 'months'
+        } else {
+          displayUnit = atc['date-time.month-unit'] || 'month'
+        }
+      } else {
+        displayUnit = atc['date-time.days-unit'] || 'days'
+      }
+      return displayUnit
     },
 
 
@@ -237,13 +248,6 @@ export default {
     },
   },
 
-  watch: {
-    activeSubscription: {
-      handler: 'GET_SUBSCRIPTION_SHIPPING_METHODS',
-      immediate: true,
-    },
-  },
-
   mounted(){
     this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
   },
@@ -268,29 +272,6 @@ export default {
     ...mapActions('subscriptions', ['SKIP_NEXT_SHIPMENT', 'SHIP_TOMORROW']),
 
     ...mapActions('newCheckoutUpdates', ['COMPLETE_SAVED_NEW_CHECKOUT_UPDATE']),
-
-    async skipNextShipment() {
-      this.skipShipmentUpdate = 'Updating'
-      try {
-        await this.SKIP_NEXT_SHIPMENT()
-      } catch(e) {
-        console.log(e)
-      } finally{
-        this.skipShipmentUpdate = ''
-      }
-    },
-
-
-    async shipTomorrow() {
-      this.shipmentNowUpdate = 'Updating'
-      try {
-        await this.SHIP_TOMORROW()
-      } catch(e) {
-        console.log(e)
-      } finally{
-        this.shipmentNowUpdate = ''
-      }
-    },
   },
 
 }
@@ -298,12 +279,23 @@ export default {
 
 <style lang="scss">
 @import '@design/_colors';
+.c-details__buttonCTA{
+  background-color: $color-white;
+  position: absolute;
+  bottom: 56px;
+  width: 100%;
+}
+
 .c-details__buttonContain{
   display: flex;
-  margin: 30px auto 0;
+  margin: 0px auto 0;
   justify-content: space-between;
   max-width: 400px;
-  padding: 0;
+  padding: 15px 16px;
+
+  @media (min-width: 420px){
+    padding: 0px;
+  }
 }
 
 .c-details__button{
@@ -314,7 +306,7 @@ export default {
   font-weight: bold;
   font-style: normal;
   max-width: 167px;
-  background-color: $color-white;
+  background-color: #F7F9FB;
 
   &:first-child{
     margin-right: 8px;

@@ -38,7 +38,7 @@ export default {
 
     handleChange($event) {
       const { name } = this
-      console.log({$event})
+      // console.log({$event})
       this.error = $event.error ? $event.error.message : ''
       this.$emit('handleChange', {complete: !!name })
       // this.$emit('handleChange', $event)

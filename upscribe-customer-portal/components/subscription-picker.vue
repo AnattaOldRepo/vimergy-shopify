@@ -184,83 +184,20 @@ export default {
       handler: 'resetSubscriptionSettings',
       immediate: true,
     },
-
-    async $route(to, from) {
-        const { subscriptions } = this
-        let route
-        let activeSubs
-        let inactiveSubs
-        if(to.query && to.query.route === 'cancelledSubscriptions'){
-          route = 'cancelledSubscriptions'
-        } else {
-          route = ''
-        }
-
-        if(route === 'cancelledSubscriptions'){
-            inactiveSubs = Object.keys(subscriptions).filter((subKey) => {
-            let sub = subscriptions[subKey]
-            return !sub.active
-          })
-          this.subscriptionStart = 0
-          this.setActiveSubscriptionId(parseInt(inactiveSubs[0]))
-          try{
-              await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
-          } catch(e) {
-              console.log(e)
-            } finally{
-              console.log('done')
-            }
-        } else {
-            activeSubs = Object.keys(subscriptions).filter((subKey) => {
-            let sub = subscriptions[subKey]
-            return sub.active
-          })
-            this.subscriptionStart = 0
-            this.setActiveSubscriptionId(parseInt(activeSubs[0]))
-            try{
-              await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
-          } catch(e) {
-              console.log(e)
-            } finally{
-              console.log('done')
-          }
-        }
-    },
   },
 
- async mounted() {
-    const { subscriptions } = this
-    let activeSubs
-    let inactiveSubs
-    if(this.$route.query.route === 'cancelledSubscriptions'){
-        inactiveSubs = Object.keys(subscriptions).filter((subKey) => {
-        let sub = subscriptions[subKey]
-        return !sub.active
-      })
-        this.setActiveSubscriptionId(parseInt(inactiveSubs[0]))
-        try{
-            await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
-        } catch(e) {
-            console.log(e)
-        } finally{
-          console.log('done')
-        }
-    } else {
-        activeSubs = Object.keys(subscriptions).filter((subKey) => {
-        let sub = subscriptions[subKey]
-        return sub.active
-      })
-        this.setActiveSubscriptionId(parseInt(activeSubs[0]))
-        try{
-          await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
-         } catch(e) {
-          console.log(e)
-        } finally{
-          console.log('done')
-        }
+  mounted() {
+    const { subscriptionActive, subscriptionInActive, activeSubscriptionId } = this
+
+    if (((subscriptionActive && subscriptionActive.length) || (subscriptionInActive && subscriptionInActive.length)) && !activeSubscriptionId) {
+      console.log('set firs sub as active')
+      if (subscriptionActive && subscriptionActive.length) {
+        this.setActiveSubscriptionId(subscriptionActive[0].id)
+      } else {
+        this.setActiveSubscriptionId(subscriptionInActive[0].id)
+      }
     }
   },
-
 
   methods: {
     ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
@@ -320,6 +257,13 @@ export default {
   background-color: $color-white;
 }
 
+.c-subscriptionPicker--mobile{
+  padding: 0 16px;
+  @media(min-width: 420px){
+    padding: 0;
+  }
+}
+
 .c-subscriptionPicker {
   display: flex;
   flex-wrap: wrap;
@@ -371,7 +315,6 @@ export default {
     padding-right: 0px;
     cursor: pointer;
     background: transparent;
-    padding-bottom: 17px;
     border: none;
     border-bottom: 3px solid transparent;
 

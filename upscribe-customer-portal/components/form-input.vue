@@ -34,7 +34,7 @@
       slot-scope="{ validator }"
       :name="name"
       class="c-formInput"
-      :class="{ isLocked: isLocked, isDisabled: disabled, isLight: isLight }"
+      :class="{ isLocked: isLocked, isDisabled: disabled, isLight: isLight, 'input--middle': inputMiddle }"
       :required="required"
       :type="type"
       :placeholder="placeholder"
@@ -195,6 +195,10 @@ export default {
       type: [String, Boolean],
       default: false,
     },
+    inputMiddle: {
+      type: [String, Boolean],
+      default: false,
+    },
   },
 
   data: () => {
@@ -272,7 +276,7 @@ export default {
 
   font-size: 14px;
   font-family: $font-primary-regular;
-  border: 1px solid $color-input-border;
+  border: 1px solid $color-blue-light-background;
   border-radius: 5px;
   height: 47px;
 
@@ -292,6 +296,8 @@ export default {
 
   &:focus {
     outline: none;
+    background: transparent;
+    z-index: 10;
   }
 
   .c-formGroup--focused & {
@@ -300,6 +306,12 @@ export default {
 
   .hasError & {
     border-color: $color-error;
+    background: transparent;
+    z-index: 10;
+  }
+
+  &::placeholder{
+    color: $color-placeholder;
   }
 }
 
@@ -399,9 +411,9 @@ export default {
   text-align: left;
   width: 100%;
   cursor: pointer;
-  height: 45px;
+  height: 46px;
   padding: 16px;
-  border: 1px solid $color-input-border;
+  border: 1px solid $color-blue-light-background;
   border-radius: 5px;
   outline: none;
   white-space: nowrap;
@@ -473,7 +485,6 @@ export default {
 	padding: 5px 0;
 	margin: 0;
 	width: 100%;
-  width: 240px;
 	max-height: 350px;
 	min-width: 200px;
 	overflow-y: auto;
@@ -577,8 +588,6 @@ export default {
 	display: none
 }
 
-
-.c-formGroup .vs__search,
 .vs__search,
 .vs__search:focus {
 	-webkit-appearance: none;
@@ -599,23 +608,23 @@ export default {
 }
 
 .vs__search::-webkit-input-placeholder {
-	color: inherit
+	color: $color-placeholder
 }
 
 .vs__search::-moz-placeholder {
-	color: inherit
+	color: $color-placeholder
 }
 
 .vs__search:-ms-input-placeholder {
-	color: inherit
+	color: $color-placeholder
 }
 
 .vs__search::-ms-input-placeholder {
-	color: inherit
+	color: $color-placeholder
 }
 
 .vs__search::placeholder {
-	color: inherit
+	color: $color-placeholder
 }
 
 .vs--unsearchable .vs__search {
@@ -655,7 +664,12 @@ export default {
 	opacity: 1
 }
 
-
+.input--middle{
+  border-radius: 0px;
+  @include bp(tablet){
+    border-radius: 5px;
+  }
+}
 /*# sourceMappingURL=vue-select.css.map*/
 
 

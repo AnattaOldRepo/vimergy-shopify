@@ -1,5 +1,5 @@
 <template>
-  <div v-if="orders && atc" class="c-order__main">
+  <div v-if="orders && atc && orderAlternativeForRefreshingPage" class="c-order__main">
     <portal to="header">
       <the-header
         :middle-html="currentOpenOrderActive"
@@ -7,7 +7,7 @@
       />
     </portal>
 
-    <div v-if="historyOrder" class="c-order__info">
+    <div class="c-order__info">
       <span class="c-order__infoStatus"
         >{{ atc['labels.orderStatus'] || 'Status' }}: {{ orderStatus }}</span
       >
@@ -42,22 +42,9 @@
               <span class="c-order__subText c-order__subTextQuantity is-faded">{{ atc['labels.quantityShort'] || 'QTY' }}: {{ item.quantity }}</span>
             </div>
 
-            <span v-if="historyOrder" class="c-order__subText u-font-bold">{{ currencySymbol }}{{
-              (item.price * item.quantity).toFixed(2)
-            }}</span>
-
-            <div v-else-if="!historyOrder" class="c-order__priceContain">
-              <span class="c-order__subText u-font-bold">{{ currencySymbol }}{{
-              (item.price * item.quantity).toFixed(2)
-              }}</span>
-
-              <span
-                class="c-order__subText u-font-bold c-order__openEditQuantity"
-                tabindex="0"
-                role="button"
-                @click="openModal(item.variant_id)">
-                Edit
-              </span>
+            <div class="c-order__subText c-order__priceControl u-font-bold">
+              <!-- <span class="c-order__priceOnly">{{ currencySymbol }}{{ item.price.toFixed(2) }}</span> -->
+              <span>{{ currencySymbol }}{{ (item.price * item.quantity).toFixed(2)}}</span>
             </div>
           </div>
         </div>
@@ -65,7 +52,7 @@
     </div>
 
     <div class="c-order__pricingSection u-font-bold">
-      <div class="c-order__pricing">
+      <div v-if="orderAlternativeForRefreshingPage" class="c-order__pricing">
         <span>{{ atc['labels.subtotal'] || 'Subtotal' }}</span>
         <span>{{ currencySymbol }}{{ orderAlternativeForRefreshingPage.total_line_items_price.toFixed(2) }}</span>
       </div>
@@ -75,13 +62,13 @@
         <span>{{ currencySymbol }}{{ shippingPrice }}</span>
       </div>
 
-      <div v-if="historyOrder" class="c-order__pricing">
+      <div v-if="historyOrder || orderAlternativeForRefreshingPage.total_tax" class="c-order__pricing">
         <span>{{ atc['labels.tax'] || 'Tax' }}</span>
         <span v-if="orderAlternativeForRefreshingPage.total_tax">{{ currencySymbol }}{{ orderAlternativeForRefreshingPage.total_tax.toFixed(2) }}</span>
         <span v-else>--</span>
       </div>
 
-      <div v-if="historyOrder" class="c-order__pricing">
+      <div class="c-order__pricing">
         <span>{{ atc['portal.discountCode'] || 'Discount Code' }}</span>
         <span  v-if="shopifyDiscount"> {{ shopifyDiscountCode }} ({{ shopifyDiscountAmountDisplay }})</span>
         <span v-else>--</span>
@@ -92,38 +79,16 @@
         <span>{{ currencySymbol }}{{ orderAlternativeForRefreshingPage.total_price.toFixed(2) }}</span>
       </div>
     </div>
-
-    <portal v-if="isProductModalOpen" to="modals">
-      <modal-product
-        :show="isProductModalOpen"
-        :close-modal="closeModal"
-        :close-animation="closeAnimation"
-        @swapSubscription="openAddToSubscriptionModal"
-        />
-    </portal>
-
-    <portal v-if="isOpeningProductSubscription" to="modals">
-      <modal-subscription
-        :show="isOpeningProductSubscription"
-        :close-modal="closeModal"
-        :close-animation="closeAnimation"
-        :is-swap="isSwapSubscription"
-        />
-    </portal>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
-import ModalProduct from '@components/modal-product'
 import moment from 'moment'
 import TheHeader from '@components/the-header'
-import ModalSubscription from '@components/modal-subscription'
 export default {
   components:{
-    ModalProduct,
     TheHeader,
-    ModalSubscription,
   },
 
   props: {
@@ -141,15 +106,6 @@ export default {
     },
   },
 
-  data(){
-    return{
-      isProductModalOpen: false,
-      closeAnimation: false,
-      isSwapSubscription: false,
-      isOpeningProductSubscription: false,
-    }
-  },
-
   computed: {
     ...mapState('translations', ['atc', 'activeLanguageCode']),
 
@@ -165,18 +121,12 @@ export default {
     ]),
 
     shopifyDiscount() {
-      const { order: { discount_applications} = {} } = this
+      const { orderAlternativeForRefreshingPage: { discount_applications} = {} } = this
       return (discount_applications && discount_applications.length) ? discount_applications[0] : false
     },
 
     currentOpenOrderActive(){
-      if(this.historyOrder){
-        return `<span class='c-order__header'>${this.prettyDate}</span> <span class='c-order__headerDate'>${this.currencySymbol}${this.orderAlternativeForRefreshingPage.total_price.toFixed(2)}</span>`
-      } else if(this.isCancelledSubscriptionRoute){
-        return `<span class='c-order__header'>Subscription ${this.activeSubscription.id}</span>`
-    } else {
-        return `<span class='c-order__header'>Next Shipment</span> <span class='c-order__headerDate'>${this.nextShipDate}</span>`
-      }
+      return `<span class='c-order__header'>${this.prettyDate}</span> <span class='c-order__headerDate'>${this.currencySymbol}${this.orderAlternativeForRefreshingPage.total_price.toFixed(2)}</span>`
     },
 
     shopifyDiscountCode() {
@@ -207,6 +157,8 @@ export default {
 
     orderLineItems() {
       const { orderAlternativeForRefreshingPage, isOriginalCharge } = this
+      if (!orderAlternativeForRefreshingPage) return []
+
       if (isOriginalCharge) {
         return orderAlternativeForRefreshingPage.items
       } else {
@@ -235,7 +187,11 @@ export default {
 
     // determin if coming from subscriptions array or shopify order array
     isOriginalCharge() {
-      return !!this.orderAlternativeForRefreshingPage.shopify_order_id
+      if (this.orderAlternativeForRefreshingPage && this.orderAlternativeForRefreshingPage.shopify_order_id !== undefined) {
+        return true
+      } else {
+        return false
+      }
     },
 
     nextShipDate() {
@@ -259,16 +215,11 @@ export default {
 
     orderAlternativeForRefreshingPage(){
       const { order, orderAlternative, historyOrder } = this
-      if(historyOrder){
-        if(order && order.shopify_order_id){
-          return order
-        }
+      if(historyOrder && order && order.shopify_order_id !== undefined){
+        return order
       } else {
-        if(order && order.shopify_order_id){
-          return order
-        }
+        return orderAlternative
       }
-      return orderAlternative
     },
   },
 
@@ -333,32 +284,6 @@ export default {
       var priceWithDecimal = (price / 100.0).toFixed(2)
 
       return '$' + String(priceWithDecimal)
-    },
-
-    openModal(productVariantId){
-      this.setProductIdAndSubscriptionId(productVariantId)
-      this.isProductModalOpen = true
-      this.closeAnimation = false
-    },
-
-    openAddToSubscriptionModal(payload){
-      this.isOpeningProductSubscription = true
-      this.closeAnimation = false
-
-      if(payload && payload.title === 'swap') {
-        this.isSwapSubscription = true
-        this.setSwapProduct(payload.product)
-      } else {
-        this.isSwapSubscription = false
-      }
-    },
-
-    closeModal(){
-      this.closeAnimation = true
-      setTimeout(() => {
-        this.isProductModalOpen = false
-        this.isOpeningProductSubscription = false
-      }, 500)
     },
   },
 }
@@ -481,10 +406,27 @@ export default {
   font-style: normal;
   margin-top: 3px;
   color: $color-blue-secondary;
+  text-align: center;
 }
 
 .c-order__subTextQuantity{
   font-size: 14px;
+}
+
+.c-order__priceControl{
+  display: flex;
+  flex-direction: column;
+  @include bp(mobile-large){
+    flex-direction: row;
+  }
+}
+
+.c-order__priceOnly{
+  flex-direction: column;
+  margin-bottom: 10px;
+  @include bp(mobile-large){
+     margin-right: 20px;
+  }
 }
 
 .c-order__itemItemPricingBox {
@@ -602,12 +544,5 @@ export default {
   cursor: pointer;
   font-size: 12px;
   line-height: 16px;
-}
-
-.c-order__main{
-  padding: 0 16px;
-  @media (min-width: 420px){
-    padding: 0;
-  }
 }
 </style>

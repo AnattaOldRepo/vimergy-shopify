@@ -137,7 +137,7 @@ export const actions = {
         passedEvent = 'Discount Removed'
         break
       default:
-        console.log('analyticsDiscount Error: ', event)
+      // console.log('analyticsDiscount Error: ', event)
     }
 
     dispatch('triggerAnalyticsEvent', {

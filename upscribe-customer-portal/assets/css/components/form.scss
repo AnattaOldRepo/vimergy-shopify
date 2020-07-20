@@ -18,12 +18,17 @@
 }
 
 .c-form__submitBox {
-  display: flex;
-  flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 0;
-  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+
+  @include bp(tablet) {
+    padding-bottom: 15px;
+    margin-top: 0px;
+  }
+
 
   &.form__submitBox--left {
     align-items: flex-start;

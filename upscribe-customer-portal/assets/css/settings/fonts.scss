@@ -1,266 +1,48 @@
-// @font-face {
-//   font-family: 'Roboto-Black';
-//   src: url('~/fonts/Roboto-Black.ttf');
-//   font-style: normal;
-//   font-weight: 900;
-//   font-display: swap;
-// }
+// Default fonts setup, upload your custom fonts, replace the src url and keep the font-family name the same to customize
+// then set font-face rules in your shopify theme to match the below, and upload those fonts to your assets if they're not already there
 
-// @font-face {
-//   font-family: 'Roboto-BlackItalic';
-//   src: url('~/fonts/Roboto-BlackItalic.ttf');
-//   font-style: italic;
-//   font-weight: 900;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Bold';
-//   src: url('~/fonts/Roboto-Bold.ttf');
-//   font-style: normal;
-//   font-weight: 700;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-BoldItalic';
-//   src: url('~/fonts/Roboto-BoldItalic.ttf');
-//   font-style: italic;
-//   font-weight: 700;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Medium';
-//   src: url('~/fonts/Roboto-Medium.ttf');
-//   font-style: normal;
-//   font-weight: 500;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-MediumItalic';
-//   src: url('~/fonts/Roboto-MediumItalic.ttf');
-//   font-style: italic;
-//   font-weight: 500;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Regular';
-//   src: url('~/fonts/Roboto-Regular.ttf');
-//   font-style: normal;
-//   font-weight: 400;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-RegularItalic';
-//   src: url('~/fonts/Roboto-Italic.ttf');
-//   font-style: italic;
-//   font-weight: 400;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Light';
-//   src: url('~/fonts/Roboto-Light.ttf');
-//   font-style: normal;
-//   font-weight: 300;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-LightItalic';
-//   src: url('~/fonts/Roboto-LightItalic.ttf');
-//   font-style: italic;
-//   font-weight: 300;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Thin';
-//   src: url('~/fonts/Roboto-Thin.ttf');
-//   font-style: normal;
-//   font-weight: 100;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-ThinItalic';
-//   src: url('~/fonts/Roboto-ThinItalic.ttf');
-//   font-style: italic;
-//   font-weight: 100;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Black';
-//   src: url('~/fonts/Roboto-Black.ttf');
-//   font-style: normal;
-//   font-weight: 900;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-BlackItalic';
-//   src: url('~/fonts/Roboto-BlackItalic.ttf');
-//   font-style: italic;
-//   font-weight: 900;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Bold';
-//   src: url('~/fonts/Roboto-Bold.ttf');
-//   font-style: normal;
-//   font-weight: 700;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-BoldItalic';
-//   src: url('~/fonts/Roboto-BoldItalic.ttf');
-//   font-style: italic;
-//   font-weight: 700;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Medium';
-//   src: url('~/fonts/Roboto-Medium.ttf');
-//   font-style: normal;
-//   font-weight: 500;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-MediumItalic';
-//   src: url('~/fonts/Roboto-MediumItalic.ttf');
-//   font-style: italic;
-//   font-weight: 500;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Regular';
-//   src: url('~/fonts/Roboto-Regular.ttf');
-//   font-style: normal;
-//   font-weight: 400;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-RegularItalic';
-//   src: url('~/fonts/Roboto-Italic.ttf');
-//   font-style: italic;
-//   font-weight: 400;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Light';
-//   src: url('~/fonts/Roboto-Light.ttf');
-//   font-style: normal;
-//   font-weight: 300;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-LightItalic';
-//   src: url('~/fonts/Roboto-LightItalic.ttf');
-//   font-style: italic;
-//   font-weight: 300;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-Thin';
-//   src: url('~/fonts/Roboto-Thin.ttf');
-//   font-style: normal;
-//   font-weight: 100;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'Roboto-ThinItalic';
-//   src: url('~/fonts/Roboto-ThinItalic.ttf');
-//   font-style: italic;
-//   font-weight: 100;
-//   font-display: swap;
-// }
-
-// IBM PLEX SANS FONT
-
-/*
 @font-face {
-  font-family: 'IBM-Plex-Sans-Thin';
-  src: url('~/fonts/IBMPlexSans-Thin.ttf');
+  font-family: 'font-primary-thin';
+  src: url("~assets/fonts/IBMPlexSans-Thin.ttf") format("truetype");
   font-weight: 200;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'IBM-Plex-Sans-Light';
-  src: url('~/fonts/IBMPlexSans-Light.ttf');
+  font-family: 'font-primary-light';
+  src: url('~assets/fonts/IBMPlexSans-Light.ttf') format("truetype");
   font-weight: 300;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'IBM-Plex-Sans-Regular';
-  src: url('~/fonts/IBMPlexSans-Regular.ttf');
+  font-family: 'font-primary-regular';
+  src: url('~assets/fonts/IBMPlexSans-Regular.ttf') format("truetype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'IBM-Plex-Sans-Medium';
-  src: url('~/fonts/IBMPlexSans-Medium.ttf');
+  font-family: 'font-primary-medium';
+  src: url('~assets/fonts/IBMPlexSans-Medium.ttf') format("truetype");
   font-weight: 500;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'IBM-Plex-Sans-SemiBold';
-  src: url('~/fonts/IBMPlexSans-SemiBold.ttf');
+  font-family: 'font-primary-semi-bold';
+  src: url('~assets/fonts/IBMPlexSans-SemiBold.ttf') format("truetype");
   font-weight: 600;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'IBM-Plex-Sans-Bold';
-  src: url('~/fonts/IBMPlexSans-Bold.ttf');
+  font-family: 'font-primary-bold';
+  src: url('~assets/fonts/IBMPlexSans-Bold.ttf') format("truetype");
   font-style: normal;
   font-weight: 700;
-  font-display: swap;
-}
-*/
-
-@font-face {
-  font-family: 'Avenir LT Pro';
-  src: url('~/fonts/AvenirLTPro-Heavy.woff2') format('woff2'),
-    url('~/fonts/AvenirLTPro-Heavy.woff') format('woff');
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Avenir LT Pro';
-  src: url('~/fonts/AvenirLTPro-Medium.woff2') format('woff2'),
-    url('~/fonts/AvenirLTPro-Medium.woff') format('woff');
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Avenir LT Pro';
-  src: url('~/fonts/AvenirLTPro-Roman.woff2') format('woff2'),
-    url('~/fonts/AvenirLTPro-Roman.woff') format('woff');
-  font-style: normal;
-  font-weight: 400;
   font-display: swap;
 }

@@ -106,11 +106,11 @@
           query: {
               template: 'order',
               orderId: order.id,
-              past_shipment: 'true',
               storeDomain,
               customerId,
             },
         }"
+        @click="setOrderForMobileLayout"
       >
         <span class="c-historyOrder__title"
           >{{ prettyDate }} <span class = "c-historyOrder__headline-price">{{ currencySymbol }}{{ order.total_price.toFixed(2) }}</span></span
@@ -125,7 +125,7 @@
 import moment from 'moment'
 import { windowSizes } from '@mixins/windowSizes'
 import IconChevronRight from '@components/icon-chevron-right.vue'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -233,6 +233,12 @@ export default {
   },
 
   methods: {
+    ...mapMutations('orders', ['setCurrentOrderForMobile']),
+
+    setOrderForMobileLayout(){
+      this.setCurrentOrderForMobile(this.order)
+    },
+
     toggleOrder() {
       this.orderOpen = !this.orderOpen
     },

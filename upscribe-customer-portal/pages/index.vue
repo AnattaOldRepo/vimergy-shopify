@@ -1,62 +1,105 @@
 <template>
-  <!-- <div v-if="!noActiveSubscriptions" class="c-subscription"> -->
-  <div v-if="subscriptions && evaluateSubscriptionsBasedOnRoute" class="c-subscription">
-    <headline-banner v-if="windowWidth < 768"/>
+  <!-- Mobile Template -->
+  <div v-if="windowWidth < 768" class="c-subscription">
+    <headline-banner  v-if="atc['portal.notification']"/>
 
-    <mobile-screen-layout v-if="windowWidth < 768" />
+    <mobile-screen-layout />
+  </div>
 
-    <div v-if="windowWidth >= 768" class="c-subscription__outer">
-      <subscription-picker
-        v-if="subscriptions && Object.keys(subscriptions).length >= 1 && windowWidth >= 768"
-        :class="{ 'u-visuallyHidden': Object.keys(subscriptions).length === 1 }"
-        :query="routeQuery"
-      />
+  <!-- Desktop Template -->
+  <div v-else>
 
-      <div class="c-subscription__inner">
-        <subscription-headline />
+    <!-- Loader template for Desktop -->
+      <div v-if="!subscriptionsLoaded">
+
+        <div class="c-subscription__inner">
 
         <div class="c-subscription__blocks">
-          <!--  -->
-          <!-- <reactivate-upgrade-block v-if="subscriptions && !isEmptyObject(subscriptions) && (!activeSubscription.active || activeSubscription.charge_limit > 0)" key="reactivate-upgrade-block"/> -->
-
-          <!-- Edit Next Order or Subscription Settings -->
-          <!-- <toggle-edit-mode-block v-if="isStandardActiveSubscription" key="edit-mode-block"/> -->
-
-          <!-- Next Order -->
           <subscription-block-next-settings
             v-if="editNextOrder"
             key="block1"
             :class="{'u-disableExpiredChanges': !activeSubscription.active }"
           />
 
-          <!-- Subscription Settings -->
-          <subscription-block-main-settings v-if="!editNextOrder" key="block2"
+          <subscription-block-main-settings
+            v-if="!editNextOrder"
+            key="block2"
             :class="{'u-disableExpiredChanges': !activeSubscription.active }"
           />
 
-          <!-- Details -->
-          <subscription-block-details key="block3"
+          <subscription-block-details
+            key="block3"
             :class="{'u-disableExpiredChanges': !activeSubscription.active }"
           />
         </div>
 
-        <subscription-products-grid class="c-subscription__productsGrid"
+        <subscription-products-grid
+            class="c-subscription__productsGrid"
             :class="{'u-disableExpiredChanges': !activeSubscription.active }"
         />
       </div>
     </div>
-  </div>
 
-  <div v-else class="c-noSubscriptions">
-    <h2 class="c-noSubscriptions__text">{{ atc['portal.noSubscriptions'] || 'You have no active subscriptions.' }}</h2>
-    <v-button class="c-noSubscriptions__button" auto @onClick="redirect">
-      {{ atc['buttons.shopNow'] || 'Shop Now' }}
-    </v-button>
+    <!-- Main Setting -->
+    <div v-else-if="subscriptions && Object.keys(toggleSubscriptions).length > 0 && subscriptionsLoaded" class="c-subscription">
+      <div class="c-subscription__outer">
+        <subscription-picker
+          v-if="subscriptions && Object.keys(toggleSubscriptions).length >= 1 && windowWidth >= 768"
+          :class="{ 'u-visuallyHidden': Object.keys(toggleSubscriptions).length === 1 }"
+          :query="routeQuery"
+        />
+
+        <div class="c-subscription__inner">
+          <subscription-headline />
+          <div class="c-subscription__blocks">
+            <!--  -->
+            <!-- <reactivate-upgrade-block v-if="subscriptions && !isEmptyObject(subscriptions) && (!activeSubscription.active || activeSubscription.charge_limit > 0)" key="reactivate-upgrade-block"/> -->
+
+            <!-- Edit Next Order or Subscription Settings -->
+            <!-- <toggle-edit-mode-block v-if="isStandardActiveSubscription" key="edit-mode-block"/> -->
+
+            <!-- Next Order -->
+            <subscription-block-next-settings
+              v-if="editNextOrder"
+              key="block1"
+              :class="{'u-disableExpiredChanges': !activeSubscription.active }"
+            />
+
+            <!-- Subscription Settings -->
+            <subscription-block-main-settings
+              v-if="!editNextOrder"
+              key="block2"
+              :class="{'u-disableExpiredChanges': !activeSubscription.active }"
+            />
+
+            <!-- Details -->
+            <subscription-block-details
+              key="block3"
+              :class="{'u-disableExpiredChanges': !activeSubscription.active }"
+            />
+          </div>
+
+          <subscription-products-grid
+              class="c-subscription__productsGrid"
+              :class="{'u-disableExpiredChanges': !activeSubscription.active }"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- No Subscriptions -->
+    <div v-else class="c-noSubscriptions">
+
+      <h2 class="c-noSubscriptions__text">{{ atc['portal.noSubscriptions'] || 'You have no active subscriptions.' }}</h2>
+      <v-button class="c-noSubscriptions__button" auto @onClick="redirect">
+        {{ atc['buttons.shopNow'] || 'Shop Now' }}
+      </v-button>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 import MobileScreenLayout from '@components/mobile-screen-layout.vue'
 // import TheHeader from '@components/the-header.vue'
@@ -93,7 +136,7 @@ export default {
   computed: {
     ...mapState('translations', ['atc']),
 
-    ...mapState('subscriptions', ['subscriptions', 'noActiveSubscriptions']),
+    ...mapState('subscriptions', ['subscriptions', 'noActiveSubscriptions',	'subscriptionsLoaded']),
 
     ...mapState('shop', ['shopData']),
 
@@ -101,11 +144,13 @@ export default {
 
     ...mapGetters('activeSubscription', ['activeSubscription', 'activeSubscriptionIsExpiredTrial']),
 
+    ...mapGetters('subscriptions', ['subscriptionActive', 'subscriptionInActive']),
+
     // Only show toggle if active subscription
-    isStandardActiveSubscription() {
-      const { activeSubscription } = this
-      return activeSubscription && activeSubscription.active
-    },
+    // isStandardActiveSubscription() {
+    //   const { activeSubscription } = this
+    //   return activeSubscription && activeSubscription.active
+    // },
 
     routeQuery(){
       let routeQuery = ''
@@ -119,19 +164,60 @@ export default {
       return routeQuery
     },
 
-    evaluateSubscriptionsBasedOnRoute(){
-      const { routeQuery } = this
-      if(routeQuery === 'cancelledSubscriptions'){
-        return Object.entries(this.subscriptions).length > 0
+    toggleSubscriptions(){
+      let currentSubscriptions
+      const { route } = this.$route.query
+
+      if(route && route === 'cancelledSubscriptions'){
+        currentSubscriptions = this.subscriptionInActive
       } else {
-        console.log(this.noActiveSubscriptions, 12123)
-        // If noActiveSubscriptions === true // turn it to falsy value
-        return !this.noActiveSubscriptions
+        currentSubscriptions = this.subscriptionActive
       }
+      return currentSubscriptions
     },
   },
 
+
+  async mounted() {
+    if(this.windowWidth > 768){
+      const { subscriptions, routeQuery } = this
+      let activeSubs
+      let inactiveSubs
+      if(routeQuery === 'cancelledSubscriptions'){
+          inactiveSubs = Object.keys(subscriptions).filter((subKey) => {
+          let sub = subscriptions[subKey]
+          return !sub.active
+        })
+          this.setActiveSubscriptionId(parseInt(inactiveSubs[0]))
+          try{
+              await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
+          } catch(e) {
+              console.log(e)
+          } finally{
+            console.log('done')
+          }
+      } else {
+          activeSubs = Object.keys(subscriptions).filter((subKey) => {
+          let sub = subscriptions[subKey]
+          return sub.active
+        })
+          this.setActiveSubscriptionId(parseInt(activeSubs[0]))
+          try{
+            await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
+          } catch(e) {
+            console.log(e)
+          } finally{
+            console.log('done')
+          }
+      }
+    }
+  },
+
   methods: {
+    ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
+
+    ...mapActions('orders', ['GET_SUBSCRIPTION_ORDERS']),
+
     redirect() {
       window.location.href = `https://${this.shopData.domain}`
     },
@@ -180,6 +266,10 @@ export default {
 
   @include bp(tablet-large){
     @include column(35/100, $gutter: 8);
+  }
+
+  @include bp(desktop){
+    @include column(35/100, $gutter: 5);
   }
 }
 

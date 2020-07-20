@@ -105,3 +105,17 @@ export default {
     </div>
   </drawer-wrap>
 </template>
+
+<style lang="scss">
+@import '@design';
+
+.c-shippingAddressForm{
+  padding: 0;
+  background-color: transparent;
+
+  @include bp(tablet){
+    padding: 24px 24px 0;
+    background-color: $color-white;
+  }
+}
+</style>

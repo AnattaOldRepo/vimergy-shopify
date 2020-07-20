@@ -16,7 +16,7 @@ export default {
 		show: {
 			type: Boolean,
 			default: false,
-    },
+		},
 	},
 	data: () => {
 		return {
@@ -42,23 +42,17 @@ export default {
 	},
 
 	computed: {
-    ...mapState('customer', ['paymentCards', 'customerShopifyId']),
+		...mapState('customer', ['paymentCards', 'customerShopifyId']),
 
+		...mapState('translations', ['atc']),
 
-    ...mapState('translations', ['atc']),
+		...mapState('editMode', ['editNextOrder']),
 
-    ...mapState('editMode', ['editNextOrder']),
-
-		...mapState('shop', [
-			'stripePublicKey',
-			'payment_type',
-    ]),
-
-    ...mapGetters('cards', ['activeCard']),
-
-		...mapState('account', ['accountData', 'guestCheckout']),
+		...mapState('shop', ['stripePublicKey', 'payment_type']),
 
 		...mapState('payment', ['paymentType', 'paymentSource', 'savedSourceData']),
+
+		...mapGetters('cards', ['activeCard']),
 
 		paymentRequestText() {
 			const { browser } = this
@@ -137,18 +131,18 @@ export default {
 			const result = detectBrowser()
 			this.browser = result
 			console.log(result)
-    },
+		},
 
-    ...mapActions('customer', ['GET_CUSTOMER']),
+		...mapActions('customer', ['GET_CUSTOMER']),
 
 		...mapActions('subscriptions', [
 			'UPDATE_SUBSCRIPTION',
 			'UPDATE_NEXT_ORDER',
 		]),
 
-    ...mapActions('cards', ['CREATE_PAYMENT_METHOD']),
+		...mapActions('cards', ['CREATE_PAYMENT_METHOD']),
 
-    ...mapMutations('cards', ['setActiveEditCard', 'setNewSwapCard']),
+		...mapMutations('cards', ['setActiveEditCard', 'setNewSwapCard']),
 
 		...mapMutations('payment', [
 			'setPaymentValidationClientSecret',
@@ -210,84 +204,79 @@ export default {
 			updatePaymentData,
 			paymentType,
 		}) {
-			console.log({
-				fullResponse,
-				newPaymentData,
-				updatePaymentData,
-				paymentType,
-			})
       this.addPaymentMethod(newPaymentData, paymentType)
 		},
 
-    async addPaymentMethod(paymentMethod, paymentType) {
-      const {editNextOrder, customerShopifyId } = this
+		async addPaymentMethod(paymentMethod, paymentType) {
+			const { editNextOrder, customerShopifyId } = this
 
-      console.log('addPaymentMethod', {paymentMethod})
-
-      this.$emit('setDrawerStatus', 'PENDING')
+			this.$emit('setDrawerStatus', 'PENDING')
 			this.updating = true
 
 			try {
-        const allPaymentMethods = await this.CREATE_PAYMENT_METHOD({paymentMethod, paymentType})
+        const allPaymentMethodsResponse = await this.CREATE_PAYMENT_METHOD({paymentMethod, paymentType})
+        console.log({allPaymentMethodsResponse})
 
-        console.log({allPaymentMethods})
+        console.log({allPaymentMethodsResponse})
+
+        const allPaymentMethods = allPaymentMethodsResponse
+
         // get newest updated payment method - that's how we know that's the one we
         // need to update on the active subscription (and potentially queue)
         const sortedPaymentMethods = allPaymentMethods.slice().sort((a, b) => a.updated_at - b.updated_at)
 
         console.log({sortedPaymentMethods})
 
-
         const newPaymentMethodId = sortedPaymentMethods[sortedPaymentMethods.length -1].id
+
         console.log({newPaymentMethodId})
 
-
-        const updatePayload = {
-          requestPayload: {
+				const updatePayload = {
+					requestPayload: {
             payment_method_id: newPaymentMethodId,
-          },
-        }
+					},
+				}
 
-        let updateAction
-        if (editNextOrder) {
-          updateAction = this.UPDATE_NEXT_ORDER(updatePayload)
-        }
+				let updateAction
+				if (editNextOrder) {
+					updateAction = this.UPDATE_NEXT_ORDER(updatePayload)
+				}
 
-        // determine if updating both of just one
-        else {
-          updateAction = (async () => {
-            await this.UPDATE_NEXT_ORDER(updatePayload)
-            await this.UPDATE_SUBSCRIPTION(updatePayload)
-          })()
-        }
+				// determine if updating both of just one
+				else {
+					updateAction = (async () => {
+						await this.UPDATE_NEXT_ORDER(updatePayload)
+						await this.UPDATE_SUBSCRIPTION(updatePayload)
+					})()
+				}
 
-        try {
-          await updateAction
-          await this.GET_CUSTOMER(customerShopifyId)
+				try {
+					await updateAction
+					await this.GET_CUSTOMER(customerShopifyId)
 
-          this.$emit('setDrawerStatus', 'SUCCESS')
-          this.$emit('setMode', 'default')
-  				this.updating = false
-
-        } catch (e) {
-          console.log('`New payment method added to subscription: ', e)
-  				this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message.message ? e.message.message : e.message})
-        }
-
+					this.$emit('setDrawerStatus', 'SUCCESS')
+					this.$emit('setMode', 'default')
+					this.updating = false
+				} catch (e) {
+					console.log('`New payment method added to subscription: ', e)
+					this.$emit('setDrawerStatus', {
+						state: 'FAILURE',
+						message: e.message.message ? e.message.message : e.message,
+					})
+				}
 			} catch (e) {
 				console.log('card/ADD_CARD error: ', e)
-				this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message.message ? e.message.message : e.message})
-
+				this.$emit('setDrawerStatus', {
+					state: 'FAILURE',
+					message: e.message.message ? e.message.message : e.message,
+				})
 			}
 		},
 
 		handleStripeElementChange(payload) {
-			console.log('handleStripeElementChangePayload: ', payload)
 			this.completeStripeCardInfo = payload.complete
 			if (payload.error) {
 				console.log({ error: payload.error })
-			} else {
-				console.log('no error')
 			}
 		},
 
@@ -300,7 +289,6 @@ export default {
 			// const vm = this
 
 			if (!this.activePaymentType) {
-				console.log('not complete')
 				this.placeOrderError = {
 					status: 'ERROR',
 					message: 'Please select payment type',
@@ -309,7 +297,6 @@ export default {
 			}
 
 			if (!this.completeStripeCardInfo) {
-				console.log('not complete')
 				this.placeOrderError = {
 					status: 'ERROR',
 					message: 'Please complete the payment form',
@@ -321,13 +308,13 @@ export default {
 			}
 
 			const stripePaymentOptions = this.$refs['stripe-payment-options']
-			console.log({ stripePaymentOptions })
+			// console.log({stripePaymentOptions})
 
 			const activePaymentTypeEl =
 				stripePaymentOptions.$refs[
 					'active-payment-type-' + this.activePaymentType
 				]
-			console.log({ activePaymentTypeEl })
+			// console.log({activePaymentTypeEl})
 
 			this.creatingPaymentMethodPending = true
 			activePaymentTypeEl.createPaymentMethod()
@@ -372,23 +359,20 @@ export default {
 
 <template>
 	<!-- <drawer-wrap class="c-drawer" :show="show" @close="$emit('close')"> -->
-		<div class=" c-drawer">
-			<div class="c-drawer__inner" style="padding:0">
-				<h2 class="c-drawer__title">{{
-					atc['portal.addCardDrawerTitle'] || 'Add Payment Method'
-				}}</h2>
-				<div style="padding: 0 20px;">
-					<payment-methods-block
-						:updating="updating"
-						:submit-button-text="
-							atc['buttons.addCard'] || 'Add New Payment Method'
-						"
-						@cancel="$emit('setMode', 'default')"
-						@finalPaymentPayloadResponse="handleFinalPaymentPayloadResponse"
-					/>
-				</div>
-			</div>
+	<div class=" c-drawer">
+		<div class="c-drawer__inner">
+			<h2 class="c-drawer__title">{{
+				atc['portal.addCardDrawerTitle'] || 'Add Payment Method'
+			}}</h2>
+
+			<payment-methods-block
+				:updating="updating"
+				:submit-button-text="atc['buttons.addCard'] || 'Add New Payment Method'"
+				@cancel="$emit('setMode', 'default')"
+				@finalPaymentPayloadResponse="handleFinalPaymentPayloadResponse"
+			/>
 		</div>
+	</div>
 	<!-- </drawer-wrap> -->
 </template>
 

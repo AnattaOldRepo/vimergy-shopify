@@ -182,12 +182,14 @@ export default {
       let finalFirstName = false
       let finalLastName = false
 
-      if (!first_name && !last_name) {
+      if (!first_name && !last_name && customerShopify.default_address) {
         finalFirstName = customerShopify.default_address.first_name
         finalLastName = customerShopify.default_address.last_name
       } else if (first_name && last_name) {
         finalFirstName = first_name
         finalLastName = last_name
+      } else {
+        return false
       }
 
       return (finalFirstName && finalLastName) ? `${finalFirstName} ${finalLastName}` : ''

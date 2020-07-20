@@ -18,23 +18,23 @@
       <content-placeholders-img class="c-history__order--placeholder" />
     </content-placeholders>
 
-      <transition :name="pageTransition" mode="out-in">
-        <div v-if="orders.length && ordersLoaded && !isOpeningOrder" class="c-history__list">
-          <!-- eslint-disable -->
-          <history-order
-            v-for="(charge, index) in sortedOrders"
-            :key="charge.id ? charge.id + index : charge.shopify_order_id + index"
-            :order="charge"
-          />
-          <!-- eslint-enable -->
-        </div>
+    <transition :name="pageTransition" mode="out-in">
+      <div v-if="orders.length && ordersLoaded && !isOpeningOrder" class="c-history__list">
+        <!-- eslint-disable -->
+        <history-order
+          v-for="(charge, index) in sortedOrders"
+          :key="charge.id ? charge.id + index : charge.shopify_order_id + index"
+          :order="charge"
+        />
+        <!-- eslint-enable -->
+      </div>
 
-          <order
-            v-else-if='orders.length && ordersLoaded && isOpeningOrder'
-            :order="orderList"
-          />
-      </transition>
-    </div>
+        <order
+          v-else-if='orders.length && ordersLoaded && isOpeningOrder'
+          :order="orderWithDiscount"
+        />
+    </transition>
+  </div>
 
 
   <div v-else class="c-noSubscriptions c-history">
@@ -79,7 +79,7 @@ export default {
       return !!this.$route.query.orderId
     },
 
-    orderList(){
+    orderWithDiscount(){
       const { orders, $route } = this
       const order = orders.find(each => each.id === parseInt($route.query.orderId))
       return order

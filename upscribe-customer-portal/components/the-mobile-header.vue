@@ -73,7 +73,7 @@ export default {
 <template>
   <div v-if="windowWidth >= 1024" class="c-header">
     <div class="c-header__inner">
-      <nav class="c-header__navUp">
+      <nav class="c-header__nav">
         <a class="c-header__navLink c-header__backToAccount" :href="shopifyAccountUrl">
           <icon-chevron-right
             class="c-header__navLinkIcon c-header__navLinkIcon--backToAccount"
@@ -109,6 +109,7 @@ export default {
             }}</nuxt-link
           >
            <nuxt-link
+            v-if="subscriptionInActive"
             class="c-header__navLink c-header__navLink--middle"
             :to="{
               name: 'index',

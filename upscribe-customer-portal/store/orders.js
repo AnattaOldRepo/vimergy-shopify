@@ -4,6 +4,7 @@ export const state = () => ({
   orders: [],
   ordersLoaded: false,
   subscriptionOrders: [],
+  currentOrderForMobile: {},
 })
 
 export const mutations = {
@@ -21,6 +22,10 @@ export const mutations = {
 
   setSubscriptionOrder(state, val) {
     state.subscriptionOrders = val
+  },
+
+  setCurrentOrderForMobile(state, val) {
+    state.currentOrderForMobile = val
   },
 }
 
@@ -52,7 +57,6 @@ export const actions = {
   async CHECK_FOR_PROCESSING_SUBS({ rootState }) {
     const { storeDomain, customerId } = rootState.route
 
-    console.log(storeDomain, customerId, '23211')
     let params = {
       limit: 10,
       search: {
@@ -63,7 +67,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
-        url: `/orders/${storeDomain}/${customerId}`,
+        url: `/orders/${storeDomain}/${customerId}?limit=100`,
         params,
       })
         .then((data) => {

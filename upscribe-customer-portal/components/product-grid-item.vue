@@ -188,7 +188,7 @@ export default {
         class="c-button--transparent c-productGridItem__buttonSwap"
         size="small"
         :disabled="disabled"
-        @onClick="$emit('handleSwapProductVariant', product.variants[0].id, product)"
+        @onClick="$emit('handleOpenSwapModal', product)"
       >
         SWAP
       </v-button>

@@ -94,9 +94,9 @@ transform-origin: 40px 40px;
 .lds-spinner div:nth-child(1) {
   transform: rotate(0deg) translateX(1px);
   animation-delay: -1.1s;
-  &:after {
-    width: 5px;
-  }
+  // &:after {
+  //   width: 5px;
+  // }
 }
 .lds-spinner div:nth-child(2) {
   transform: rotate(30deg);

@@ -56,6 +56,11 @@ export default {
       }
       this.$emit('handleChange', $event)
     },
+
+    handleClear(){
+      this.card.clear()
+    },
+
     createPaymentMethod() {
       console.log('createPaymentMethod')
       const vm = this

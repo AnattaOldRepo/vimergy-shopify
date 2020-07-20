@@ -93,9 +93,9 @@ export default {
         product.variant_title
       }}</span>
 
-      <strong v-if="product.in_stock !== null && product.in_stock !== undefined && !product.in_stock" class="c-productOption__detail">
-        {{ atc['portal.itemOutOfStock'] || '(Out of stock. Excluded from total)' }}
-      </strong>
+    <strong v-if="product.in_stock !== null && product.in_stock !== undefined && !product.in_stock" class="c-productOption__detail">
+      {{ atc['portal.itemOutOfStock'] || '(Out of stock. Excluded from total)' }}
+    </strong>
 
       <span
         v-if="showPrice && product && product.price"

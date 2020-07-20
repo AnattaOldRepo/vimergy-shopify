@@ -96,7 +96,6 @@
   </div>
 </template>
 
-
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 
@@ -276,9 +275,7 @@ export default {
 }
 
 .c-cancel__listItem {
-  flex-wrap: wrap;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 19px;
@@ -301,10 +298,8 @@ export default {
 
 .c-cancel__listItemText {
   font-family: $font-primary-regular;
-  font-size: 13px;
+  font-size: 14px;
   color: $color-black;
-  width:70%;
-  font-weight: 700;
 }
 
 .c-cancel__field {
@@ -358,7 +353,7 @@ export default {
   .c-button {
     max-width: 240px;
     margin-bottom: 12px;
-    font-size: 11px;
+
     @include bp(tablet) {
       max-width: none;
       margin-right: 26px;

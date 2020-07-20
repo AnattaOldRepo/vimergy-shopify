@@ -1,34 +1,40 @@
 <template>
-  <div v-if="activeSubscription && initedSkipAction" class="c-skipShipment">
-    <thank-you-block
-      v-if="shipmentSkipped"
-      :active-subscription="activeSubscription"
-      :active-charge="activeSubscription.next"
-      class="c-skipShipment__thankYou"
-    />
+  <div>
+    <portal to="header">
+      <the-header />
+    </portal>
 
-    <div v-else class="c-skipShipment__loading">
-      <h2 v-if="error" class="c-skipShipment__loadingText">{{ error.message === 'NETWORK ERROR' ? 'Network Error, please wait a moment and then refresh the page.' : error.message }}</h2>
+    <div v-if="activeSubscription && initedSkipAction" class="c-skipShipment">
+      <thank-you-block
+        v-if="shipmentSkipped"
+        :active-subscription="activeSubscription"
+        :active-charge="activeSubscription.next"
+        class="c-skipShipment__thankYou"
+      />
 
-      <h2
-        v-else
-        class="c-skipShipment__loadingText"
-      >{{ atc['portal.skippingNextShipmentMessage'] || 'Skipping your next shipment...' }}</h2>
+      <div v-else class="c-skipShipment__loading">
+        <h2 v-if="error" class="c-skipShipment__loadingText">{{ error.message === 'NETWORK ERROR' ? 'Network Error, please wait a moment and then refresh the page.' : error.message }}</h2>
 
-      <loader-icon class="c-skipShipment__loadingIcon" />
-    </div>
-  </div>
+        <h2
+          v-else
+          class="c-skipShipment__loadingText"
+        >{{ atc['portal.skippingNextShipmentMessage'] || 'Skipping your next shipment...' }}</h2>
 
-  <div v-else class="c-skipShipment">
-    <div v-if="allDataLoaded && !shipmentSkipped" class="c-skipShipment__loading">
-      <h3 class="c-skipShipment__loadingText">{{ atc['portal.skipNextShipmentMessage'] || 'Skip your next shipment' }}</h3>
-      <v-button :text="atc['buttons.skipShipment'] || 'Skip Shipment'" auto @click.native="skipShipment" />
-    </div>
-
-    <div v-else class="c-skipShipment__loading">
-      <loader-icon class="c-skipShipment__loadingIcon" />
+        <second-loader-icon class="c-skipShipment__loadingIcon" />
+      </div>
     </div>
 
+    <div v-else class="c-skipShipment">
+      <div v-if="allDataLoaded && !shipmentSkipped" class="c-skipShipment__loading">
+        <h3 class="c-skipShipment__loadingText">{{ atc['portal.skipNextShipmentMessage'] || 'Skip your next shipment' }}</h3>
+        <v-button :text="atc['buttons.skipShipment'] || 'Skip Shipment'" auto @click.native="skipShipment" />
+      </div>
+
+      <div v-else class="c-skipShipment__loading">
+        <second-loader-icon class="c-skipShipment__loadingIcon" />
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -36,13 +42,13 @@
 import moment from 'moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import ThankYouBlock from '@components/thank-you-block.vue'
-import LoaderIcon from '@components/loader-icon.vue'
+import SecondLoaderIcon from '@components/second-loader-icon.vue'
 import VButton from '@components/v-button.vue'
 
 export default {
   components: {
     ThankYouBlock,
-    LoaderIcon,
+    SecondLoaderIcon,
     VButton,
   },
   data: () => {

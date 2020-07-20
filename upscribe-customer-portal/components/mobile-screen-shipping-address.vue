@@ -15,13 +15,14 @@
       class="c-formBlock--noPadding c-shippingAddressForm"
       :form-submit-button-text="atc['buttons.updateAddress'] || 'Add Address'"
       form-name="shipping-address"
+      :data-fill="activeShippingAddress"
       @onSubmit="updateShippingAddress"
     />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import NewAddressForm from '@components/new-address-form.vue'
 import TheHeader from '@components/the-header'
 
@@ -33,6 +34,8 @@ export default {
 
   computed: {
     ...mapState('translations', ['atc']),
+
+    ...mapGetters('activeSubscription', ['activeSubscription', 'activeShippingAddress']),
   },
   methods: {
     ...mapMutations('mobileGlobalManagement', ['setMessage', 'setStatus']),

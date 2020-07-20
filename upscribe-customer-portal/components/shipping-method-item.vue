@@ -57,8 +57,6 @@ export default {
   justify-content: space-between;
   width: 100%;
   margin: 0 auto;
-  margin-bottom: 20px;
-
 }
 
 .c-shippingMethodItem__inner {

@@ -6,7 +6,7 @@
     :close-animation="closeAnimation"
     @close="closeModal"
   >
-    <div v-if="!needUpdating" class="c-modalSubscription">
+    <div v-if="!needUpdating && !swapping" class="c-modalSubscription">
       <h2 v-if="editNextOrder"
         class="c-modalSubscription__title">
         {{ atc['portal.productsGridNextOrderTitle'] || 'Add to Your Next Order' }}
@@ -41,7 +41,7 @@
                   :is-swap="isSwap"
                   @handleAddProductVariantToSubscription="handleAddProductVariantToSubscription"
                   @handleQuantityChange="handleQuantityChange"
-                  @handleSwapProductVariant="handleSwapProductVariant"
+                  @handleOpenSwapModal="handleOpenSwapModal"
                   @handleRemove="handleRemove"
                 />
               </div>
@@ -62,7 +62,7 @@
                 :is-swap="isSwap"
                 @handleAddProductVariantToSubscription="handleAddProductVariantToSubscription"
                 @handleQuantityChange="handleQuantityChange"
-                @handleSwapProductVariant="handleSwapProductVariant"
+                @handleOpenSwapModal="handleOpenSwapModal"
                 @handleRemove="handleRemove"
               />
             </div>
@@ -79,7 +79,7 @@
               :is-swap="isSwap"
               @handleAddProductVariantToSubscription="handleAddProductVariantToSubscription"
               @handleQuantityChange="handleQuantityChange"
-              @handleSwapProductVariant="handleSwapProductVariant"
+              @handleOpenSwapModal="handleOpenSwapModal"
               @handleRemove="handleRemove"
             />
           </div>
@@ -119,9 +119,16 @@
       </div>
     </div>
 
+    <div v-else-if="swapping" class="c-modalMobile__wrapper">
+      <modal-swap
+         @handleSwapProductVariant="handleSwapProductVariant"
+         @handleCloseSwapModal="handleCloseSwapModal"
+      />
+    </div>
+
     <div v-else class="c-modalMobile__wrapper">
       <modal-shipping-require
-        @updateStatus="updateStatus"
+          @updateStatus="updateStatus"
       />
     </div>
   </modal-mobile-wrap>
@@ -134,6 +141,7 @@ import ModalMobileWrap from '@components/modal-wrap-mobile.vue'
 import ProductGridItem from '@components/product-grid-item.vue'
 import CollectionFilter from '@components/collection-filter.vue'
 import ModalShippingRequire from '@components/modal-shipping-require.vue'
+import ModalSwap from '@components/modal-swap.vue'
 import productChangeRequest from '@utils/product-change-request.js'
 import { buildNewCheckoutUpdatePayload } from '@utils/newCheckoutUpdateHelpers'
 
@@ -143,6 +151,7 @@ export default {
     ProductGridItem,
     CollectionFilter,
     ModalShippingRequire,
+    ModalSwap,
   },
 
   props: {
@@ -171,6 +180,7 @@ export default {
       activeCollectionHandle: 'all',
       needUpdating: false,
       updating: false,
+      swapping: false,
     }
   },
 
@@ -270,13 +280,6 @@ export default {
     },
   },
 
-  watch: {
-    activeSubscription: {
-      handler: 'GET_SUBSCRIPTION_SHIPPING_METHODS',
-      immediate: true,
-    },
-  },
-
   methods:{
     ...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
 
@@ -308,6 +311,16 @@ export default {
       }
     },
 
+    handleOpenSwapModal(product){
+      console.log(product)
+      this.setVariantSelectProduct(product)
+      this.swapping = true
+    },
+
+    handleCloseSwapModal(){
+      this.swapping = false
+    },
+
     handleNewCheckoutUpdate(updateArray) {
       console.log('handleNewCheckoutUpdate')
 
@@ -319,12 +332,23 @@ export default {
         this.statusText = 'Saving'
           // for each update
           updateArray.forEach(async (update) => {
-            console.log({update})
+            // console.log({update})
             this.updating = true
             try {
               await update.updateAction
               this.status = 'success'
               this.statusText = 'saved successfully'
+
+              if(this.swapping){
+                setTimeout(() => {
+                  this.closeModal()
+                }, 2000)
+              }
+
+              if(this.needUpdating){
+                this.needUpdating = false
+              }
+
             } catch (e) {
               this.handleNewCheckoutUpdateError(e, update)
             } finally {
@@ -350,11 +374,12 @@ export default {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
         this.needUpdating = true
-        this.status = 'rejected'
-        this.statusText = e.message
       } else {
         console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
       }
+
+      this.status = 'rejected'
+      this.statusText = e.message
     },
 
     // handleUpdateError(e, updatePayload) {
@@ -566,7 +591,6 @@ export default {
     },
 
     async handleAddProductVariantToSubscription(variantId, product) {
-      console.log('handleAddProductVariantToSubscription', variantId)
       this.setVariantSelectProduct(product)
       const {
         editNextOrder,
@@ -643,7 +667,6 @@ export default {
     },
 
     async handleSwapProductVariant(variantId, newProduct) {
-
       const {
         editNextOrder,
         activeSubscription,
@@ -675,8 +698,8 @@ export default {
         subscription: activeSubscription,
       })
 
-      console.log({nextAddSwapItemPayload, nextRemoveSwappedItemPayload})
-      console.log({subscriptionAddSwapItemPayload, subscriptionRemoveSwappedItemPayload})
+      // console.log({nextAddSwapItemPayload, nextRemoveSwappedItemPayload})
+      // console.log({subscriptionAddSwapItemPayload, subscriptionRemoveSwappedItemPayload})
 
       // create next swap payload depending on the diff product upday payload options
       let nextItemPayload = []

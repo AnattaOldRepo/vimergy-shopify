@@ -154,7 +154,6 @@ export default {
 .c-drawerDeliveryDate__intro {
   margin-bottom: 16px;
   color: $color-blue-secondary;
-  text-align: center;
 }
 
 .c-drawerDeliveryDate__currentDate {

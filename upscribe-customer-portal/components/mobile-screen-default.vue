@@ -115,26 +115,12 @@
         </functional-button-block>
 
         <p class="c-subscriptionMobilePage__idText">Subscription ID: {{ activeSubscription.id }}</p>
-
-        <div v-if="isCancelledSubscriptionRoute" class="c-subscriptionMobilePage__reactiveBlock">
-          <v-button
-            v-if="isExpiredTrial || isInactiveTrial"
-            slot="button"
-            class = "c-button c-button--transparent c-subscriptionMobilePage__button bold"
-            :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.reactivateAsSubscription'] || 'Reactivate as Subscription')"
-            @click.native="handleReactivateTrialAsSubscription"
-          />
-
-          <v-button
-            v-else-if="isInactiveRegular"
-            slot="button"
-            class = "c-button c-button--transparent c-subscriptionMobilePage__button bold"
-            :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.reactivateSubscription'] || 'Reactivate Subscription')"
-            @click.native="handleReactivateSubscription"
-          />
-        </div>
       </div>
     </mobile-subscription-template>
+
+    <portal v-if="isCancelledSubscriptionRoute" to="float-buttons">
+       <mobile-float-buttons />
+    </portal>
  </div>
 </template>
 
@@ -146,8 +132,8 @@ import SubscriptionIcon from '@components/Icon/subscription-icon.vue'
 import CreditCardIcon from '@components/Icon/credit-card-icon'
 import HistoryIcon from '@components/Icon/history-icon'
 import MobileSubscriptionTemplate from '@components/mobile-subscription-template'
-import VButton from '@components/v-button'
 import CrossCircleIcon from '@components/Icon/cross-circle-icon'
+import MobileFloatButtons from '@components/mobile-float-buttons'
 import TheHeader from '@components/the-header'
 import moment from 'moment'
 
@@ -161,8 +147,8 @@ export default {
     CreditCardIcon,
     HistoryIcon,
     MobileSubscriptionTemplate,
-    VButton,
     CrossCircleIcon,
+    MobileFloatButtons,
   },
 
   data(){
@@ -221,7 +207,10 @@ export default {
     },
 
     pastShipmentText(){
-      return `<br/><span class="c-functionalButtonBlock__small-text">Last Shipment Devivered ${this.deliveredDate}</span>`
+      if(this.deliveredDate){
+        return `<br/><span class="c-functionalButtonBlock__small-text">Last Shipment Delivered ${this.deliveredDate}</span>`
+      }
+      return ''
     },
 
     deliveredDate(){

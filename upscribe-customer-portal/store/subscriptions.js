@@ -44,19 +44,27 @@ export const mutations = {
 
   SET_SUBSCRIPTIONS(state, payload) {
     let subIdHash = {}
-    let hasActiveSubscription = false
     state.subscriptionArr = payload
-    payload.forEach((subscription, index) => {
+    state.noActiveSubscriptions = true
+    state.subscriptionArr = payload
+
+    console.log(state.subscriptionArr, 123123)
+
+    if (!payload || !payload.length) {
+      state.noActiveSubscriptions = true
+      return
+    }
+
+    let hasActiveSubscription = false
+
+    payload.forEach((subscription) => {
       subIdHash[subscription.id] = subscription
       if (subscription.active) {
         hasActiveSubscription = true
       }
     })
-
     state.subscriptions = Object.assign({}, state.subscription, subIdHash)
-    if (!payload || !payload.length) {
-      state.noActiveSubscriptions = true
-    }
+
     state.noActiveSubscriptions = hasActiveSubscription
   },
 
@@ -326,7 +334,10 @@ export const actions = {
     })
   },
 
-  async ACTIVATE_SUBSCRIPTION({ rootGetters, rootState, commit }, manualSubscriptionId = false) {
+  async ACTIVATE_SUBSCRIPTION(
+    { rootGetters, rootState, commit },
+    manualSubscriptionId = false
+  ) {
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
     const { customerId, storeDomain } = rootState.route

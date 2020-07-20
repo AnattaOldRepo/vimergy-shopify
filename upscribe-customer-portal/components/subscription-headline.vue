@@ -1,44 +1,48 @@
 <template>
   <div v-if="activeSubscription" class="c-subscriptionHeadline">
-    <h2 class="c-subscriptionHeadline__title">Subscription <span> {{ activeSubscription.id }}</span></h2>
+    <h2 class="c-subscriptionHeadline__title"><strong>Subscription</strong> <span> {{ activeSubscription.id }}</span></h2>
 
-    <div v-if="activeSubscription.active" class="c-subscriptionHeadline__button-contain" @click = "pickingEdit($event)">
+    <div
+      v-if="activeSubscription.active"
+      class="c-subscriptionHeadline__button-contain"
+      @click="pickingEdit($event)">
       <v-button
-        data-id = "button-edit-subscription"
-        data-next-order = "false"
+        data-id="button-edit-subscription"
+        data-next-order="false"
         class="c-subscriptionHeadline__button"
-        :class ="{'c-subscriptionHeadline__button--active': buttonActive === 'button-edit-subscription'}">
+        :class="{'c-subscriptionHeadline__button--active': buttonActive === 'button-edit-subscription'}">
         Edit Subscription Details
       </v-button>
 
       <v-button
-        data-id = "button-edit-next-order"
-        data-next-order = "true"
-        class= "c-subscriptionHeadline__button c-subscriptionHeadline__button--secondary"
-        :class ="{'c-subscriptionHeadline__button--active': buttonActive === 'button-edit-next-order'}">
+        data-id="button-edit-next-order"
+        data-next-order="true"
+        class="c-subscriptionHeadline__button c-subscriptionHeadline__button--secondary"
+        :class="{'c-subscriptionHeadline__button--active': buttonActive === 'button-edit-next-order'}">
         Edit Next Shipment
       </v-button>
 
       <p
-        class= "c-subscriptionHeadline__button c-subscriptionHeadline__button--text displayOnly">
+        v-if="deliveredDate"
+        class="c-subscriptionHeadline__button c-subscriptionHeadline__button--text displayOnly">
         Previous Shipment <span>({{ deliveredDate }})</span>
       </p>
 
       <v-button
-        v-if = "windowWidth > 1024"
-        data-id = "button-subscription-history"
-        class= "c-subscriptionHeadline__button"
-        :class ="{'c-subscriptionHeadline__button--active': buttonActive === 'button-subscription-history'}">
+        v-if="windowWidth > 1024 && (subscriptionOrders && subscriptionOrders.length)"
+        data-id="button-subscription-history"
+        class="c-subscriptionHeadline__button"
+        :class="{'c-subscriptionHeadline__button--active': buttonActive === 'button-subscription-history'}">
         Subscription History
       </v-button>
 
-      <span v-else role = "button" tabindex="0" aria-label="history">
+      <span v-else-if="windowWidth <= 1024 && (subscriptionOrders && subscriptionOrders.length)" role = "button" tabindex="0" aria-label="history">
         <history-icon
-          data-id = "button-subscription-history"
-          class= "c-subscriptionHeadline__button c-subscriptionHeadline__button--icon"
-          width= "14"
-          height= "14"
-          fill = "#000000"
+          data-id="button-subscription-history"
+          class="c-subscriptionHeadline__button c-subscriptionHeadline__button--icon"
+          width="14"
+          height="14"
+          fill="#000000"
         />
       </span>
 
@@ -57,7 +61,7 @@
       <v-button
         v-if="isTrial && isActive"
         slot="button"
-        class = "c-button--primary c-subscriptionHeadline__button--mobile bold"
+        class="c-button--primary c-subscriptionHeadline__button--mobile bold"
         :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.convertTrialToSubscription'] || 'Convert Trial to Subscription')"
         @click.native="handleConvertTrialToSubscription"
       />
@@ -65,7 +69,7 @@
       <v-button
         v-else-if="isExpiredTrial || isInactiveTrial"
         slot="button"
-        class = "c-button--primary c-subscriptionHeadline__button--mobile bold"
+        class="c-button--primary c-subscriptionHeadline__button--mobile bold"
         :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.reactivateAsSubscription'] || 'Reactivate as Subscription')"
         @click.native="handleReactivateTrialAsSubscription"
       />
@@ -73,7 +77,7 @@
       <v-button
         v-else-if="isInactiveRegular"
         slot="button"
-        class = "c-button--primary c-subscriptionHeadline__button--mobile bold"
+        class="c-button--primary c-subscriptionHeadline__button--mobile bold"
         :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.reactivateSubscription'] || 'Reactivate Subscription')"
         @click.native="handleReactivateSubscription"
       />
@@ -168,6 +172,8 @@ export default {
         date = isOriginalCharge
           ? moment(subscriptionOrders[0].created_at, 'YYYYMMDD').format('MMM D')
           : moment(subscriptionOrders[0].processed_at).format('MMM D')
+      } else {
+        return false
       }
 
       if(fullFillmentText && fullFillmentText.includes('_')){
@@ -203,7 +209,7 @@ export default {
     },
 
     async handleReactivateSubscription() {
-      const { activeSubscription } = this
+      const { activeSubscription, storeDomain, customerId } = this
 
       let analyticsEventName = 'Upscribe Reactivate Subscription'
       let analyticsPayload = {
@@ -225,11 +231,13 @@ export default {
         // Set route getting new subscription as current route dynamically
         this.setActiveSubscriptionId(activeSubscription.id)
         this.updating = false
+
+        this.$router.push({ name: 'index', query: { storeDomain, customerId } })
       }
     },
 
     async handleReactivateTrialAsSubscription() {
-      const { activeSubscription} = this
+      const { activeSubscription, storeDomain, customerId } = this
 
       let analyticsEventName = 'Upscribe Reactivate Trial as Subscription'
       let analyticsPayload = {
@@ -248,12 +256,15 @@ export default {
         console.log('handleReactivateTrialAsSubscription error: ', e)
       } finally {
         await this.GET_SUBSCRIPTIONS()
+        this.setActiveSubscriptionId(activeSubscription.id)
         this.updating = false
+
+        this.$router.push({ name: 'index', query: { storeDomain, customerId } })
       }
     },
 
     async handleConvertTrialToSubscription() {
-      const { activeSubscription} = this
+      const { activeSubscription, storeDomain, customerId } = this
 
       const updatePayload = {
         requestPayload: {
@@ -278,7 +289,10 @@ export default {
         console.log('handleConvertTrialToSubscription error: ', e)
       } finally {
         await this.GET_SUBSCRIPTIONS()
+        this.setActiveSubscriptionId(activeSubscription.id)
         this.updating = false
+
+        this.$router.push({ name: 'index', query: { storeDomain, customerId } })
       }
     },
   },

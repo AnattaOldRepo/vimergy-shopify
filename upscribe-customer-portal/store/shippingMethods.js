@@ -38,9 +38,7 @@ export const actions = {
   async GET_SUBSCRIPTION_SHIPPING_METHODS({ rootState, rootGetters, commit }) {
     const { storeDomain, customerId } = rootState.route
     const { id } = rootGetters['activeSubscription/activeSubscription']
-    // console.log('RUNNING VOO VOO')
     let url = `/subscription/shipping/${storeDomain}/${customerId}/${id}`
-    console.log(id, 1212)
     return new Promise((resolve, reject) => {
       request({
         method: 'get',

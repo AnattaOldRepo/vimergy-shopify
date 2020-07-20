@@ -48,6 +48,15 @@ export default {
       console.log('stripe payment options: ', {$event})
       this.$emit('handleChange', $event)
     },
+
+    handleClear(){
+      if(this.$refs['active-payment-type-stripe_card']){
+        this.$refs['active-payment-type-stripe_card'].handleClear()
+      } else if(this.$refs['active-payment-type-stripe_sepa_direct_debit']){
+        this.$refs['active-payment-type-stripe_sepa_direct_debit'].handleClear()
+      }
+    },
+
     handleCreateStripeCardToken(token) {
       console.log({token})
     },

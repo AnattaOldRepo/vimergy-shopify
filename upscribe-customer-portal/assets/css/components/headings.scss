@@ -12,8 +12,8 @@
 
 .c-heading4 {
   font-family: $font-primary-medium;
-  font-size: 17px;
   font-weight: 500;
+  font-size: 17px;
 
   @include bp(tablet) {
     font-size: 22px;

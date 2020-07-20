@@ -1,6 +1,6 @@
 .c-mainBlock {
-  padding: 34px 20px 24px;
   background-color: $color-white;
+  padding: 34px 20px 24px;
 
   @include bp(tablet) {
     padding: 60px 68px 24px;
@@ -8,9 +8,9 @@
 }
 
 .c-block {
-  position: relative;
   max-width: 640px;
   margin: 0 auto 54px;
+  position: relative;
 }
 
 .c-blockHead {

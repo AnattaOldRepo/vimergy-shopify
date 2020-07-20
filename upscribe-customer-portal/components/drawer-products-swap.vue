@@ -29,6 +29,7 @@ export default {
       return this.activeSubscription.items
     },
   },
+
   methods: {
     ...mapMutations('swapProduct', ['setSwapProduct']),
 

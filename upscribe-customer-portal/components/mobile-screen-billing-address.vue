@@ -14,14 +14,17 @@
         class="c-formBlock--noPadding c-billingAddressForm"
         :form-submit-button-text="atc['buttons.updateAddress'] || 'Update Address'"
         form-name="billing-address"
-        @onSubmit="updateBillingAddress"
+        :data-fill="activeBillingAddress"
+        :has-same-address="hasSameAddress"
+				@onSubmit="updateBillingAddress"
       />
   </div>
 </template>
 
 <script>
+import { isEqual } from 'lodash'
 import NewAddressForm from '@components/new-address-form.vue'
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import TheHeader from '@components/the-header'
 export default {
   components:{
@@ -29,8 +32,33 @@ export default {
     TheHeader,
   },
 
+  data(){
+    return {
+        hasSameAddress: true,
+        initialHasSameAddressState: null,
+    }
+  },
+
   computed:{
     ...mapState('translations', ['atc']),
+
+    ...mapGetters('activeSubscription', ['activeSubscription', 'activeBillingAddress']),
+
+    billingAddress() {
+			const { activeSubscription } = this
+			return activeSubscription.billing_address
+		},
+
+		shippingAddress() {
+      const { activeSubscription } = this
+			return activeSubscription.shipping_address
+		},
+  },
+
+  mounted(){
+    const initialHasSameAddress = this.isSameAsSubscription()
+		this.hasSameAddress = initialHasSameAddress
+    this.initialHasSameAddressState = initialHasSameAddress
   },
 
   methods: {
@@ -45,6 +73,49 @@ export default {
 
     handleHeaderAction() {
       this.$refs['edit-billing-address-form'].fillFormWithDefaultData()
+    },
+
+    isSameAsSubscription() {
+      const { shippingAddress, billingAddress } = this
+
+      if(billingAddress && shippingAddress){
+        const cleanedShippingAddress = {
+          address1: shippingAddress.address1 || undefined,
+          address2: shippingAddress.address2 || undefined,
+          city: shippingAddress.city || undefined,
+          company: shippingAddress.company || undefined,
+          country: shippingAddress.country || undefined,
+          country_code: shippingAddress.country_code || undefined,
+          first_name: shippingAddress.first_name || undefined,
+          last_name: shippingAddress.last_name || undefined,
+          latitude: shippingAddress.latitude || undefined,
+          longitude: shippingAddress.longitude || undefined,
+          name: shippingAddress.name || undefined,
+          phone: shippingAddress.phone || undefined,
+          province: shippingAddress.province || undefined,
+          province_code: shippingAddress.province_code || undefined,
+          zip: shippingAddress.zip || undefined,
+        }
+
+        const cleanedBillingAddress = {
+          address1: billingAddress.address1 || undefined,
+          address2: billingAddress.address2 || undefined,
+          city: billingAddress.city || undefined,
+          company: billingAddress.company || undefined,
+          country: billingAddress.country || undefined,
+          country_code: billingAddress.country_code || undefined,
+          first_name: billingAddress.first_name || undefined,
+          last_name: billingAddress.last_name || undefined,
+          latitude: billingAddress.latitude || undefined,
+          longitude: billingAddress.longitude || undefined,
+          name: billingAddress.name || undefined,
+          phone: billingAddress.phone || undefined,
+          province: billingAddress.province || undefined,
+          province_code: billingAddress.province_code || undefined,
+          zip: billingAddress.zip || undefined,
+        }
+        return isEqual(cleanedShippingAddress, cleanedBillingAddress)
+      }
     },
 
     async updateBillingAddress(address) {

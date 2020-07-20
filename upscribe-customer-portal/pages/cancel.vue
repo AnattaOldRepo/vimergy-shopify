@@ -298,7 +298,7 @@ export default {
 
 .c-cancel__listItemText {
   font-family: $font-primary-regular;
-  font-size: 14px;
+  font-size: 13px;
   color: $color-black;
 }
 
@@ -353,7 +353,7 @@ export default {
   .c-button {
     max-width: 240px;
     margin-bottom: 12px;
-
+    font-size: 11px;
     @include bp(tablet) {
       max-width: none;
       margin-right: 26px;

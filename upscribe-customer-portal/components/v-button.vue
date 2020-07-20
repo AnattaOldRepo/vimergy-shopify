@@ -143,7 +143,7 @@ export default {
     color: $color-white;
     background-color: $color-blue-brand;
     border: none;
-    border-radius: 4px;
+    border-radius: 0;
 
     &:hover,
     &:active,
@@ -156,7 +156,7 @@ export default {
     color: $color-black;
     background-color: transparent;
     border: 1px solid $color-blue-light-border;
-    border-radius: 4px;
+    border-radius: 0;
 
     &:hover,
     &:active,
@@ -169,7 +169,7 @@ export default {
     color: $color-black;
     background-color: transparent;
     border: 1px solid $color-danger;
-    border-radius: 4px;
+    border-radius: 0;
 
     &:hover,
     &:active,

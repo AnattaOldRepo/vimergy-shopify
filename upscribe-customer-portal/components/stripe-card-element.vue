@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     handleChange($event) {
-      console.log({$event})
       if ($event.error) {
         this.error = $event.error.message
       } else {
@@ -58,20 +57,17 @@ export default {
     },
 
     handleClear(){
+      if (!this.card || !this.card.clear) return
       this.card.clear()
     },
 
     createPaymentMethod() {
-      console.log('createPaymentMethod')
       const vm = this
       this.stripe.createToken(vm.card).then((result) => {
         if (result.error) {
 
           vm.error = result.error.message
         } else {
-          // Send the token to your server.
-          console.log('success place order in type', {token: result.token})
-          // stripeTokenHandler(result.token);
           vm.$emit('createPaymentMethodResponse', {
             fullResponse: result,
             newPaymentData: result.token,
@@ -88,9 +84,6 @@ export default {
 
           vm.error = result.error.message
         } else {
-          // Send the token to your server.
-          console.log({token: result.token})
-          // stripeTokenHandler(result.token);
           this.$emit('createStripeCardToken', result.token)
         }
       })

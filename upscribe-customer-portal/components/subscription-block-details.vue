@@ -82,13 +82,16 @@ export default {
 
     paymentInfo() {
       const { activeCard } = this
-      console.log(activeCard, 231)
       if (!activeCard) return false
 
       const { last4, exp_month, exp_year, type, bank_code, zipcode } = activeCard
 
       if (type.includes('card')) {
         return `CARD *${last4} ${exp_month}/${exp_year}<br> ${zipcode ? 'Zip: ' + zipcode : ''}`
+      }
+
+      else if (type === 'braintree_paypal') {
+        return `Account Email: ${ activeCard.email || 'No email available for account'}`
       }
 
       else if (type === 'stripe_sepa_direct_debit') {
@@ -177,6 +180,7 @@ export default {
         @onClick="drawerCardsOpen = true"
       >
         <span v-if="activeCard.type === 'stripe_sepa_direct_debit'" class="c-portalBlockOption__text">SEPA Direct Debit <br></span>
+
         <!-- eslint-disable-next-line vue/no-v-html -->
         <span class="c-portalBlockOption__text" v-html="paymentInfo"/>
 

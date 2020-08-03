@@ -192,7 +192,7 @@ export default {
       try {
         await this.SHIP_TOMORROW()
       } catch(e) {
-        console.log(e)
+        console.log('shipTomorrow e:', e)
       } finally{
         this.shipmentNowUpdate = ''
       }
@@ -203,7 +203,7 @@ export default {
       try {
         await this.SKIP_NEXT_SHIPMENT()
       } catch(e) {
-        console.log(e)
+        console.log('skipNextShipment e:', e)
       } finally{
         this.skipShipmentUpdate = ''
       }

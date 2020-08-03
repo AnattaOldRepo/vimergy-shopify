@@ -100,8 +100,6 @@ export default {
     },
 
     async swapShippingMethods() {
-      console.log('swap shipping methods')
-
       const { newSwapShippingMethod, editNextOrder, activeSubscription } = this
 
       const updatePayload = {
@@ -147,7 +145,6 @@ export default {
       }
 
       try {
-        console.log('WHU')
         this.$emit('setDrawerStatus', 'PENDING')
         await updateAction
         this.$emit('setDrawerStatus', 'SUCCESS')

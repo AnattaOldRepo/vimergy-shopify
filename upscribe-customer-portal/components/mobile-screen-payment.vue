@@ -104,9 +104,7 @@ export default {
       this.setMessage('Removing the Payment Method')
       this.setStatus('updating')
 
-      console.log('removePaymentMethod')
-
-      console.log({paymentMethodId, paymentType})
+      // console.log({paymentMethodId, paymentType})
 
       try {
         await this.REMOVE_PAYMENT_METHOD({paymentMethodId, paymentType})
@@ -126,7 +124,7 @@ export default {
 
     async swapCards() {
       const { newSwapCard, editNextOrder, activeCard } = this
-      this.setMessage('Updating new Payment Method')
+      this.setMessage('Swapping Payment Method')
       this.setStatus('updating')
       const updatePayload = {
         requestPayload: {
@@ -165,7 +163,7 @@ export default {
             newCard,
           },
         })
-        this.setMessage('Saved new Payment Method')
+        this.setMessage('Swapped Payment Method')
         this.setStatus('success')
         this.setNewSwapCard(null)
       } catch (e) {

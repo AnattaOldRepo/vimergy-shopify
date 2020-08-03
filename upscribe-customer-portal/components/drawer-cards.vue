@@ -49,16 +49,13 @@ export default {
 		if (initialMode) {
 			this.mode = initialMode
 		}
-		// console.log(this.cards, 222)
 	},
 	methods: {
 		handleSetMode(mode) {
 			this.mode = mode
 		},
 		handleDrawerStatus(status) {
-			// console.log(status)
 			this.status = status
-			// console.log(this.status)
 		},
 	},
 }

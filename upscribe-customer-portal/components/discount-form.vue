@@ -116,7 +116,6 @@ export default {
     submit() {
       this.$v.form.$touch()
       if (this.$v.form.$pending || this.$v.form.$error) {
-        console.log('there is an error')
         return
       }
 

@@ -7,8 +7,8 @@
     <div v-if="activeSubscription && initedSkipAction" class="c-skipShipment">
       <thank-you-block
         v-if="shipmentSkipped"
-        :active-subscription="activeSubscription"
-        :active-charge="activeSubscription.next"
+        :active-charge="thankYouCharge"
+        :multiple-order-display="multipleSubscriptionUpdates"
         class="c-skipShipment__thankYou"
       />
 
@@ -57,6 +57,9 @@ export default {
       shipmentSkipped: false,
       error: null,
       initedSkipAction: false,
+      multipleSubscriptionUpdates: false,
+      multipleSkipValues: [],
+      thankYouCharge: null,
     }
   },
   computed: {
@@ -78,7 +81,7 @@ export default {
 
     if (!query) return
 
-    const { skipShipment, skipShipmentSubscriptionId } = query
+    const { skipShipment, skipShipmentSubscriptionId, skipShipmentQueueId } = query
 
     if (!skipShipment || !skipShipmentSubscriptionId) {
       return this.$nuxt.error({
@@ -87,7 +90,28 @@ export default {
       })
     }
 
-    this.setActiveSubscriptionId(parseInt(skipShipmentSubscriptionId))
+    // if multiple ids save all of them
+    if (skipShipmentSubscriptionId.indexOf(',') > -1) {
+      this.multipleSubscriptionUpdates = true
+      let subIds = skipShipmentSubscriptionId.split(',')
+      let queueIds = skipShipmentQueueId.split(',')
+
+      // set multiple queu/sub combos for multiple manual passed id requests
+      subIds.forEach((subId,index) => {
+        this.multipleSkipValues.push({
+          subscriptionId: parseInt(subIds[index]),
+          queueId: parseInt(queueIds[index]),
+        })
+      })
+
+      // set first for display purposes
+      this.setActiveSubscriptionId(subIds[0])
+    }
+
+    // only one subscription skip
+    else {
+      this.setActiveSubscriptionId(parseInt(skipShipmentSubscriptionId))
+    }
   },
 
   methods: {
@@ -98,7 +122,7 @@ export default {
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
     async skipShipment() {
-      const { activeSubscription } = this
+      const { activeSubscription, multipleSkipValues, multipleSubscriptionUpdates } = this
 
       const { next, interval, period } = activeSubscription
 
@@ -123,7 +147,22 @@ export default {
 
       this.drawerStatus = 'PENDING'
       try {
-        await this.UPDATE_SUBSCRIPTION_QUEUE(requestPayload)
+        // all updates
+        if (multipleSubscriptionUpdates) {
+          const updatedCharges = await Promise.all(multipleSkipValues.map(valObj => this.UPDATE_SUBSCRIPTION_QUEUE({
+            ...requestPayload,
+            subscriptionId: valObj.subscriptionId,
+            queueId: valObj.queueId,
+          })))
+          this.thankYouCharge = updatedCharges
+          // http://localhost:3000/#/skip-shipment?storeDomain=upscribe-demo.myshopify.com&customerId=1051286306867&skipShipmentSubscriptionId=556,558&skipShipmentQueueId=3137,2512&skipShipment=true
+
+        }
+        // single update
+        else {
+          const updatedCharge = await this.UPDATE_SUBSCRIPTION_QUEUE(requestPayload)
+          this.thankYouCharge = updatedCharge
+        }
         this.triggerAnalyticsEvent({
           event: 'Upscribe Skip Shipment',
           payload: analyticsPayload,
@@ -131,7 +170,7 @@ export default {
         this.shipmentSkipped = true
         // this.removeSkipShipmentUrlParams()
       } catch (e) {
-        this.error = { state: 'FAILURE', message: this.stripHtml(e.message) }
+        this.error = { state: 'FAILURE', message: e.message }
         console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
       }
     },

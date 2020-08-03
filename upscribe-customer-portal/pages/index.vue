@@ -177,6 +177,16 @@ export default {
     },
   },
 
+  watch: {
+    toggleSubscriptions: {
+      immediate: true,
+      handler: function (newVal) {
+        if (newVal && newVal[0]) {
+          this.setActiveSubscriptionId(newVal[0].id)
+        }
+      },
+    },
+  },
 
   async mounted() {
     if(this.windowWidth > 768){
@@ -193,21 +203,19 @@ export default {
               await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
           } catch(e) {
               console.log(e)
-          } finally{
-            console.log('done')
           }
+
       } else {
           activeSubs = Object.keys(subscriptions).filter((subKey) => {
-          let sub = subscriptions[subKey]
-          return sub.active
-        })
+            let sub = subscriptions[subKey]
+            return sub.active
+          })
+          console.log({activeSubs})
           this.setActiveSubscriptionId(parseInt(activeSubs[0]))
           try{
             await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
           } catch(e) {
             console.log(e)
-          } finally{
-            console.log('done')
           }
       }
     }

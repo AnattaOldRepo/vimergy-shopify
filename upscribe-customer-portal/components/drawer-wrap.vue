@@ -98,7 +98,6 @@ export default {
   },
   mounted() {
     // close drawer on escape
-    console.log('mounted')
     document.addEventListener('keydown', (e) => {
       if (this.show && e.keyCode === 27) {
         this.close()

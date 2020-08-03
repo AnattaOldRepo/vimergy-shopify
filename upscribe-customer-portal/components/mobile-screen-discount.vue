@@ -155,7 +155,7 @@ export default {
 		},
 
 		handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-			console.log('e', e)
+			console.log('handleNewCheckoutUpdateError: ', e)
 			if (e && e.data && e.data.shipping_update_required) {
 				this.SET_SHIPPING_METHODS(e.data.rates)
 				this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)

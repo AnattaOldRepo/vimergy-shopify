@@ -66,7 +66,6 @@ export default {
 
       // no change if same reate
       if (activeShippingMethod.handle === shippingMethod.handle) {
-        console.log('no change, same rate')
         return false
       }
 

@@ -72,17 +72,14 @@ export default {
     // ...mapActions('payment', ['CREATE_SEPA_DEBIT_SOURCE']),
 
     handleChange($event) {
-      console.log({$event})
       this.error = $event.error ? $event.error.message : ''
       this.$emit('handleChange', $event)
     },
     createPaymentMethod() {
-      console.log('createPaymentMethod')
       const vm = this
       const { name, checkoutData } = this
       const { currency, payment_due } = checkoutData
       const redirectUrl = window.location.href
-      console.log({ redirectUrl, currency, payment_due })
 
       const idealSourceData = {
         type: 'ideal',
@@ -96,16 +93,12 @@ export default {
         },
       }
 
-      console.log({idealSourceData})
-
       this.stripe.createSource(vm.idealBank, idealSourceData).then( async result => {
         if (result.error) {
           this.error = result.error.message
           return
         }
         this.error = ''
-
-        console.log('createSource: ', {result})
 
         // save for after confirmation comparison
         this.setSavedPaymentData(result.source)
@@ -114,8 +107,6 @@ export default {
         this.setPaymentType('stripe_ideal')
 
         let authorizeUrl = result.source.redirect.url
-        console.log({authorizeUrl})
-
         window.location.href = authorizeUrl
       })
     },

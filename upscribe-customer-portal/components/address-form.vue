@@ -374,10 +374,8 @@ export default {
 			const { countries } = this
 
 			if (!countries || this.isEmptyObject(countries)) {
-				console.log('no countrySelectOptions', console.log({ countries }))
+				console.log('no countrySelectOptions', { countries })
 			}
-
-			// console.log('countrySelectOptions', countries)
 
 			return Object.keys(countries).map((countryName) => {
 				let country = countries[countryName]
@@ -409,7 +407,6 @@ export default {
 				console.log('nocountry', country)
 				return false
 			}
-			// console.log(getCountryState.getStatesByShort(country.country.code))
 
 			return getCountryState.getStatesByShort(country.country.code)
 		},
@@ -481,7 +478,6 @@ export default {
 
 	watch: {
 		form(newVal = {}, oldVal = {}) {
-			// console.log('newVal', newVal.country)
 			if (
 				newVal.country &&
 				oldVal.country &&
@@ -530,7 +526,6 @@ export default {
 
 		fillFormWithDefaultData() {
 			const { noDataFill, addressDataFill, form } = this
-			// console.log('fillFormWithDefaultData')
 
 			if (!this.isEmptyObject(addressDataFill) && !noDataFill) {
 				let dataFill = Object.assign(form, addressDataFill)
@@ -553,16 +548,12 @@ export default {
 		},
 
 		handleStateSelected(statePayload) {
-			if (!statePayload || !statePayload.name) {
-				// console.log('handleState', statePayload)
-			}
 			this.form.state = statePayload.payload.name
 			this.form.province = statePayload.payload.name
 			this.form.province_code = statePayload.payload.code
 		},
 
 		handleCountrySelected(countryPayload) {
-			// console.log('countryPayload', countryPayload)
 
 			if (!countryPayload || !countryPayload.name) {
 				return console.log('handleCountrySelected error: ', countryPayload)

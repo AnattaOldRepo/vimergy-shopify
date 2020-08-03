@@ -61,6 +61,7 @@
         :key="8"
       />
 
+      <!-- List view of payments -->
       <mobile-screen-payment
         v-else-if="templateQuery === 'edit-payment'"
         :key="9"
@@ -76,6 +77,7 @@
         :key="11"
       />
 
+      <!-- edit payment -->
       <mobile-screen-add-card
         v-else-if="templateQuery === 'edit-add-card'"
         :key="12"

@@ -92,8 +92,7 @@ export const actions = {
         id: subscriptionShopifyOrderId,
       },
     }
-    // console.log(subscriptionShopifyOrderId)
-    // console.log('RUNNING WOOO WOO')
+
     return new Promise((resolve, reject) => {
       request({
         method: 'get',

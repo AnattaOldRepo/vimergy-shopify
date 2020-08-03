@@ -67,7 +67,7 @@ export default {
 
 		...mapState('payment', ['paymentType', 'paymentSource', 'savedSourceData']),
 
-		...mapState('activeSubscription', ['activeSubscription']),
+    ...mapState('activeSubscription', ['activeSubscription']),
 
 		paymentRequestText() {
 			const { browser } = this
@@ -155,14 +155,17 @@ export default {
 			'setPaymentValidationClientSecret',
 			'setPaymentValidationSource',
 			'setPaymentValidationLiveMode',
+    ]),
+
+ 		...mapActions('subscriptions', [
+			'UPDATE_SUBSCRIPTION',
+			'UPDATE_NEXT_ORDER',
 		]),
 
 		handlePotentialPaymentVerificationRedirects() {
 			const { $route, paymentType } = this
 			const queryParams = $route.query || {}
 			const { client_secret, livemode, source } = queryParams
-
-			// console.log({ queryParams })
 
 			if (client_secret || livemode || source) {
 				this.setPaymentValidationClientSecret(client_secret)
@@ -171,7 +174,6 @@ export default {
 
 				// not using existing card
 				this.useNewPayment()
-				console.log('use new payment')
 			}
 
 			// set payment type selection
@@ -198,7 +200,6 @@ export default {
 				paymentTypeEnabled = true
 			}
 			if (!activePaymentType || activePaymentType === type) {
-				console.log({ type })
 				displayPaymentType = true
 			}
 
@@ -217,17 +218,51 @@ export default {
 		async updatePaymentMethod(updatePaymentData, paymentType) {
 			const { customerShopifyId } = this
 
-      // console.log('updatePaymentMethod', {updatePaymentData})
       const paymentCustomerId = this.activeEditCard.payment_customer_id
 			const paymentMethodId = this.activeEditCard.id
-			const updatePayload = updatePaymentData
-			this.$emit('setDrawerStatus', 'PENDING')
-			try {
-        await this.UPDATE_PAYMENT_METHOD({updatePayload, paymentMethodId, paymentType, paymentCustomerId})
-				await this.GET_CUSTOMER(customerShopifyId)
+      const { editNextOrder } = this
 
-				this.$emit('setDrawerStatus', 'SUCCESS')
-				this.$emit('setMode', 'default')
+      this.$emit('setDrawerStatus', 'PENDING')
+
+			try {
+        const updatedPayment = await this.UPDATE_PAYMENT_METHOD({updatePayload: updatePaymentData, paymentMethodId, paymentType, paymentCustomerId})
+
+        const updatedPaymentId = updatedPayment.id
+
+				const updatePayload = {
+					requestPayload: {
+            payment_method_id: updatedPaymentId,
+					},
+				}
+
+				let updateAction
+				if (editNextOrder) {
+					updateAction = this.UPDATE_NEXT_ORDER(updatePayload)
+				}
+
+				// determine if updating both of just one
+				else {
+					updateAction = (async () => {
+						await this.UPDATE_NEXT_ORDER(updatePayload)
+						await this.UPDATE_SUBSCRIPTION(updatePayload)
+					})()
+				}
+
+				try {
+					await updateAction
+					await this.GET_CUSTOMER(customerShopifyId)
+
+					this.$emit('setDrawerStatus', 'SUCCESS')
+					this.$emit('setMode', 'default')
+					this.updating = false
+				} catch (e) {
+					console.log('`New payment method added to subscription: ', e)
+					this.$emit('setDrawerStatus', {
+						state: 'FAILURE',
+						message: e.message.message ? e.message.message : e.message,
+					})
+				}
+
 			} catch (e) {
 				console.log('card/UPDATE_PAYMENT_METHOD error: ', e)
 				this.$emit('setDrawerStatus', {
@@ -240,7 +275,6 @@ export default {
 		},
 
 		handleStripeElementChange(payload) {
-			// console.log('handleStripeElementChangePayload: ', payload)
 			this.completeStripeCardInfo = payload.complete
 			if (payload.error) {
 				console.log({ error: payload.error })
@@ -248,15 +282,11 @@ export default {
 		},
 
 		handleSubmitPaymentForm() {
-			console.log('handleSubmitPaymentForm')
+			// console.log('handleSubmitPaymentForm')
 		},
 
 		createPaymentMethodHandler() {
-			console.log('createPaymentMethod top')
-			// const vm = this
-
 			if (!this.activePaymentType) {
-				console.log('not complete')
 				this.placeOrderError = {
 					status: 'ERROR',
 					message: 'Please select payment type',
@@ -265,7 +295,6 @@ export default {
 			}
 
 			if (!this.completeStripeCardInfo) {
-				console.log('not complete')
 				this.placeOrderError = {
 					status: 'ERROR',
 					message: 'Please complete the payment form',
@@ -277,13 +306,11 @@ export default {
 			}
 
 			const stripePaymentOptions = this.$refs['stripe-payment-options']
-			console.log({ stripePaymentOptions })
 
 			const activePaymentTypeEl =
 				stripePaymentOptions.$refs[
 					'active-payment-type-' + this.activePaymentType
 				]
-			console.log({ activePaymentTypeEl })
 
 			this.creatingPaymentMethodPending = true
 			activePaymentTypeEl.createPaymentMethod()
@@ -294,11 +321,11 @@ export default {
 			paymentData,
 			paymentType,
 		}) {
-			console.log('handlePlaceOrderResponseFromRedirect', {
-				fullResponse,
-				paymentData,
-				paymentType,
-			})
+			// console.log('handlePlaceOrderResponseFromRedirect', {
+			// 	fullResponse,
+			// 	paymentData,
+			// 	paymentType,
+			// })
 		},
 
 		handleCreatePaymentMethodResponse({
@@ -306,16 +333,15 @@ export default {
 			paymentData,
 			paymentType,
 		}) {
-			console.log('handleCreatePaymentMethodResponse', {
-				fullResponse,
-				paymentData,
-				paymentType,
-			})
+			// console.log('handleCreatePaymentMethodResponse', {
+			// 	fullResponse,
+			// 	paymentData,
+			// 	paymentType,
+			// })
 			this.addPaymentMethod(fullResponse)
 		},
 
 		handleEnableStripePaymentRequest(val) {
-			console.log('enableStripePaymentRequest top level', val)
 			this.stripePaymentRequestEnabled = true
 		},
 

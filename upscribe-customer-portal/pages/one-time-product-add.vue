@@ -258,12 +258,12 @@ export default {
 
     this.setActiveSubscriptionId(parseInt(otoSubscriptionId))
 
-    console.log({
-      otoProductVariantId: this.otoProductVariantId,
-      otoQueueId: this.otoQueueId,
-      otoSubscriptionId: this.otoSubscriptionId,
-      otoAddProduct: this.otoAddProduct,
-    })
+    // console.log({
+    //   otoProductVariantId: this.otoProductVariantId,
+    //   otoQueueId: this.otoQueueId,
+    //   otoSubscriptionId: this.otoSubscriptionId,
+    //   otoAddProduct: this.otoAddProduct,
+    // })
 
     this.$nextTick(() => {
       this.otoVariablesSet = true
@@ -337,7 +337,7 @@ export default {
         this.showShippingMethodUpdateModal = true
       } else {
         console.log('subscription/OTO_ADD_PRODUCT error: ', e)
-        this.error = { state: 'FAILURE', message: this.stripHtml(e.message) }
+        this.error = { state: 'FAILURE', message: e.message }
       }
     },
 

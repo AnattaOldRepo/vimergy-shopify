@@ -4,7 +4,6 @@ function checkVariantInProductList(variantId, items) {
   let matchingProduct = false
 
   items.forEach(item => {
-    // console.log(variantId, item.variant_id)
     if (item.variant_id === variantId) {
       matchingProduct = item
     }
@@ -22,11 +21,6 @@ function checkVariantInProductList(variantId, items) {
  * @param { subscriptoin } Object - full subscription object
  */
 const productChangeRequest = function ({ variantId, editNextOrder, subscription }) {
-  // console.log({
-  //   variantId,
-  //   editNextOrder,
-  //   subscription,
-  // })
 
   if (!variantId || !subscription) {
     console.log('productChangeRequest missing required param: !variantId || !subscription')

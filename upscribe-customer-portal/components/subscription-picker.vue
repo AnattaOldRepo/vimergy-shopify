@@ -19,7 +19,7 @@
         href=""
         @click.prevent="swapAndSetSubscription(subscription.id, false, false)"
       >
-        {{ atc['labels.subscription'] || 'Subscription' }} {{ subscription.id }} {{shipmentDate(subscription.next.date) && '-'}} {{ shipmentDate(subscription.next.date)}}
+        {{ atc['labels.subscription'] || 'Subscription' }} {{ subscription.id }} {{shipmentDate(subscription) && '-'}} {{ shipmentDate(subscription)}}
       </a>
 
       <div v-if = "dropDownLength > 0" class="c-subscriptionPicker__dropdown-contain">
@@ -75,7 +75,7 @@
           }"
         @click.native.prevent="setActiveSubscriptionId(subscription.id)"
       >
-        {{ atc['labels.subscription'] || 'Subscription'}} {{ subscription.id }} <span>{{ shipmentDate(subscription.next.date)}}</span>
+        {{ atc['labels.subscription'] || 'Subscription'}} {{ subscription.id }} <span>{{ shipmentDate(subscription)}}</span>
 
         <icon-chevron-right class="c-subscriptionPicker__chev c-subscriptionPicker__chev--mobile"/>
       </nuxt-link>
@@ -190,7 +190,6 @@ export default {
     const { subscriptionActive, subscriptionInActive, activeSubscriptionId } = this
 
     if (((subscriptionActive && subscriptionActive.length) || (subscriptionInActive && subscriptionInActive.length)) && !activeSubscriptionId) {
-      console.log('set firs sub as active')
       if (subscriptionActive && subscriptionActive.length) {
         this.setActiveSubscriptionId(subscriptionActive[0].id)
       } else {
@@ -220,14 +219,13 @@ export default {
 
     swapAndSetSubscription(subscriptionId, index, needToggled){
       if(index || index === 0){
-          this.subscriptionStart = index
+        this.subscriptionStart = index
       }
 
       if(needToggled){
-          this.toggleDropDown()
+        this.toggleDropDown()
       }
       this.setActiveSubscriptionId(subscriptionId)
-      // console.log(this.activeSubscription)
       this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
     },
 
@@ -237,7 +235,10 @@ export default {
      },
 
 
-    shipmentDate(date) {
+    shipmentDate(subscription) {
+      if (!subscription || !subscription.next || !subscription.next.date) return
+      const date = subscription.next.date
+
       if(!moment(date, 'MMMM-DD-YYYY').isValid()){
         return ''
       } else {

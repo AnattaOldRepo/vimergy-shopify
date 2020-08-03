@@ -1,10 +1,8 @@
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 import EditCardForm from '@components/edit-card-form.vue'
 import VButton from '@components/v-button.vue'
-
-import detectBrowser from '@utils/detectBrowser.js'
 
 export default {
 	components: {
@@ -19,10 +17,6 @@ export default {
 		submitButtonText: {
 			type: String,
 			required: true,
-		},
-		editPaymentMethodMode: {
-			type: Boolean,
-			default: false,
 		},
 	},
 	data: () => {
@@ -53,8 +47,6 @@ export default {
 		...mapState('translations', ['atc']),
 
 		...mapState('shop', ['stripePublicKey', 'store']),
-
-		...mapState('account', ['accountData', 'guestCheckout']),
 
 		...mapState('customer', ['customerDefaultPaymentId']),
 
@@ -110,19 +102,15 @@ export default {
 	},
 
 	mounted() {
-		const { paymentCards, editPaymentMethodMode, activeEditCard, stripePublicKey } = this
-		console.log('mounted', { activeEditCard })
-		if (editPaymentMethodMode) {
-			this.activePaymentType = activeEditCard.type
-		}
+		const { paymentCards, activeEditCard } = this
 
-		this.setBrowser()
+  	this.activePaymentType = activeEditCard.type
 
 		// this.resetCheckoutUiState()
 		// reset on new load
 		this.orderSuccessfullyPlaced = false
 
-		if (process.browser && stripePublicKey) {
+		if (process.browser && this.stripePublicKey) {
 			let domElement = document.createElement('script')
 			domElement.setAttribute('src', 'https://js.stripe.com/v3/')
 			domElement.onload = () => {
@@ -137,131 +125,9 @@ export default {
 		} else {
 			this.useNewPaymentState = true
 		}
-
-		this.handlePotentialPaymentVerificationRedirects()
 	},
 
-	methods: {
-		setBrowser() {
-			const result = detectBrowser()
-			this.browser = result
-		},
-
-		...mapMutations('payment', [
-			'setPaymentValidationClientSecret',
-			'setPaymentValidationSource',
-			'setPaymentValidationLiveMode',
-		]),
-
-		handlePotentialPaymentVerificationRedirects() {
-			const { $route, paymentType } = this
-			const queryParams = $route.query || {}
-			const { client_secret, livemode, source } = queryParams
-
-			// console.log({ queryParams })
-
-			if (client_secret || livemode || source) {
-				this.setPaymentValidationClientSecret(client_secret)
-				this.setPaymentValidationSource(source)
-				this.setPaymentValidationLiveMode(livemode)
-
-				// not using existing card
-				this.useNewPayment()
-				console.log('use new payment')
-			}
-
-			// set payment type selection
-			if (paymentType) {
-				this.setActivePaymentType(paymentType)
-			}
-		},
-
-		toggleActivePaymentType(type) {
-			const { activePaymentType } = this
-			if (activePaymentType === type) {
-				this.activePaymentType = null
-			} else {
-				this.activePaymentType = type
-			}
-		},
-
-		displayPaymentType(type) {
-			const { paymentTypes, activePaymentType } = this
-			let paymentTypeEnabled = false
-			let displayPaymentType = false
-
-			if (paymentTypes.includes(type)) {
-				paymentTypeEnabled = true
-			}
-			if (!activePaymentType || activePaymentType === type) {
-				// console.log({type })
-				displayPaymentType = true
-			}
-
-			return paymentTypeEnabled && displayPaymentType
-		},
-
-		handleStripeElementChange(payload) {
-			// console.log('handleStripeElementChangePayload: ', payload)
-			this.completeStripeCardInfo = payload.complete
-			if (payload.error) {
-				console.log({ error: payload.error })
-			}
-		},
-
-		handleSubmitPaymentForm() {
-			console.log('handleSubmitPaymentForm')
-		},
-
-		createPaymentMethodHandler() {
-			console.log('createPaymentMethod top')
-			// const vm = this
-
-			if (!this.activePaymentType) {
-				console.log('not complete')
-				this.placeOrderError = {
-					status: 'ERROR',
-					message: 'Please select payment type',
-				}
-				return
-			}
-
-			if (!this.completeStripeCardInfo) {
-				console.log('not complete')
-				this.placeOrderError = {
-					status: 'ERROR',
-					message: 'Please complete the payment form',
-				}
-				return
-			} else {
-				this.creatingPaymentMethodPendingError = false
-				this.creatingPaymentMethodPending = false
-			}
-
-			const stripePaymentOptions = this.$refs['stripe-payment-options']
-			// console.log({stripePaymentOptions})
-
-			const activePaymentTypeEl =
-				stripePaymentOptions.$refs[
-					'active-payment-type-' + this.activePaymentType
-				]
-			// console.log({activePaymentTypeEl})
-
-			this.creatingPaymentMethodPending = true
-			activePaymentTypeEl.createPaymentMethod()
-		},
-
-		handlePlaceOrderResponseFromRedirect({
-			fullResponse,
-			paymentData,
-			paymentType,
-		}) {
-			console.log('handlePlaceOrderResponseFromRedirect', {
-				fullResponse,
-				paymentData,
-				paymentType,
-			})
-		},
+  methods: {
 
 		async updateCard({
 			cardName,
@@ -291,12 +157,12 @@ export default {
 			updatePaymentData,
 			paymentType,
 		}) {
-			console.log('handleCreatePaymentMethodResponse', {
-				fullResponse,
-				newPaymentData,
-				updatePaymentData,
-				paymentType,
-			})
+			// console.log('handleCreatePaymentMethodResponse', {
+			// 	fullResponse,
+			// 	newPaymentData,
+			// 	updatePaymentData,
+			// 	paymentType,
+			// })
 			this.$emit('finalPaymentPayloadResponse', {
 				fullResponse,
 				newPaymentData,
@@ -306,7 +172,6 @@ export default {
 		},
 
 		handleEnableStripePaymentRequest(val) {
-			console.log('enableStripePaymentRequest top level', val)
 			this.stripePaymentRequestEnabled = true
 		},
 
@@ -318,178 +183,7 @@ export default {
 </script>
 
 <template>
-	<div class="c-defaultModal__main">
-		<div
-			v-if="useNewPaymentState || (!paymentCards || !paymentCards.length)"
-			class="c-paymentMethods__innerBlock"
-		>
-			<div
-				v-if="!editPaymentMethodMode"
-				class="c-paymentMethods__innerOptions"
-				style="padding: 0"
-			>
-				<a
-					v-if="displayPaymentType('stripe_card')"
-					href=""
-					class="c-newPaymentOptions__option c-heading4"
-					:class="{
-						'c-newPaymentOptions__option--selected':
-							activePaymentType === 'stripe_card',
-					}"
-					@click.prevent="toggleActivePaymentType('stripe_card')"
-				>
-					<span class="c-newPaymentOptions__optionText">Card</span>
-					<svg
-						class="c-newPaymentOptions__optionIcon"
-						width="15"
-						height="8"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z"
-							fill="#666"
-						/>
-					</svg>
-				</a>
-
-				<a
-					v-if="displayPaymentType('stripe_sepa_direct_debit')"
-					href
-					class="c-newPaymentOptions__option c-heading4"
-					:class="{
-						'c-newPaymentOptions__option--selected':
-							activePaymentType === 'stripe_sepa_direct_debit',
-					}"
-					@click.prevent="toggleActivePaymentType('stripe_sepa_direct_debit')"
-				>
-					<span class="c-newPaymentOptions__optionText">SEPA Direct Debit</span>
-					<svg
-						class="c-newPaymentOptions__optionIcon"
-						width="15"
-						height="8"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z"
-							fill="#666"
-						/>
-					</svg>
-				</a>
-
-				<a
-					v-if="displayPaymentType('stripe_ideal')"
-					href
-					class="c-newPaymentOptions__option c-heading4"
-					:class="{
-						'c-newPaymentOptions__option--selected':
-							activePaymentType === 'stripe_ideal',
-					}"
-					@click.prevent="toggleActivePaymentType('stripe_ideal')"
-				>
-					<span class="c-newPaymentOptions__optionText">iDEAL</span>
-					<svg
-						class="c-newPaymentOptions__optionIcon"
-						width="15"
-						height="8"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z"
-							fill="#666"
-						/>
-					</svg>
-				</a>
-
-				<a
-					v-if="displayPaymentType('stripe_bancontact')"
-					href
-					class="c-newPaymentOptions__option c-heading4"
-					:class="{
-						'c-newPaymentOptions__option--selected':
-							activePaymentType === 'stripe_bancontact',
-					}"
-					@click.prevent="toggleActivePaymentType('stripe_bancontact')"
-				>
-					<span class="c-newPaymentOptions__optionText">Bancontact</span>
-					<svg
-						class="c-newPaymentOptions__optionIcon"
-						width="15"
-						height="8"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z"
-							fill="#666"
-						/>
-					</svg>
-				</a>
-
-				<a
-					v-if="displayPaymentType('stripe_sofort')"
-					href
-					class="c-newPaymentOptions__option c-heading4"
-					:class="{
-						'c-newPaymentOptions__option--selected':
-							activePaymentType === 'stripe_sofort',
-					}"
-					@click.prevent="toggleActivePaymentType('stripe_sofort')"
-				>
-					<span class="c-newPaymentOptions__optionText">Sofort</span>
-					<svg
-						class="c-newPaymentOptions__optionIcon"
-						width="15"
-						height="8"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z"
-							fill="#666"
-						/>
-					</svg>
-				</a>
-
-				<a
-					v-if="
-						stripePaymentRequestEnabled &&
-							displayPaymentType('stripe_payment_request')
-					"
-					href
-					class="c-newPaymentOptions__option c-heading4"
-					:class="{
-						'c-newPaymentOptions__option--selected':
-							activePaymentType === 'stripe_payment_request',
-					}"
-					@click.prevent="toggleActivePaymentType('stripe_payment_request')"
-				>
-					<span class="c-newPaymentOptions__optionText">{{
-						paymentRequestText
-					}}</span>
-					<svg
-						class="c-newPaymentOptions__optionIcon"
-						width="15"
-						height="8"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z"
-							fill="#666"
-						/>
-					</svg>
-				</a>
-
-      <a
-        v-if="displayPaymentType('braintree_card')"
-        href
-        class="c-newPaymentOptions__option c-heading4"
-        :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'braintree_card' }"
-        @click.prevent="toggleActivePaymentType('braintree_card')"
-        >
-        <span class="c-newPaymentOptions__optionText">Braintree Card</span>
-        <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
-        </a>
-
-			</div>
-		</div>
+	<div v-if="loadedStripe && stripePublicKey" class="c-defaultModal__main">
 
 		<div
 			class="c-paymentMethods__options"

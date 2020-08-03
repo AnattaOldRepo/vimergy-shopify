@@ -1,6 +1,6 @@
 <template>
   <div class="c-cardForm">
-    <form-wrapper :validator="$v.form">
+    <form-wrapper v-if="$v.form" :validator="$v.form">
       <form novalidate @submit.prevent="submit">
 
         <div v-if="paymentMethodType.includes('card')"
@@ -39,12 +39,16 @@
           />
         </div>
 
+        <div v-else-if="paymentMethodType == 'braintree_paypal'" class="notification">
+          <p>{{ atc['portal.paypalEditPaymentMethodMessage'] || 'Paypal account details can only be edited through the customer\'s PayPal account.' }}</p>
+        </div>
+
         <div v-else class="notification">
-          <p>SEPA Direct Debit details can only be edited through the customer's bank account.</p>
+          <p>{{ atc['portal.sepaEditPaymentMethodMessage'] || 'SEPA Direct Debit details can only be edited through the customer\'s bank account.' }}</p>
         </div>
 
         <vue-checkbox
-          style="margin-bottom:20px;"
+          style="margin-bottom:20px; margin-top: 12px;"
           name="accepts-marketing"
           label="Make default payment method"
           :checked="makeDefault"
@@ -159,13 +163,19 @@ export default {
       },
     }
   },
-  validations: {
-    form: {
-      // cardNumber: { numeric },
-      expirationMonth: { numeric, required },
-      expirationYear: { numeric, required },
-      zipcode: { required },
-    },
+  validations() {
+    let final = {
+      form: {},
+      makeDefault: { required },
+    }
+
+    if (this.paymentMethodType.includes('card')) {
+      final.form.expirationMonth = { numeric, required }
+      final.form.expirationYear = { numeric, required }
+      final.form.zipcode = { required }
+    }
+
+    return final
   },
 
   computed: {
@@ -174,10 +184,10 @@ export default {
     cardData() {
       const { form, makeDefault } = this
       return {
-        cardMonth: form.expirationMonth,
-        cardYear: form.expirationYear,
-        cardZipcode: form.zipcode,
-        cardDefault: makeDefault,
+        cardMonth: form.expirationMonth || undefined,
+        cardYear: form.expirationYear || undefined,
+        cardZipcode: form.zipcode || undefined,
+        cardDefault: makeDefault ? 1 : 0,
       }
     },
   },

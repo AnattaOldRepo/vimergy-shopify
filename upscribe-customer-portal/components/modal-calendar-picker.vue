@@ -77,7 +77,6 @@ export default {
 
 		async handleChangeShipmentDate(unformattedNewDate) {
 			const { activeSubscriptionNextDate } = this
-			// console.log(activeSubscriptionNextDate)
 			if (!activeSubscriptionNextDate) return false
 			let currentDate = activeSubscriptionNextDate
 

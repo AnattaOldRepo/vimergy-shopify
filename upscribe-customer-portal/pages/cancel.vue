@@ -187,7 +187,6 @@ export default {
           payload: analyticsPayload,
         })
         await this.GET_SUBSCRIPTIONS()
-        console.log('finished')
         this.$router.push({ name: 'index', query: { ...this.$route.query } })
 
       } catch (e) {

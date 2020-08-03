@@ -98,8 +98,6 @@ export default {
 				zip: billingAddress.zip || undefined,
 			}
 
-			// console.log({shippingAddress}, {billingAddress}, {cleanedShippingAddress}, {cleanedBillingAddress})
-
 			return isEqual(cleanedShippingAddress, cleanedBillingAddress)
 		},
 
@@ -111,9 +109,7 @@ export default {
 				// current state of saved subscription is not matching shipping / billing
 				// so we do an update when checking the same as shipping option
 				if (!this.initialHasSameAddressState) {
-					console.log(
-						'initial state was NOT matching, apply auto update when checking "same as shipping box"'
-					)
+					// console.log('initial state was NOT matching, apply auto update when checking "same as shipping box"')
 
 					this.updateBillingAddressToMatchShipping()
 				}
@@ -121,7 +117,7 @@ export default {
 				// initial state was matching, so only do an update after they "Update Billing" action
 				// from within the address-form component
 				else {
-					console.log("initial state was matching, don't auto update")
+					// console.log("initial state was matching, don't auto update")
 				}
 			}
 		},

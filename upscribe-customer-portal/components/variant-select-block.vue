@@ -205,7 +205,6 @@ export default {
 
   watch: {
     selectedVariant(val) {
-      console.log({val})
       if (val.option1) this.activeOption1 = val.option1
       if (val.option2) this.activeOption2 = val.option2
       if (val.option3) this.activeOption3 = val.option3
@@ -215,7 +214,6 @@ export default {
 
   mounted() {
     const { variantsObj } = this
-    console.log({variantsObj})
 
     if (!this.isEmptyObject(variantsObj)) {
       this.selectedVariantId = variantsObj[Object.keys(variantsObj)[0]].id
@@ -241,12 +239,6 @@ export default {
 
       // set for if unavailable to display
       this[`activeOption${position}`] = value
-      console.log('JUST SET ACTIVE OPTION', `activeOption[${position}]`, value)
-
-      console.log({variantsObj})
-
-      console.log({ value, position })
-      console.log({selectedVariant})
 
       // keep same options as current selected variant
       const checkOptions = {
@@ -262,26 +254,20 @@ export default {
 
       Object.keys(variantsObj).forEach((key) => {
         let variant = variantsObj[key]
-        console.log({variant})
-        console.log(
-          variant.option1,
-          variant.option2,
-          variant.option3,
-        )
 
         let match1 = true
         let match2 = true
         let match3 = true
 
         if (variant.option1) {
-          console.log({ 'var1':variant.option1 , 'new1':checkOptions.option1})
+          // console.log({ 'var1':variant.option1 , 'new1':checkOptions.option1})
           if (variant.option1 != checkOptions.option1) {
             match1 = false
           }
         }
 
         if (variant.option2) {
-          console.log({ 'var2':variant.option2 , 'new2':checkOptions.option2})
+          // console.log({ 'var2':variant.option2 , 'new2':checkOptions.option2})
 
           if (variant.option2 != checkOptions.option2) {
             match2 = false
@@ -289,17 +275,16 @@ export default {
         }
 
         if (variant.option3) {
-          console.log({ 'var3':variant.option3 , 'new3':checkOptions.option3})
+          // console.log({ 'var3':variant.option3 , 'new3':checkOptions.option3})
 
           if (variant.option3 != checkOptions.option3) {
             match3 = false
           }
         }
 
-        console.log({match1, match2, match3})
+        // console.log({match1, match2, match3})
 
         if (match1 && match2 && match3) {
-          console.log('it\'s a match')
           matchingVariants.push(variant)
         }
       })

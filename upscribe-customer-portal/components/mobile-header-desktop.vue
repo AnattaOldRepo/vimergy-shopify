@@ -82,6 +82,8 @@ export default {
 
     ...mapState('shop', ['shopData']),
 
+    ...mapGetters('subscriptions', ['subscriptionActive', 'subscriptionInActive']),
+
     shopifyAccountUrl() {
       const { shopData } = this
       if (!shopData) return

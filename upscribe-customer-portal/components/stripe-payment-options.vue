@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     handleChange($event) {
-      console.log('stripe payment options: ', {$event})
       this.$emit('handleChange', $event)
     },
 
@@ -56,16 +55,13 @@ export default {
         this.$refs['active-payment-type-stripe_sepa_direct_debit'].handleClear()
       }
     },
-
     handleCreateStripeCardToken(token) {
-      console.log({token})
+      // console.log({token})
     },
     handleCreatePaymentMethodResponse(response) {
-      console.log('handleCreatePaymentMethodResponse: ', response)
       this.$emit('createPaymentMethodResponse', response)
     },
     handleEnableStripePaymentRequest(val){
-      console.log('handleEnableStripePaymentRequest', val)
       this.$emit('enableStripePaymentRequest', val)
     },
   },

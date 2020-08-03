@@ -17,7 +17,6 @@ export const state = () => ({
 
 export const mutations = {
   SET_SHOP_DATA(state, data) {
-    // console.log('SET_SHOP_DATA data.shop', data.shop)
     state.store = data
 
     state.shopData = data.shop

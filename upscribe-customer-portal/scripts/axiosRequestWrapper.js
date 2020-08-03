@@ -60,7 +60,6 @@ const request = function(options) {
 
             if (Array.isArray(groups)) {
               groups.forEach((group) => {
-                console.log('array group, ', group)
                 groupErrorMessageString += `${group.message}. <br>`
               })
             } else {

@@ -30,6 +30,7 @@ export default {
 
   methods: {
     handleHeaderAction(){
+      if (!this.$refs['add-payment-method-mobile']) return
       this.$refs['add-payment-method-mobile'].handleClear()
     },
   },

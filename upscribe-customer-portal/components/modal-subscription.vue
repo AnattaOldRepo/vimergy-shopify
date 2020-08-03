@@ -312,7 +312,6 @@ export default {
     },
 
     handleOpenSwapModal(product){
-      console.log(product)
       this.setVariantSelectProduct(product)
       this.swapping = true
     },
@@ -322,8 +321,6 @@ export default {
     },
 
     handleNewCheckoutUpdate(updateArray) {
-      console.log('handleNewCheckoutUpdate')
-
       return new Promise((resolve, reject) => {
 
         let updateCount = updateArray.length
@@ -332,7 +329,6 @@ export default {
         this.statusText = 'Saving'
           // for each update
           updateArray.forEach(async (update) => {
-            // console.log({update})
             this.updating = true
             try {
               await update.updateAction
@@ -364,8 +360,7 @@ export default {
     },
 
     handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-      console.log('e', e)
-      console.log(handleNewCheckoutUpdatePayload)
+      console.log('handleNewCheckoutUpdateError: ', e)
       if (
         e &&
         e.data &&
@@ -382,19 +377,7 @@ export default {
       this.statusText = e.message
     },
 
-    // handleUpdateError(e, updatePayload) {
-    //   console.log('e.response', e)
-    //   if (e && e.data && e.data.shipping_update_required) {
-    //     // this.SET_SHIPPING_METHODS(e.data.rates)
-    //     this.setSavedProductUpdatePayload(updatePayload)
-    //   } else {
-    //     console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
-    //   }
-    // },
-
     async handleQuantityChange({ type, id, quantity, variant_id, product }) {
-
-
       const {
         editNextOrder,
         activeSubscription,
@@ -443,7 +426,6 @@ export default {
       }
 
       if (editNextOrder) {
-        // updateMessage = `Quantity updated to ${quantity} on next order.`
         analyticsEventName = 'Upscribe Next Order Product Quantity Change'
 
         handleNewCheckoutUpdatePayload = [
@@ -487,8 +469,6 @@ export default {
     },
 
     async handleRemove(product) {
-
-      console.log('Triggering me')
       const {
         activeSubscription,
         activeQueue,

@@ -40,26 +40,26 @@ export default {
       let plural = activeSubscription.interval > 1
 
       let displayUnit = ''
-      if (intervalUnit === 'day') {
+      if (intervalUnit.indexOf('day') > -1) {
         if (plural) {
           displayUnit = atc['date-time.days-unit'] || 'days'
         } else {
           displayUnit = atc['date-time.day-unit'] || 'day'
         }
-      } else if (intervalUnit === 'week') {
+      } else if (intervalUnit.indexOf('week') > -1) {
         if (plural) {
           displayUnit = atc['date-time.weeks-unit'] || 'weeks'
         } else {
           displayUnit = atc['date-time.week-unit'] || 'week'
         }
-      } else if (intervalUnit === 'month') {
+      } else if (intervalUnit.indexOf('month') > -1) {
         if (plural) {
           displayUnit = atc['date-time.months-unit'] || 'months'
         } else {
           displayUnit = atc['date-time.month-unit'] || 'month'
         }
       } else {
-        displayUnit = atc['date-time.days-unit'] || 'days'
+        displayUnit = intervalUnit
       }
       return displayUnit
     },
@@ -81,20 +81,14 @@ export default {
 		...mapMutations('shippingMethods', ['SET_SHIPPING_METHODS']),
 
 		handleNewCheckoutUpdate(updateArray) {
-			console.log('handleNewCheckoutUpdate')
-
 			return new Promise((resolve, reject) => {
 				let updateCount = updateArray.length
 				let updatesFinished = 0
 
 				// for each update
 				updateArray.forEach(async (update) => {
-					// console.log({update})
 					try {
 						await update.updateAction
-						// this.$toasted.global.success({
-						//   message: update.successMessage,
-						// })
 					} catch (e) {
 						this.handleNewCheckoutUpdateError(e, update)
 					} finally {
@@ -109,7 +103,7 @@ export default {
 		},
 
 		handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-			console.log('e', e)
+			console.log('handleNewCheckoutUpdateError: ', e)
 			if (e && e.data && e.data.shipping_update_required) {
 				this.SET_SHIPPING_METHODS(e.data.rates)
 				this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)

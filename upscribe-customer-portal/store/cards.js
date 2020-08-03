@@ -11,16 +11,14 @@ export const getters = {
       rootGetters['activeSubscription/activeSubscription']
     const activeQueue = rootGetters['activeSubscription/activeQueue']
     const { editNextOrder } = rootState.editMode
-    // console.log(activeQueue, 11212)
-    // console.log(activeSubscription, 1212)
     return editNextOrder
       ? activeQueue.payment_method_id
       : activeSubscription.payment_method_id
   },
   activeCard(state, getters, rootState, rootGetters) {
-    // console.log(getters)
+
     const { activeCardId } = getters
-    // console.log(activeCardId, 12312)
+
     const { cards } = state
 
     if (!cards || !activeCardId) return false
@@ -33,7 +31,6 @@ export const getters = {
 
 export const mutations = {
   SET_CARDS(state, cards) {
-    // console.log('SET_CARDS mutation ', cards)
     if (cards) {
       state.cards = cards
     } else {
@@ -123,7 +120,6 @@ export const actions = {
         },
       })
         .then((response) => {
-          console.log('crate method', response)
           commit('SET_CARDS', response.items)
           resolve(response.items)
         })
@@ -140,12 +136,39 @@ export const actions = {
    */
   async UPDATE_PAYMENT_METHOD(
     { rootState, commit, dispatch },
-    { paymentMethodId, updatePayload, paymentCustomerId }
+    { paymentMethodId, updatePayload, paymentCustomerId, paymentType }
   ) {
     const { storeDomain } = rootState.route
 
-    if (!paymentCustomerId) {
-      console.log('no matching paymentCustomerId')
+    const { paymentCustomers } = rootState.customer
+
+    console.log('updste_payment_method', { paymentMethodId, updatePayload, paymentType })
+
+    console.log({paymentCustomers})
+
+    if (!paymentCustomers) {
+      console.log('paymentCustomers required')
+      return
+    }
+
+    if (!paymentType) {
+      console.log('paymentType required in UPDATE_PAYMENT_METHOD')
+      return
+    }
+
+    const newPaymentMethodGatewayType = paymentType.includes('stripe') ? 'stripe' : 'braintree'
+    console.log({newPaymentMethodGatewayType})
+
+    let customerPaymentId = false
+
+    paymentCustomers.forEach(paymentCustomer => {
+      if (paymentCustomer.type.includes(newPaymentMethodGatewayType)) {
+        customerPaymentId = paymentCustomer.id
+      }
+    })
+
+    if (!customerPaymentId) {
+      console.log('no matching customerPaymentId: ', {newPaymentMethodGatewayType}, )
       return
     }
 
@@ -189,7 +212,6 @@ export const actions = {
         url,
       })
         .then((response) => {
-          console.log('remove response ', response)
           commit('SET_CARDS', response.items)
           resolve(response)
         })

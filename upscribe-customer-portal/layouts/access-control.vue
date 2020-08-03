@@ -97,7 +97,6 @@ export default {
 
 	async created() {
 		const query = this.$route.query
-    console.log(window.location.href)
     const isAccessTokenRequiredRoute = window.location.href.indexOf('account-subscriptions') >= 0
 
 		let customerId = false
@@ -147,7 +146,7 @@ export default {
 
 
     if (isAccessTokenRequiredRoute) {
-      console.log('accesstokenrequired route')
+      console.log('isAccessTokenRequiredRoute')
       let validToken
       try {
         validToken = await this.VALIDATE_ACCESS_TOKEN({
@@ -160,8 +159,6 @@ export default {
         this.tokenChecked = true
       }
 
-      console.log({validToken})
-
       if (!validToken && this.tokenChecked) {
         // redirect to account login page
         this.validToken = false
@@ -170,7 +167,6 @@ export default {
         window.location = `https://${storeDomain}/account/login`
       }
 
-      console.log('continue load authorized')
 			await this.initialDataLoad()
 			this.$loadStoreSegment()
 			this.$loadStoreGtm()
@@ -178,7 +174,6 @@ export default {
 
     // continue load
     else {
-      console.log('continue load default')
 			await this.initialDataLoad()
 			this.$loadStoreSegment()
 			this.$loadStoreGtm()
@@ -188,7 +183,7 @@ export default {
   mounted() {
     const { storeDomain } = this
     if (!this.validToken && this.tokenChecked) {
-      console.log('invalide access token')
+      console.log('invalid access token')
       window.location = `https://${storeDomain}/account/login`
     }
   },
@@ -216,8 +211,6 @@ export default {
 		...mapActions('products', ['GET_PRODUCTS']),
 
 		...mapActions('orders', ['CHECK_FOR_PROCESSING_SUBS']),
-
-		// ...mapActions('cards', ['GET_CARDS']),
 
 		...mapMutations('route', ['setCustomerId', 'setStoreDomain']),
 
@@ -291,10 +284,8 @@ export default {
 					// console.log({ activeSubs })
 
 					if (activeSubs.length) {
-						console.log('yes active subs')
 						this.setNoActiveSubscriptions(false)
 					} else {
-						console.log('no active subs')
 						this.setNoActiveSubscriptions(true)
 						return
 					}
@@ -327,8 +318,8 @@ export default {
 				customer && customer.shopify && customer.shopify.language
 					? customer.shopify.language
 					: 'en'
-			// console.log({ customer })
-			// first get avilable languages
+
+      // first get avilable languages
 			await this.GET_TRANSLATION_LIST()
 
 			if (!this.shopData) {
@@ -336,14 +327,12 @@ export default {
 				const checkoutStoreDomain = this.$route.query.store
 				const shopResponse = await this.GET_SHOP({ checkoutStoreDomain })
 
-				console.log('shopresponse in setup translations', shopResponse)
 				this.SET_SHOP_DATA(shopResponse.data)
 			} else {
 				console.log('ESLE shopresponse in setup translations')
 			}
 
 			if (this.initialLanguageSet) {
-				console.log('initial language alreaday set')
 				return
 			}
 
@@ -359,7 +348,6 @@ export default {
 				preferredLanguage &&
 				this.translationList.includes(preferredLanguage)
 			) {
-				// console.log('got it preferred Lang: ', preferredLanguage)
 				defaultLanguage = preferredLanguage
 			}
 
@@ -372,7 +360,6 @@ export default {
 			const checkProcessing = setInterval(async () => {
 				if (this.newCheckoutSubscriptionProcessing) {
 					const processingSubsResponse = await this.CHECK_FOR_PROCESSING_SUBS()
-					// console.log({ processingSubsResponse })
 
 					// check if finished processing
 					if (processingSubsResponse.count === 0) {

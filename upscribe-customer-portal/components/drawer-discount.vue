@@ -108,7 +108,7 @@ export default {
 		},
 
 		handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-			console.log('e', e)
+			console.log('handleNewCheckoutUpdateError:', e)
 			if (e && e.data && e.data.shipping_update_required) {
 				this.SET_SHIPPING_METHODS(e.data.rates)
 				this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
@@ -183,12 +183,9 @@ export default {
 			]
 
 			// hande everything in handleNewCheckoutUpdate function
-			const response = await this.handleNewCheckoutUpdate(
+			await this.handleNewCheckoutUpdate(
 				handleNewCheckoutUpdatePayload
 			)
-
-			console.log({ response })
-
 			this.drawerStatus = 'SUCCESS'
 
 			this.triggerAnalyticsEvent({

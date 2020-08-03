@@ -52,7 +52,6 @@ export default {
 
     activeShippingMethod() {
       const { activeSubscription, activeQueue, editNextOrder } = this
-      console.log(this.shippingMethods)
       let shippingLines = null
 
       if (editNextOrder) {
@@ -78,14 +77,12 @@ export default {
 
       // no change if same reate
       if (activeShippingMethod.handle === shippingMethod.handle) {
-        console.log('no change, same rate')
         return false
       }
       this.setMessage('Updating Shipping Method')
       this.setStatus('updating')
 
       if (selectDuringProductUpdate) {
-        console.log('selectDuringProductUpdate')
         this.setNewSwapShippingMethod(shippingMethod)
 
         try {

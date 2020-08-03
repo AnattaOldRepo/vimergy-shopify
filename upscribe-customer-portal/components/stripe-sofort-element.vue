@@ -90,17 +90,12 @@ export default {
       'setSavedPaymentData',
     ]),
 
-    // ...mapActions('payment', ['CREATE_SEPA_DEBIT_SOURCE']),
-
     handleChange($event) {
       const { name, sofortCountryCode } = this
-      console.log({$event})
       this.error = $event.error ? $event.error.message : ''
       this.$emit('handleChange', {complete: (name && sofortCountryCode) })
-      // this.$emit('handleChange', $event)
     },
     createPaymentMethod() {
-      // const vm = this
       const { name, checkoutData, sofortCountryCode } = this
       const { payment_due } = checkoutData
       const redirectUrl = window.location.href
@@ -120,18 +115,12 @@ export default {
         },
       }
 
-      console.log({sofortSourceData})
-
-      debugger
-
       this.stripe.createSource(sofortSourceData).then( async result => {
         if (result.error) {
           this.error = result.error.message
           return
         }
         this.error = ''
-
-        console.log('createSource in sofort: ', {result})
 
         // save for after confirmation comparison
         this.setSavedPaymentData(result.source)
@@ -140,10 +129,6 @@ export default {
         this.setPaymentType('stripe_sofort')
 
         let authorizeUrl = result.source.redirect.url
-
-        console.log({authorizeUrl})
-
-        // debugger
 
         window.location.href = authorizeUrl
 

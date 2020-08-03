@@ -1,14 +1,21 @@
 <script>
-import { mapState } from 'vuex'
-import braintree from 'braintree-web'
-
-console.log('initial braintree: ', braintree)
+import BraintreePaypalElement from '@components/braintree-paypal-element.vue'
+import BraintreeCardElement from '@components/braintree-card-element.vue'
+import { mapState }  from 'vuex'
 
 export default {
+  components: {
+    BraintreeCardElement,
+    BraintreePaypalElement,
+  },
   props: {
     activePaymentType: {
       type: String,
-      required: true,
+      default: 'card',
+    },
+    completebraintreeCardInfo: {
+      type: Boolean,
+      default: false,
     },
     placeOrderPending: {
       type: Boolean,
@@ -20,139 +27,36 @@ export default {
       braintreeOptions: {},
       authorization: null,
       error: '',
+      braintreeLoaded: false,
    }
   },
   computed: {
     ...mapState('shop', ['braintreeClientToken']),
   },
-  mounted() {
-    const { braintreeClientToken } = this
-    this.authorization = braintreeClientToken
-    this.createHostedFields()
-  },
-
   methods: {
-
     clearErrors() {
-      console.log('clearErrors')
       this.$emit('handleError', {type: false, message: false})
       this.error = false
     },
 
-    createHostedFields() {
-      // eslint-disable-next-line no-unused-vars
-      let checkout
-      const vm = this
-      const authorization = this.authorization
-
-      console.log('braintree: ', braintree)
-
-      braintree.setup(authorization, 'custom', {
-        id: 'braintree-card-form',
-        hostedFields: {
-          number: {
-            selector: '#braintree-card-number',
-            placeholder: 'Card number',
-          },
-          cvv: {
-            selector: '#braintree-card-cvv',
-            placeholder: 'CVC',
-          },
-          expirationDate: {
-            selector: '#braintree-card-expiration-date',
-            placeholder: 'MM / YY',
-          },
-          postalCode: {
-            selector: '#braintree-card-postal-code',
-            placeholder: 'ZIP',
-          },
-          styles: {
-            'input': {
-              'font-size': '16px',
-              'font-weight': 'lighter',
-              'color': '#32325d',
-            },
-            ':focus': {
-              'color': '#32325d',
-            },
-            '.valid': {
-              'color': '#32325d',
-            },
-            'input.invalid': {
-              'color': '#ff7777',
-            },
-            'input.valid': {
-              'color': '#32325d',
-            },
-            '::-webkit-input-placeholder': {
-              'color': '#A3B5BF',
-            },
-            ':-moz-placeholder': {
-              'color': '#A3B5BF',
-            },
-            '::-moz-placeholder': {
-            'color': '#A3B5BF',
-            },
-            ':-ms-input-placeholder': {
-              'color': '#A3B5BF',
-            },
-          },
-        },
-        onReady: function (integration) {
-          checkout = integration
-        },
-        onPaymentMethodReceived: function (payload) {
-          console.log('onPaymentMethodReceived',{payload})
-          vm.clearErrors()
-          vm.$emit('handleError', {type: false, message: false})
-
-          vm.$emit('createPaymentMethodResponse', {
-            fullResponse: payload,
-            newPaymentData: {
-              id: payload.nonce,
-              creditCard: payload.details,
-            },
-            updatePaymentData: payload.details,
-            paymentType: 'braintree_card',
-          })
-        },
-        paymentMethodNonceReceived: function(payload) {
-          console.log('paymentMethodNonceReceived', payload)
-        },
-        onError: function({type, message}) {
-          console.log('onError', {type, message})
-          vm.error = message
-          vm.$emit('handleError', {type, message})
-          // this.$emit('handleChange', {type, message})
-        },
-      })
-    },
-    // submit Braintree form
-    createPaymentMethod() {
-      console.log('submit payment method')
-      const submitButton = document.getElementById('braintree-card-submit')
-      submitButton.click()
-    },
-
     handleChange($event) {
-      console.log('braintree payment options: ', {$event})
       this.$emit('handleChange', $event)
     },
-    handleCreatebraintreeCardToken(token) {
-      console.log({token})
-    },
     handlePlaceOrderResponse(response) {
-      console.log('handlePlaceOrderResponse: ', response)
+      // console.log('handlePlaceOrderResponse: ', response)
       this.$emit('placeOrderResponse', response)
     },
+    handleCreatePaymentMethodResponse(response) {
+      // console.log('handleCreatePaymentMethodResponse: ', response)
+      this.$emit('createPaymentMethodResponse', response)
+    },
     handleEnablebraintreePaymentRequest(val){
-      console.log('handleEnablebraintreePaymentRequest', val)
+      // console.log('handleEnablebraintreePaymentRequest', val)
       this.$emit('enablebraintreePaymentRequest', val)
     },
-    handleSubmit() {
-      console.log('submit braintree')
+    submitPaymentForm() {
+      // console.log('submit braintree')
       this.$emit('handleError', {type: false, message: false})
-
     },
   },
 }
@@ -161,34 +65,25 @@ export default {
 <template>
 <div>
   <no-ssr>
-    <form id="braintree-card-form" ref="active-payment-type-braintree_card" method="post" @submit.prevent="handleSubmit">
-      <!-- <label class="hosted-fields--label" for="braintree-card-number">Card Number</label> -->
-      <div id="braintree-card-number" class="hosted-field c-braintreeFormInput c-braintreeFormInput--text" style="margin-bottom: 20px;"></div>
+    <braintree-card-element
+      v-if="activePaymentType === 'braintree_card' && braintreeClientToken"
+      ref="active-payment-type-braintree_card"
+      :braintree-client-token="braintreeClientToken"
+      @handleChange="handleChange($event)"
+      @submitPaymentForm="$emit('submitPaymentForm')"
+      @placeOrderResponse="handlePlaceOrderResponse($event)"
+      @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
+    />
 
-      <div class="form-row inline c-braintreeFormSplitGroups">
-
-        <div class="col c-paymentMethodFormGroup">
-          <!-- <label class="hosted-fields--label" for="braintree-card-expiration-date">Expiration Date</label> -->
-          <div id="braintree-card-expiration-date" class="hosted-field c-braintreeFormInput c-braintreeFormInput--text"></div>
-        </div>
-
-        <div class="col c-paymentMethodFormGroup">
-          <!-- <label class="hosted-fields--label" for="braintree-card-cvv">CVV</label> -->
-          <div id="braintree-card-cvv" class="hosted-field c-braintreeFormInput c-braintreeFormInput--text"></div>
-        </div>
-
-        <div class="col c-paymentMethodFormGroup">
-          <!-- <label class="hosted-fields--label" for="braintree-card-cvv">Postal Code</label> -->
-          <div id="braintree-card-postal-code" class="hosted-field c-braintreeFormInput c-braintreeFormInput--text"></div>
-        </div>
-      </div>
-
-      <div class="button-container" style="display:none;">
-        <input id="braintree-card-submit" ref="active-payment-type-braintree-card-submit-button" type="submit" class="button button--small button--green" value="Purchase"/>
-      </div>
-    </form>
-
-    <div v-if="error" id="card-errors" role="alert" class="c-paymentMethodErrors">{{ error }}</div>
+    <braintree-paypal-element
+      v-if="activePaymentType === 'braintree_paypal' && braintreeClientToken"
+      ref="active-payment-type-braintree_paypal"
+      :braintree-client-token="braintreeClientToken"
+      @handleChange="handleChange($event)"
+      @submitPaymentForm="$emit('submitPaymentForm')"
+      @placeOrderResponse="handlePlaceOrderResponse($event)"
+      @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
+    />
 
   </no-ssr>
 </div>
@@ -197,7 +92,7 @@ export default {
 <style lang="scss">
 @import '@design';
 
-.c-paymentMethodErrors, {
+.c-braintreeErrors, {
   margin: 20px 0;
   color: $color-error;
   padding: 20px;
@@ -226,7 +121,7 @@ export default {
   display: block;
 }
 
-.c-paymentMethodFormGroup {
+.c-braintreeFormGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
@@ -329,7 +224,7 @@ export default {
   display: block;
 }
 
-.c-paymentMethodFormGroup {
+.c-braintreeFormGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;

@@ -16,11 +16,21 @@ export const mutations = {
     state.customer = payload
     state.paymentCustomers = payload.payment_customers
 
-    state.customerShopify = payload.shopify
-    state.customerShopifyId = payload.shopify.id
 
-    if (payload.payment_customer && payload.payment_customers.length) {
+    if (payload.payment_customers && payload.payment_customers.length) {
+      state.customerStripeId = payload.payment_customers[0].id
+      state.customerStripe = payload.payment_customers[0]
       state.customerDefaultPaymentId = payload.payment_customers[0].default_source
+    }
+
+    state.customerShopify = payload.shopify
+
+    if (payload.payment_customer && payload.payment_customer.id) {
+      state.customerStripeId = payload.payment_customer.id
+    }
+
+    if (payload.shopify && payload.shopify.id) {
+      state.customerShopifyId = payload.shopify.id
     }
   },
 }

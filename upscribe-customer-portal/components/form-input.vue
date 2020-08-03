@@ -249,7 +249,6 @@ export default {
 
   methods: {
     updateSelected(payload) {
-      console.log({payload})
       this.$emit('updateSelected', payload)
     },
 

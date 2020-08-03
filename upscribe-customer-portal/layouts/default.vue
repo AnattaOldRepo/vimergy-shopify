@@ -4,6 +4,10 @@
 
 		<portal-target v-else name="header" class="header-portal" />
 
+		<div class="c-portalBar">
+		    If you would like to break up the subscription and have multiple ship dates for the same subscription... please contact <a href="mailto:help@vimergy.com">help@vimergy.com</a> or call <a hfre="tel:(904) 335-3254">(904) 335-3254</a>.
+		</div>
+
 		<div class="c-portal__main">
 			<loading-block
 				v-if="newCheckoutSubscriptionProcessing"
@@ -97,7 +101,7 @@ export default {
 
 	async created() {
     const query = this.$route.query
-    console.log(window.location.href)
+
     const isAccessTokenRequiredRoute = window.location.href.indexOf('account-subscriptions') >= 0
 
 		let customerId = false
@@ -163,20 +167,20 @@ export default {
         this.tokenChecked = true
       }
 
-      console.log({validToken})
-
       if (!validToken && this.tokenChecked) {
         // redirect to account login page
         this.validToken = false
-
         console.log('invalide access token')
         window.location = `https://${storeDomain}/account/login`
+      } else {
+        await this.initialDataLoad()
+        this.$loadStoreSegment()
+        this.$loadStoreGtm()
       }
     }
 
     // continue load
     else {
-      console.log('continue load')
 			await this.initialDataLoad()
 			this.$loadStoreSegment()
 			this.$loadStoreGtm()
@@ -216,11 +220,12 @@ export default {
 		async initialDataLoad() {
 			const { $route } = this
 			const { query } = $route
+      const { customerId, direct_from_checkout } = query
 
-			if (query.direct_from_checkout) {
+			if (direct_from_checkout) {
 				this.newCheckoutSubscriptionProcessing = true
 				this.pollForNewCheckoutSubscriptionProcessing()
-			}
+      }
 
 			try {
 				// eslint-disable-next-line no-unused-vars
@@ -232,7 +237,7 @@ export default {
 					translationList,
 				] = await Promise.all([
 					this.GET_CUSTOMER(),
-					this.GET_SUBSCRIPTIONS(),
+					this.GET_SUBSCRIPTIONS(customerId),
 					this.GET_PRODUCTS(),
 					this.GET_SHOP(),
 					this.GET_TRANSLATION_LIST(),
@@ -281,10 +286,8 @@ export default {
 					// console.log({ activeSubs })
 
 					if (activeSubs.length) {
-						console.log('yes active subs')
 						this.setNoActiveSubscriptions(false)
 					} else {
-						console.log('no active subs')
 						this.setNoActiveSubscriptions(true)
 						return
 					}
@@ -317,28 +320,21 @@ export default {
 				customer && customer.shopify && customer.shopify.language
 					? customer.shopify.language
 					: 'en'
-			// console.log({ customer })
 			// first get avilable languages
 			await this.GET_TRANSLATION_LIST()
 
 			if (!this.shopData) {
-				console.log('no shopData available to get primary_locale')
 				const checkoutStoreDomain = this.$route.query.store
 				const shopResponse = await this.GET_SHOP({ checkoutStoreDomain })
 
-				console.log('shopresponse in setup translations', shopResponse)
 				this.SET_SHOP_DATA(shopResponse.data)
-			} else {
-				console.log('ESLE shopresponse in setup translations')
 			}
 
 			if (this.initialLanguageSet) {
-				console.log('initial language alreaday set')
 				return
 			}
 
 			if (!this.translationList) {
-				console.log('no translationList available to get intial language')
 				return
 			}
 
@@ -349,7 +345,6 @@ export default {
 				preferredLanguage &&
 				this.translationList.includes(preferredLanguage)
 			) {
-				// console.log('got it preferred Lang: ', preferredLanguage)
 				defaultLanguage = preferredLanguage
 			}
 
@@ -359,15 +354,18 @@ export default {
 		},
 
 		async pollForNewCheckoutSubscriptionProcessing() {
+      let processingChecks = 0
 			const checkProcessing = setInterval(async () => {
 				if (this.newCheckoutSubscriptionProcessing) {
-					const processingSubsResponse = await this.CHECK_FOR_PROCESSING_SUBS()
-					// console.log({ processingSubsResponse })
+          const processingSubsResponse = await this.CHECK_FOR_PROCESSING_SUBS()
+
+          console.log({processingSubsResponse})
 
 					// check if finished processing
-					if (processingSubsResponse.count === 0) {
+          if (processingSubsResponse.count === 0 || processingChecks > 30) {
 						this.newCheckoutSubscriptionProcessing = false
 					} else {
+            processingChecks += 1
 						console.log('still processing new subscriptions')
 					}
 				} else {
@@ -383,7 +381,7 @@ export default {
 						noDirectFromCheckoutUrl
 					)
 				}
-			}, 500)
+			}, 5000)
 		},
 	},
 }
@@ -435,6 +433,16 @@ h2,
 	@include bp(tablet) {
 		background-color: transparent;
 	}
+}
+
+.c-portalBar {
+  width:100%;
+  background-color: #EFEAE5;
+  padding:10px 10px;
+  font-size: 14px;
+  line-height: normal;
+  text-align: center;
+  text-transform: initial;
 }
 
 .c-portal__main {

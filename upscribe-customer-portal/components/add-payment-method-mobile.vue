@@ -14,6 +14,7 @@
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex'
 import PaymentMethodsBlock from '@components/payment-methods-block.vue'
+import { windowSizes } from '@mixins/windowSizes'
 
 import detectBrowser from '@utils/detectBrowser.js'
 
@@ -21,7 +22,10 @@ export default {
 	components: {
 		// Card,
 		PaymentMethodsBlock,
-	},
+  },
+
+  mixins: [windowSizes],
+
 	props: {
 		show: {
 			type: Boolean,
@@ -133,7 +137,7 @@ export default {
 		}
 
 		this.handlePotentialPaymentVerificationRedirects()
-	},
+  },
 
 	methods: {
 		...mapMutations('mobileGlobalManagement', ['setMessage', 'setStatus']),
@@ -169,6 +173,7 @@ export default {
     },
 
 		handleClear() {
+      if (!this.$refs['payment-methods-block']) return
 			this.$refs['payment-methods-block'].handleClear()
 		},
 
@@ -177,8 +182,6 @@ export default {
 			const queryParams = $route.query || {}
 			const { client_secret, livemode, source } = queryParams
 
-			// console.log({ queryParams })
-
 			if (client_secret || livemode || source) {
 				this.setPaymentValidationClientSecret(client_secret)
 				this.setPaymentValidationSource(source)
@@ -186,7 +189,6 @@ export default {
 
 				// not using existing card
 				this.useNewPayment()
-				// console.log('use new payment')
 			}
 
 			// set payment type selection
@@ -213,7 +215,6 @@ export default {
 				paymentTypeEnabled = true
 			}
 			if (!activePaymentType || activePaymentType === type) {
-				// console.log({type })
 				displayPaymentType = true
 			}
 
@@ -226,7 +227,6 @@ export default {
 			updatePaymentData,
 			paymentType,
 		}) {
-			// console.log({fullResponse, newPaymentData, updatePaymentData, paymentType})
       this.addPaymentMethod(newPaymentData, paymentType)
 		},
 
@@ -234,7 +234,10 @@ export default {
 			const { editNextOrder, customerShopifyId } = this
 
 			this.$emit('setDrawerStatus', 'PENDING')
-			this.updating = true
+      this.updating = true
+
+      this.setMessage('Adding Payment Method')
+      this.setStatus('updating')
 
 			try {
         const allPaymentMethodsResponse = await this.CREATE_PAYMENT_METHOD({paymentMethod, paymentType})
@@ -273,8 +276,15 @@ export default {
 					await this.GET_CUSTOMER(customerShopifyId)
 
 					this.$emit('setDrawerStatus', 'SUCCESS')
-					this.$emit('setMode', 'default')
-					this.updating = false
+          this.$emit('setMode', 'default')
+          this.setMessage('Added Payment Method')
+          this.setStatus('success')
+          this.updating = false
+
+          if (this.windowWidth < 768) {
+            this.goBackRoute()
+          }
+
 				} catch (e) {
 					console.log('`New payment method added to subscription: ', e)
 					this.$emit('setDrawerStatus', {
@@ -283,11 +293,13 @@ export default {
 					})
 				}
 			} catch (e) {
-				console.log('card/ADD_CARD error: ', e)
+				console.log('CREATE_PAYMENT_METHOD error: ', e)
 				this.$emit('setDrawerStatus', {
 					state: 'FAILURE',
 					message: e.message.message ? e.message.message : e.message,
-				})
+        })
+        this.setMessage(e.message)
+        this.setStatus('error')
 			}
 		},
 
@@ -304,10 +316,8 @@ export default {
 
 		createPaymentMethodHandler() {
 			console.log('createPaymentMethod top')
-			// const vm = this
 
 			if (!this.activePaymentType) {
-				// console.log('not complete')
 				this.placeOrderError = {
 					status: 'ERROR',
 					message: 'Please select payment type',
@@ -316,7 +326,6 @@ export default {
 			}
 
 			if (!this.completeStripeCardInfo) {
-				// console.log('not complete')
 				this.placeOrderError = {
 					status: 'ERROR',
 					message: 'Please complete the payment form',
@@ -328,13 +337,11 @@ export default {
 			}
 
 			const stripePaymentOptions = this.$refs['stripe-payment-options']
-			// console.log({ stripePaymentOptions })
 
 			const activePaymentTypeEl =
 				stripePaymentOptions.$refs[
 					'active-payment-type-' + this.activePaymentType
 				]
-			// console.log({ activePaymentTypeEl })
 
 			this.creatingPaymentMethodPending = true
 			activePaymentTypeEl.createPaymentMethod()
@@ -366,7 +373,6 @@ export default {
 		},
 
 		handleEnableStripePaymentRequest(val) {
-			console.log('enableStripePaymentRequest top level', val)
 			this.stripePaymentRequestEnabled = true
 		},
 

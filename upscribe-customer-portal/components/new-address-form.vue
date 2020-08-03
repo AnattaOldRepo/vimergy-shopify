@@ -341,9 +341,6 @@ export default {
     countrySelectOptions() {
       const { formName, shippingCountries } = this
 
-      // console.log({shippingCountries})
-      // console.log('get all', getAllCountryNames())
-
       // use any country for billing or
       // use only shippable countries for shipping
       let countries = (formName === 'billing-address') ? getAllCountryNames() : shippingCountries
@@ -351,8 +348,6 @@ export default {
       if (!countries || this.isEmptyObject(countries)) {
         console.log('no countrySelectOptions', console.log({countries}))
       }
-
-      // console.log('countrySelectOptions', countries)
 
       const countriesArray = Object.keys(countries).map(countryName => {
         let country = countries[countryName]
@@ -438,8 +433,6 @@ export default {
       const { shippingCountries } = this
       const countries = (this.formName === 'billing-address') ? getAllCountryNames() : shippingCountries
 
-      // console.log('country builder', {countries})
-
       const name = this.form.country
 
       if (this.form.country && countries[this.form.country]) {
@@ -467,11 +460,6 @@ export default {
       if (!country || !country.name) return false
 
       finalStates = getCountryProvinces(country.name)
-      // console.log({finalStates})
-
-      // if (country.country.code === 'US') {
-        // finalStates.push('Armed Forces Americas', 'Armed Forces Europe', 'Armed Forces Pacific')
-      // }
       return finalStates
     },
 
@@ -546,8 +534,7 @@ export default {
     },
 
     stateSelectOptions(val) {
-      console.log('stateSelectOptions updated')
-
+      // console.log('stateSelectOptions updated')
     },
 
     billingAddressDataFill: {
@@ -559,8 +546,6 @@ export default {
     },
 
     async country(country) {
-      // console.log({country})
-
       if (this.countriesNotWorkingWithAutocomplete.includes(country.name)) {
         this.useGoogleMapsAutocomplete = false
       } else {
@@ -577,7 +562,6 @@ export default {
 
   // fill form data if already saved
   async mounted() {
-    // console.log('mounted', this.countries)
     if (!this.countries || this.isEmptyObject(this.countries)) {
       console.log('run GET_SHIPPING_ZONES')
       await this.GET_SHIPPING_ZONES()
@@ -597,7 +581,7 @@ export default {
       if (dataFill && !this.isEmptyObject(preFilledData)) {
         let preFilledForm = Object.assign(this.form, preFilledData)
 
-        console.log({ preFilledForm})
+        // console.log({ preFilledForm})
 
         this.form = {
           firstName: preFilledForm.first_name ? preFilledForm.first_name : preFilledForm.firstName || '',
@@ -633,7 +617,6 @@ export default {
 
     setAddressFields(addressFields) {
       this.addressFields = Array.prototype.concat.apply([], addressFields)
-      // console.log({addressFields})
     },
 
     updateFullform() {
@@ -646,15 +629,11 @@ export default {
         console.log('processing form - ignore data fill update')
         return
       }
-      console.log('UPDATEFORM')
-
       if (this.formName === 'billing-address') {
         preFilledData = copyBillingAddress
       } else {
         preFilledData = copyShippingAddress
       }
-
-      // console.log({preFilledData})
 
       if (!this.isEmptyObject(preFilledData)) {
         let preFilledForm = Object.assign(this.form, preFilledData)
@@ -691,7 +670,6 @@ export default {
     },
 
     isValidCountryOption(countryName) {
-      // console.log('isValidCountryOption', {countryName})
       const { countrySelectOptions } = this
       return countrySelectOptions.some(option => {
         return option.value === countryName
@@ -709,9 +687,6 @@ export default {
      * @param {String} id Input container ID
      */
     handlePlaceChanged(addressData, placeResultData, id) {
-
-      // console.log({addressData, placeResultData, id})
-
       this.autoaddress = addressData
 
       this.$nextTick(() => {
@@ -755,11 +730,6 @@ export default {
 
         // check for city/state matching locality to update (EU issue)
         this.$nextTick(() => {
-          // console.log('check for city/state matching locality to update (EU issue)')
-          // console.log('stateSelectOptions: ', this.stateSelectOptions)
-          // console.log('autoaddress', this.autoaddress)
-          // console.log('auto locality: ', this.autoaddress.locality)
-
           if (!this.stateSelectOptions) return
 
           // check if locality is a valid state/province option
@@ -768,7 +738,6 @@ export default {
           })
 
           if (localityProvinceMatches.length) {
-            // console.log({ localityProvinceMatches })
             this.form.state = localityProvinceMatches[0].name
             this.form.province = localityProvinceMatches[0].name
           }
@@ -791,7 +760,6 @@ export default {
     },
 
     handleStateSelected(statePayload) {
-      // console.log({statePayload})
       if (statePayload.name === 'other' || statePayload.value === 'OTHER') {
         return this.setLocationToManual()
       }
@@ -805,8 +773,6 @@ export default {
     },
 
     handleCountrySelected(countryPayload) {
-      // console.log({countryPayload})
-
       if (!countryPayload || !countryPayload.name) {
         return console.log('handleCountrySelected error: ', countryPayload)
       }

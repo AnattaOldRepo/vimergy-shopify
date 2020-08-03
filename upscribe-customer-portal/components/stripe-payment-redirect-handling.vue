@@ -31,7 +31,6 @@ export default {
         window.location.href
       )
 
-      console.log({ cleanedQueryParamsUrl })
       window.history.replaceState({}, document.title, cleanedQueryParamsUrl)
     },
 
@@ -42,8 +41,6 @@ export default {
       const { client_secret, livemode, source } = queryParams
       const stripe = window.Stripe(vm.stripePublicKey)
       this.stripe = stripe
-
-      console.log({ queryParams })
 
       if (client_secret || livemode || source) {
 
@@ -56,9 +53,6 @@ export default {
         this.removeRedirectQueryParams()
 
         this.$emit('processingRedirectPaymentVerification', true)
-
-
-        console.log('in Redirect savedPaymentData', { savedPaymentData })
 
         const sepaDebitSourcePayload = {
           type: savedPaymentData.type,
@@ -76,18 +70,8 @@ export default {
           [savedPaymentData.type]: savedPaymentData[savedPaymentData.type],
         }
 
-        console.log({ sepaDebitSourcePayload })
-
-
-        // debugger
-
         stripe.createSource(sepaDebitSourcePayload).then(result => {
           this.error = result.error ? result.error.message : ''
-
-          // debugger
-
-          console.log('createSourceFromRedirect then SepaDebit: ', {result})
-          // vm.$emit('placeOrderResponse', result.token)
 
           // process order
           this.$emit('placeOrderResponseFromRedirect', {

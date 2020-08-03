@@ -34,19 +34,12 @@ export default {
       'setSavedPaymentData',
     ]),
 
-    // ...mapActions('payment', ['CREATE_SEPA_DEBIT_SOURCE']),
-
     handleChange($event) {
       const { name } = this
-      // console.log({$event})
       this.error = $event.error ? $event.error.message : ''
       this.$emit('handleChange', {complete: !!name })
-      // this.$emit('handleChange', $event)
     },
     createPaymentMethod() {
-      console.log('createPaymentMethod')
-
-      // const vm = this
       const { name, checkoutData } = this
       const { payment_due } = checkoutData
       const redirectUrl = window.location.href
@@ -63,16 +56,12 @@ export default {
         },
       }
 
-      console.log({bancontactSourceData})
-
       this.stripe.createSource(bancontactSourceData).then( async result => {
         if (result.error) {
           this.error = result.error.message
           return
         }
         this.error = ''
-
-        console.log('createSource in bancontact: ', {result})
 
         // save for after confirmation comparison
         this.setSavedPaymentData(result.source)
@@ -81,10 +70,6 @@ export default {
         this.setPaymentType('stripe_bancontact')
 
         let authorizeUrl = result.source.redirect.url
-
-        console.log({authorizeUrl})
-
-        // debugger
 
         window.location.href = authorizeUrl
 
@@ -100,29 +85,6 @@ export default {
             name,
           },
         }
-
-
-        // http://localhost:3000/
-        // ?client_secret=src_client_secret_GTSjZWvgRkG5GcIIYpuEeJlr
-        // &currentStep=3
-        // &livemode=false
-        // &reachedStep=3
-        // &source=src_1FwVoKCAVKE2YnNzj6F9nQQP
-        // &store=upscribe-demo.myshopify.com
-        // &token=17a7fe2bdab0f9815b295877d355cfb8
-
-        console.log({sepaDebitSourcePayload})
-
-        // const createSepaDebitSourceResponse = await this.CREATE_SEPA_DEBIT_SOURCE({sepaDebitSourcePayload })
-        // console.log({createSepaDebitSourceResponse})
-
-        // // vm.$emit('placeOrderResponse', result.token)
-        // this.$emit('placeOrderResponse', {
-        //   fullResponse: result,
-        //   paymentData: result.source,
-        //   paymentType: 'stripe_ideal',
-        // })
-
       })
     },
   },

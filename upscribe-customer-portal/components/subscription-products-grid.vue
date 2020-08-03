@@ -2,7 +2,6 @@
 import { mapState, mapGetters } from 'vuex'
 import ProductGridItem from '@components/product-grid-item.vue'
 import VButton from '@components/v-button.vue'
-// import { dummyProduct } from '@scripts/dummies.js'
 import { windowSizes } from '@mixins/windowSizes.js'
 
 export default {

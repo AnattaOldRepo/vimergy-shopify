@@ -63,14 +63,12 @@ export default {
   },
   methods: {
     handleChange($event) {
-      console.log({$event})
       this.error = $event.error ? $event.error.message : ''
       this.bankName = $event.bankName || ''
       this.$emit('handleChange', $event)
     },
 
     handleClear(){
-      console.log('UOUOUOUO')
       this.iban.clear()
       this.name=''
       this.email=''
@@ -91,11 +89,8 @@ export default {
         },
       }
 
-      console.log('createSource')
-
       this.stripe.createSource(vm.iban, sourceData).then(result => {
         this.error = result.error ? result.error.message : ''
-        console.log('createSource: ', {result})
         this.$emit('createPaymentMethodResponse', {
           fullResponse: result,
           newPaymentData: result.source,

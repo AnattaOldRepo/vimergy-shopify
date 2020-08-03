@@ -116,7 +116,6 @@ export default {
   },
   methods: {
     quantityChangeManual(quantity) {
-      console.log({quantity})
       const { product } = this
 
       this.$emit('quantityChangeManual', {
@@ -202,6 +201,14 @@ export default {
     <div class="c-drawerProductBlock__bottom">
       <div class="c-drawerProductBlock__buttonsWrap">
         <v-button
+          v-if="remove"
+          :class="{'control-is-updating': updating}"
+          class="c-drawerProductBlock__button c-drawerProductBlock__button--remove c-button--transparent"
+          html='<svg width="14"  height="16" view-box="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 2.5H10.9062L9.84375 0.75C9.59375 0.34375 9.03125 0 8.5625 0H5.40625C4.9375 0 4.375 0.34375 4.125 0.75L3.0625 2.5H0.5C0.21875 2.5 0 2.75 0 3V3.5C0 3.78125 0.21875 4 0.5 4H1L1.65625 14.5938C1.6875 15.375 2.375 16 3.15625 16H10.8125C11.5938 16 12.2812 15.375 12.3125 14.5938L13 4H13.5C13.75 4 14 3.78125 14 3.5V3C14 2.75 13.75 2.5 13.5 2.5ZM5.40625 1.5H8.5625L9.15625 2.5H4.8125L5.40625 1.5ZM10.8125 14.5H3.15625L2.5 4H11.4688L10.8125 14.5Z" fill="#FF7777"/></svg>'
+          @click.native="$emit('removeProduct', product)"
+        />
+
+        <v-button
           v-if="swap"
           :class="{'control-is-updating': updating}"
           class="c-drawerProductBlock__button c-button--transparent bold"
@@ -209,15 +216,6 @@ export default {
           :text="atc['buttons.swapProduct'] || 'SWAP'"
           @click.native="$emit('swapProduct', product)"
         />
-
-        <!-- <v-button
-          v-if="remove"
-          :class="{'control-is-updating': updating}"
-          class="c-drawerProductBlock__button c-button--transparent"
-          size="small"
-          html='<svg width="14"  height="16" view-box="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 2.5H10.9062L9.84375 0.75C9.59375 0.34375 9.03125 0 8.5625 0H5.40625C4.9375 0 4.375 0.34375 4.125 0.75L3.0625 2.5H0.5C0.21875 2.5 0 2.75 0 3V3.5C0 3.78125 0.21875 4 0.5 4H1L1.65625 14.5938C1.6875 15.375 2.375 16 3.15625 16H10.8125C11.5938 16 12.2812 15.375 12.3125 14.5938L13 4H13.5C13.75 4 14 3.78125 14 3.5V3C14 2.75 13.75 2.5 13.5 2.5ZM5.40625 1.5H8.5625L9.15625 2.5H4.8125L5.40625 1.5ZM10.8125 14.5H3.15625L2.5 4H11.4688L10.8125 14.5Z" fill="#FF7777"/></svg>'
-          @click.native="$emit('removeProduct', product)"
-        /> -->
 
         <v-button
           v-if="add"
@@ -228,15 +226,6 @@ export default {
           @click.native="$emit('variantSelectProduct', product)"
         />
       </div>
-
-      <!-- <quantity-changer
-        v-if="quantity"
-        class="c-drawerProductBlock__quantity"
-        :class="{'control-is-updating': updating}"
-        :quantity="product.quantity"
-        @increaseQuantity="quantityChange('increase')"
-        @decreaseQuantity="quantityChange('decrease')"
-      /> -->
 
       <quantity-changer-manual-entry
         v-if="quantity"
@@ -360,6 +349,9 @@ export default {
   border-radius: 4px;
   &:last-of-type {
     margin-right: 0;
+  }
+  &--remove {
+    min-width: 40px;
   }
 }
 

@@ -267,11 +267,20 @@ export default {
 
     cardDisplayCancelledRoute(){
       const { activeCard } = this
+      const card = activeCard
 
-      if(activeCard){
-        return `<span class="c-addressPayment__formatted--large black">CARD *${ activeCard.last4 } ${ activeCard.exp_month }/${ activeCard.exp_year } ${activeCard.zipcode ? 'Zip: ' + activeCard.zipcode : ''}</span>`
+      if (card.type.includes('card')) {
+
+        return `<span class="c-addressPayment__formatted--large black">CARD *${ card.last4 } ${ card.exp_month }/${ card.exp_year } ${card.zipcode ? 'Zip: ' + card.zipcode : ''}</span>`
+
+      } else if (card.type === 'braintree_paypal') {
+        return `<span class="c-addressPayment__formatted--large black">Account Email: ${ card.email || 'No email available for account'}</span>`
+
+      } else if (card.type === 'stripe_sepa_direct_debit') {
+        return `<span class="c-addressPayment__formatted--large black">Acct *${card.last4} / Bank ${card.bank_code}</span>`
+      } else {
+        return false
       }
-      return 'No payment method attached to this subscription'
     },
 
     isCancelledSubscriptionRoute(){

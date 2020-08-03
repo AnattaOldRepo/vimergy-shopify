@@ -138,8 +138,6 @@ export default {
 
           this.selectedindex = 0
           this.mutableValue = this.items[0]
-        } else {
-          console.log('no items')
         }
       }
     },

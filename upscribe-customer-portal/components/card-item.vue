@@ -51,6 +51,8 @@ export default {
         return card.name || card.brand
       } else if ( card.type === 'stripe_sepa_direct_debit') {
         return 'SEPA Direct Debit'
+      } else if ( card.type === 'braintree_paypal') {
+        return 'PayPal'
       } else {
         return false
       }
@@ -60,6 +62,9 @@ export default {
       const { card } = this
       if (card.type.includes('card')) {
         return `*${card.last4} ${card.exp_month}/${card.exp_year} ${card.zipcode ? '<br>Zip: ' + card.zipcode : ''}`
+
+      } else if (card.type === 'braintree_paypal') {
+        return `Account Email: ${ card.email || 'No email available for account'}`
 
       } else if (card.type === 'stripe_sepa_direct_debit') {
         return `Acct *${card.last4} / Bank ${card.bank_code}`
@@ -212,6 +217,8 @@ export default {
 
 .c-cardItem__editText--mobile {
   color: $color-text;
+  text-align: left;
+  max-width: 200px;
 
   br {
     display: none;

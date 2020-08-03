@@ -87,7 +87,6 @@ export default {
       this.hoverIndex = this.selectedindex
     },
     select({value, position}) {
-      // console.log('select', { value, position })
       this.$emit('selectOption', {
         value,
         position,

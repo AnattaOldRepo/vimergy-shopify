@@ -48,8 +48,6 @@ export const mutations = {
     state.noActiveSubscriptions = true
     state.subscriptionArr = payload
 
-    console.log(state.subscriptionArr, 123123)
-
     if (!payload || !payload.length) {
       state.noActiveSubscriptions = true
       return
@@ -105,13 +103,14 @@ export const mutations = {
 }
 
 export const actions = {
-  async GET_SUBSCRIPTIONS({ rootState, commit, dispatch }, payload) {
+  async GET_SUBSCRIPTIONS({ rootState, commit, dispatch }, customerPayloadId = null) {
     const { storeDomain, customerId } = rootState.route
+    const usedPayloadId = customerPayloadId || customerId
 
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
-        url: `/subscriptions/${storeDomain}/${customerId}`,
+        url: `/subscriptions/${storeDomain}/${usedPayloadId}`,
       })
         .then((data) => {
           const subscriptions = data.items
@@ -161,12 +160,12 @@ export const actions = {
     })
   },
 
-  async UPDATE_SUBSCRIPTION_QUEUE({ rootGetters, commit }, { newDate, skip }) {
+  async UPDATE_SUBSCRIPTION_QUEUE({ rootGetters, commit }, { newDate, skip, subscriptionId, queueId}) {
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
-
-    const subscriptionId = activeSubscription.id
-    const queueId = activeSubscription.next.id
+    // used manual passed values or fallback on active subscription
+    let finalSubscriptionId = subscriptionId || activeSubscription.id
+    let finalQueueId = queueId || activeSubscription.next.id
 
     const requestPayload = {}
 
@@ -177,7 +176,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       request({
         method: 'post',
-        url: `/subscription/queue/${subscriptionId}/${queueId}`,
+        url: `/subscription/queue/${finalSubscriptionId}/${finalQueueId}`,
         data: JSON.stringify(requestPayload),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

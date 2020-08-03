@@ -84,7 +84,6 @@ export default {
 
       // no change if same reate
       if (activeShippingMethod.handle === shippingMethod.handle) {
-        console.log('no change, same rate')
         return false
       }
 
@@ -100,7 +99,7 @@ export default {
           this.$emit('updateStatus', {status: 'success', statusText: 'saved successfully'})
       }
       catch(e) {
-          console.log(e)
+          console.log('COMPLETE_SAVED_NEW_CHECKOUT_UPDATE error: ', e)
           this.$emit('updateStatus', {status: 'rejected', statusText: e.message })
       } finally {
           setTimeout(() => {

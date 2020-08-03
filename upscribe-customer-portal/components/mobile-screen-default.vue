@@ -296,36 +296,6 @@ export default {
         this.updating = false
       }
     },
-
-    // async handleConvertTrialToSubscription() {
-    //   const { activeSubscription} = this
-
-    //   const updatePayload = {
-    //     requestPayload: {
-    //       charge_limit: 0,
-    //     },
-    //   }
-
-    //   let analyticsEventName = 'Upscribe Convert Trial to Subscription'
-
-    //   let analyticsPayload = {
-    //     subscription: activeSubscription,
-    //   }
-
-    //   this.updating = true
-    //   try {
-    //     await this.UPDATE_SUBSCRIPTION(updatePayload)
-    //     this.triggerAnalyticsEvent({
-    //       event: analyticsEventName,
-    //       payload: analyticsPayload,
-    //     })
-    //   } catch (e) {
-    //     console.log('handleConvertTrialToSubscription error: ', e)
-    //   } finally {
-    //     await this.GET_SUBSCRIPTIONS()
-    //     this.updating = false
-    //   }
-    // },
   },
 }
 </script>

@@ -62,7 +62,7 @@ export default {
 
     // Check the availability of the Payment Request API first.
     paymentRequest.canMakePayment().then((result) => {
-      console.log('canmakepayment: ', { result})
+      // console.log('canmakepayment: ', { result})
       if (result) {
         prButton.mount('#payment-request-button')
         this.$emit('enableStripePaymentRequest', true)
@@ -78,12 +78,11 @@ export default {
   },
   methods: {
     createPaymentMethod(result) {
-      console.log('placeOrder', { result})
-      console.log('success place order in type', {
-        fullResponse: result,
-        paymentData: result,
-        paymentType: 'stripe_payment_request',
-      })
+      // console.log('success place order in type', {
+      //   fullResponse: result,
+      //   paymentData: result,
+      //   paymentType: 'stripe_payment_request',
+      // })
       // stripeTokenHandler(result.token);
       this.$emit('placeOrderResponse', {
         fullResponse: result,

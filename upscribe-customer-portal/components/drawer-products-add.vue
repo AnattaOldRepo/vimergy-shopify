@@ -25,26 +25,26 @@ export default {
       let plural = activeSubscription.interval > 1
 
       let displayUnit = ''
-      if (intervalUnit === 'day') {
+      if (intervalUnit.indexOf('day') > -1) {
         if (plural) {
           displayUnit = atc['date-time.days-unit'] || 'days'
         } else {
           displayUnit = atc['date-time.day-unit'] || 'day'
         }
-      } else if (intervalUnit === 'week') {
+      } else if (intervalUnit.indexOf('week') > -1) {
         if (plural) {
           displayUnit = atc['date-time.weeks-unit'] || 'weeks'
         } else {
           displayUnit = atc['date-time.week-unit'] || 'week'
         }
-      } else if (intervalUnit === 'month') {
+      } else if (intervalUnit.indexOf('month') > -1) {
         if (plural) {
           displayUnit = atc['date-time.months-unit'] || 'months'
         } else {
           displayUnit = atc['date-time.month-unit'] || 'month'
         }
       } else {
-        displayUnit = atc['date-time.days-unit'] || 'days'
+        displayUnit = intervalUnit
       }
       return displayUnit
     },

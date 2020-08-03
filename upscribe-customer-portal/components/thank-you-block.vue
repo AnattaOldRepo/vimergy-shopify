@@ -1,112 +1,110 @@
 <template>
-  <div v-if="activeSubscription">
-    <section class="c-thankYouBlock">
-      <div class="c-thankYouBlock__inner">
-        <div class="c-thankYouBlock__top">
-          <div class="c-thankYouBlock__logoWrap">
-            <store-logo class="c-logo" />
-          </div>
-
-          <h1 class="c-orderThankyou__title"
-            >{{ atc['labels.thankYou'] || 'Thank you' }} {{ customerName ? customerName : '' }}!</h1
-          >
-          <p class="c-orderThankyou__message">
-            {{ atc['portal.thankYouNewShipmentDate'] || 'Your new shipment date is' }} {{ nextShipDate }}
-          </p>
+  <section v-if="displayCharges" class="c-thankYouBlock">
+    <div class="c-thankYouBlock__inner">
+      <div class="c-thankYouBlock__top">
+        <div class="c-thankYouBlock__logoWrap">
+          <store-logo class="c-logo" />
         </div>
 
-        <div class="c-thankYouBlock__bottom">
-          <div class="c-thankYouBlock__items">
-            <product-option
-              v-for="item in activeSubscription.next.items"
-              :key="item.id"
-              :product="item"
-              :show-price="true"
-              class="c-thankYouBlock__item"
-            />
-          </div>
+        <h1 class="c-orderThankyou__title"
+          >{{ atc['labels.thankYou'] || 'Thank you' }} {{ customerName ? customerName : '' }}!</h1
+        >
+        <p class="c-orderThankyou__message">
+          {{ atc['portal.thankYouNewShipmentDate'] || 'Your new shipment date is' }} {{ nextShipDate(displayCharges[0]) }}
+        </p>
+      </div>
 
-          <div class="c-thankYouBlock__total c-tableContainer">
-            <table class="c-table">
-              <tbody>
-                <tr>
-                  <th>{{ atc['labels.subtotal'] || 'Subtotal' }}</th>
-                  <td></td>
-                  <td></td>
-                  <td class="has-text-centered"
-                    >{{ currencySymbol }}{{
-                      parseFloat(activeSubscription.next.total_line_items_price, 2)
-                    }}</td
-                  >
-                </tr>
-                <tr>
-                  <th
-                    >{{ atc['labels.shipping'] || 'Shipping' }}
-                    <span
-                      v-if="
-                        nextCharge &&
-                        nextCharge.shipping_lines &&
-                        nextCharge.shipping_lines[0].title
-                      "
-                      style="font-weight: normal"
-                      >&nbsp;{{ nextCharge.shipping_lines[0].title }}</span
-                    ></th
-                  >
-                  <td colspan="2" class="has-text-centered"></td>
-                  <td class="has-text-centered"
-                    >{{ currencySymbol }}{{
-                      parseFloat(nextCharge.shipping_lines[0].price, 2)
-                    }}</td
-                  >
-                </tr>
+      <div v-for="displayCharge in displayCharges" :key="displayCharge.id" class="c-thankYouBlock__bottom">
+        <p class="c-orderThankyou__message">Subscription #{{ displayCharge.subscription_id}}</p>
+        <div class="c-thankYouBlock__items">
+          <product-option
+            v-for="item in displayCharge.items"
+            :key="item.id"
+            :product="item"
+            :show-price="true"
+            class="c-thankYouBlock__item"
+          />
+        </div>
 
-                <tr v-if="discountAmount && discountCode">
-                  <th
-                    >{{ atc['labels.discount'] || 'Discount' }}
-                    <span
-                      v-if="discountAmount && discountCode"
-                      style="font-weight: normal"
-                      >&nbsp;{{ discountCode }}</span
-                    ></th
-                  >
-                  <td colspan="2" class="has-text-centered"></td>
-                  <td class="has-text-centered"
-                    ><span v-if="discountAmount"
-                      >-{{ currencySymbol }}{{ discountAmount }}</span
-                    ></td
-                  >
-                </tr>
+        <div class="c-thankYouBlock__total c-tableContainer" style="display:none;">
+          <table class="c-table">
+            <tbody>
+              <tr>
+                <th>{{ atc['labels.subtotal'] || 'Subtotal' }}</th>
+                <td></td>
+                <td></td>
+                <td class="has-text-centered"
+                  >{{ currencySymbol }}{{
+                    parseFloat(displayCharge.total_line_items_price, 2)
+                  }}</td
+                >
+              </tr>
+              <tr>
+                <th
+                  >{{ atc['labels.shipping'] || 'Shipping' }}
+                  <span
+                    v-if="
+                      displayCharge &&
+                      displayCharge.shipping_lines &&
+                      displayCharge.shipping_lines[0].title
+                    "
+                    style="font-weight: normal"
+                    >&nbsp;{{ displayCharge.shipping_lines[0].title }}</span
+                  ></th
+                >
+                <td colspan="2" class="has-text-centered"></td>
+                <td class="has-text-centered"
+                  >{{ currencySymbol }}{{
+                    parseFloat(displayCharge.shipping_lines[0].price, 2)
+                  }}</td
+                >
+              </tr>
 
-                <tr>
-                  <th>{{ atc['labels.tax'] || 'Tax' }}</th>
-                  <td></td>
-                  <td></td>
+              <tr v-if="displayCharge.shopify_discount && displayCharge.discount_code">
+                <th
+                  >{{ atc['labels.discount'] || 'Discount' }}
+                  <span
+                    style="font-weight: normal"
+                    >&nbsp;{{ displayCharge.discount_code }}</span
+                  ></th
+                >
+                <td colspan="2" class="has-text-centered"></td>
+                <td class="has-text-centered"
+                  ><span
+                    >-{{ currencySymbol }}{{ parseFloat(displayCharge.shopify_discount).toFixed(2) }}</span
+                  ></td
+                >
+              </tr>
 
-                  <td class="has-text-centered"
-                    >{{ currencySymbol }}{{ parseFloat(nextCharge.total_tax, 2) }}</td
-                  >
-                </tr>
+              <tr>
+                <th>{{ atc['labels.tax'] || 'Tax' }}</th>
+                <td></td>
+                <td></td>
 
-                <tr>
-                  <th>{{ atc['labels.total'] || 'Total' }}</th>
-                  <td></td>
-                  <td></td>
+                <td class="has-text-centered"
+                  >{{ currencySymbol }}{{ parseFloat(displayCharge.total_tax, 2) }}</td
+                >
+              </tr>
 
-                  <td class="has-text-centered"
-                    >{{ currencySymbol }}{{ parseFloat(nextCharge.total_price, 2) }}</td
-                  >
-                </tr>
-              </tbody></table
-            >
-          </div>
+              <tr>
+                <th>{{ atc['labels.total'] || 'Total' }}</th>
+                <td></td>
+                <td></td>
 
-          <v-button class="c-button--auto" @onClick="viewUpcomingOrderDetails"
-            >{{ atc['buttons.viewOrderDetails'] || 'View Order Details' }}</v-button
+                <td class="has-text-centered"
+                  >{{ currencySymbol }}{{ parseFloat(displayCharge.total_price, 2) }}</td
+                >
+              </tr>
+            </tbody></table
           >
         </div>
       </div>
-    </section>
-  </div>
+
+      <v-button class="c-button--auto" style="margin:20px auto" @onClick="viewUpcomingOrderDetails"
+        >{{ atc['buttons.viewOrderDetails'] || 'View Order Details' }}</v-button
+      >
+    </div>
+  </section>
 </template>
 
 <script>
@@ -125,9 +123,14 @@ export default {
   },
 
   props: {
-    activeSubscription: {
-      type: Object,
+    activeCharge: {
+      type: [Object, Array],
       required: true,
+    },
+    // if the above two props are Arrays (muliple) or Objects (single)
+    multipleOrderDisplay: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -146,17 +149,21 @@ export default {
     ...mapState('customer', ['customerShopify']),
     ...mapState('shop', ['currencySymbol']),
 
-    nextShipDate() {
-      const { activeSubscription } = this
-      if (
-        !activeSubscription &&
-        activeSubscription.next &&
-        activeSubscription.next.date
-      )
-        return false
-      return moment(activeSubscription.next.date, 'YYYYMMDD').format(
-        'MMMM Do, YYYY'
-      )
+    displayCharges() {
+      const { multipleOrderDisplay, activeCharge } = this
+      if (multipleOrderDisplay && activeCharge) {
+        if (Array.isArray(activeCharge)) {
+          return activeCharge
+        } else {
+          // single put in array
+          return [activeCharge]
+        }
+      } else if (multipleOrderDisplay){
+        console.log('Mismatch between displayCharges and multipleOrderDisplay')
+        return [activeCharge.next]
+      } else {
+        return [activeCharge]
+      }
     },
 
     customerName() {
@@ -178,27 +185,6 @@ export default {
 
       return (finalFirstName && finalLastName) ? `${finalFirstName} ${finalLastName}` : ''
     },
-
-    nextCharge() {
-      const { activeSubscription } = this
-      return activeSubscription.next
-    },
-
-    discountAmount() {
-      const { nextCharge } = this
-      if (nextCharge.shopify_discount) {
-        return parseFloat(nextCharge.shopify_discount).toFixed(2)
-      } else {
-        return false
-      }
-    },
-
-    discountCode() {
-      const { nextCharge } = this
-      return nextCharge && nextCharge.discount_code
-        ? nextCharge.discount_code
-        : false
-    },
   },
 
   watch: {
@@ -213,6 +199,17 @@ export default {
   methods: {
     viewUpcomingOrderDetails() {
       this.$router.push({ name: 'index' })
+    },
+
+    nextShipDate(charge) {
+      console.log('nextShipDate', {charge})
+      if (charge && charge.date) {
+        return moment(charge.date, 'YYYYMMDD').format(
+        'MMMM Do, YYYY')
+      }
+      else {
+        return false
+      }
     },
   },
 }

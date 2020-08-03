@@ -53,29 +53,28 @@ export default {
 
 		intervalUnitDisplay(plural) {
 			const { intervalUnit, atc } = this
-			console.log(intervalUnit, 12)
 			let displayUnit = ''
-			if (intervalUnit === 'day') {
-				if (plural) {
-					displayUnit = atc['date-time.days-unit'] || 'days'
-				} else {
-					displayUnit = atc['date-time.day-unit'] || 'day'
-				}
-			} else if (intervalUnit === 'week') {
-				if (plural) {
-					displayUnit = atc['date-time.weeks-unit'] || 'weeks'
-				} else {
-					displayUnit = atc['date-time.week-unit'] || 'week'
-				}
-			} else if (intervalUnit === 'month') {
-				if (plural) {
-					displayUnit = atc['date-time.months-unit'] || 'months'
-				} else {
-					displayUnit = atc['date-time.month-unit'] || 'month'
-				}
-			} else {
-				displayUnit = atc['date-time.days-unit'] || 'days'
-			}
+      if (intervalUnit.indexOf('day') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.days-unit'] || 'days'
+        } else {
+          displayUnit = atc['date-time.day-unit'] || 'day'
+        }
+      } else if (intervalUnit.indexOf('week') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.weeks-unit'] || 'weeks'
+        } else {
+          displayUnit = atc['date-time.week-unit'] || 'week'
+        }
+      } else if (intervalUnit.indexOf('month') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.months-unit'] || 'months'
+        } else {
+          displayUnit = atc['date-time.month-unit'] || 'month'
+        }
+      } else {
+        displayUnit = intervalUnit
+      }
 			return displayUnit
 		},
 
@@ -85,7 +84,6 @@ export default {
 		},
 
 		async handleChangeFrequency(payload) {
-			// console.log('handleChangeFrequency', payload)
 			const { intervalUnit, frequency } = payload
 			const updatePayload = {
 				requestPayload: {

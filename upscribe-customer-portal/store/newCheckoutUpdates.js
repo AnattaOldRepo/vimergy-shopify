@@ -31,7 +31,6 @@ export const actions = {
 
       const { savedNewCheckoutUpdates } = state
       if (!savedNewCheckoutUpdates) {
-        console.log('savedNewCheckoutUpdate')
         reject(new Error('no savedNewCheckoutUpdate'))
       }
 
@@ -42,10 +41,7 @@ export const actions = {
 
       savedNewCheckoutUpdates.forEach(async update => {
         const { updateActionPayload, updateActionStoreName, updateActionName,
-          // successMessage
         } = update
-        // console.log('completeSavedNewCheckoutUpdate update', { shippingMethod },{ update } )
-
         const savedNewCheckoutUpdateWithShippingUpdate = {
           requestPayload: {
             ...updateActionPayload.requestPayload,
@@ -57,35 +53,23 @@ export const actions = {
           },
         }
 
-        // console.log(
-        //   'savedNewCheckoutUpdateWithShippingUpdate',
-        //   savedNewCheckoutUpdateWithShippingUpdate
-        // )
-
         commit('newCheckoutUpdateUpdating', true)
 
         try {
           const response = await dispatch(`${updateActionStoreName}/${updateActionName}`, savedNewCheckoutUpdateWithShippingUpdate, { root: true })
-
-          // Vue.toasted.global.success({
-          //   message: successMessage || 'Updated',
-          // })
 
           results.push(response)
         } catch (e) {
           console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
           reject(e)
 
-          // Vue.toasted.global.error({
-          //   message: e,
-          // })
         } finally {
           commit('newCheckoutUpdateUpdating', false)
           completedUpdates += 1
         }
 
         if (updatesLength === completedUpdates) {
-          console.log('finished all updates - results: ', { results })
+
           resolve(results)
           setTimeout(commit('clearUpdates'), 200)
         }

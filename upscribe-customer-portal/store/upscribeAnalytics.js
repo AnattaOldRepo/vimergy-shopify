@@ -1,13 +1,3 @@
-// import { isEmptyObject } from '@utils/helpers.js'
-
-// function logAnalyticsEvent(event) {
-//   console.log(
-//     'Upscribe Analytics Event Triggered: ',
-//     event.type,
-//     window.UpscribeAnalytics
-//   )
-// }
-
 export const state = () => ({
   store: null, // {}
   customer: null, // || {}
@@ -21,7 +11,6 @@ export const mutations = {
   },
 
   resetAnalytics(state) {
-    console.log('resetAnalytics')
     state.store = null
     state.checkout = null
     state.customer = null
@@ -191,8 +180,6 @@ export const actions = {
    * After loading the order completed/thank you page
    */
   analyticsOrderCompleted({ state, dispatch, commit }, payload) {
-    console.log('analyticsOrderCompleted')
-
     dispatch('triggerAnalyticsEvent', {
       event: 'Order Completed',
       payload,
@@ -226,8 +213,6 @@ export const actions = {
       dispatch('updateWindowUpscribeAnalytics')
     }
 
-    // console.log('triggerAnalyticsEvent: ', { event, segmentEventName, payload })
-
     // used in plugins/analytics.js
     commit('pushAnalyticsEvent', {
       event,
@@ -252,6 +237,4 @@ export const actions = {
       window.dispatchEvent(customEvent)
     }
   },
-
-  // Customer Portal Events
 }

@@ -50,7 +50,6 @@ export default {
 	},
 	async mounted() {
 		const { query } = this.$route
-		// console.log({query})
 		if (!query) return
 
 		if (!query.storeDomain || !query.customerId) {

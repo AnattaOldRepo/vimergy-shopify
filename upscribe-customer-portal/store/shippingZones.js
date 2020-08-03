@@ -25,7 +25,6 @@ export const actions = {
         url: `/shipping/zones/${storeDomain}`,
       })
         .then((response) => {
-          console.log('response', response)
           commit('SET_SHIPPING_ZONES', response)
           commit('countries/SET_COUNTRIES_FROM_SHIPPING_ZONES', response, {
             root: true,

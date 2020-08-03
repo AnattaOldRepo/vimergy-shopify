@@ -243,7 +243,6 @@ export default {
     ...mapMutations('swapProduct', ['setSwapProduct']),
 
     productOptionDetails(item) {
-      console.log(item)
       const { isOriginalCharge } = this
       if (!item.properties) return false
 

@@ -130,7 +130,6 @@ export default {
 		setBrowser() {
 			const result = detectBrowser()
 			this.browser = result
-			console.log(result)
 		},
 
 		...mapActions('customer', ['GET_CUSTOMER']),
@@ -155,8 +154,6 @@ export default {
 			const queryParams = $route.query || {}
 			const { client_secret, livemode, source } = queryParams
 
-			console.log({ queryParams })
-
 			if (client_secret || livemode || source) {
 				this.setPaymentValidationClientSecret(client_secret)
 				this.setPaymentValidationSource(source)
@@ -164,7 +161,6 @@ export default {
 
 				// not using existing card
 				this.useNewPayment()
-				console.log('use new payment')
 			}
 
 			// set payment type selection
@@ -191,7 +187,6 @@ export default {
 				paymentTypeEnabled = true
 			}
 			if (!activePaymentType || activePaymentType === type) {
-				console.log({ type })
 				displayPaymentType = true
 			}
 
@@ -215,9 +210,6 @@ export default {
 
 			try {
         const allPaymentMethodsResponse = await this.CREATE_PAYMENT_METHOD({paymentMethod, paymentType})
-        console.log({allPaymentMethodsResponse})
-
-        console.log({allPaymentMethodsResponse})
 
         const allPaymentMethods = allPaymentMethodsResponse
 
@@ -225,11 +217,7 @@ export default {
         // need to update on the active subscription (and potentially queue)
         const sortedPaymentMethods = allPaymentMethods.slice().sort((a, b) => a.updated_at - b.updated_at)
 
-        console.log({sortedPaymentMethods})
-
         const newPaymentMethodId = sortedPaymentMethods[sortedPaymentMethods.length -1].id
-
-        console.log({newPaymentMethodId})
 
 				const updatePayload = {
 					requestPayload: {
@@ -281,12 +269,11 @@ export default {
 		},
 
 		handleSubmitPaymentForm() {
-			console.log('handleSubmitPaymentForm')
+			// console.log('handleSubmitPaymentForm')
 		},
 
 		createPaymentMethodHandler() {
-			console.log('createPaymentMethod top')
-			// const vm = this
+			// console.log('createPaymentMethod top')
 
 			if (!this.activePaymentType) {
 				this.placeOrderError = {
@@ -308,13 +295,11 @@ export default {
 			}
 
 			const stripePaymentOptions = this.$refs['stripe-payment-options']
-			// console.log({stripePaymentOptions})
 
 			const activePaymentTypeEl =
 				stripePaymentOptions.$refs[
 					'active-payment-type-' + this.activePaymentType
 				]
-			// console.log({activePaymentTypeEl})
 
 			this.creatingPaymentMethodPending = true
 			activePaymentTypeEl.createPaymentMethod()
@@ -325,11 +310,11 @@ export default {
 			paymentData,
 			paymentType,
 		}) {
-			console.log('handlePlaceOrderResponseFromRedirect', {
-				fullResponse,
-				paymentData,
-				paymentType,
-			})
+			// console.log('handlePlaceOrderResponseFromRedirect', {
+			// 	fullResponse,
+			// 	paymentData,
+			// 	paymentType,
+			// })
 		},
 
 		handleCreatePaymentMethodResponse({
@@ -337,16 +322,15 @@ export default {
 			paymentData,
 			paymentType,
 		}) {
-			console.log('handleCreatePaymentMethodResponse', {
-				fullResponse,
-				paymentData,
-				paymentType,
-			})
+			// console.log('handleCreatePaymentMethodResponse', {
+				// fullResponse,
+				// paymentData,
+				// paymentType,
+			// })
 			this.addPaymentMethod(fullResponse)
 		},
 
 		handleEnableStripePaymentRequest(val) {
-			console.log('enableStripePaymentRequest top level', val)
 			this.stripePaymentRequestEnabled = true
 		},
 

@@ -218,100 +218,105 @@ export default {
 		...mapMutations('editMode', ['setEditNextOrder']),
 
 		async initialDataLoad() {
+      const vm = this
 			const { $route } = this
 			const { query } = $route
       const { customerId, direct_from_checkout } = query
 
-			if (direct_from_checkout) {
-				this.newCheckoutSubscriptionProcessing = true
-				this.pollForNewCheckoutSubscriptionProcessing()
+      // Direct from checkout logic
+      if (query.direct_from_checkout && !vm.directFromCheckoutCheckCompleted) {
+        vm.newCheckoutSubscriptionProcessing = true
+        vm.processingChecks = 0
+        vm.directFromCheckoutCheckCompleted = true
+
+        setTimeout(vm.pollForNewCheckoutSubscriptionProcessing, 5000)
+      } else {
+        try {
+          // eslint-disable-next-line no-unused-vars
+          const [
+            customer,
+            subscriptions,
+            products,
+            shop,
+            translationList,
+          ] = await Promise.all([
+            this.GET_CUSTOMER(),
+            this.GET_SUBSCRIPTIONS(customerId),
+            this.GET_PRODUCTS(),
+            this.GET_SHOP(),
+            this.GET_TRANSLATION_LIST(),
+            // this.GET_CARDS(),
+          ])
+
+          await this.setupIntialTranslations(customer)
+
+          // console.log(customer,
+          //   subscriptions,
+          //   products,
+          //   shop,
+          //   translationList)
+
+          // console.log({ subscriptions })
+
+          if (
+            subscriptions &&
+            subscriptions.items &&
+            subscriptions.items.length
+          ) {
+            const activeSubs = subscriptions.items.filter((sub) => {
+              // if active subscription
+              if (sub.active) {
+                return true
+              }
+              // trial subscription
+              else if (
+                !sub.active &&
+                sub.charge_limit > 1 &&
+                sub.cancellation_reason === 'Trial period has expired'
+              ) {
+                return true
+              }
+
+              // trial onetime subscription
+              else if (
+                !sub.active &&
+                !sub.charge_limit &&
+                sub.cancellation_reason === 'Trial period has expired'
+              ) {
+                return true
+              }
+            })
+
+            // console.log({ activeSubs })
+
+            if (activeSubs.length) {
+              this.setNoActiveSubscriptions(false)
+            } else {
+              this.setNoActiveSubscriptions(true)
+              return
+            }
+          }
+        } catch (error) {
+          console.log('initialDataLoad error: ', error)
+          this.$nextTick(() => {
+            if (this.noActiveSubscriptions) {
+              console.log('no active subscriptions')
+            } else {
+              let errorMessage = false
+
+              if (error.status === 404) {
+                errorMessage =
+                  'There were no subscriptions found with this account.'
+              }
+              return this.$nuxt.error({
+                statusCode: 404,
+                message:
+                  errorMessage || 'Error Loading Portal. Please reload the page.',
+              })
+            }
+          })
+        }
       }
-
-			try {
-				// eslint-disable-next-line no-unused-vars
-				const [
-					customer,
-					subscriptions,
-					products,
-					shop,
-					translationList,
-				] = await Promise.all([
-					this.GET_CUSTOMER(),
-					this.GET_SUBSCRIPTIONS(customerId),
-					this.GET_PRODUCTS(),
-					this.GET_SHOP(),
-					this.GET_TRANSLATION_LIST(),
-					// this.GET_CARDS(),
-				])
-
-				await this.setupIntialTranslations(customer)
-
-				// console.log(customer,
-				//   subscriptions,
-				//   products,
-				//   shop,
-				//   translationList)
-
-				// console.log({ subscriptions })
-
-				if (
-					subscriptions &&
-					subscriptions.items &&
-					subscriptions.items.length
-				) {
-					const activeSubs = subscriptions.items.filter((sub) => {
-						// if active subscription
-						if (sub.active) {
-							return true
-						}
-						// trial subscription
-						else if (
-							!sub.active &&
-							sub.charge_limit > 1 &&
-							sub.cancellation_reason === 'Trial period has expired'
-						) {
-							return true
-						}
-
-						// trial onetime subscription
-						else if (
-							!sub.active &&
-							!sub.charge_limit &&
-							sub.cancellation_reason === 'Trial period has expired'
-						) {
-							return true
-						}
-					})
-
-					// console.log({ activeSubs })
-
-					if (activeSubs.length) {
-						this.setNoActiveSubscriptions(false)
-					} else {
-						this.setNoActiveSubscriptions(true)
-						return
-					}
-				}
-			} catch (error) {
-				console.log('initialDataLoad error: ', error)
-				this.$nextTick(() => {
-					if (this.noActiveSubscriptions) {
-						console.log('no active subscriptions')
-					} else {
-						let errorMessage = false
-
-						if (error.status === 404) {
-							errorMessage =
-								'There were no subscriptions found with this account.'
-						}
-						return this.$nuxt.error({
-							statusCode: 404,
-							message:
-								errorMessage || 'Error Loading Portal. Please reload the page.',
-						})
-					}
-				})
-			}
 		},
 
 		// Setup Intial Translation
@@ -354,35 +359,46 @@ export default {
 		},
 
 		async pollForNewCheckoutSubscriptionProcessing() {
-      let processingChecks = 0
-			const checkProcessing = setInterval(async () => {
-				if (this.newCheckoutSubscriptionProcessing) {
-          const processingSubsResponse = await this.CHECK_FOR_PROCESSING_SUBS()
+      const vm = this
+      return new Promise(async (resolve, reject) => {
+        if (vm.newCheckoutSubscriptionProcessing) {
+          const processingSubsResponse = await vm.CHECK_FOR_PROCESSING_SUBS()
+          // check if finished processing
+          if (!processingSubsResponse.count || vm.processingChecks > 30) {
+            vm.newCheckoutSubscriptionProcessing = false
 
-          console.log({processingSubsResponse})
-
-					// check if finished processing
-          if (processingSubsResponse.count === 0 || processingChecks > 30) {
-						this.newCheckoutSubscriptionProcessing = false
-					} else {
-            processingChecks += 1
-						console.log('still processing new subscriptions')
-					}
-				} else {
-					clearInterval(checkProcessing)
-					// replace history state to prevent direct from checkout flow on reload
-					var noDirectFromCheckoutUrl = removeQueryParam(
-						'direct_from_checkout',
-						window.location.href
-					)
-					window.history.replaceState(
-						{},
-						document.title,
-						noDirectFromCheckoutUrl
-					)
-				}
-			}, 5000)
-		},
+            let noDirectFromCheckoutUrl = removeQueryParam(
+              'direct_from_checkout',
+              window.location.href
+            )
+            window.history.replaceState(
+              {},
+              document.title,
+              noDirectFromCheckoutUrl
+            )
+            vm.initialDataLoad()
+            resolve()
+          } else {
+            vm.processingChecks += 1
+            setTimeout(vm.pollForNewCheckoutSubscriptionProcessing, 5000)
+          }
+        } else {
+          vm.newCheckoutSubscriptionProcessing = false
+          // replace history state to prevent direct from checkout flow on reload
+          let noDirectFromCheckoutUrl = removeQueryParam(
+            'direct_from_checkout',
+            window.location.href
+          )
+          window.history.replaceState(
+            {},
+            document.title,
+            noDirectFromCheckoutUrl
+          )
+          vm.initialDataLoad()
+          resolve()
+        }
+      })
+    },
 	},
 }
 </script>

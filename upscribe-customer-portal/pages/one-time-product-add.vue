@@ -32,6 +32,7 @@
 
   <div v-else class="c-oneTimeProductAdd">
     <div  v-if="allDataLoaded && !oneTimeAdded" class="c-oneTimeProductAdd__loading">
+      <img v-if="productImage && productImage.src" class="c-oneTimeProductAdd__image" :src="productImage.src" />
       <h3 class="c-oneTimeProductAdd__loadingText">{{ addOtoProductToNextOrderMessage }}</h3>
       <v-button :text="atc['buttons.addProductGridItem'] || 'Add'" auto @click.native="addOtoProduct" />
 
@@ -160,8 +161,8 @@ export default {
     },
 
     productImage() {
-      const { productImages, product, otoProductVariantId } = this
-      if (!productImages && !product.image_url && !product.image) return false
+      const { productImages, otoProduct, otoProductVariantId } = this
+      if (!productImages && !otoProduct.image_url && !otoProduct.image) return false
 
       if (
         otoProductVariantId &&
@@ -170,8 +171,8 @@ export default {
       ) {
         return productImages[otoProductVariantId]
       } else {
-        return product && product.image && product.image.src
-          ? product.image.src
+        return otoProduct && otoProduct.image && otoProduct.image.src
+          ? otoProduct.image
           : false
       }
     },
@@ -467,5 +468,10 @@ export default {
 .c-oneTimeProductAdd__loadingText {
   line-height: 1.5;
   margin-bottom: 30px;
+}
+
+.c-oneTimeProductAdd__image {
+  width: 150px;
+  margin: 0 auto 30px;
 }
 </style>

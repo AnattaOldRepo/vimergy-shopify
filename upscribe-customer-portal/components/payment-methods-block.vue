@@ -458,7 +458,7 @@ export default {
     :class="{ 'c-paymentMethods__options--visible': activePaymentType && loadedStripe }"
   >
     <braintree-payment-options
-      v-if="displayPaymentType('braintree_card')"
+      v-if="displayPaymentType('braintree_card') || displayPaymentType('braintree_paypal')"
       v-show="activePaymentType && activePaymentType.includes('braintree')"
       ref="braintree-payment-options"
       :active-payment-type="activePaymentType"

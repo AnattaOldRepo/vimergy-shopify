@@ -319,7 +319,7 @@ export default {
 </script>
 
 <template>
-<div v-if="loadedStripe && stripePublicKey" class="c-defaultModal__main">
+<div class="c-defaultModal__main">
   <div v-if="useNewPaymentState || (!paymentCards || !paymentCards.length) || editPaymentMethodMode"
   :class="{'c-paymentMethods__innerBlock c-paymentMethods__innerBlock--color': !editPaymentMethodMode}">
 
@@ -455,7 +455,7 @@ export default {
 
 
   <div v-else class="c-paymentMethods__options c-paymentMethods__options--add "
-    :class="{ 'c-paymentMethods__options--visible': activePaymentType && loadedStripe }"
+    :class="{ 'c-paymentMethods__options--visible': activePaymentType }"
   >
     <braintree-payment-options
       v-if="displayPaymentType('braintree_card') || displayPaymentType('braintree_paypal')"

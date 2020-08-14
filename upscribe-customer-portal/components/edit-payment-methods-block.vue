@@ -183,7 +183,7 @@ export default {
 </script>
 
 <template>
-	<div v-if="loadedStripe && stripePublicKey" class="c-defaultModal__main">
+	<div v-if="activePaymentType" class="c-defaultModal__main">
 
 		<div
 			class="c-paymentMethods__options"

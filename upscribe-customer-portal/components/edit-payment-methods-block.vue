@@ -510,4 +510,7 @@ export default {
 		display: block;
 	}
 }
+
+iframe#braintree-hosted-field-number { padding: 0 }
+
 </style>

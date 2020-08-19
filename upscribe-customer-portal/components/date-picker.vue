@@ -247,6 +247,7 @@ export default {
   border: 0;
   outline: none;
   opacity: 0.5;
+  z-index: 9999;
 }
 
 .pika-prev:hover,

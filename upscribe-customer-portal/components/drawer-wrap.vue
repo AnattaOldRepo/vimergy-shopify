@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations} from 'vuex'
 // import { Linear } from 'gsap';
 
 /* eslint-disable vue/no-v-html */
@@ -39,6 +39,8 @@ export default {
     ...mapState('translations', ['atc']),
 
     ...mapState('editMode', ['editNextOrder']),
+
+    ...mapState('orders', ['drawerSubscriptionHistoryOpen']),
 
     drawerStatusClass() {
       const { status } = this
@@ -94,6 +96,7 @@ export default {
     if (this.scrollMagicInitiated) {
       this.$ksvuescr.$emit('destroy')
       this.scrollMagicInitiated = false
+      this.SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN(false)
     }
   },
   mounted() {
@@ -109,12 +112,15 @@ export default {
     })
   },
   methods: {
+    ...mapMutations('orders', ['SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN']),
+
     close() {
       if (this.show) {
         this.transitionOut = true
         setTimeout(() => {
           this.$emit('close')
           this.transitionOut = false
+          this.SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN(false)
         }, 300)
       }
     },
@@ -172,7 +178,7 @@ export default {
           :class="{ 'c-drawer__wrapper--nextOrderWarning': editNextOrder }"
         >
           <p
-            v-if="editNextOrder && !manualDrawerWarning"
+            v-if="editNextOrder && !manualDrawerWarning && !drawerSubscriptionHistoryOpen"
             class="c-drawerLogic__nextOrderWarning"
             >{{ atc['portal.portal.editModeNextOrderInfoText'] || 'Changes made will only affect your next order. To affect all shipments, toggle the Edit Mode.' }}</p
           >

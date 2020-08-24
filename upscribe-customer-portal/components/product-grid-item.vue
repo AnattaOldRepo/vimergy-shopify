@@ -174,7 +174,7 @@ export default {
         class="c-productGridItem__button--secondary c-button--transparent"
         size="small"
         :disabled="disabled"
-        @onClick="$emit('handleAddProductVariantToSubscription', product.variants[0].id, product)"
+        @onClick="$emit('handleAddProductVariantToSubscription', product.variants[0].id, product, true)"
       >
        <plus-circle
           width='24'

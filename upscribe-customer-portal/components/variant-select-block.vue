@@ -45,7 +45,7 @@ export default {
 
     ...mapState('products', ['productImages']),
 
-    ...mapState('shop', ['currencySymbol']),
+    ...mapState('shop', ['currencySymbol', 'nextOrderProductsSubscriptionPricing']),
 
     ...mapState('editMode', ['editNextOrder']),
 
@@ -83,7 +83,9 @@ export default {
     },
 
     subscriptionDiscountAmount() {
-      const { product, productBuiltProperties } = this
+      const { product, productBuiltProperties, nextOrderProductsSubscriptionPricing, editNextOrder } = this
+
+      if (!nextOrderProductsSubscriptionPricing && editNextOrder) return false
 
       const productProperties = product.properties || productBuiltProperties
 
@@ -227,7 +229,7 @@ export default {
       if (variantAction === 'swap') {
         this.$emit('swapProductVariant', {variantId: this.selectedVariantId, product: this.product})
       } else {
-        this.$emit('addProductVariantToSubscription', this.selectedVariantId)
+        this.$emit('addProductVariantToSubscription', this.selectedVariantId, this.product)
       }
     },
 

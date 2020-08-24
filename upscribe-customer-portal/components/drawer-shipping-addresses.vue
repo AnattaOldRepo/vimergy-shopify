@@ -25,10 +25,51 @@ export default {
 
     ...mapState('editMode', ['editNextOrder']),
 
-		...mapGetters('activeSubscription', [
-			'activeShippingAddress',
-		]),
+    ...mapGetters('activeSubscription', [
+      'activeShippingAddress',
+      'activeSubscription',
+    ]),
 
+    deliveryEveryText() {
+      const { activeSubscription } = this
+      if (!activeSubscription) return false
+      return `${activeSubscription.interval}`
+    },
+
+    intervalUnitDisplay() {
+      const { activeSubscription, atc } = this
+      let intervalUnit = activeSubscription.period
+      let plural = activeSubscription.interval > 1
+
+      let displayUnit = ''
+      if (intervalUnit.indexOf('day') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.days-unit'] || 'days'
+        } else {
+          displayUnit = atc['date-time.day-unit'] || 'day'
+        }
+      } else if (intervalUnit.indexOf('week') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.weeks-unit'] || 'weeks'
+        } else {
+          displayUnit = atc['date-time.week-unit'] || 'week'
+        }
+      } else if (intervalUnit.indexOf('month') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.months-unit'] || 'months'
+        } else {
+          displayUnit = atc['date-time.month-unit'] || 'month'
+        }
+      } else {
+        displayUnit = intervalUnit
+      }
+      return displayUnit
+    },
+
+    activeSubscriptionProducts() {
+      const { activeSubscription } = this
+      return activeSubscription.items
+    },
   },
 
   methods: {
@@ -85,14 +126,26 @@ export default {
 </script>
 
 <template>
-  <drawer-wrap class = "c-darwer__edittingAddress" :show="show" :status="drawerStatus" @close="$emit('close')">
+  <drawer-wrap
+    class="c-darwer__edittingAddress"
+    :show="show"
+    :status="drawerStatus"
+    @close="$emit('close')"
+  >
     <div class="c-drawerShippingAddresses c-drawer">
       <h2 class="c-drawer__title"
-        >{{ atc['portal.editShippingAddressDrawerTitle'] || 'Edit Shipping Address' }}
+        >{{
+          atc['portal.editShippingAddressDrawerTitle'] ||
+            'Edit Shipping Address'
+        }}
       </h2>
 
       <p class="c-drawer__subtitle">
-         {{ atc['portal.editShippingAddressDrawerPrompt'] || "These products ship every 15 days"}}
+        {{
+          atc['portal.editShippingAddressDrawerPrompt'] ||
+            'These products ship every'
+        }}
+        {{ deliveryEveryText }} {{ intervalUnitDisplay }}
       </p>
 
       <new-address-form
@@ -109,11 +162,11 @@ export default {
 <style lang="scss">
 @import '@design';
 
-.c-shippingAddressForm{
+.c-shippingAddressForm {
   padding: 0;
   background-color: transparent;
 
-  @include bp(tablet){
+  @include bp(tablet) {
     padding: 24px 24px 0;
     background-color: $color-white;
   }

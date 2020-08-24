@@ -186,39 +186,9 @@ export default {
         }
       },
     },
-  },
-
-  async mounted() {
-    if(this.windowWidth > 768){
-      const { subscriptions, routeQuery } = this
-      let activeSubs
-      let inactiveSubs
-      if(routeQuery === 'cancelledSubscriptions'){
-          inactiveSubs = Object.keys(subscriptions).filter((subKey) => {
-          let sub = subscriptions[subKey]
-          return !sub.active
-        })
-          this.setActiveSubscriptionId(parseInt(inactiveSubs[0]))
-          try{
-              await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
-          } catch(e) {
-              console.log(e)
-          }
-
-      } else {
-          activeSubs = Object.keys(subscriptions).filter((subKey) => {
-            let sub = subscriptions[subKey]
-            return sub.active
-          })
-          console.log({activeSubs})
-          this.setActiveSubscriptionId(parseInt(activeSubs[0]))
-          try{
-            await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
-          } catch(e) {
-            console.log(e)
-          }
-      }
-    }
+    subscriptionsLoaded(){
+      this.getSubscriptionOrders()
+    },
   },
 
   methods: {
@@ -228,6 +198,33 @@ export default {
 
     redirect() {
       window.location.href = `https://${this.shopData.domain}`
+    },
+
+    async getSubscriptionOrders(){
+      try {
+        if(this.windowWidth > 768){
+          const { subscriptions, routeQuery } = this
+          let activeSubs
+          let inactiveSubs
+          if(routeQuery === 'cancelledSubscriptions'){
+              inactiveSubs = Object.keys(subscriptions).filter((subKey) => {
+                let sub = subscriptions[subKey]
+                return !sub.active
+              })
+              this.setActiveSubscriptionId(parseInt(inactiveSubs[0]))
+              await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
+          } else {
+            activeSubs = Object.keys(subscriptions).filter((subKey) => {
+            let sub = subscriptions[subKey]
+              return sub.active
+            })
+            this.setActiveSubscriptionId(parseInt(activeSubs[0]))
+            await this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
+        }
+      }
+      }catch(err){
+        console.log(err)
+      }
     },
   },
 }

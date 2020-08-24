@@ -5,6 +5,7 @@ export const state = () => ({
   ordersLoaded: false,
   subscriptionOrders: [],
   currentOrderForMobile: {},
+  drawerSubscriptionHistoryOpen: false,
 })
 
 export const mutations = {
@@ -22,6 +23,11 @@ export const mutations = {
 
   setSubscriptionOrder(state, val) {
     state.subscriptionOrders = val
+  },
+
+
+  SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN(state, bool){
+    state.drawerSubscriptionHistoryOpen =  bool
   },
 
   setCurrentOrderForMobile(state, val) {

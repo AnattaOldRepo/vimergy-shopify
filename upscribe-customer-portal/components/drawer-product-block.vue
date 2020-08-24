@@ -45,6 +45,10 @@ export default {
 
     ...mapState('products', ['productImages']),
 
+    ...mapState('shop', ['currencySymbol', 'nextOrderProductsSubscriptionPricing']),
+
+    ...mapState('editMode', ['editNextOrder']),
+
     productBuiltProperties() {
       const { product } = this
       let finalProps = {}
@@ -170,11 +174,11 @@ export default {
           }}</h3>
 
           <span v-if="existingProduct && product.line_price" class="c-drawerProductBlock__price"
-            >${{ parseFloat(product.line_price).toFixed(2) }}</span
+            >{{ currencySymbol }}{{ parseFloat(product.line_price).toFixed(2) }}</span
           >
 
-          <span v-if="!existingProduct && productFirstVariantSubscriptionPrice" class="c-drawerProductBlock__price"
-            >${{ productFirstVariantSubscriptionPrice }}</span
+          <span v-if="!existingProduct && productFirstVariantSubscriptionPrice && ((editNextOrder && nextOrderProductsSubscriptionPricing) || !editNextOrder )" class="c-drawerProductBlock__price"
+            >{{ currencySymbol }}{{ productFirstVariantSubscriptionPrice }}</span
           >
         </div>
 

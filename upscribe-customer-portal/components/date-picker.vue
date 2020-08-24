@@ -216,6 +216,7 @@ export default {
   font-family: $font-primary-medium;
   font-weight: 500;
   font-size: 22px;
+  position: relative;
 
   &:nth-child(1) {
     margin-right: 7px;
@@ -247,7 +248,6 @@ export default {
   border: 0;
   outline: none;
   opacity: 0.5;
-  z-index: 9999;
 }
 
 .pika-prev:hover,

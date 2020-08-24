@@ -1,65 +1,68 @@
 <template>
-   <div class="c-header__inner">
-      <nav class="c-header__navUp">
-        <a class="c-header__navLink c-header__backToAccount" :href="shopifyAccountUrl">
-          <icon-chevron-right
-            class="c-header__navLinkIcon c-header__navLinkIcon--backToAccount"
-          />
-          {{ atc['portal.headerBackToAccount'] || 'Back to account' }}
-        </a>
-
-        <div class="c-header__navLink-middle">
-          <nuxt-link
-            class="c-header__navLink c-header__navLink--middle"
-            :to="{
-              name: 'index',
-              query: {
-                storeDomain,
-                customerId,
-              },
-            }"
-            >{{
-              atc['portal.headerYourSubscription'] || 'Your Subscriptions'
-            }}</nuxt-link
-          >
-          <nuxt-link
-            class="c-header__navLink c-header__navLink--middle"
-            :to="{
-              name: 'history',
-              query: {
-                storeDomain,
-                customerId,
-              },
-            }"
-            >{{
-              atc['portal.headerSubscriptionHistory'] || 'Past Shipments'
-            }}</nuxt-link
-          >
-           <nuxt-link
-             v-if="subscriptionInActive"
-            class="c-header__navLink c-header__navLink--middle"
-            :to="{
-              name: 'index',
-              query: {
-                route: 'cancelledSubscriptions',
-                storeDomain,
-                customerId,
-              },
-            }"
-            >{{
-              atc['portal.cancelledSubscriptions'] || 'Cancelled Subscriptions'
-            }}</nuxt-link
-          >
-        </div>
-      </nav>
-
-      <v-button
-        class="c-button--auto c-header__button c-button--transparent"
-        size="small"
-        @onClick="signOut"
-        >{{ atc['portal.headerSignOut'] || 'Sign Out' }}</v-button
+  <div class="c-header__inner">
+    <nav class="c-header__navUp">
+      <a
+        class="c-header__navLink c-header__backToAccount"
+        :href="shopifyAccountUrl"
       >
-    </div>
+        <icon-chevron-right
+          class="c-header__navLinkIcon c-header__navLinkIcon--backToAccount"
+        />
+        {{ atc['portal.headerBackToAccount'] || 'Back to account' }}
+      </a>
+      <div class="c-header__navLink-middle">
+        <nuxt-link
+          class="c-header__navLink c-header__navLink--middle"
+          :to="{
+            name: 'index',
+            query: {
+              storeDomain,
+              customerId,
+            },
+          }"
+          >{{
+            atc['portal.headerYourSubscription'] || 'Your Subscriptions'
+          }}</nuxt-link
+        >
+        <nuxt-link
+          class="c-header__navLink c-header__navLink--middle"
+          :to="{
+            name: 'history',
+            query: {
+              storeDomain,
+              customerId,
+            },
+          }"
+          >{{
+            atc['portal.headerSubscriptionHistory'] || 'Past Shipments'
+          }}</nuxt-link
+        >
+        <nuxt-link
+          v-if="subscriptionInActive.length"
+          class="c-header__navLink c-header__navLink--middle"
+          :to="{
+            name: 'index',
+            query: {
+              route: 'cancelledSubscriptions',
+              storeDomain,
+              customerId,
+            },
+          }"
+        >
+          {{
+            atc['portal.cancelledSubscriptions'] || 'Cancelled Subscriptions'
+          }}
+        </nuxt-link>
+      </div>
+    </nav>
+
+    <v-button
+      class="c-button--auto c-header__button c-button--transparent"
+      size="small"
+      @onClick="signOut"
+      >{{ atc['portal.headerSignOut'] || 'Sign Out' }}</v-button
+    >
+  </div>
 </template>
 
 <script>
@@ -68,21 +71,27 @@ import VButton from '@components/v-button.vue'
 import IconChevronRight from '@components/icon-chevron-right.vue'
 
 export default {
-  components:{
+  components: {
     IconChevronRight,
     VButton,
   },
 
-  computed:{
+  computed: {
     ...mapState('translations', ['atc']),
 
-    ...mapGetters('subscriptions', ['subscriptionActive', 'subscriptionInActive']),
+    ...mapGetters('subscriptions', [
+      'subscriptionActive',
+      'subscriptionInActive',
+    ]),
 
     ...mapState('route', ['storeDomain', 'customerId']),
 
     ...mapState('shop', ['shopData']),
 
-    ...mapGetters('subscriptions', ['subscriptionActive', 'subscriptionInActive']),
+    ...mapGetters('subscriptions', [
+      'subscriptionActive',
+      'subscriptionInActive',
+    ]),
 
     shopifyAccountUrl() {
       const { shopData } = this

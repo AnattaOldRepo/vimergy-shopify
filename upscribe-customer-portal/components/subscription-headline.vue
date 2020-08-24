@@ -31,8 +31,7 @@
       <v-button
         v-if="windowWidth > 1024 && (subscriptionOrders && subscriptionOrders.length)"
         data-id="button-subscription-history"
-        class="c-subscriptionHeadline__button"
-        :class="{'c-subscriptionHeadline__button--active': buttonActive === 'button-subscription-history'}">
+        class="c-subscriptionHeadline__button c-subscriptionHeadline__button--text c-subscriptionHeadline__button--focusNoborder ">
         Subscription History
       </v-button>
 
@@ -186,6 +185,7 @@ export default {
 
   methods: {
     ...mapMutations('editMode', ['setEditNextOrder']),
+    ...mapMutations('orders', ['SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN']),
 
     ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
 
@@ -199,6 +199,7 @@ export default {
       const { id, nextOrder } = e.target.dataset
       if(id === 'button-subscription-history'){
         this.drawerSubscriptionHistoryOpen = true
+        this.SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN(true)
       } else if (id) {
           this.buttonActive = id
       }
@@ -375,6 +376,10 @@ $color-id: #A3B5BF;
 
   &--text{
     margin: 0 20px 0 0;
+  }
+
+  &--focusNoborder:focus{
+    border-color: transparent;
   }
 }
 

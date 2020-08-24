@@ -13,6 +13,7 @@ export const state = () => ({
   cancellationReasons: null,
   currencySymbol: null,
   featuredPortalCollection: null,
+  nextOrderProductsSubscriptionPricing: null,
 })
 
 export const mutations = {
@@ -38,6 +39,8 @@ export const mutations = {
     state.segment_analytics_id = data.segment_analytics_id
     state.shopify_storefront_access_token = data.shopify_storefront_access_token
     state.stripe_public_key = data.stripe_public_key
+
+    state.nextOrderProductsSubscriptionPricing = !data.one_time_price_enabled
 
     // Set shop currency
     let currencyCode = data.shop.currency

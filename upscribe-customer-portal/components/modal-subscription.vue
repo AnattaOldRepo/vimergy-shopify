@@ -6,35 +6,57 @@
     :close-animation="closeAnimation"
     @close="closeModal"
   >
-    <div v-if="!needUpdating && !swapping" class="c-modalSubscription">
-      <h2 v-if="editNextOrder"
-        class="c-modalSubscription__title">
-        {{ atc['portal.productsGridNextOrderTitle'] || 'Add to Your Next Order' }}
-      </h2>
+    <div v-if="!showVariantSelector">
+      <div v-if="!needUpdating && !swapping" class="c-modalSubscription">
+        <h2 v-if="editNextOrder"
+          class="c-modalSubscription__title">
+          {{ atc['portal.productsGridNextOrderTitle'] || 'Add to Your Next Order' }}
+        </h2>
 
-      <h2 v-else
-        class="c-modalSubscription__title">
-        {{ atc['portal.productsGridSubscriptionTitle'] || 'Add to Subscription' }}
-      </h2>
+        <h2 v-else
+          class="c-modalSubscription__title">
+          {{ atc['portal.productsGridSubscriptionTitle'] || 'Add to Subscription' }}
+        </h2>
 
-      <div class="c-modalSubscription__inner">
-        <collection-filter
-          v-if="collectionOptions"
-          :collection-option="collectionOptions"
-          :active-collection-handle="activeCollectionHandle"
-          @selectCollection="changeCurrentFilter"
-        />
+        <div class="c-modalSubscription__inner">
+          <collection-filter
+            v-if="collectionOptions"
+            :collection-option="collectionOptions"
+            :active-collection-handle="activeCollectionHandle"
+            @selectCollection="changeCurrentFilter"
+          />
 
-        <div v-if="products && activeCollectionHandle === 'all' && currentCollection">
+          <div v-if="products && activeCollectionHandle === 'all' && currentCollection">
+            <div
+              v-for="(each, index) in quantityProductCollection"
+              :key="index"
+              class="c-modalSubscription__gridContain"
+              >
+                <div class="c-modalSubscription__grid">
+                  <product-grid-item
+                    v-for="(product, index2) in each.items"
+                    :key="product.id + index2"
+                    class="c-productsGrid__item"
+                    :product="product"
+                    :status="status"
+                    :is-swap="isSwap"
+                    @handleAddProductVariantToSubscription="handleAddProductVariantToSubscription"
+                    @handleQuantityChange="handleQuantityChange"
+                    @handleOpenSwapModal="handleOpenSwapModal"
+                    @handleRemove="handleRemove"
+                  />
+                </div>
+            </div>
+          </div>
+
           <div
-            v-for="(each, index) in quantityProductCollection"
-            :key="index"
+            v-else-if="products && activeCollectionHandle !== 'all' && currentCollection"
             class="c-modalSubscription__gridContain"
             >
               <div class="c-modalSubscription__grid">
                 <product-grid-item
-                  v-for="(product, index2) in each.items"
-                  :key="product.id + index2"
+                  v-for="(product, index) in quantityProductCollection.items"
+                  :key="product.id + index"
                   class="c-productsGrid__item"
                   :product="product"
                   :status="status"
@@ -46,16 +68,12 @@
                 />
               </div>
           </div>
-        </div>
 
-        <div
-          v-else-if="products && activeCollectionHandle !== 'all' && currentCollection"
-          class="c-modalSubscription__gridContain"
-          >
+          <div v-else-if="products && activeCollectionHandle === 'all' && !currentCollection" class="c-modalSubscription__gridContain">
             <div class="c-modalSubscription__grid">
               <product-grid-item
-                v-for="(product, index) in quantityProductCollection.items"
-                :key="product.id + index"
+                v-for="(product, index2) in withProductQuantity"
+                :key="product.id + index2"
                 class="c-productsGrid__item"
                 :product="product"
                 :status="status"
@@ -66,70 +84,62 @@
                 @handleRemove="handleRemove"
               />
             </div>
-        </div>
+          </div>
 
-        <div v-else-if="products && activeCollectionHandle === 'all' && !currentCollection" class="c-modalSubscription__gridContain">
-          <div class="c-modalSubscription__grid">
-            <product-grid-item
-              v-for="(product, index2) in withProductQuantity"
-              :key="product.id + index2"
-              class="c-productsGrid__item"
-              :product="product"
-              :status="status"
-              :is-swap="isSwap"
-              @handleAddProductVariantToSubscription="handleAddProductVariantToSubscription"
-              @handleQuantityChange="handleQuantityChange"
-              @handleOpenSwapModal="handleOpenSwapModal"
-              @handleRemove="handleRemove"
-            />
+          <div v-else class="c-modalSubscription__grid c-modalSubscription__gridContain">
+            <content-placeholders
+              v-for="(item, index) in [1, 2, 3, 4, 5, 6]"
+              :key="index"
+              :centered="true"
+              class="c-productGridItem c-productsGrid__item"
+              style="display: block;"
+            >
+              <div class="c-productGridItem__imageWrap" style="margin-bottom: 10px">
+                <content-placeholders-img
+                  class="c-productGridItem__image"
+                  style="width: 140px; height: 140px;"
+                />
+              </div>
+              <content-placeholders-text
+                style="height: 20px; min-height: auto"
+                :lines="1"
+                class="c-productGridItem__title"
+              />
+              <!-- <content-placeholders-text
+                style="height: 20px;"
+                :lines="1"
+                class="c-productGridItem__price"
+              /> -->
+
+              <content-placeholders-img
+                style="height: 30px;"
+                class="c-productGridItem__button"
+              />
+            </content-placeholders>
           </div>
         </div>
+      </div>
 
-        <div v-else class="c-modalSubscription__grid c-modalSubscription__gridContain">
-          <content-placeholders
-            v-for="(item, index) in [1, 2, 3, 4, 5, 6]"
-            :key="index"
-            :centered="true"
-            class="c-productGridItem c-productsGrid__item"
-            style="display: block;"
-          >
-            <div class="c-productGridItem__imageWrap" style="margin-bottom: 10px">
-              <content-placeholders-img
-                class="c-productGridItem__image"
-                style="width: 140px; height: 140px;"
-              />
-            </div>
-            <content-placeholders-text
-              style="height: 20px; min-height: auto"
-              :lines="1"
-              class="c-productGridItem__title"
-            />
-            <!-- <content-placeholders-text
-              style="height: 20px;"
-              :lines="1"
-              class="c-productGridItem__price"
-            /> -->
+      <div v-else-if="swapping" class="c-modalMobile__wrapper">
+        <modal-swap
+          @handleSwapProductVariant="handleSwapProductVariant"
+          @handleCloseSwapModal="handleCloseSwapModal"
+        />
+      </div>
 
-            <content-placeholders-img
-              style="height: 30px;"
-              class="c-productGridItem__button"
-            />
-          </content-placeholders>
-        </div>
+      <div v-else class="c-modalMobile__wrapper">
+        <modal-shipping-require
+            @updateStatus="updateStatus"
+        />
       </div>
     </div>
-
-    <div v-else-if="swapping" class="c-modalMobile__wrapper">
-      <modal-swap
-         @handleSwapProductVariant="handleSwapProductVariant"
-         @handleCloseSwapModal="handleCloseSwapModal"
-      />
-    </div>
-
-    <div v-else class="c-modalMobile__wrapper">
-      <modal-shipping-require
-          @updateStatus="updateStatus"
-      />
+    <div v-if="showVariantSelector">
+      <a @click="setVariantSelectProduct(null); showVariantSelector = false"><icon-chevron-right class="c-headerMobile__navLink--mobileIcon c-modalSubscription__backButton"/></a>
+      <variant-select-block
+          v-if="variantSelectProduct"
+          :product="variantSelectProduct"
+          @addProductVariantToSubscription="handleAddProductVariantToSubscription"
+        />
     </div>
   </modal-mobile-wrap>
 </template>
@@ -144,6 +154,8 @@ import ModalShippingRequire from '@components/modal-shipping-require.vue'
 import ModalSwap from '@components/modal-swap.vue'
 import productChangeRequest from '@utils/product-change-request.js'
 import { buildNewCheckoutUpdatePayload } from '@utils/newCheckoutUpdateHelpers'
+import VariantSelectBlock from '@components/variant-select-block.vue'
+import IconChevronRight from '@components/icon-chevron-right.vue'
 
 export default {
   components: {
@@ -152,6 +164,8 @@ export default {
     CollectionFilter,
     ModalShippingRequire,
     ModalSwap,
+    VariantSelectBlock,
+    IconChevronRight,
   },
 
   props: {
@@ -181,6 +195,7 @@ export default {
       needUpdating: false,
       updating: false,
       swapping: false,
+      showVariantSelector: false,
     }
   },
 
@@ -570,8 +585,22 @@ export default {
       })
     },
 
-    async handleAddProductVariantToSubscription(variantId, product) {
+    async handleAddProductVariantToSubscription(variantId, product, showVariantSelector) {
+      try {
+
+
+      console.log('product', product)
       this.setVariantSelectProduct(product)
+
+      console.log('variantSelectProduct 1', this.variantSelectProduct)
+
+      if(showVariantSelector) {
+        this.showVariantSelector = true
+        return
+      }
+
+      console.log('variantSelectProduct 2', this.variantSelectProduct)
+
       const {
         editNextOrder,
         activeSubscription,
@@ -644,6 +673,15 @@ export default {
         event: analyticsEventName,
         payload: analyticsPayload,
       })
+
+      console.log('variantSelectProduct', this.variantSelectProduct)
+
+
+      this.closeModal()
+
+      } catch (e) {
+        console.log('Error',e)
+      }
     },
 
     async handleSwapProductVariant(variantId, newProduct) {
@@ -831,5 +869,10 @@ export default {
   font-size: 14px;
   line-height: 22px;
   color: $color-blue-secondary;
+}
+.c-modalSubscription__backButton{
+  position: relative;
+  margin-left: 10px;
+  bottom: 15px;
 }
 </style>

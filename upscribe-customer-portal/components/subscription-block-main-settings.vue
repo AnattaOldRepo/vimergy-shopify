@@ -107,9 +107,13 @@ export default {
     },
 
     totalPriceText() {
-      const { activeTotalPrice, currencySymbol, atc } = this
+      const { activeTotalPrice, currencySymbol, atc, activeSubscription } = this
+      let totalTaxText =  ''
+      if(activeSubscription.total_tax){
+        totalTaxText = `<div><span class ='total__title'>${atc['labels.tax'] || 'TAX' }</span>: <strong>${currencySymbol}${activeSubscription.total_tax}</strong></div>`
+      }
       if (!activeTotalPrice) return false
-      return `<span class ='total__title'>${atc['labels.total'] || 'TOTAL' }</span>: <strong>${currencySymbol}${activeTotalPrice}</strong>`
+      return `${totalTaxText} <span class ='total__title'>${atc['labels.total'] || 'TOTAL' }</span>: <strong>${currencySymbol}${activeTotalPrice}</strong>`
     },
 
     shippingMethod() {

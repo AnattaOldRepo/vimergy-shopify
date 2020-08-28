@@ -1880,7 +1880,9 @@ body.offcanvas-open {
     border:none;
     letter-spacing:1px;
     text-align: center;
+    display: none;
 }
+
 .c-cart__checkout:hover, .c-cart__checkout:focus, .c-cart__checkout:active {
 	color:#75D08C;
 }

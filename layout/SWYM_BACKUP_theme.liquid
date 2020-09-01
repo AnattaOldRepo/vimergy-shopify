@@ -3,20 +3,26 @@
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html class="no-js supports-no-cookies" lang="{{ shop.locale }}"> <!--<![endif]-->
     <head>
-{% include 'booster-seo' %}
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-PZB3KNW');</script>
+        <!-- End Google Tag Manager -->
+        {% include 'booster-seo' %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="theme-color" content="{{ settings.color_primary }}">
         <link rel="canonical" href="{{ canonical_url }}">
-
-        <!-- Global site tag (gtag.js) - Google Analytics -->
+      
+      	<!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-21939169-4"></script>
 
         {% if settings.favicon != blank %}
             <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
         {% endif %}
-
         {% capture seo_title %}
             {{ page_title }}
 
@@ -64,7 +70,10 @@
     </head>
 
     <body id="{{ page_title | handle }}" class="template-{{ template.name | handle }}">
-
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PZB3KNW"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
         {% include 'drawer-left' %}
 
         {% include 'drawer-right' %}

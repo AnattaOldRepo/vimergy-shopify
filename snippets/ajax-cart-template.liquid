@@ -167,13 +167,10 @@
 
 
 </script>
-{%comment%} 
-{% include 'subscription-theme-footer' %}
-{%endcomment%} 
 {% if template != 'cart'  %}
     <script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-	<script>
-	rjQuery = jQuery.noConflict( true );
+    <script>
+    rjQuery = jQuery.noConflict( true );
     var subscription_active='{{shop.metafields.subscriptions.subscription_active}}';
 
     function get_cookie(k){return(document.cookie.match('(^|; )'+k+'=([^;]*)')||0)[2]}

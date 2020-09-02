@@ -16,14 +16,6 @@
                 <li class="c-index__underline">
                     <a href="https://{{ shop.domain }}/account?view=subscriptions#/">Manage Subscriptions</a>
                 </li>
-            {% else %}
-                {% if customer.metafields.subscriptions.customer_string %}
-                    <li class="c-index__underline">
-                        <!--BeginRechargeCode-->
-                        <a href="/tools/recurring/portal/{{customer.metafields.subscriptions.customer_string}}/subscriptions/">Manage Subscriptions</a>
-                        <!--EndRechargeCode-->
-                    </li>
-                {% endif %}
             {% endif %}
             <li><a href="https://vimergy.myshopify.com/pages/privacy-policy">Privacy Policy </a></li>
             <li class="c-index--index"><a class="c-btn c-btn--index c-btn--logout account-dashboard__logout" href="account/logout">Log Out</a></li>

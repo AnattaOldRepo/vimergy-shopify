@@ -128,9 +128,15 @@ export default {
 
 <style lang="scss" scoped>
 @import '@design';
-.o-container--mobile {
+
+.o-container{
+  width: 100%;
+}
+
+.c-all__title{
+  margin-top: 50px;
   @include bp(mobile-large-max) {
-    padding: 0;
+    margin-top: 0;
   }
 }
 
@@ -218,11 +224,14 @@ export default {
         cursor: pointer;
         background-color: $color-primary;
         border: none;
+        font-size: 11px;
 
         @include bp(mobile-large-max) {
           width: 200px;
           height: 45px;
-          margin: 10px auto 0 0;
+          margin: 10px auto 0 auto;
+          padding-top:0;
+          padding-bottom:0;
         }
       }
     }

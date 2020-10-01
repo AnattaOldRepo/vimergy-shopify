@@ -320,7 +320,7 @@ export default {
         product.title
       }}</h3>
 
-        <span v-if="subscriptionDiscountAmount" class="c-variantSelectBlock__discountInfo">{{ atc['labels.autoRenew'] || 'Auto Renew' }} ({{ subscriptionDiscountAmount }})</span
+        <span v-if="subscriptionDiscountAmount && $route.query.template !== 'next-shipment'" class="c-variantSelectBlock__discountInfo">{{ atc['labels.autoRenew'] || 'Auto Renew' }} ({{ subscriptionDiscountAmount }})</span
         >
 
       <span v-if="selectedVariant && selectedVariantPrice" class="c-variantSelectBlock__price"

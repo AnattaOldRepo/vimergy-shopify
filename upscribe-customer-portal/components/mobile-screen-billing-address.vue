@@ -139,10 +139,7 @@ export default {
 
       // determine if updating both of just one
       else {
-        updateAction = (async () => {
-          await this.UPDATE_SUBSCRIPTION(updatePayload)
-          await this.UPDATE_NEXT_ORDER(updatePayload)
-        })()
+        updateAction = this.UPDATE_SUBSCRIPTION(updatePayload)
         analyticsEventName = 'Upscribe Subscription Billing Address Update'
       }
 

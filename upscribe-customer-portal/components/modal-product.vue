@@ -259,13 +259,6 @@ export default {
 
         handleNewCheckoutUpdatePayload = [
           buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(finalPayload),
-            finalPayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Quantity updated to ${quantity} on next order.`
-          ),
-          buildNewCheckoutUpdatePayload(
             this.UPDATE_SUBSCRIPTION(finalPayload),
             finalPayload,
             'subscriptions',
@@ -449,13 +442,6 @@ export default {
 
         handleNewCheckoutUpdatePayload = [
           buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Quantity updated to ${quantity} on next order.`
-          ),
-          buildNewCheckoutUpdatePayload(
             this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
             updateSubscriptionPayload,
             'subscriptions',
@@ -555,13 +541,6 @@ export default {
         analyticsEventName = 'Upscribe Subscription Product Remove'
 
         handleNewCheckoutUpdatePayload = [
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Product removed from next order.`
-          ),
           buildNewCheckoutUpdatePayload(
             this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
             updateSubscriptionPayload,

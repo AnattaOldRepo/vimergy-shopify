@@ -1,14 +1,17 @@
 <template>
-<div>
-  <portal to="header">
-      <the-header
-        :middle-html="titleHeaderHtml"
-        mode="backwardRoute"
-      />
+  <div>
+    <portal to="header">
+      <the-header :middle-html="titleHeaderHtml" mode="backwardRoute" />
     </portal>
 
-  <mobile-subscription-template v-if="activeSubscription && !edit" functional-block-title="Shipping">
-    <div slot="functionality-block" class="c-mobileSubscriptionTemplate__tools">
+    <mobile-subscription-template
+      v-if="activeSubscription && !edit"
+      functional-block-title="Shipping"
+    >
+      <div
+        slot="functionality-block"
+        class="c-mobileSubscriptionTemplate__tools"
+      >
         <!-- Change Ship Date -->
         <functional-button-block
           :internal-link="{
@@ -21,7 +24,7 @@
           title="Change Ship Date"
         >
           <span slot="icon" class="c-functionalButtonBlock__icon">
-              <calendar-icon />
+            <calendar-icon />
           </span>
         </functional-button-block>
 
@@ -33,18 +36,25 @@
               customerId,
             },
           }"
-          :title="hasDiscount ? atc['portal.editDiscountDrawerTitle'] || 'Edit Discount' : atc['portal.addDiscountDrawerTitle'] || 'Add Discount'"
+          :title="
+            hasDiscount
+              ? atc['portal.editDiscountDrawerTitle'] || 'Edit Discount'
+              : atc['portal.addDiscountDrawerTitle'] || 'Add Discount'
+          "
         >
-          <span slot="icon" class="c-functionalButtonBlock__icon c-functionalButtonBlock__icon-slot">
+          <span
+            slot="icon"
+            class="c-functionalButtonBlock__icon c-functionalButtonBlock__icon-slot"
+          >
           </span>
         </functional-button-block>
       </div>
-  </mobile-subscription-template>
+    </mobile-subscription-template>
 
-  <portal to="float-buttons">
-    <mobile-float-buttons />
-  </portal>
-</div>
+    <portal to="float-buttons">
+      <mobile-float-buttons />
+    </portal>
+  </div>
 </template>
 
 <script>
@@ -70,20 +80,24 @@ export default {
 
     ...mapState('translations', ['atc']),
 
-    ...mapGetters('activeSubscription', ['activeSubscription', 'activeSubscriptionNextDate', 'activeQueue']),
+    ...mapGetters('activeSubscription', [
+      'activeSubscription',
+      'activeSubscriptionNextDate',
+      'activeQueue',
+    ]),
 
     hasDiscount() {
-			const { activeQueue } = this
-			if (activeQueue.coupon_discount) {
-				return true
-			} else {
-				return false
-			}
-		},
+      const { activeQueue } = this
+      if (activeQueue.coupon_discount) {
+        return true
+      } else {
+        return false
+      }
+    },
 
-    edit(){
+    edit() {
       const { edit } = this.$route.query
-      if(edit === 'date'){
+      if (edit === 'date') {
         return 'date'
       }
       return false
@@ -92,21 +106,18 @@ export default {
     shipmentDate() {
       const { activeSubscriptionNextDate } = this
       if (!activeSubscriptionNextDate) return false
-      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format(
-        'MMM D'
-      )
+      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMM D')
     },
 
-    titleHeaderHtml(){
-      return `Edit Next Shipment <span class="c-nextShipment__date">${this.shipmentDate}</span>`
+    titleHeaderHtml() {
+      return `Edit Next Shipment <span class="c-nextShipment__date">${
+        this.shipmentDate
+      }</span>`
     },
   },
 
-
   methods: {
-    ...mapMutations('modalCalendarGlobal',  ['openModalCalendar']),
-
-    ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION_QUEUE']),
+    ...mapMutations('modalCalendarGlobal', ['openModalCalendar']),
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
   },
@@ -114,10 +125,10 @@ export default {
 </script>
 
 <style lang="scss">
-.c-nextShipment__date{
-  color: #888888;
+.c-nextShipment__date {
+  color: #888;
 }
-.c-functionalButtonBlock__icon-slot{
+.c-functionalButtonBlock__icon-slot {
   min-width: 16px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="shippingMethods" class="c-details__shippingOptions">
+  <div v-if="shippingMethods && availableShippingMethods" class="c-details__shippingOptions">
     <portal to="header">
       <the-header
         middle-html="Change Shipping Method"
@@ -8,7 +8,7 @@
     </portal>
 
     <shipping-method-item
-      v-for="(each, index) in shippingMethods"
+      v-for="(each, index) in availableShippingMethods"
       :key="each.id"
       :shipping-method="each"
       :is-selected="activeShippingMethod === each.handle"
@@ -62,6 +62,19 @@ export default {
 
       return shippingLines ? shippingLines[0].handle : false
     },
+
+    availableShippingMethods() {
+      const { shippingMethods, activeShippingMethod } = this
+
+      const activeHandle = activeShippingMethod.toLowerCase()
+
+      return shippingMethods.filter(method => {
+        let title = method.title.toLowerCase()
+        let handle = method.handle.toLowerCase()
+        return (title.indexOf('custom') < 0 || handle === activeHandle)
+      })
+    },
+
   },
 
   methods: {

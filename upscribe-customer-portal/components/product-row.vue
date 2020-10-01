@@ -2,26 +2,28 @@
   <div class="c-productRow">
     <div v-if="products" class="c-productRow__imageWrap">
       <div
-          v-for="(each, index) in products.slice().splice(0, calculateProductEndNumber)"
-          :key="index"
-          class="c-productRow__imageContain"
-          @click="openModal(each.variant_id)"
-        >
+        v-for="(each, index) in products
+          .slice()
+          .splice(0, calculateProductEndNumber)"
+        :key="index"
+        class="c-productRow__imageContain"
+        @click="openModal(each.variant_id)"
+      >
         <img
           class="c-productRow__image"
-          :class="{'c-productRow__image--disabled': isCancelledSubscriptionRoute}"
+          :class="{
+            'c-productRow__image--disabled': isCancelledSubscriptionRoute,
+          }"
           :src="
             each.image_url
               .replace('.png', '_320x.png')
               .replace('.jpg', '_320x.jpg')
           "
-          alt=''
+          alt=""
         />
 
-        <span
-          v-if="each.quantity > 1"
-          class="c-productRow__quanity">
-            {{ each.quantity }}
+        <span v-if="each.quantity > 1" class="c-productRow__quanity">
+          {{ each.quantity }}
         </span>
       </div>
 
@@ -33,27 +35,34 @@
             template: 'order-next-shipment',
             ...returnCancelledSubscriptionRoute,
             storeDomain,
-            customerId
-          }
+            customerId,
+          },
         }"
-        >
-          + {{ products.length - calculateProductEndNumber  }}
+      >
+        + {{ products.length - calculateProductEndNumber }}
       </nuxt-link>
 
       <div class="c-productRow__buttonContainer">
-        <v-button :disabled="isCancelledSubscriptionRoute" class="c-productRow__rightButton" @onClick="openAddToSubscriptionModal">
+        <v-button
+          :disabled="isCancelledSubscriptionRoute"
+          class="c-productRow__rightButton"
+          @onClick="openAddToSubscriptionModal"
+        >
           <plus-circle />
         </v-button>
 
-        <nuxt-link class="c-productRow__rightButton"
-        :to="{
-          query: {
-            template: 'order-next-shipment',
-            ...returnCancelledSubscriptionRoute,
-            storeDomain,
-            customerId
-          }
-        }">
+        <nuxt-link
+          class="c-productRow__rightButton"
+          :to="{
+            query: {
+              template: 'order-next-shipment',
+              ...returnCancelledSubscriptionRoute,
+              storeDomain,
+              customerId,
+              editNextOrder: this.$route.query.template == 'next-shipment',
+            },
+          }"
+        >
           <angle-right />
         </nuxt-link>
       </div>
@@ -65,7 +74,7 @@
         :close-modal="closeModal"
         :close-animation="closeAnimation"
         @swapSubscription="openAddToSubscriptionModal"
-        />
+      />
     </portal>
 
     <portal v-if="isOpeningProductSubscription" to="modals">
@@ -74,7 +83,7 @@
         :close-modal="closeModal"
         :close-animation="closeAnimation"
         :is-swap="isSwapSubscription"
-        />
+      />
     </portal>
   </div>
 </template>
@@ -88,7 +97,7 @@ import ModalProduct from '@components/modal-product.vue'
 import ModalSubscription from '@components/modal-subscription'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 export default {
-  components:{
+  components: {
     VButton,
     PlusCircle,
     AngleRight,
@@ -104,14 +113,14 @@ export default {
       required: true,
       default: () => [],
     },
-    shopifyOrderId:{
+    shopifyOrderId: {
       type: Number,
       default: 0,
     },
   },
 
-  data(){
-    return{
+  data() {
+    return {
       productEndNumber: 4,
       isProductModalOpen: false,
       isOpeningProductSubscription: false,
@@ -125,23 +134,23 @@ export default {
 
     ...mapGetters('activeSubscription', ['activeSubscription']),
 
-    isCancelledSubscriptionRoute(){
+    isCancelledSubscriptionRoute() {
       return this.$route.query.route === 'cancelledSubscriptions'
     },
 
-    returnCancelledSubscriptionRoute(){
-      if(this.isCancelledSubscriptionRoute){
-        return {'route': 'cancelledSubscriptions'}
+    returnCancelledSubscriptionRoute() {
+      if (this.isCancelledSubscriptionRoute) {
+        return { route: 'cancelledSubscriptions' }
       }
       return {}
     },
 
-    calculateProductEndNumber(){
-      const { windowWidth, products, productEndNumber} = this
+    calculateProductEndNumber() {
+      const { windowWidth, products, productEndNumber } = this
 
-      if(windowWidth >= 400 && products.length - 1 >= 4){
+      if (windowWidth >= 400 && products.length - 1 >= 4) {
         return productEndNumber
-      } else if(windowWidth < 400 && products.length - 1 >= 3){
+      } else if (windowWidth < 400 && products.length - 1 >= 3) {
         return 3
       } else {
         return products.length
@@ -154,20 +163,20 @@ export default {
 
     ...mapMutations('swapProduct', ['setSwapProduct']),
 
-    openModal(productVariantId){
-      if(this.isCancelledSubscriptionRoute) return
-      if(!productVariantId) return
+    openModal(productVariantId) {
+      if (this.isCancelledSubscriptionRoute) return
+      if (!productVariantId) return
 
       this.setProductIdAndSubscriptionId(productVariantId)
       this.isProductModalOpen = true
       this.closeAnimation = false
     },
 
-    openAddToSubscriptionModal(payload){
+    openAddToSubscriptionModal(payload) {
       this.isOpeningProductSubscription = true
       this.closeAnimation = false
 
-      if(payload && payload.title === 'swap') {
+      if (payload && payload.title === 'swap') {
         this.isSwapSubscription = true
         this.setSwapProduct(payload.product)
       } else {
@@ -175,7 +184,7 @@ export default {
       }
     },
 
-    closeModal(){
+    closeModal() {
       this.closeAnimation = true
       setTimeout(() => {
         this.isProductModalOpen = false
@@ -188,85 +197,85 @@ export default {
 
 <style lang="scss">
 @import '@design';
-.c-productRow__imageWrap{
-  margin: 0 auto;
-  max-width: 400px;
-  padding: 8px 24px 8px 16px;
+.c-productRow__imageWrap {
+  position: relative;
   display: flex;
   align-items: center;
+  max-width: 400px;
+  padding: 8px 24px 8px 16px;
+  margin: 0 auto;
   background-color: $color-white;
   border: 1px solid $color-blue-light-border;
   border-radius: 4px;
-  position: relative;
 
-  @media (min-width: 425px){
+  @media (min-width: 425px) {
     padding: 8px 16px 8px 16px;
   }
 }
 
-.c-productRow__imageContain{
+.c-productRow__imageContain {
+  position: relative;
   width: 48px;
   height: 48px;
-  position: relative;
   margin-right: 8px;
 
-  &:last-child{
-    margin-right: 13px
+  &:last-child {
+    margin-right: 13px;
   }
 }
 
-.c-productRow__quanity{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.c-productRow__quanity {
   position: absolute;
+  right: 0;
   bottom: 0;
-  right: 0px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 20px;
   height: 20px;
-  border-radius: 50%;
-  background-color: $color-white;
-  z-index: 50;
   font-size: 12px;
+  background-color: $color-white;
+  border-radius: 50%;
 }
 
-.c-productRow__image{
-  object-fit: cover;
-  height: 100%;
+.c-productRow__image {
   width: 100%;
+  height: 100%;
   cursor: pointer;
+  object-fit: cover;
 }
 
-.c-productRow__button{
-  min-width: 40px;
-  width: 40px;
-  padding: 0px;
-  height: 40px;
+.c-productRow__button {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
 }
 
-.c-productRow__buttonContainer{
+.c-productRow__buttonContainer {
+  position: absolute;
+  right: 20px;
   display: flex;
   align-items: center;
-  position: absolute;
-  right: 20px
 }
-.c-productRow__rightButton{
-  background-color: transparent;
-  border: 0px;
-  padding: 1px 7px 2px;
+.c-productRow__rightButton {
   min-width: auto;
+  padding: 1px 7px 2px;
+  background-color: transparent;
+  border: 0;
 
   &:hover,
-  &:focus{
-    background-color:transparent;
+  &:focus {
+    background-color: transparent;
   }
 }
 
-.c-productRow__image--disabled{
-  cursor: none;
+.c-productRow__image--disabled {
   pointer-events: none;
+  cursor: none;
 }
 </style>

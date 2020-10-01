@@ -17,14 +17,6 @@ export default {
 
     ...mapState('products', ['products']),
 
-    swapProductOptions() {
-      const { products, swapProduct } = this
-
-      return products.filter((product) => {
-        return product.id !== swapProduct.product_id
-      })
-    },
-
     activeSubscriptionProducts() {
       return this.activeSubscription.items
     },
@@ -57,7 +49,7 @@ export default {
 
     <div class="c-drawerDeliveryFrequency__options">
       <drawer-product-block
-        v-for="product in swapProductOptions"
+        v-for="product in products"
         :key="product.id"
         :product="product"
         swap

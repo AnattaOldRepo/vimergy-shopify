@@ -88,15 +88,16 @@ export default {
 
     handleSelectCard(card) {
       if (card.id === this.activeCard.id) return
+      console.log({card})
       if(this.isRemovingCard){
-        this.removePaymentMethod(card.id, card.type)
+        this.removePaymentMethod(card.id, card.type, card.payment_customer_id)
       } else {
         this.setNewSwapCard(card)
         this.swapCards()
       }
     },
 
-    async removePaymentMethod(paymentMethodId, paymentType) {
+    async removePaymentMethod(paymentMethodId, paymentType, paymentCustomerId) {
       let analyticsEventName = 'Upscribe Remove Card'
       let analyticsPayload = {
         card: this.activeEditCard,
@@ -104,10 +105,10 @@ export default {
       this.setMessage('Removing the Payment Method')
       this.setStatus('updating')
 
-      // console.log({paymentMethodId, paymentType})
+      console.log({paymentMethodId, paymentType})
 
       try {
-        await this.REMOVE_PAYMENT_METHOD({paymentMethodId, paymentType})
+        await this.REMOVE_PAYMENT_METHOD({paymentMethodId, paymentType, paymentCustomerId})
 
         this.triggerAnalyticsEvent({
           event: analyticsEventName,
@@ -143,11 +144,7 @@ export default {
 
       // determine if updating both of just one
       else {
-        updateAction = (async () => {
-          await this.UPDATE_NEXT_ORDER(updatePayload)
-          await this.UPDATE_SUBSCRIPTION(updatePayload)
-        })()
-
+        updateAction = this.UPDATE_SUBSCRIPTION(updatePayload)
         analyticsEventName = 'Upscribe Subscription Payment Swap'
       }
 

@@ -193,7 +193,7 @@ export default {
         SWAP
       </v-button>
 
-      <div v-if="quantityControlIsOpen" class="c-productGridItem__quantityControl">
+      <div v-if="quantityControlIsOpen && product.quantity" class="c-productGridItem__quantityControl">
         <v-button
           v-if="product.quantity > 1"
           class="c-productGridItem__quantityBox"

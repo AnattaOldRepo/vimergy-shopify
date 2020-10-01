@@ -14,6 +14,19 @@
         <nuxt-link
           class="c-header__navLink c-header__navLink--middle"
           :to="{
+            name: 'all',
+            query: {
+              storeDomain,
+              customerId,
+            },
+          }"
+          >{{
+            atc['portal.headerAllSubscription'] || 'All Subscriptions'
+          }}</nuxt-link
+        >
+        <nuxt-link
+          class="c-header__navLink c-header__navLink--middle"
+          :to="{
             name: 'index',
             query: {
               storeDomain,

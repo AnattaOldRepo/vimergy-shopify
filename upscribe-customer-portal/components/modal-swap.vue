@@ -69,11 +69,6 @@ export default {
 	methods: {
 		...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
-		...mapActions('subscriptions', [
-			'UPDATE_SUBSCRIPTION',
-			'UPDATE_NEXT_ORDER',
-		]),
-
 		...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
 
     ...mapMutations('shippingMethods', ['SET_SHIPPING_METHODS']),

@@ -50,6 +50,18 @@ export default {
 
       return shippingLines ? shippingLines[0].handle : false
     },
+
+    availableShippingMethods() {
+      const { shippingMethods, activeShippingMethod } = this
+
+      const activeHandle = activeShippingMethod.toLowerCase()
+
+      return shippingMethods.filter(method => {
+        let title = method.title.toLowerCase()
+        let handle = method.handle.toLowerCase()
+        return (title.indexOf('custom') < 0 || handle === activeHandle)
+      })
+    },
   },
 
   methods: {
@@ -141,9 +153,9 @@ export default {
     </div>
 
     <div class="c-drawer__main">
-      <div v-if="shippingMethods" class="c-shippingMethodList">
+      <div v-if="shippingMethods && availableShippingMethods" class="c-shippingMethodList">
         <shipping-method-item
-          v-for="(shippingMethod, index) in shippingMethods"
+          v-for="(shippingMethod, index) in availableShippingMethods"
           :key="shippingMethod.id"
           :shipping-method="shippingMethod"
           :is-selected="activeShippingMethod === shippingMethod.handle"

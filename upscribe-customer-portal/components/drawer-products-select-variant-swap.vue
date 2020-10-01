@@ -225,25 +225,59 @@ export default {
 					),
 				]
 			} else {
-				analyticsEventName = 'Upscribe Subscription Product Swap'
+        analyticsEventName = 'Upscribe Subscription Product Swap'
 
-				handleNewCheckoutUpdatePayload = [
-					buildNewCheckoutUpdatePayload(
-						this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-						nextOrderUpdatePayload,
-						'subscriptions',
-						'UPDATE_NEXT_ORDER',
-						`Product swapped on next order.`
-					),
-					buildNewCheckoutUpdatePayload(
-						this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
-						updateSubscriptionPayload,
-						'subscriptions',
-						'UPDATE_SUBSCRIPTION',
-						`Product swapped on subscription.`
-					),
-				]
-			}
+        // check if identical payloads, if so can make the combined update
+        // using updateNext=1 on the subscription endpoint
+
+        // if not, then we need to keep on doing the separate updates
+        let identical = JSON.stringify(updateSubscriptionPayload) === JSON.stringify(nextOrderUpdatePayload)
+
+        console.log(JSON.stringify(updateSubscriptionPayload), JSON.stringify(nextOrderUpdatePayload), {identical})
+        // determine if identical
+
+        if (identical) {
+          handleNewCheckoutUpdatePayload = [
+            buildNewCheckoutUpdatePayload(
+              this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+              updateSubscriptionPayload,
+              'subscriptions',
+              'UPDATE_SUBSCRIPTION',
+              `Product swapped on subscription.`,
+            ),
+          ]
+        } else {
+          handleNewCheckoutUpdatePayload = [
+            buildNewCheckoutUpdatePayload(
+              this.UPDATE_SUBSCRIPTION({
+                ...updateSubscriptionPayload,
+                notIdentical: true,
+              }),
+              {
+                updateSubscriptionPayload: {
+                  ...updateSubscriptionPayload,
+                  notIdentical: true,
+                },
+              },
+              'subscriptions',
+              'UPDATE_SUBSCRIPTION',
+              `Product swapped on subscription.`,
+            ),
+          ]
+
+          if (nextOrderUpdatePayload.requestPayload.items) {
+            handleNewCheckoutUpdatePayload.push(
+              buildNewCheckoutUpdatePayload(
+                this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
+                nextOrderUpdatePayload,
+                'queues',
+                'UPDATE_NEXT_ORDER',
+                `Product swapped on next order.`
+              ),
+            )
+          }
+        }
+      }
 
 			this.$emit('setDrawerStatus', 'PENDING')
 

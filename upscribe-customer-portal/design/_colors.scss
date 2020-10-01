@@ -18,9 +18,9 @@ $color-blue-secondary: #253237 !default;
 $color-danger: #75D08C !default;
 
 $color-background: #f7f9fb !default;
-$color-background-light: #FBFCFC !default;
+$color-background-light: #fbfcfc !default;
 
-$color-placeholder: #A3B5BF !default;
+$color-placeholder: #a3b5bf !default;
 $color-icons: #a3b5bf !default;
 $color-border: #eaf1f4 !default;
 $color-input-border: #dcdcdf !default;
@@ -28,10 +28,10 @@ $color-input-border: #dcdcdf !default;
 $color-indigo: #6610f2 !default;
 $color-purple: #6f42c1 !default;
 $color-pink: #e83e8c !default;
-$color-red: #FF7777 !default;
+$color-red: #ff7777 !default;
 $color-orange: #fd7e14 !default;
-$color-yellow: #FFC954 !default;
-$color-green: #08BD7C !default;
+$color-yellow: #ffc954 !default;
+$color-green: #08bd7c !default;
 $color-teal: #20c997 !default;
 $color-cyan: #17a2b8 !default;
 
@@ -46,6 +46,7 @@ $color-error: $color-red !default;
 $color-light: $color-gray-100 !default;
 $color-dark: $color-gray-800 !default;
 $color-active: $color-red !default;
+$color-inactive: $color-gray-100 !default;
 
 $color-primary-light: lighten($color-primary, 20%) !default;
 

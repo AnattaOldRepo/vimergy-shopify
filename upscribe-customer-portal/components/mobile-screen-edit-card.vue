@@ -57,10 +57,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		editNextOrder: {
-			type: Boolean,
-			default: false,
-		},
 		updateCardOnlyModal: {
 			type: Boolean,
 			default: false,
@@ -299,10 +295,7 @@ export default {
 
 				// determine if updating both of just one
 				else {
-					updateAction = (async () => {
-						await this.UPDATE_NEXT_ORDER(updatePayload)
-						await this.UPDATE_SUBSCRIPTION(updatePayload)
-					})()
+					updateAction = this.UPDATE_SUBSCRIPTION(updatePayload)
 				}
 
 				try {
@@ -421,8 +414,10 @@ export default {
 		},
 
     handleHeaderAction(){
-      if (!this.$refs['payment-methods-block']) return
-      this.$refs['payment-methods-block'].handleClear()
+      if (this.$refs['payment-methods-block']) {
+        this.$refs['payment-methods-block'].handleClear()
+      }
+      this.goBackRoute()
     },
 
     goBackRoute(){

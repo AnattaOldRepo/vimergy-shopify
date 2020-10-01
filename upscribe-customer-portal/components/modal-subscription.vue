@@ -459,13 +459,6 @@ export default {
 
         handleNewCheckoutUpdatePayload = [
           buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Quantity updated to ${quantity} on next order.`
-          ),
-          buildNewCheckoutUpdatePayload(
             this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
             updateSubscriptionPayload,
             'subscriptions',
@@ -499,18 +492,30 @@ export default {
           name: 'cancel',
         })
       }
-      const {
-        removePayload: nextRemoveItemPayload,
-      } = productChangeRequest({
-        variantId: product.variant_id,
-        editNextOrder: true,
-        subscription: activeSubscription,
+      // When data is coming from product item grid we do not have selected variant id
+      let selectedVariant
+
+      if(!product.variant_id){
+        if(this.$route.query.template === 'next-shipment'){
+          selectedVariant = activeSubscription.next.items.find(item => item.product_id === product.id)
+        }
+        else {
+          selectedVariant = activeSubscription.items.find(item => item.product_id === product.id)
+        }
+      }
+
+
+      const { removePayload: nextRemoveItemPayload } = productChangeRequest({
+				variantId: product.variant_id || (selectedVariant && selectedVariant.variant_id),
+				editNextOrder: true,
+				subscription: activeSubscription,
       })
+
 
       const {
         removePayload: subscriptionRemoveItemPayload,
       } = productChangeRequest({
-        variantId: product.variant_id,
+        variantId: product.variant_id || (selectedVariant && selectedVariant.variant_id),
         editNextOrder: false,
         subscription: activeSubscription,
       })
@@ -559,13 +564,6 @@ export default {
         analyticsEventName = 'Upscribe Subscription Product Remove'
 
         handleNewCheckoutUpdatePayload = [
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Product removed from next order.`
-          ),
           buildNewCheckoutUpdatePayload(
             this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
             updateSubscriptionPayload,
@@ -650,13 +648,6 @@ export default {
         analyticsEventName = 'Upscribe Subscription Product Add'
 
         handleNewCheckoutUpdatePayload = [
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Product added to next order.`
-          ),
           buildNewCheckoutUpdatePayload(
             this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
             updateSubscriptionPayload,
@@ -782,13 +773,6 @@ export default {
         analyticsEventName = 'Upscribe Subscription Product Swap'
 
         handleNewCheckoutUpdatePayload = [
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Product swapped on next order.`
-          ),
           buildNewCheckoutUpdatePayload(
             this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
             updateSubscriptionPayload,

@@ -51,11 +51,9 @@ module.exports = {
     '~/plugins/globalMixins',
     { src: '~plugins/storeSegment.js', mode: 'client' },
     { src: '~plugins/storeGtm.js', mode: 'client' },
-
+    { src: '~plugins/filter.js', mode: 'client' },
     { src: '~plugins/persistedState.js', mode: 'client' },
-
     { src: '~plugins/analytics.js', mode: 'client' },
-
     { src: '~plugins/formValidation.js', mode: 'client' },
     { src: '~plugins/vueJsToggleButton', mode: 'client' },
     { src: '~/plugins/vueContentPlaceholders.js', mode: 'client' },

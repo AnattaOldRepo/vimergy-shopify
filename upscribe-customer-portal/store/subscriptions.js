@@ -134,16 +134,30 @@ export const actions = {
     const { storeDomain } = rootState.route
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
-
-    const subscriptionId = activeSubscription.id
     const shopifyCustomerId = activeSubscription.shopify_customer_id
+    const { requestPayload, subscriptionId = false, notIdentical } = payload
 
-    const { requestPayload } = payload
+
+    const requestSubscriptionId = subscriptionId || activeSubscription.id
+    let url
+
+    console.log({payload})
+    console.log({notIdentical})
+
+    if (notIdentical) {
+      console.log('notIdentical', notIdentical)
+      url = `/subscription/update/${storeDomain}/${shopifyCustomerId}/${requestSubscriptionId}?updateNext=0`
+    } else {
+      console.log('else notIdentical', notIdentical)
+      url = `/subscription/update/${storeDomain}/${shopifyCustomerId}/${requestSubscriptionId}?updateNext=1`
+    }
+
+    console.log({url})
 
     return new Promise((resolve, reject) => {
       request({
         method: 'post',
-        url: `/subscription/update/${storeDomain}/${shopifyCustomerId}/${subscriptionId}`,
+        url,
         data: JSON.stringify(requestPayload),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

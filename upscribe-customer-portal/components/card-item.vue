@@ -121,7 +121,7 @@ export default {
                 <edit-icon />
               </span>
 
-              <span tabindex="0" @click.stop="$emit('removePaymentMethod')">
+              <span tabindex="0" @click.prevent="$emit('removePaymentMethod')">
                 <trash-icon />
               </span>
             </div>

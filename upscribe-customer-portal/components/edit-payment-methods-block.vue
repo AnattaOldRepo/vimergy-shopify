@@ -203,7 +203,7 @@ export default {
 			/>
 		</div>
 
-		<div class="mt-30" style="display: flex; justify-content: space-between">
+		<div class="c-editPaymentmethodsBlock-actionButtons mt-30" style="display: flex; justify-content: space-between">
 			<v-button
 				class="c-cardCancelButton"
 				style="margin-top:30px;"

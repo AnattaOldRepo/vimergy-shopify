@@ -73,6 +73,36 @@ export default {
       return productProperties['Discount Amount'] || productProperties['discount_amount']
     },
 
+    isSubscriptionProduct() {
+      const { product } = this
+      if (!product.properties) return false
+
+      return !!product.properties['Subscription']
+    },
+
+    productOptionDetails() {
+      const { product, isSubscriptionProduct, atc } = this
+      if (!product.properties) return false
+
+      let discountAmount = product.properties['Discount Amount']
+        ? product.properties['Discount Amount']
+        : false
+
+      let detail
+
+      if (isSubscriptionProduct) {
+        if (parseInt(discountAmount)) {
+          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${product.quantity} (-${discountAmount} off)`
+        } else {
+          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${product.quantity}`
+        }
+      } else {
+        detail = `x${product.quantity}`
+      }
+
+      return detail
+    },
+
     subscriptionDiscountType() {
       const { subscriptionDiscountAmount } = this
       if (!subscriptionDiscountAmount) return false
@@ -182,8 +212,8 @@ export default {
           >
         </div>
 
-        <span v-if="subscriptionDiscountAmount" class="c-drawerProductBlock__discountInfo"
-          >{{ atc['labels.autoRenew'] || 'Auto Renew'}} (-{{ subscriptionDiscountAmount }})</span
+        <span v-if="productOptionDetails" class="c-drawerProductBlock__discountInfo"
+          >{{ productOptionDetails }}</span
         >
 
         <span

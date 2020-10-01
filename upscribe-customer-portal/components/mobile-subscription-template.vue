@@ -1,28 +1,38 @@
 <template>
-  <div v-if="activeSubscription && !isOpeningOrder" class="c-mobileSubscriptionTemplate">
+  <div
+    v-if="activeSubscription && !isOpeningOrder"
+    class="c-mobileSubscriptionTemplate"
+  >
     <div v-if="hasProductRow" class="c-mobileSubscriptionTemplate--top">
-      <h2 class="c-mobileSubscriptionTemplate__productTitle">Products | ${{ activeSubscription.total_price}}</h2>
-
+      <h2 class="c-mobileSubscriptionTemplate__productTitle"
+        >Products | ${{ activeSubscription.total_price }}</h2
+      >
       <product-row
+        v-if="$route.query.template === 'next-shipment'"
+        :products="activeSubscription.next.items"
+        :shopify-order-id="activeSubscription.shopify_order_id"
+      />
+      <product-row
+        v-else
         :products="activeSubscription.items"
         :shopify-order-id="activeSubscription.shopify_order_id"
       />
     </div>
 
     <div class="c-mobileSubscriptionTemplate--botom">
-      <h2 v-if="functionalBlockTitle" class="c-mobileSubscriptionTemplate__productTitle">{{ functionalBlockTitle }}</h2>
+      <h2
+        v-if="functionalBlockTitle"
+        class="c-mobileSubscriptionTemplate__productTitle"
+        >{{ functionalBlockTitle }}</h2
+      >
 
-      <slot name="functionality-block">
-      </slot>
+      <slot name="functionality-block"> </slot>
     </div>
 
-    <slot>
-    </slot>
+    <slot> </slot>
 
     <portal v-if="activeSubscription && isOpenModalCalendar" to="modals">
-      <modal-calendar-picker
-        :show="isOpenModalCalendar"
-      />
+      <modal-calendar-picker :show="isOpenModalCalendar" />
     </portal>
   </div>
 </template>
@@ -33,24 +43,24 @@ import { mapMutations, mapGetters, mapState } from 'vuex'
 import ModalCalendarPicker from '@components/modal-calendar-picker.vue'
 
 export default {
-  components:{
+  components: {
     ProductRow,
-     ModalCalendarPicker,
+    ModalCalendarPicker,
   },
 
-  props:{
+  props: {
     functionalBlockTitle: {
       type: String,
       default: '',
     },
-    hasProductRow:{
+    hasProductRow: {
       type: Boolean,
       default: true,
     },
   },
 
-  data(){
-    return{
+  data() {
+    return {
       isOrderOpen: false,
     }
   },
@@ -64,7 +74,7 @@ export default {
 
     ...mapState('editMode', ['editNextOrder']),
 
-    isOpeningOrder(){
+    isOpeningOrder() {
       return !!this.$route.query.orderId
     },
   },
@@ -75,56 +85,56 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 @import '@design';
 
-.c-mobileSubscriptionTemplate{
-  @include bp(tablet){
-      padding: 20px 0;
+.c-mobileSubscriptionTemplate {
+  @include bp(tablet) {
+    padding: 20px 0;
   }
 }
 
-.c-mobileSubscriptionTemplate__productTitle{
+.c-mobileSubscriptionTemplate__productTitle {
+  padding: 24px 0 0;
+  margin: 0 auto 8px;
   font-size: 12px;
   line-height: 16px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin: 0 auto 8px;
   color: $color-blue-secondary;
-  padding: 24px 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
-.c-mobileSubscriptionTemplate--top{
-  margin:0 auto 24px;
+.c-mobileSubscriptionTemplate--top {
   max-width: 400px;
   padding: 0 16px;
-  @media (min-width: 425px){
+  margin: 0 auto 24px;
+
+  @media (min-width: 425px) {
     padding: 0;
   }
 }
 
-.c-mobileSubscriptionTemplate--botom{
+.c-mobileSubscriptionTemplate--botom {
   max-width: 400px;
   padding: 0 16px;
   margin: 0 auto;
-  @media (min-width: 425px){
+
+  @media (min-width: 425px) {
     padding: 0;
   }
 }
 
-.c-mobileSubscriptionTemplate__tools{
-  width: 100%;
-  margin: 0 auto;
+.c-mobileSubscriptionTemplate__tools {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
 }
 
-.c-mobileSubscriptionTemplate__order{
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 24px 20px 64px;
+.c-mobileSubscriptionTemplate__order {
+  width: 100%;
+  max-width: 600px;
+  padding: 24px 20px 64px;
+  margin: 0 auto;
 }
-
 </style>

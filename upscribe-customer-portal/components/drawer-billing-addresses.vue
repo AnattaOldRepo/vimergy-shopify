@@ -45,6 +45,42 @@ export default {
 			const { activeSubscription } = this
 			return activeSubscription.shipping_address
 		},
+
+		 deliveryEveryText() {
+      const { activeSubscription } = this
+      if (!activeSubscription) return false
+      return `${activeSubscription.interval}`
+    },
+
+    intervalUnitDisplay() {
+      const { activeSubscription, atc } = this
+      let intervalUnit = activeSubscription.period
+      let plural = activeSubscription.interval > 1
+
+      let displayUnit = ''
+      if (intervalUnit.indexOf('day') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.days-unit'] || 'days'
+        } else {
+          displayUnit = atc['date-time.day-unit'] || 'day'
+        }
+      } else if (intervalUnit.indexOf('week') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.weeks-unit'] || 'weeks'
+        } else {
+          displayUnit = atc['date-time.week-unit'] || 'week'
+        }
+      } else if (intervalUnit.indexOf('month') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.months-unit'] || 'months'
+        } else {
+          displayUnit = atc['date-time.month-unit'] || 'month'
+        }
+      } else {
+        displayUnit = intervalUnit
+      }
+      return displayUnit
+    },
 	},
 	mounted() {
 		const initialHasSameAddress = this.isSameAsSubscription()
@@ -146,10 +182,7 @@ export default {
 
 			// determine if updating both of just one
 			else {
-				updateAction = (async () => {
-					await this.UPDATE_SUBSCRIPTION(updatePayload)
-					await this.UPDATE_NEXT_ORDER(updatePayload)
-				})()
+				updateAction = this.UPDATE_SUBSCRIPTION(updatePayload)
 				analyticsEventName = 'Upscribe Subscription Billing Address Update'
 			}
 
@@ -185,8 +218,9 @@ export default {
 			<p class="c-drawer__subtitle">
 				{{
 					atc['portal.editBillingAddressDrawerPrompt'] ||
-						'These products ship every 15 days'
+						'These products ship every'
 				}}
+				 {{ deliveryEveryText }} {{ intervalUnitDisplay }}
 			</p>
 
 			<div class="c-drawer__checkBox c-formInput">

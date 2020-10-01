@@ -1,9 +1,20 @@
 
 // check if product in passed product list
-function checkVariantInProductList(variantId, items) {
+function checkVariantInProductList(variantId, items, id) {
+  console.log({variantId, items, id})
   let matchingProduct = false
 
+  if (id) {
+    items.forEach(item => {
+      // console.log(variantId, item.variant_id)
+      if (item.id === id) {
+        matchingProduct = item
+      }
+    })
+  }
+
   items.forEach(item => {
+    // console.log(variantId, item.variant_id)
     if (item.variant_id === variantId) {
       matchingProduct = item
     }
@@ -20,9 +31,10 @@ function checkVariantInProductList(variantId, items) {
  * @param { editNextOrder } Boolean - whether we're getting payloads for the subscription.next update or main subscription update
  * @param { subscriptoin } Object - full subscription object
  */
-const productChangeRequest = function ({ variantId, editNextOrder, subscription }) {
+const productChangeRequest = function({variantId, editNextOrder, subscription, quantity, id}) {
+  console.log({variantId, editNextOrder, subscription, quantity, id})
 
-  if (!variantId || !subscription) {
+  if ((!variantId || !subscription) && (!quantity && !id)) {
     console.log('productChangeRequest missing required param: !variantId || !subscription')
     return
   }
@@ -30,21 +42,30 @@ const productChangeRequest = function ({ variantId, editNextOrder, subscription 
   // which list to compare to - determined by if we're making a request payload for the
   // main subscription products or the next order products
 
+  console.log({editNextOrder, subscription})
+
   const productList = editNextOrder ? subscription.next.items : subscription.items
 
+  let setQuantityPayload = {}
   let increasePayload = {}
   let decreasePayload = {}
   let removePayload = {}
   let addPayload = {}
 
   // returns false or the product in the list
-  const productInList = checkVariantInProductList(variantId, productList)
+  const  productInList = checkVariantInProductList(variantId, productList, id)
 
   // chanage
   if (productInList) {
     let productQuantity = productInList.quantity
     let itemId = productInList.id
     let productId = productInList.product_id
+
+    setQuantityPayload = {
+      id: itemId,
+      product_id: productId,
+      quantity,
+    }
 
     // add one to existing quantity
     increasePayload = {
@@ -73,6 +94,7 @@ const productChangeRequest = function ({ variantId, editNextOrder, subscription 
       id: itemId,
       product_id: productId,
       delete: 1,
+      variantId,
     }
 
     // if product already in list, then an add is just a quantity increase
@@ -85,6 +107,11 @@ const productChangeRequest = function ({ variantId, editNextOrder, subscription 
 
   // if item not in list
   else {
+
+    setQuantityPayload = {
+      variant_id: variantId,
+      quantity,
+    }
 
     // increase for an item that's not already there
     // is the same as adding it the first time
@@ -109,12 +136,13 @@ const productChangeRequest = function ({ variantId, editNextOrder, subscription 
     }
   }
 
-  // console.log(increasePayload,
+  // console.log(    increasePayload,
   //   decreasePayload,
   //   removePayload,
-  //   addPayload)
+  //   addPayload,)
 
   return {
+    setQuantityPayload,
     increasePayload,
     decreasePayload,
     removePayload,

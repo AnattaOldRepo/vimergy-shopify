@@ -1,22 +1,24 @@
 <template>
   <div class="c-mobileScreenLayout__contain">
     <portal to="header">
-      <the-header
-        mode="default"
-      />
+      <the-header mode="default" />
     </portal>
 
     <div v-if="!subscriptionsLoaded">
-        <second-loader-icon />
+      <second-loader-icon />
     </div>
 
-    <transition v-else-if="subscriptionsLoaded" :name="pageTransition" mode="out-in">
+    <transition
+      v-else-if="subscriptionsLoaded"
+      :name="pageTransition"
+      mode="out-in"
+    >
       <div
         v-if="!templateQuery && subscriptions && toggleSubscriptions.length > 0"
-        :key="1">
-        <subscription-picker
-          :query="isCancelledQueryRoute"
-        />
+        :key="1"
+      >
+        <all />
+        <!-- <subscription-picker :query="isCancelledQueryRoute" /> -->
       </div>
 
       <!-- Next Shipment Block -->
@@ -32,10 +34,7 @@
       <!-- Next Shipment Block -->
 
       <!-- Detail block  -->
-      <mobile-screen-details
-        v-else-if="templateQuery === 'details'"
-        :key="4"
-      />
+      <mobile-screen-details v-else-if="templateQuery === 'details'" :key="4" />
 
       <mobile-screen-shipping-method
         v-else-if="templateQuery === 'edit-shipping-method'"
@@ -43,7 +42,7 @@
       />
 
       <mobile-screen-frenquency
-        v-else-if="templateQuery ==='edit-shipping-frenquency'"
+        v-else-if="templateQuery === 'edit-shipping-frenquency'"
         :key="6"
       />
       <!-- Detail block  -->
@@ -115,15 +114,22 @@
         :key="17"
       />
 
-      <div v-else-if="!templateQuery && Object.keys(toggleSubscriptions).length < 1" class="c-noSubscriptions">
-          <h2 class="c-noSubscriptions__text">{{ atc['portal.noSubscriptions'] || 'You have no active subscriptions.' }}</h2>
-          <v-button class="c-noSubscriptions__button" auto @onClick="redirect">
-              {{ atc['buttons.shopNow'] || 'Shop Now' }}
-          </v-button>
+      <div
+        v-else-if="
+          !templateQuery && Object.keys(toggleSubscriptions).length < 1
+        "
+        class="c-noSubscriptions"
+      >
+        <h2 class="c-noSubscriptions__text">{{
+          atc['portal.noSubscriptions'] || 'You have no active subscriptions.'
+        }}</h2>
+        <v-button class="c-noSubscriptions__button" auto @onClick="redirect">
+          {{ atc['buttons.shopNow'] || 'Shop Now' }}
+        </v-button>
       </div>
     </transition>
 
-    <mobile-screen-actions/>
+    <mobile-screen-actions />
   </div>
 </template>
 
@@ -145,10 +151,11 @@ import MobileScreenEditCard from '@components/mobile-screen-edit-card.vue'
 import MobileScreenDiscount from '@components/mobile-screen-discount.vue'
 import MobileOrderNextShipment from '@components/mobile-order-next-shipment.vue'
 import TheHeader from '@components/the-header'
-import SubscriptionPicker from '@components/subscription-picker.vue'
+// import SubscriptionPicker from '@components/subscription-picker.vue'
 import Order from '@components/order.vue'
 import SecondLoaderIcon from '@components/second-loader-icon.vue'
 import VButton from '@components/v-button'
+import All from '../pages/all.vue'
 import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -165,7 +172,7 @@ export default {
     MobileScreenBillingAddress,
     MobileScreenAddCard,
     MobileScreenDatePicker,
-    SubscriptionPicker,
+    // SubscriptionPicker,
     MobileScreenEditCard,
     VButton,
     Order,
@@ -174,14 +181,22 @@ export default {
     MobileScreenActions,
     MobileScreenDiscount,
     MobileOrderNextShipment,
+    All,
   },
 
   computed: {
-    ...mapState('subscriptions', ['subscriptions', 'noActiveSubscriptions', 'subscriptionsLoaded']),
+    ...mapState('subscriptions', [
+      'subscriptions',
+      'noActiveSubscriptions',
+      'subscriptionsLoaded',
+    ]),
 
     ...mapState('translations', ['atc']),
 
-    ...mapState('activeSubscription', ['activeSubscription', 'activeSubscriptionId']),
+    ...mapState('activeSubscription', [
+      'activeSubscription',
+      'activeSubscriptionId',
+    ]),
 
     ...mapState('mobileGlobalManagement', ['pageTransition']),
 
@@ -191,34 +206,39 @@ export default {
 
     ...mapGetters('activeSubscription', ['activeSubscription']),
 
-    ...mapGetters('subscriptions', ['subscriptionActive', 'subscriptionInActive']),
+    ...mapGetters('subscriptions', [
+      'subscriptionActive',
+      'subscriptionInActive',
+    ]),
 
-    templateQuery(){
-      if(this.$route.query.template){
-        const { template }  = this.$route.query
+    templateQuery() {
+      if (this.$route.query.template) {
+        const { template } = this.$route.query
         return template
       }
       return ''
     },
 
-    orderPastShipments(){
+    orderPastShipments() {
       const { orders, $route } = this
-      const order = orders.find(each => each.id === parseInt($route.query.orderId))
+      const order = orders.find(
+        (each) => each.id === parseInt($route.query.orderId)
+      )
       return order
     },
 
-    hasId(){
-       if(this.$route.query.id){
+    hasId() {
+      if (this.$route.query.id) {
         return this.$route.query.id
       }
       return false
     },
 
-    isCancelledQueryRoute(){
+    isCancelledQueryRoute() {
       let routeQuery = ''
       const { route } = this.$route.query
 
-      if(route && route === 'cancelledSubscriptions'){
+      if (route && route === 'cancelledSubscriptions') {
         routeQuery = route
       } else {
         routeQuery = ''
@@ -226,11 +246,11 @@ export default {
       return routeQuery
     },
 
-    toggleSubscriptions(){
+    toggleSubscriptions() {
       let currentSubscriptions
       const { route } = this.$route.query
 
-      if(route && route === 'cancelledSubscriptions'){
+      if (route && route === 'cancelledSubscriptions') {
         currentSubscriptions = this.subscriptionInActive
       } else {
         currentSubscriptions = this.subscriptionActive
@@ -246,7 +266,6 @@ export default {
     },
   },
 
-
   methods: {
     ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
 
@@ -260,15 +279,19 @@ export default {
 </script>
 
 <style lang="scss">
-.c-mobileScreenLayout__contain{
+.c-mobileScreenLayout__contain {
   margin: 0 auto;
 
-  @media (max-width: 400px){
+  @media (max-width: 400px) {
     max-width: 400px;
+  }
+
+  .c-editPaymentmethodsBlock-actionButtons {
+    display: none !important;
   }
 }
 
-.c-noSubscriptions__button{
+.c-noSubscriptions__button {
   margin: 0 auto;
 }
 </style>

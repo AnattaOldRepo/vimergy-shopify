@@ -116,7 +116,7 @@ export const actions = {
 
   async UPDATE_ADDRESS(
     { rootState, commit, dispatch },
-    { addressId, address }
+    { addressId, address, updateSub }
   ) {
     const { storeDomain } = rootState.route
     const { customerShopifyId } = rootState.customer
@@ -142,17 +142,19 @@ export const actions = {
           }
 
           commit('SET_UPDATED_ADDRESS', response.data)
-          dispatch(
-            'subscriptions/UPDATE_SUBSCRIPTION',
-            {
-              requestPayload: {
-                shipping_address: response.data,
+          if (updateSub) {
+            dispatch(
+              'subscriptions/UPDATE_SUBSCRIPTION',
+              {
+                requestPayload: {
+                  shipping_address: response.data,
+                },
               },
-            },
-            {
-              root: true,
-            }
-          )
+              {
+                root: true,
+              }
+            )
+          }
 
           resolve(response)
         })

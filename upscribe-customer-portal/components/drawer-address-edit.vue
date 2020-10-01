@@ -43,6 +43,7 @@ export default {
           await this.UPDATE_ADDRESS({
             address,
             addressId: activeEditAddress.id,
+            updateSub: false,
           })
           await this.UPDATE_NEXT_ORDER({
             requestPayload: {
@@ -53,6 +54,7 @@ export default {
           await this.UPDATE_ADDRESS({
             address,
             addressId: activeEditAddress.id,
+            updateSub: true,
           })
         }
 

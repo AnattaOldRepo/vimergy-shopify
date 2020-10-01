@@ -49,17 +49,34 @@ export default {
           : product.image_url
       }
     },
-    productOptionDetails() {
+
+    isSubscriptionProduct() {
       const { product } = this
+      if (!product.properties) return false
+
+      return !!product.properties['Subscription']
+    },
+
+    productOptionDetails() {
+      const { product, isSubscriptionProduct, atc } = this
       if (!product.properties) return false
 
       let discountAmount = product.properties['Discount Amount']
         ? product.properties['Discount Amount']
         : false
-      let detail = `Auto Renew x${product.quantity}`
-      if (discountAmount) {
-        detail += ` (-${discountAmount} off)`
+
+      let detail
+
+      if (isSubscriptionProduct) {
+        if (parseInt(discountAmount)) {
+          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${product.quantity} (-${discountAmount} off)`
+        } else {
+          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${product.quantity}`
+        }
+      } else {
+        detail = `x${product.quantity}`
       }
+
       return detail
     },
   },

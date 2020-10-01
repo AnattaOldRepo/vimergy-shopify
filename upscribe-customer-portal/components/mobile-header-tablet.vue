@@ -32,6 +32,21 @@
       <nuxt-link
         class="c-headerTablet__navLink"
         :to="{
+          name: 'all',
+          query: {
+            storeDomain,
+            customerId,
+          },
+        }"
+        @click.native="mobileNavOpen = false"
+        >{{
+          atc['portal.headerAllSubscriptions'] || 'All Subscriptions'
+        }}</nuxt-link
+      >
+
+      <nuxt-link
+        class="c-headerTablet__navLink"
+        :to="{
           name: 'index',
           query: {
             storeDomain,

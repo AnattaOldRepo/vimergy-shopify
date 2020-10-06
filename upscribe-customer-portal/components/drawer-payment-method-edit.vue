@@ -212,6 +212,7 @@ export default {
 			updatePaymentData,
 			paymentType,
 		}) {
+      console.log('handleFinalPaymentPayloadResponse',{updatePaymentData})
       this.updatePaymentMethod(updatePaymentData, paymentType)
 		},
 
@@ -372,6 +373,7 @@ export default {
 				:submit-button-text="
 					atc['buttons.updateCard'] || 'Save Updated Payment Method'
 				"
+        :is-baintree-card="activeEditCard.type === 'braintree_card'"
 				edit-payment-method-mode
 				@cancel="$emit('setMode', 'default')"
 				@remove="showRemoveCardPrompt"

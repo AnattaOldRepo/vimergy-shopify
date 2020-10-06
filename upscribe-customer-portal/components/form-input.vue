@@ -307,6 +307,7 @@ export default {
     border-color: $color-error;
     background: transparent;
     z-index: 10;
+    margin-bottom: 35px;
   }
 
   &::placeholder{

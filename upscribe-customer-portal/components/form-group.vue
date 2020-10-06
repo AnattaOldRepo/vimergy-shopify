@@ -275,6 +275,20 @@ export default {
     }
   }
 
+  &--fourth {
+    @include bp(tablet) {
+      @include column(1/2);
+    }
+
+    @include bp(tablet-large) {
+      @include column(1/4);
+    }
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+
   &--twoThird {
     @include bp(tablet) {
       @include column(1/2);

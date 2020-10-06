@@ -3,40 +3,119 @@
     <form-wrapper v-if="$v.form" :validator="$v.form">
       <form novalidate @submit.prevent="submit">
 
-        <div v-if="paymentMethodType.includes('card')"
-          class="c-formGroupWrapper"
-        >
-          <form-input
-            id="expirationMonth"
-            v-model="form.expirationMonth"
-            class="c-formGroup--half"
-            type="text"
-            :label="atc['forms.cardExpirationMonthLabel'] || 'Exp Month'"
-            maxlength="2"
-            name="expirationMonth"
-            required
-          />
+        <div v-if="paymentMethodType.includes('card') && paymentMethodType === 'braintree_card'">
+          <div class="c-formGroupWrapper">
+            <form-input
+              id="expirationMonth"
+              v-model="form.expirationMonth"
+              :class="{
+                'c-formGroup--half': paymentMethodType === 'braintree_card',
+                'c-formGroup--third': paymentMethodType !== 'braintree_card'
+              }"
+              type="text"
+              :label="atc['forms.cardExpirationMonthLabel'] || 'Exp Month'"
+              maxlength="2"
+              name="expirationMonth"
+              required
+            />
 
-          <form-input
-            id="expirationYear"
-            v-model="form.expirationYear"
-            class="c-formGroup--half"
-            type="text"
-            maxlength="4"
-            :label="atc['forms.cardExpirationYearLabel'] || 'Exp Year'"
-            name="expirationYear"
-            required
-          />
+            <form-input
+              id="expirationYear"
+              v-model="form.expirationYear"
+              :class="{
+                'c-formGroup--half': paymentMethodType === 'braintree_card',
+                'c-formGroup--third': paymentMethodType !== 'braintree_card'
+              }"
+              type="text"
+              maxlength="4"
+              :label="atc['forms.cardExpirationYearLabel'] || 'Exp Year'"
+              name="expirationYear"
+              required
+            />
+          </div>
+          <div class="c-formGroupWrapper">
+            <form-input
+              id="zipcode"
+              v-model="form.zipcode"
+              :class="{
+                'c-formGroup--half': paymentMethodType === 'braintree_card',
+                'c-formGroup--third': paymentMethodType !== 'braintree_card'
+              }"
+              type="text"
+              :label="atc['forms.cardZipcodeLabel'] || 'Zipcode'"
+              name="zipcode"
+              required
+            />
 
-          <form-input
-            id="zipcode"
-            v-model="form.zipcode"
-            class="c-formGroup--third"
-            type="text"
-            :label="atc['forms.cardZipcodeLabel'] || 'Zipcode'"
-            name="zipcode"
-            required
-          />
+            <form-input
+              v-if="paymentMethodType === 'braintree_card'"
+              id="cvv"
+              v-model="form.cvv"
+              class="c-formGroup--half"
+              type="number"
+              label="CVV"
+              name="cvv"
+              optional-label-text="(Optional)"
+            />
+          </div>
+        </div>
+
+        <div v-else-if="paymentMethodType.includes('card') && paymentMethodType === 'braintree_card'">
+          <div class="c-formGroupWrapper">
+            <form-input
+              id="expirationMonth"
+              v-model="form.expirationMonth"
+              :class="{
+                'c-formGroup--half': paymentMethodType === 'braintree_card',
+                'c-formGroup--third': paymentMethodType !== 'braintree_card'
+              }"
+              type="text"
+              :label="atc['forms.cardExpirationMonthLabel'] || 'Exp Month'"
+              maxlength="2"
+              name="expirationMonth"
+              required
+            />
+
+            <form-input
+              id="expirationYear"
+              v-model="form.expirationYear"
+              :class="{
+                'c-formGroup--half': paymentMethodType === 'braintree_card',
+                'c-formGroup--third': paymentMethodType !== 'braintree_card'
+              }"
+              type="text"
+              maxlength="4"
+              :label="atc['forms.cardExpirationYearLabel'] || 'Exp Year'"
+              name="expirationYear"
+              required
+            />
+          </div>
+          <div class="c-formGroupWrapper">
+
+            <form-input
+              id="zipcode"
+              v-model="form.zipcode"
+              :class="{
+                'c-formGroup--half': paymentMethodType === 'braintree_card',
+                'c-formGroup--third': paymentMethodType !== 'braintree_card'
+              }"
+              type="text"
+              :label="atc['forms.cardZipcodeLabel'] || 'Zipcode'"
+              name="zipcode"
+              required
+            />
+
+            <form-input
+              v-if="paymentMethodType === 'braintree_card'"
+              id="cvv"
+              v-model="form.cvv"
+              class="c-formGroup--half"
+              type="number"
+              label="CVV"
+              name="cvv"
+              optional-label-text="(Optional)"
+            />
+          </div>
         </div>
 
         <div v-else-if="paymentMethodType == 'braintree_paypal'" class="notification">
@@ -182,13 +261,18 @@ export default {
     ...mapState('translations', ['atc']),
 
     cardData() {
-      const { form, makeDefault } = this
-      return {
-        cardMonth: form.expirationMonth || undefined,
-        cardYear: form.expirationYear || undefined,
-        cardZipcode: form.zipcode || undefined,
-        cardDefault: makeDefault ? 1 : 0,
+      const { form, makeDefault, paymentMethodType } = this
+      let cardData = {
+        cardMonth: form.expirationMonth,
+        cardYear: form.expirationYear,
+        cardZipcode: form.zipcode,
+        cardDefault: makeDefault,
       }
+
+      if (paymentMethodType === 'braintree_card') {
+        cardData.cardCvv = form.cvv
+      }
+      return cardData
     },
   },
 
@@ -214,6 +298,8 @@ export default {
         })
         return
       }
+
+      console.log('PAYLOAD CARD DARA', this.cardData)
 
       // pass validation, submit payload event
       let payload = this.cardData

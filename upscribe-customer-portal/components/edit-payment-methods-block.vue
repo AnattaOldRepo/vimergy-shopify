@@ -135,9 +135,12 @@ export default {
 			cardYear,
 			cardZipcode,
 			cardDefault,
+			cardCvv,
 		}) {
-      // console.log({ cardName, cardMonth, cardYear, cardZipcode })
+      console.log({ cardName, cardMonth, cardYear, cardZipcode, cardCvv })
       const { activePaymentType } = this
+
+      console.log('huh')
 
 
 			const updatePayload = {}
@@ -146,6 +149,9 @@ export default {
 			if (cardYear) updatePayload.exp_year = cardYear
 			if (cardZipcode) updatePayload.address_zip = cardZipcode
 			if (cardDefault) updatePayload.default = cardDefault ? 1 : 0
+      if (cardCvv) updatePayload.cvv = parseInt(cardCvv)
+
+      console.log({updatePayload})
 
       this.$emit('finalPaymentPayloadResponse', {updatePaymentData: updatePayload, paymentType: activePaymentType})
 

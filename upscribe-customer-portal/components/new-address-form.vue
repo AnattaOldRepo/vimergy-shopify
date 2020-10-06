@@ -3,6 +3,8 @@
     <form-wrapper :validator="$v.form">
       <form novalidate @submit.prevent="submit">
         <div class="c-formGroupWrapper">
+
+          asdfasdf
           <form-input
             id="firstName"
             key="firstName"
@@ -10,7 +12,7 @@
             class="c-formGroup--half"
             name="firstName"
             type="text"
-            label="First Name"
+            :label="atc['forms.firstNameLabel'] || 'First Name'"
             required
           />
 
@@ -21,7 +23,7 @@
             class="c-formGroup--half"
             name="lastName"
             type="text"
-            label="Last Name"
+            :label="atc['forms.lastNameLabel'] || 'Last Name'"
             :input-middle="true"
             required
           />
@@ -32,7 +34,7 @@
           key="company"
           v-model="form.company"
           type="text"
-          label="Company"
+          :label="atc['forms.companyLabel'] || 'Company'"
           name="company"
           :input-middle="true"
           optional-label-text="(Optional)"
@@ -43,7 +45,7 @@
           key="address1"
           v-model="form.address1"
           type="text"
-          label="Address 1"
+          :label="atc['forms.address1Label'] || 'Address 1'"
           name="address1"
           required
           :input-middle="true"
@@ -55,7 +57,7 @@
           key="address2"
           v-model="form.address2"
           type="text"
-          label="Address 2"
+          :label="atc['forms.address2Label'] || 'Address 2'"
           :input-middle="true"
           optional-label-text="(Optional)"
           name="address2"
@@ -65,7 +67,7 @@
           id="country"
           key="country"
           :value="country"
-          label="Country"
+          :label="atc['forms.countryLabel'] || 'Country'"
           name="country"
           :select-options="countrySelectOptions"
           required
@@ -82,7 +84,7 @@
             v-model="form.zipcode"
             :class="{'c-formGroup--third': requiresProvince, 'c-formGroup--half': !requiresProvince }"
             type="text"
-            label="Zipcode"
+            :label="atc['forms.zipcodeLabel'] || 'Zip'"
             name="zipcode"
             :input-middle="true"
             required
@@ -94,7 +96,7 @@
             v-model="form.city"
             :class="{'c-formGroup--third': requiresProvince, 'c-formGroup--half': !requiresProvince }"
             type="text"
-            label="City"
+            :label="atc['forms.cityLabel'] || 'City'"
             name="city"
             :input-middle="true"
             required
@@ -107,7 +109,7 @@
             v-model="form.province"
             class="c-formGroup--third no-select-options"
             type="text"
-            :label="(country && country.name !== 'United States') ? 'Province' : 'State'"
+            :label="atc['forms.stateLabel'] || 'State'"
             name="state"
             :input-middle="true"
             :required="requiresProvince"
@@ -119,7 +121,7 @@
             key="state-select-options"
             class="c-formGroup--third select-options testest"
             :value="state"
-            :label="(country && country.name !== 'United States') ? 'Province' : 'State'"
+            :label="atc['forms.stateLabel'] || 'State'"
             name="state"
             :select-options="stateSelectOptions"
             :required="requiresProvince"
@@ -129,16 +131,32 @@
           />
         </div>
 
-        <form-input
-          id="phone"
-          key="phone"
-          v-model="form.phone"
-          type="text"
-          label="Phone Number"
-          :optional-label-text="store && store.checkout_phone_number_required ? '' : '(Optional)'"
-          name="phone"
-          :required="store && store.checkout_phone_number_required ? true : false"
-        />
+        <div class="c-formGroupWrapper">
+          <form-input
+            id="phone"
+            key="phone"
+            v-model="form.phone"
+            :class="{'c-formGroup--half': activePaymentType === 'braintree_card' || !activePaymentType}"
+            type="text"
+            :label="atc['forms.phoneLabel'] || 'Phone'"
+            :optional-label-text="store.checkout_phone_number_required ? '' : '(Optional)'"
+            name="phone"
+            :required="store.checkout_phone_number_required ? true : false"
+          />
+
+          <form-input
+            v-if="activePaymentType === 'braintree_card' || !activePaymentType"
+            id="cvv"
+            key="cvv"
+            v-model="form.cvv"
+            class="c-formGroup--half"
+            type="number"
+            :label="atc['forms.cvvLabel'] || 'CVV'"
+            optional-label-text="(Optional)"
+            name="cvv"
+          />
+        </div>
+
 
         <form-summary style="display: none" />
       </form>
@@ -247,6 +265,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    activePaymentType: {
+      type: [String, Boolean],
+      default: false,
+    },
   },
 
   data() {
@@ -272,7 +294,7 @@ export default {
         zipcode: '',
         phone: '',
       },
-      addressFields: ['firstName', 'lastName', 'company', 'address1', 'address2', 'city', 'country', 'province', 'zip', 'phone'],
+      addressFields: ['firstName', 'lastName', 'company', 'address1', 'address2', 'city', 'country', 'province', 'zip', 'phone', 'cvv'],
     }
   },
   validations() {
@@ -305,6 +327,8 @@ export default {
   },
 
   computed: {
+    ...mapState('translations', ['atc']),
+
     ...mapState('googleMaps', ['googleMapsScriptLoaded']),
 
     ...mapState('countries', {
@@ -510,6 +534,7 @@ export default {
         province: form.province ? form.province : form.state || '',
         state: form.state || '',
         country: form.country || '',
+        cvv: form.cvv || null,
       }
 
       if (country && country.country && country.country.code) {
@@ -596,6 +621,7 @@ export default {
           provinceCode: preFilledForm.province_code || '',
           zipcode: preFilledForm.zipcode ? preFilledForm.zipcode : preFilledForm.zip || '',
           phone: preFilledForm.phone ?  preFilledForm.phone.replace(/\D/g,'') : '',
+          cvv: null,
         }
       } else {
         this.form = {
@@ -610,6 +636,7 @@ export default {
           state: '',
           zipcode: '',
           phone: '',
+          cvv: null,
         }
       }
 		},
@@ -651,6 +678,7 @@ export default {
           provinceCode: preFilledForm.province_code || '',
           zipcode: preFilledForm.zipcode ? preFilledForm.zipcode : preFilledForm.zip || '',
           phone: preFilledForm.phone || '',
+          cvv: null,
         }
       } else {
         this.form = {
@@ -665,6 +693,7 @@ export default {
           state: '',
           zipcode: '',
           phone: '',
+          cvv: null,
         }
       }
     },
@@ -798,6 +827,7 @@ export default {
         city: address.city,
 
         zip: address.zipcode,
+        cvv: address.cvv,
 
         province_code: address.province_code,
         province: address.province,

@@ -34,7 +34,22 @@ export default {
 
 		...mapGetters('activeSubscription', ['activeSubscription']),
 
-		...mapGetters('activeSubscription', ['activeBillingAddress']),
+    ...mapGetters('activeSubscription', ['activeBillingAddress']),
+
+    ...mapState('cards', ['cards']),
+
+    activePaymentType() {
+      const { editNextOrder, activeSubscription, cards } = this
+
+      let paymentId = editNextOrder ? activeSubscription.next.payment_method_id : activeSubscription.payment_method_id
+
+      let activePaymentType = false
+
+      cards.forEach(card => {
+        if (card.id === paymentId) activePaymentType = card.type
+      })
+      return activePaymentType
+    },
 
 		billingAddress() {
 			const { activeSubscription } = this
@@ -247,6 +262,7 @@ export default {
 				:form-submit-button-text="
 					atc['buttons.updateAddress'] || 'Update Address'
 				"
+        :active-payment-type="activePaymentType"
 				form-name="billing-address"
 				:data-fill="activeBillingAddress"
 				:has-same-address="hasSameAddress"

@@ -340,9 +340,10 @@ export default {
         :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'stripe_card' }"
         @click.prevent="toggleActivePaymentType('stripe_card')"
         >
-        <span class="c-newPaymentOptions__optionText">Card</span>
+        <span class="c-newPaymentOptions__optionText">{{ atc['checkout.creditCardLabel'] || 'Card' }}</span>
         <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
-      </a>
+        </a
+      >
 
       <a
         v-if="displayPaymentType('stripe_sepa_direct_debit')"
@@ -351,7 +352,7 @@ export default {
         :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'stripe_sepa_direct_debit' }"
         @click.prevent="toggleActivePaymentType('stripe_sepa_direct_debit')"
         >
-        <span class="c-newPaymentOptions__optionText">SEPA Direct Debit</span>
+        <span class="c-newPaymentOptions__optionText">{{ atc['checkout.sepaDirectDebitLabel'] || 'SEPA Direct Debit' }}</span>
         <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
         </a
       >
@@ -363,7 +364,7 @@ export default {
         :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'stripe_ideal' }"
         @click.prevent="toggleActivePaymentType('stripe_ideal')"
         >
-        <span class="c-newPaymentOptions__optionText">iDEAL</span>
+        <span class="c-newPaymentOptions__optionText">{{ atc['checkout.idealLabel'] || 'iDEAL' }}</span>
         <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
         </a
       >
@@ -375,7 +376,7 @@ export default {
         :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'stripe_bancontact' }"
         @click.prevent="toggleActivePaymentType('stripe_bancontact')"
         >
-        <span class="c-newPaymentOptions__optionText">Bancontact</span>
+        <span class="c-newPaymentOptions__optionText">{{ atc['checkout.bancontactLabel'] || 'Bancontact' }}</span>
         <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
         </a
       >
@@ -387,32 +388,41 @@ export default {
         :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'stripe_sofort' }"
         @click.prevent="toggleActivePaymentType('stripe_sofort')"
         >
-        <span class="c-newPaymentOptions__optionText">Sofort</span>
+        <span class="c-newPaymentOptions__optionText">{{ atc['checkout.sofortLabel'] || 'Sofort' }}</span>
+        <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
+        </a>
+
+      <a
+        v-if="stripePaymentRequestEnabled && displayPaymentType('stripe_payment_request')"
+        href
+        class="c-newPaymentOptions__option c-heading4"
+        :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'stripe_payment_request' }"
+        @click.prevent="toggleActivePaymentType('stripe_payment_request')"
+      >
+        <span class="c-newPaymentOptions__optionText">{{ paymentRequestText }}</span>
         <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
       </a>
 
-        <a
-          v-if="displayPaymentType('braintree_card')"
-          href
-          class="c-newPaymentOptions__option c-heading4"
-          :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'braintree_card' }"
-          @click.prevent="toggleActivePaymentType('braintree_card')"
-          >
-          <span class="c-newPaymentOptions__optionText">Braintree Card</span>
-          <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
-          </a>
 
-        <a
-          v-if="displayPaymentType('braintree_paypal')"
-          href
-          class="c-newPaymentOptions__option c-heading4"
-          :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'braintree_paypal' }"
-          @click.prevent="toggleActivePaymentType('braintree_paypal')"
-          >
-          <span class="c-newPaymentOptions__optionText">Braintree Paypal</span>
-          <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
-          </a>
+      <a
+        v-if="displayPaymentType('braintree_card')"
+        class="c-newPaymentOptions__option c-heading4"
+        :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'braintree_card' }"
+        @click.prevent="toggleActivePaymentType('braintree_card')"
+        >
+        <span class="c-newPaymentOptions__optionText">{{ atc['checkout.braintreeCardLabel'] || 'Card' }}</span>
+        <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
+        </a>
 
+      <a
+        v-if="displayPaymentType('braintree_paypal')"
+        class="c-newPaymentOptions__option c-heading4"
+        :class="{ 'c-newPaymentOptions__option--selected': activePaymentType === 'braintree_paypal' }"
+        @click.prevent="toggleActivePaymentType('braintree_paypal')"
+        >
+        <span class="c-newPaymentOptions__optionText">{{ atc['checkout.braintreePaypalLabel'] || 'Paypal' }}</span>
+        <svg class="c-newPaymentOptions__optionIcon" width="15" height="8" xmlns="http://www.w3.org/2000/svg"><path d="M7.2 8c-.258 0-.516-.096-.713-.288L.295 1.678a.965.965 0 0 1 0-1.39 1.027 1.027 0 0 1 1.426 0L7.2 5.628l5.478-5.34a1.027 1.027 0 0 1 1.426 0 .965.965 0 0 1 0 1.39L7.913 7.712A1.019 1.019 0 0 1 7.2 8z" fill="#666"/></svg>
+        </a>
       </div>
     </div>
 
@@ -461,7 +471,6 @@ export default {
       </div>
     </div>
   </div>
-
 
   <div v-else class="c-paymentMethods__options c-paymentMethods__options--add "
     :class="{ 'c-paymentMethods__options--visible': activePaymentType }"

@@ -4,7 +4,6 @@
       <form novalidate @submit.prevent="submit">
         <div class="c-formGroupWrapper">
 
-          asdfasdf
           <form-input
             id="firstName"
             key="firstName"

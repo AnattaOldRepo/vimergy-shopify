@@ -156,57 +156,15 @@ export default {
       } else {
         analyticsEventName = 'Upscribe Subscription Product Add'
 
-        // check if identical payloads, if so can make the combined update
-        // using updateNext=1 on the subscription endpoint
-
-        // if not, then we need to keep on doing the separate updates
-        let identical = JSON.stringify(updateSubscriptionPayload) === JSON.stringify(nextOrderUpdatePayload)
-
-        console.log(JSON.stringify(updateSubscriptionPayload), JSON.stringify(nextOrderUpdatePayload), {identical})
-        // determine if identical
-
-        if (identical) {
-          handleNewCheckoutUpdatePayload = [
-            buildNewCheckoutUpdatePayload(
-              this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
-              updateSubscriptionPayload,
-              'subscriptions',
-              'UPDATE_SUBSCRIPTION',
-              `Product added on subscription.`,
-            ),
-          ]
-        } else {
-
-          handleNewCheckoutUpdatePayload = [
-            buildNewCheckoutUpdatePayload(
-              this.UPDATE_SUBSCRIPTION({
-                ...updateSubscriptionPayload,
-                notIdentical: true,
-              }),
-              {
-                updateSubscriptionPayload: {
-                  ...updateSubscriptionPayload,
-                  notIdentical: true,
-                },
-              },
-              'subscriptions',
-              'UPDATE_SUBSCRIPTION',
-              `Product added to subscription.`,
-            ),
-          ]
-
-          if (nextOrderUpdatePayload.requestPayload.items) {
-            handleNewCheckoutUpdatePayload.push(
-              buildNewCheckoutUpdatePayload(
-                this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-                nextOrderUpdatePayload,
-                'queues',
-                'UPDATE_NEXT_ORDER',
-                `Product added to next order.`
-              ),
-            )
-          }
-        }
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+            updateSubscriptionPayload,
+            'subscriptions',
+            'UPDATE_SUBSCRIPTION',
+            `Product added on subscription.`,
+          ),
+        ]
       }
 
       this.$emit('setDrawerStatus', 'PENDING')
@@ -251,6 +209,7 @@ export default {
         v-if="variantSelectProduct"
         :product="variantSelectProduct"
         :updating="updating"
+        :button-text="editNextOrder ? (atc['portal.addProductToNextOrder'] || 'Add to Next Shipment') : (atc['portal.addProductToSubscription'] || 'Add to Subscription')"
         @addProductVariantToSubscription="handleAddProductVariantToSubscription"
         @setMode="handleSetMode"
       />

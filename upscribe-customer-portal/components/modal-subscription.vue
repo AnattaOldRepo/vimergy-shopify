@@ -8,7 +8,7 @@
   >
     <div v-if="!showVariantSelector">
       <div v-if="!needUpdating && !swapping" class="c-modalSubscription">
-        <h2 v-if="editNextOrder"
+        <h2 v-if="editNextOrderFallback"
           class="c-modalSubscription__title">
           {{ atc['portal.productsGridNextOrderTitle'] || 'Add to Your Next Order' }}
         </h2>
@@ -138,6 +138,7 @@
       <variant-select-block
           v-if="variantSelectProduct"
           :product="variantSelectProduct"
+          :button-text="editNextOrderFallback ? (atc['portal.addProductToNextOrder'] || 'Add to Next Shipment') : (atc['portal.addProductToSubscription'] || 'Add to Subscription')"
           @addProductVariantToSubscription="handleAddProductVariantToSubscription"
         />
     </div>
@@ -218,6 +219,14 @@ export default {
     ]),
 
     ...mapGetters('products', ['hashedCollections', 'product']),
+
+    editNextOrderFallback() {
+      const { editNextOrder, $route } = this
+
+      if ($route.query && $route.query.template && $route.query.template === 'next-shipment') return true
+
+      return editNextOrder
+    },
 
     collectionOptions(){
       let collectionOptionsArr = []
@@ -394,7 +403,8 @@ export default {
 
     async handleQuantityChange({ type, id, quantity, variant_id, product }) {
       const {
-        editNextOrder,
+        // editNextOrder,
+        editNextOrderFallback,
         activeSubscription,
       } = this
 
@@ -440,7 +450,7 @@ export default {
         ...product,
       }
 
-      if (editNextOrder) {
+      if (editNextOrderFallback) {
         analyticsEventName = 'Upscribe Next Order Product Quantity Change'
 
         handleNewCheckoutUpdatePayload = [
@@ -480,10 +490,10 @@ export default {
       const {
         activeSubscription,
         activeQueue,
-        editNextOrder,
+        editNextOrderFallback,
       } = this
 
-      const itemCount = editNextOrder
+      const itemCount = editNextOrderFallback
         ? activeQueue.items.length
         : activeSubscription.items.length
 
@@ -535,7 +545,7 @@ export default {
         },
       }
 
-      let itemsToCheck = editNextOrder
+      let itemsToCheck = editNextOrderFallback
         ? activeSubscription.next.items
         : activeSubscription.items
 
@@ -548,7 +558,7 @@ export default {
         product: { ...editItem },
       }
 
-      if (editNextOrder) {
+      if (editNextOrderFallback) {
         analyticsEventName = 'Upscribe Next Order Product Remove'
 
         handleNewCheckoutUpdatePayload = [
@@ -600,7 +610,8 @@ export default {
       console.log('variantSelectProduct 2', this.variantSelectProduct)
 
       const {
-        editNextOrder,
+        // editNextOrder,
+        editNextOrderFallback,
         activeSubscription,
       } = this
 
@@ -631,7 +642,7 @@ export default {
       let analyticsEventName, handleNewCheckoutUpdatePayload
       let analyticsPayload = { product }
 
-      if (editNextOrder) {
+      if (editNextOrderFallback) {
         analyticsEventName = 'Upscribe Next Order Product Add'
 
         handleNewCheckoutUpdatePayload = [
@@ -677,7 +688,8 @@ export default {
 
     async handleSwapProductVariant(variantId, newProduct) {
       const {
-        editNextOrder,
+        // editNextOrder,
+        editNextOrderFallback,
         activeSubscription,
       } = this
 
@@ -754,7 +766,7 @@ export default {
         oldProduct: productToReplace,
       }
 
-      if (editNextOrder) {
+      if (editNextOrderFallback) {
         analyticsEventName = 'Upscribe Next Order Product Swap'
 
         // updateMessage = `Quantity updated to ${quantity} on next order.`

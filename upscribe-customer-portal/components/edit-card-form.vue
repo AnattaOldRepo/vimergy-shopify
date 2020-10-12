@@ -60,62 +60,40 @@
           </div>
         </div>
 
-        <div v-else-if="paymentMethodType.includes('card') && paymentMethodType === 'braintree_card'">
-          <div class="c-formGroupWrapper">
-            <form-input
-              id="expirationMonth"
-              v-model="form.expirationMonth"
-              :class="{
-                'c-formGroup--half': paymentMethodType === 'braintree_card',
-                'c-formGroup--third': paymentMethodType !== 'braintree_card'
-              }"
-              type="text"
-              :label="atc['forms.cardExpirationMonthLabel'] || 'Exp Month'"
-              maxlength="2"
-              name="expirationMonth"
-              required
-            />
+        <div v-else-if="paymentMethodType.includes('card')"
+          class="c-formGroupWrapper"
+        >
+          <form-input
+            id="expirationMonth"
+            v-model="form.expirationMonth"
+            class="c-formGroup--half"
+            type="text"
+            :label="atc['forms.cardExpirationMonthLabel'] || 'Exp Month'"
+            maxlength="2"
+            name="expirationMonth"
+            required
+          />
 
-            <form-input
-              id="expirationYear"
-              v-model="form.expirationYear"
-              :class="{
-                'c-formGroup--half': paymentMethodType === 'braintree_card',
-                'c-formGroup--third': paymentMethodType !== 'braintree_card'
-              }"
-              type="text"
-              maxlength="4"
-              :label="atc['forms.cardExpirationYearLabel'] || 'Exp Year'"
-              name="expirationYear"
-              required
-            />
-          </div>
-          <div class="c-formGroupWrapper">
+          <form-input
+            id="expirationYear"
+            v-model="form.expirationYear"
+            class="c-formGroup--half"
+            type="text"
+            maxlength="4"
+            :label="atc['forms.cardExpirationYearLabel'] || 'Exp Year'"
+            name="expirationYear"
+            required
+          />
 
-            <form-input
-              id="zipcode"
-              v-model="form.zipcode"
-              :class="{
-                'c-formGroup--half': paymentMethodType === 'braintree_card',
-                'c-formGroup--third': paymentMethodType !== 'braintree_card'
-              }"
-              type="text"
-              :label="atc['forms.cardZipcodeLabel'] || 'Zipcode'"
-              name="zipcode"
-              required
-            />
-
-            <form-input
-              v-if="paymentMethodType === 'braintree_card'"
-              id="cvv"
-              v-model="form.cvv"
-              class="c-formGroup--half"
-              type="number"
-              label="CVV"
-              name="cvv"
-              optional-label-text="(Optional)"
-            />
-          </div>
+          <form-input
+            id="zipcode"
+            v-model="form.zipcode"
+            class="c-formGroup--third"
+            type="text"
+            :label="atc['forms.cardZipcodeLabel'] || 'Zipcode'"
+            name="zipcode"
+            required
+          />
         </div>
 
         <div v-else-if="paymentMethodType == 'braintree_paypal'" class="notification">

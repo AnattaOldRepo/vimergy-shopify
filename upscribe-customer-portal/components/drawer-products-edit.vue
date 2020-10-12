@@ -191,58 +191,17 @@ export default {
         ]
 
       } else {
-
         analyticsEventName = 'Upscribe Subscription Product Quantity Change'
 
-        // check if identical payloads, if so can make the combined update
-        // using updateNext=1 on the subscription endpoint
-
-        // if not, then we need to keep on doing the separate updates
-        let identical = JSON.stringify(updateSubscriptionPayload) === JSON.stringify(nextOrderUpdatePayload)
-
-        console.log(JSON.stringify(updateSubscriptionPayload), JSON.stringify(nextOrderUpdatePayload), {identical})
-        // determine if identical
-        if (identical) {
-          handleNewCheckoutUpdatePayload = [
-            buildNewCheckoutUpdatePayload(
-              this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
-              updateSubscriptionPayload,
-              'subscriptions',
-              'UPDATE_SUBSCRIPTION',
-              `Quantity updated to ${quantity} on subscription.`,
-            ),
-          ]
-        } else {
-          handleNewCheckoutUpdatePayload = [
-            buildNewCheckoutUpdatePayload(
-              this.UPDATE_SUBSCRIPTION({
-                ...updateSubscriptionPayload,
-                notIdentical: true,
-              }),
-              {
-                updateSubscriptionPayload: {
-                  ...updateSubscriptionPayload,
-                  notIdentical: true,
-                },
-              },
-              'subscriptions',
-              'UPDATE_SUBSCRIPTION',
-              `Quantity updated to ${quantity} on subscription.`,
-            ),
-          ]
-
-          if (nextOrderUpdatePayload.requestPayload.items) {
-            handleNewCheckoutUpdatePayload.push(
-              buildNewCheckoutUpdatePayload(
-                this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-                nextOrderUpdatePayload,
-                'queues',
-                'UPDATE_NEXT_ORDER',
-                `Quantity updated to ${quantity} on next order.`
-              ),
-            )
-          }
-        }
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+            updateSubscriptionPayload,
+            'subscriptions',
+            'UPDATE_SUBSCRIPTION',
+            `Quantity updated to ${quantity} on subscription.`,
+          ),
+        ]
       }
 
       this.$emit('setDrawerStatus', 'PENDING')
@@ -330,58 +289,17 @@ export default {
 					),
 				]
 			} else {
-				// updateMessage = `Quantity updated to ${quantity}.`
 				analyticsEventName = 'Upscribe Subscription Product Quantity Change'
 
-        // check if identical payloads, if so can make the combined update
-        // using updateNext=1 on the subscription endpoint
-
-        // if not, then we need to keep on doing the separate updates
-        let identical = JSON.stringify(updateSubscriptionPayload) === JSON.stringify(nextOrderUpdatePayload)
-
-        console.log(JSON.stringify(updateSubscriptionPayload), JSON.stringify(nextOrderUpdatePayload), {identical})
-        // determine if identical
-        if (identical) {
-          handleNewCheckoutUpdatePayload = [
-            buildNewCheckoutUpdatePayload(
-              this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
-              updateSubscriptionPayload,
-              'subscriptions',
-              'UPDATE_SUBSCRIPTION',
-              `Quantity updated to ${quantity} on subscription.`,
-            ),
-          ]
-        } else {
-          handleNewCheckoutUpdatePayload = [
-            buildNewCheckoutUpdatePayload(
-              this.UPDATE_SUBSCRIPTION({
-                ...updateSubscriptionPayload,
-                notIdentical: true,
-              }),
-              {
-                updateSubscriptionPayload: {
-                  ...updateSubscriptionPayload,
-                  notIdentical: true,
-                },
-              },
-              'subscriptions',
-              'UPDATE_SUBSCRIPTION',
-              `Quantity updated to ${quantity} on subscription.`,
-            ),
-          ]
-
-          if (nextOrderUpdatePayload.requestPayload.items) {
-            handleNewCheckoutUpdatePayload.push(
-              buildNewCheckoutUpdatePayload(
-                this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-                nextOrderUpdatePayload,
-                'queues',
-                'UPDATE_NEXT_ORDER',
-                `Quantity updated to ${quantity} on next order.`
-              ),
-            )
-          }
-        }
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+            updateSubscriptionPayload,
+            'subscriptions',
+            'UPDATE_SUBSCRIPTION',
+            `Quantity updated to ${quantity} on subscription.`,
+          ),
+        ]
 			}
 
 			this.$emit('setDrawerStatus', 'PENDING')
@@ -447,7 +365,7 @@ export default {
 			let handleNewCheckoutUpdatePayload, analyticsEventName
 
 			if (editNextOrder) {
-				analyticsEventName = 'Upscribe Next Order Product Remove'
+				analyticsEventName = 'Upscribe Next Order Product Removed'
 
 				handleNewCheckoutUpdatePayload = [
 					buildNewCheckoutUpdatePayload(
@@ -460,58 +378,17 @@ export default {
 				]
       } else {
 
-        // check if identical payloads, if so can make the combined update
-        // using updateNext=1 on the subscription endpoint
+				analyticsEventName = 'Upscribe Subscription Product Removed'
 
-        // if not, then we need to keep on doing the separate updates
-        let identical = JSON.stringify(updateSubscriptionPayload) === JSON.stringify(nextOrderUpdatePayload)
-
-        console.log(JSON.stringify(updateSubscriptionPayload), JSON.stringify(nextOrderUpdatePayload), {identical})
-        // determine if identical
-
-        if (identical) {
-          console.log('ran as identical')
-
-          handleNewCheckoutUpdatePayload = [
-            buildNewCheckoutUpdatePayload(
-              this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
-              updateSubscriptionPayload,
-              'subscriptions',
-              'UPDATE_SUBSCRIPTION',
-              `Product removed from subscription`,
-            ),
-          ]
-        } else {
-          handleNewCheckoutUpdatePayload = [
-            buildNewCheckoutUpdatePayload(
-              this.UPDATE_SUBSCRIPTION({
-                ...updateSubscriptionPayload,
-                notIdentical: true,
-              }),
-              {
-                updateSubscriptionPayload: {
-                  ...updateSubscriptionPayload,
-                  notIdentical: true,
-                },
-              },
-              'subscriptions',
-              'UPDATE_SUBSCRIPTION',
-              `Product removed from subscription`,
-            ),
-          ]
-
-          if (nextOrderUpdatePayload.requestPayload.items) {
-            handleNewCheckoutUpdatePayload.push(
-              buildNewCheckoutUpdatePayload(
-                this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-                nextOrderUpdatePayload,
-                'queues',
-                'UPDATE_NEXT_ORDER',
-                `Product removed from next order.`
-              )
-            )
-          }
-        }
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+            updateSubscriptionPayload,
+            'subscriptions',
+            'UPDATE_SUBSCRIPTION',
+            `Product removed from subscription`,
+          ),
+        ]
       }
 
 			// this.removeUpdating = false

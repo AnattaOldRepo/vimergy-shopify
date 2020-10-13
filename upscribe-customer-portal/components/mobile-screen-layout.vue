@@ -17,8 +17,13 @@
         v-if="!templateQuery && subscriptions && toggleSubscriptions.length > 0"
         :key="1"
       >
-        <all />
-        <!-- <subscription-picker :query="isCancelledQueryRoute" /> -->
+        <!-- subscriptions-picker is used only for showing cancel page  -->
+        <subscription-picker
+          v-if="isCancelledQueryRoute"
+          :query="isCancelledQueryRoute"
+        />
+        <!-- all subscription page  -->
+        <all v-else />
       </div>
 
       <!-- Next Shipment Block -->
@@ -151,7 +156,7 @@ import MobileScreenEditCard from '@components/mobile-screen-edit-card.vue'
 import MobileScreenDiscount from '@components/mobile-screen-discount.vue'
 import MobileOrderNextShipment from '@components/mobile-order-next-shipment.vue'
 import TheHeader from '@components/the-header'
-// import SubscriptionPicker from '@components/subscription-picker.vue'
+import SubscriptionPicker from '@components/subscription-picker.vue'
 import Order from '@components/order.vue'
 import SecondLoaderIcon from '@components/second-loader-icon.vue'
 import VButton from '@components/v-button'
@@ -172,7 +177,7 @@ export default {
     MobileScreenBillingAddress,
     MobileScreenAddCard,
     MobileScreenDatePicker,
-    // SubscriptionPicker,
+    SubscriptionPicker,
     MobileScreenEditCard,
     VButton,
     Order,

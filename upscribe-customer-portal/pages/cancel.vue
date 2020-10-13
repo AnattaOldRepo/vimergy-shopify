@@ -1,17 +1,16 @@
 <template>
   <div class="c-cancel">
     <portal v-if="windowWidth < 768" to="header">
-      <the-header
-         middle-html="Cancel Subscription"
-         mode="backwardRoute"
-      />
+      <the-header middle-html="Cancel Subscription" mode="backwardRoute" />
     </portal>
 
-    <h1 class="c-cancel__title">{{ atc['portal.cancelSubscriptionTitle'] || 'Cancel Subscription' }}</h1>
+    <h1 class="c-cancel__title">{{
+      atc['portal.cancelSubscriptionTitle'] || 'Cancel Subscription'
+    }}</h1>
 
-    <h2 v-if="shopData" class="c-cancel__subtitle"
-      >{{ cancelSubscriptionPrompt }}</h2
-    >
+    <h2 v-if="shopData" class="c-cancel__subtitle">{{
+      cancelSubscriptionPrompt
+    }}</h2>
 
     <div v-if="cancellationReasons" class="c-cancel__inner">
       <div class="c-cancel__list">
@@ -25,7 +24,9 @@
           }"
         >
           <div class="c-cancel__listItemIcon"></div>
-          <span class="c-cancel__listItemText">{{ reason }}</span>
+          <span class="c-cancel__listItemText">{{
+            reason.message || reason
+          }}</span>
           <input
             :id="'cancel-reason-' + index"
             v-model="selectedReasonIndex"
@@ -37,10 +38,14 @@
       </div>
 
       <div class="c-cancel__field c-cancel__field--textArea">
-        <label
-          class="c-cancel__label c-cancel__label--textArea"
-        >{{ atc['labels.comments'] || 'Comments' }}</label>
-        <textarea v-model="comments" type="textarea" class="c-cancel__textArea" />
+        <label class="c-cancel__label c-cancel__label--textArea">{{
+          atc['labels.comments'] || 'Comments'
+        }}</label>
+        <textarea
+          v-model="comments"
+          type="textarea"
+          class="c-cancel__textArea"
+        />
       </div>
     </div>
 
@@ -61,7 +66,11 @@
 
       <v-button
         v-if="activeSubscription.active"
-        :text="cancelSubscriptionUpdating ? (atc['notices.cancellingNotice'] || 'Cancelling') : (atc['buttons.cancelSubscription'] || 'Cancel Subscription')"
+        :text="
+          cancelSubscriptionUpdating
+            ? atc['notices.cancellingNotice'] || 'Cancelling'
+            : atc['buttons.cancelSubscription'] || 'Cancel Subscription'
+        "
         :disabled="selectedReason === false ? true : false"
         size="small"
         type="alt"
@@ -136,9 +145,14 @@ export default {
     cancelSubscriptionPrompt() {
       const { atc, shopData } = this
       if (atc['portal.cancelSubscriptionPrompt']) {
-        return atc['portal.cancelSubscriptionPrompt'].replace('<shop-name>', shopData.name)
+        return atc['portal.cancelSubscriptionPrompt'].replace(
+          '<shop-name>',
+          shopData.name
+        )
       } else {
-        return `${shopData.name}’s priority is happy customers. Please tell us your
+        return `${
+          shopData.name
+        }’s priority is happy customers. Please tell us your
       reason for cancelling.`
       }
     },
@@ -165,7 +179,10 @@ export default {
   methods: {
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
-    ...mapActions('subscriptions', ['CANCEL_SUBSCRIPTION', 'GET_SUBSCRIPTIONS']),
+    ...mapActions('subscriptions', [
+      'CANCEL_SUBSCRIPTION',
+      'GET_SUBSCRIPTIONS',
+    ]),
 
     async cancelAttempt() {
       const { finalReasonPayload } = this
@@ -188,7 +205,6 @@ export default {
         })
         await this.GET_SUBSCRIPTIONS()
         this.$router.push({ name: 'index', query: { ...this.$route.query } })
-
       } catch (e) {
         console.log('e: ', e)
         this.triggerAnalyticsEvent({
@@ -258,7 +274,7 @@ export default {
   margin: 0 auto;
   background-color: $color-white;
 
-  @include bp(tablet){
+  @include bp(tablet) {
     margin: 0 auto 52px;
     padding: 54px 20px;
   }

@@ -44,7 +44,7 @@
 
       <div class="c-productRow__buttonContainer">
         <v-button
-          :disabled="isCancelledSubscriptionRoute"
+          v-if="!isCancelledSubscriptionRoute"
           class="c-productRow__rightButton"
           @onClick="openAddToSubscriptionModal"
         >

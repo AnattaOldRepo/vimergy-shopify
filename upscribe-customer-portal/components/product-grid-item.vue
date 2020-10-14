@@ -259,7 +259,6 @@ export default {
 .c-productGridItem__image {
   display: block;
   width: 100%;
-  min-height: 160px;
 }
 
 .c-productGridItem__title {

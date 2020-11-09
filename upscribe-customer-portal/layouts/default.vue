@@ -5,7 +5,7 @@
 		<portal-target v-else name="header" class="header-portal" />
 
 		<div class="c-portalBar">
-		    If you would like to break up the subscription and have multiple ship dates for the same subscription... please contact <a href="mailto:help@vimergy.com">help@vimergy.com</a> or call <a hfre="tel:(904) 335-3254">(904) 335-3254</a>.
+		   <a href="https://vimeo.com/468150046/5a738789cf">CLICK TO LEARN HOW TO EDIT YOUR SUBSCRIPTION</a>
 		</div>
 
 		<div class="c-portal__main">

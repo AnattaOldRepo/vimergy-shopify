@@ -10,10 +10,14 @@ export const state = () => ({
 
   storeLogo: null,
   shopifyStorefrontAccessToken: null,
-  cancellationReasons: null,
   currencySymbol: null,
   featuredPortalCollection: null,
   nextOrderProductsSubscriptionPricing: null,
+
+  cancellationReasons: null,
+  nestedCancellationReasonsEnabled: null,
+  nestedCancellationReasonMap: null,
+  nestedCancellationReasons: null,
 })
 
 export const mutations = {
@@ -27,7 +31,6 @@ export const mutations = {
 
     state.storeLogo = data.logo_url
     state.shopifyStorefrontAccessToken = data.shopify_storefront_access_token
-    state.cancellationReasons = data.cancellation_reasons
     state.cname = data.cname
     state.google_analytics_id = data.google_analytics_id
     state.google_tag_manager_id = data.google_tag_manager_id
@@ -41,6 +44,35 @@ export const mutations = {
     state.stripe_public_key = data.stripe_public_key
 
     state.nextOrderProductsSubscriptionPricing = !data.one_time_price_enabled
+
+    state.cancellationReasons = data.cancellation_reasons
+
+    state.nestedCancellationReasonsEnabled = data.nested_cancellation_reasons_enabled
+    state.nestedCancellationReasons = data.nested_cancellation_reasons
+
+    console.log({nested_cancellation_reasons: data.nested_cancellation_reasons})
+
+    if (data.nested_cancellation_reasons && data.nested_cancellation_reasons[0] && typeof data.nested_cancellation_reasons[0] === 'object' && data.nested_cancellation_reasons[0] !== null) {
+      let final = {}
+
+      data.nested_cancellation_reasons.forEach(reason => {
+        if (reason.children) {
+          final[reason.id] = reason
+          reason.children.forEach(reason2 => {
+            if (reason2.children) {
+              final[reason2.id] = reason2
+              reason2.children.forEach(reason3 => {
+                final[reason3.id] = reason3
+              })
+            } else {
+              final[reason2.id] = reason2
+            }
+          })
+        }
+      })
+
+      state.nestedCancellationReasonMap = { ...final }
+    }
 
     // Set shop currency
     let currencyCode = data.shop.currency

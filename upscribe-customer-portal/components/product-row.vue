@@ -36,6 +36,7 @@
             ...returnCancelledSubscriptionRoute,
             storeDomain,
             customerId,
+            ...editNextOrder,
           },
         }"
       >
@@ -59,7 +60,7 @@
               ...returnCancelledSubscriptionRoute,
               storeDomain,
               customerId,
-              editNextOrder: this.$route.query.template == 'next-shipment',
+              ...editNextOrder,
             },
           }"
         >
@@ -156,6 +157,11 @@ export default {
         return products.length
       }
     },
+    editNextOrder() {
+      return this.$route.query.template === 'next-shipment'
+        ? { editNextOrder: true }
+        : {}
+    },
   },
 
   methods: {
@@ -167,7 +173,7 @@ export default {
       if (this.isCancelledSubscriptionRoute) return
       if (!productVariantId) return
 
-      this.setProductIdAndSubscriptionId(productVariantId)
+      this.setProductIdAndSubscriptionId({ productVariantId })
       this.isProductModalOpen = true
       this.closeAnimation = false
     },

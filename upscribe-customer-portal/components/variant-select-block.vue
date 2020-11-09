@@ -170,7 +170,7 @@ export default {
       const { variantPrice, subscriptionDiscountAmount, subscriptionDiscountType } = this
       if (!variantPrice || !subscriptionDiscountAmount ||  !subscriptionDiscountType) return false
 
-      const discountAmount = this.subscriptionDiscountAmount.replace(/\D/g,'')
+      const discountAmount = this.subscriptionDiscountAmount.replace(/[^0-9.]/g,'')
 
       let calcDiscountAmount = 0
 

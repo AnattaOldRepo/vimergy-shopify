@@ -1,11 +1,13 @@
 <template>
   <div class="o-container o-container--mobile">
-    <h1 v-if="subscriptions" class="c-all__title u-mt-3">
+    <h1 v-if="subscriptions" class="c-all__title u-mt-3 u-ml-1">
       {{ atc['portal.headerAllSubscriptions'] || 'All Subscriptions' }}</h1
     >
-    <h1 v-else class="c-all__title u-mt-3">No Subscriptions Available</h1>
+    <h1 v-else class="c-all__title u-mt-3 u-ml-1"
+      >No Subscriptions Available</h1
+    >
     <div
-      v-for="subscription in subscriptions"
+      v-for="subscription in sortedSubscriptions"
       :key="subscription.id"
       class="c-subscriptions u-bgColor--white"
       :class="{ 'c-subscriptions--inactive': !subscription.active }"
@@ -81,7 +83,7 @@ import { windowSizes } from '@mixins/windowSizes'
 
 export default {
   mixins: [windowSizes],
-
+  scrollToTop: true,
   computed: {
     ...mapState('translations', ['atc']),
     ...mapState('subscriptions', [
@@ -91,16 +93,21 @@ export default {
     ]),
     ...mapState('route', ['storeDomain', 'customerId']),
     ...mapState('shop', ['currencySymbol']),
-    currentRoute() {
-      return this.$route.query === 'cancelledSubscriptions'
-        ? { route: 'cancelledSubscriptions' }
-        : {}
+    sortedSubscriptions() {
+      // changing object to array
+      const arr = Object.keys(this.subscriptions).map(
+        (key) => this.subscriptions[key]
+      )
+      // active subscriptions comes first
+      const sortedSubs = [...arr].sort((a, b) =>
+        a.active === b.active ? 0 : a.active ? -1 : 1
+      )
+      return sortedSubs
     },
   },
   methods: {
     ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
     goToSubscription(subscriptionId) {
-      this.setActiveSubscriptionId(subscriptionId)
       if (this.windowWidth > 767) {
         this.$router.push({
           name: 'index',
@@ -111,9 +118,10 @@ export default {
           },
         })
       } else {
+        // scrolls the screen to the top
+        document.documentElement.scrollTop = 0
         this.$router.push({
           query: {
-            currentRoute: this.currentRoute,
             template: 'default',
             storeDomain: this.storeDomain,
             customerId: this.customerId,
@@ -121,6 +129,7 @@ export default {
           },
         })
       }
+      this.setActiveSubscriptionId(subscriptionId)
     },
   },
 }

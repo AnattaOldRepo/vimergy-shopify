@@ -12,13 +12,41 @@
       cancelSubscriptionPrompt
     }}</h2>
 
-    <div v-if="cancellationReasons" class="c-cancel__inner">
+  <div v-if="nestedCancellationReasonsEnabled" class="c-cancel__inner">
+      <div v-if="useTheseReasons" style="width:100%">
+        <cancel-subscription-options-ui
+          :reasons="useTheseReasons"
+          :position="1"
+          :position1-id="position1Id"
+          :position2-id="position2Id"
+          :position3-id="position3Id"
+          :position1="position1"
+          :position2="position2"
+          :position3="position3"
+          @setCancellationReason="setCancellationReason"
+        />
+
+        <div class="c-cancel__comments c-cancel__field c-cancel__field--textArea">
+          <label
+            class="c-cancel__label c-cancel__label--textArea"
+          >Comments</label>
+          <textarea v-model="comments" type="textarea" class="c-cancel__textArea" rows="4"/>
+        </div>
+      </div>
+
+      <!-- <loading-block v-else /> -->
+    </div>
+
+
+    <!-- Old Cancellation Reasons Structure -->
+
+    <div v-else class="c-cancel__inner">
       <div class="c-cancel__list">
         <label
           v-for="(reason, index) in cancellationReasons"
           :key="'cancel-reason-' + index"
           :for="'cancel-reason-' + index"
-          class="c-cancel__listItem"
+          class="c-cancel__listItem c-cancel__listItem--old"
           :class="{
             'c-cancel__listItem--active': selectedReasonIndex === index,
           }"
@@ -65,7 +93,20 @@
       />
 
       <v-button
-        v-if="activeSubscription.active"
+        v-if="nestedCancellationReasonsEnabled"
+        type="alt"
+        :text="
+          cancelSubscriptionUpdating
+            ? atc['notices.cancellingNotice'] || 'Cancelling'
+            : atc['buttons.cancelSubscription'] || 'Cancel Subscription'
+        "
+        :disabled="!allowCancellation"
+        size="small"
+        @onClick="handleCancelSubscription"
+      />
+
+      <v-button
+        v-else-if="!nestedCancellationReasonsEnabled && activeSubscription.active"
         :text="
           cancelSubscriptionUpdating
             ? atc['notices.cancellingNotice'] || 'Cancelling'
@@ -74,7 +115,7 @@
         :disabled="selectedReason === false ? true : false"
         size="small"
         type="alt"
-        @onClick="cancelAttempt"
+        @onClick="handleCancelSubscriptionOld"
       />
     </div>
 
@@ -115,9 +156,13 @@ import CancelModal from '@components/cancel-modal.vue'
 import TheHeader from '@components/the-header'
 import { windowSizes } from '@mixins/windowSizes'
 
+import CancelSubscriptionOptionsUi from '@components/cancel-subscription-options-ui'
+
+
 export default {
   components: {
     VButton,
+    CancelSubscriptionOptionsUi,
     DrawerDeliveryDate,
     DrawerProducts,
     CancelModal,
@@ -134,11 +179,19 @@ export default {
       cancelModalOpen: false,
       cancelSubscriptionUpdating: false,
       comments: '',
+
+      position1: null,
+      position2: null,
+      position3: null,
+
+      position1Id: null,
+      position2Id: null,
+      position3Id: null,
     }
   },
   computed: {
     ...mapState('translations', ['atc']),
-    ...mapState('shop', ['shopData', 'cancellationReasons']),
+    ...mapState('shop', ['shopData', 'cancellationReasons', 'nestedCancellationReasons', 'nestedCancellationReasonsEnabled']),
 
     ...mapGetters('activeSubscription', ['activeSubscription']),
 
@@ -165,6 +218,62 @@ export default {
       return cancellationReasons[selectedReasonIndex]
     },
 
+    allowCancellation() {
+      const { position1, position2, position3 } = this
+      if (position1) {
+        if (position1.children && position1.children.length) {
+          if (position2) {
+            if (position2.children && position2.children.length) {
+              if (position3) {
+                return true // only allow 3 deep
+              } else {
+                return false // only 3, and 3 selected
+              }
+            } else {
+              return true // only 2
+            }
+          } else {
+            return false // need to select 2
+          }
+        } else {
+          return true // only 1
+        }
+      } else {
+        return false // need to select 1
+      }
+    },
+
+    newFinalReasonPayload() {
+      const { position1Id, position2Id, position3Id, comments } = this
+      const payload = {
+        reasons: [],
+        comment: comments || undefined,
+      }
+      if (position1Id) payload.reasons.push({ reason_id: position1Id, position: 1})
+      if (position2Id) payload.reasons.push({ reason_id: position2Id, position: 2})
+      if (position3Id) payload.reasons.push({ reason_id: position3Id, position: 3})
+      return payload
+    },
+
+    useTheseReasons() {
+      const { cancellationReasons, nestedCancellationReasons, nestedCancellationReasonsEnabled } = this
+
+      console.log({nestedCancellationReasons})
+
+      if (nestedCancellationReasonsEnabled && nestedCancellationReasons) {
+        const customerPortalReasons = nestedCancellationReasons.filter(reason => {
+          return (reason.type === 'CUSTOMER PORTAL' && reason.active)
+        })
+        return customerPortalReasons
+      }
+
+      else {
+        // old structure
+        // fallback to default reasons if admin cancellation reasons not set
+        return cancellationReasons
+      }
+    },
+
     finalReasonPayload() {
       let reason = this.selectedReason
 
@@ -184,27 +293,84 @@ export default {
       'GET_SUBSCRIPTIONS',
     ]),
 
-    async cancelAttempt() {
-      const { finalReasonPayload } = this
+    setCancellationReason(payload) {
+      if (!payload) return
 
-      // if denying
-      // this.cancelCustomerSupportModalOpen = true
-      // else {..}
+      const {reason, position} = payload
+      // console.log('setCancellationReason', {reason, position})
+
+      if (!reason || !position) {
+        console.log('reason or position not')
+        return
+      }
+
+      // console.log({reason, position})
+
+      // console.log('setPositionOne', {reason})
+      // this.positionOneReason = { ...reason }
+      // this.positionOneReasonId = reason.id
+
+      this[`position${position}Id`] = reason.id
+      this[`position${position}`] = {...reason}
+    },
+
+    async handleCancelSubscription() {
+      const { subscriptionId, newFinalReasonPayload, finalReasonPayload, nestedCancellationReasonsEnabled } = this
+
+      let cancelPayload = {
+        subscriptionId,
+        reason: nestedCancellationReasonsEnabled ? newFinalReasonPayload : finalReasonPayload,
+      }
 
       let analyticsEventName = 'Upscribe Subscription Cancel'
       let analyticsPayload = {
-        reason: this.selectedReason,
+        reason: nestedCancellationReasonsEnabled ? newFinalReasonPayload : finalReasonPayload,
       }
+
+      console.log('clicked')
 
       this.cancelSubscriptionUpdating = true
       try {
-        await this.CANCEL_SUBSCRIPTION({ reason: finalReasonPayload })
+        await this.CANCEL_SUBSCRIPTION(cancelPayload)
         this.triggerAnalyticsEvent({
           event: analyticsEventName,
           payload: analyticsPayload,
         })
         await this.GET_SUBSCRIPTIONS()
-        this.$router.push({ name: 'index', query: { ...this.$route.query } })
+        this.$router.push({ name: 'all', query: { ...this.$route.query } })
+      } catch (e) {
+        console.log('cancel subscription error: ', e)
+        this.triggerAnalyticsEvent({
+          event: 'Upscribe Subscription Cancel Attempt',
+          payload: analyticsPayload,
+        })
+      } finally {
+        this.cancelSubscriptionUpdating = false
+        this.$emit('close')
+      }
+    },
+
+    async handleCancelSubscriptionOld() {
+      const { subscriptionId, finalReasonPayload } = this
+
+      let cancelPayload = {
+        subscriptionId,
+        reason: { reason: finalReasonPayload},
+      }
+      let analyticsEventName = 'Upscribe Subscription Cancel'
+      let analyticsPayload = {
+        reason: { reason: finalReasonPayload},
+      }
+
+      this.cancelSubscriptionUpdating = true
+      try {
+        await this.CANCEL_SUBSCRIPTION(cancelPayload)
+        this.triggerAnalyticsEvent({
+          event: analyticsEventName,
+          payload: analyticsPayload,
+        })
+        await this.GET_SUBSCRIPTIONS()
+        this.$router.push({ name: 'all', query: { ...this.$route.query } })
       } catch (e) {
         console.log('e: ', e)
         this.triggerAnalyticsEvent({
@@ -285,7 +451,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  max-width: 300px;
+  // max-width: 300px;
   width: 100%;
 }
 
@@ -327,7 +493,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  max-width: 300px;
+  // max-width: 300px;
   width: 100%;
   font-family: $font-primary-regular;
   font-size: 14px;
@@ -369,6 +535,178 @@ export default {
     max-width: 240px;
     margin-bottom: 12px;
     font-size: 11px;
+    @include bp(tablet) {
+      max-width: none;
+      margin-right: 26px;
+      margin-bottom: 0;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+
+
+.c-cancel {
+  @include clearfix;
+
+  width: 100%;
+  // max-width: 400px;
+  padding: 50px 20px;
+  margin: 0 auto;
+
+  @include bp(tablet) {
+    // max-width: 664px;
+    padding: 94px 20px;
+  }
+}
+
+.c-cancel__title {
+  margin-bottom: 11px;
+  font-family: $font-primary-regular;
+  font-size: 22px;
+  text-align: center;
+
+  @include bp(tablet) {
+    font-size: 34px;
+  }
+}
+
+.c-cancel__subtitle {
+  max-width: 600px;
+  margin: 0 auto 36px;
+  font-family: $font-primary-medium;
+  font-size: 18px;
+  line-height: 32px;
+  color: $color-text;
+  text-align: center;
+
+  @include bp(tablet) {
+    font-size: 22px;
+  }
+}
+
+.c-cancel__inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 527px;
+  padding: 54px 20px;
+  margin: 0 auto 52px;
+  background-color: $color-white;
+}
+
+.c-cancel__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  // max-width: 300px;
+  width: 100%;
+}
+
+.c-cancel__listItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  cursor: pointer;
+
+  &--old {
+    flex-direction: row;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.c-cancel__comments {
+  margin-top: 20px;
+}
+
+.c-cancel__listItem__inner {
+  display: flex;
+  padding-left: 30px;
+  flex-direction: column;
+}
+
+.c-cancel__listItemLabel {
+  display: flex;
+}
+
+.c-cancel__listItemIcon {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  min-height: 20px;
+  border-radius: 50px;
+  margin-right: 10px;
+  border: 1px solid $color-black;
+
+  &--active {
+    border: 5px solid $color-primary;
+  }
+}
+
+.c-cancel__listItemText {
+  font-family: $font-primary-regular;
+  font-size: 14px;
+  color: $color-black;
+}
+
+.c-cancel__field {
+  display: flex;
+  width: 100%;
+  // max-width: 400px;
+  margin-bottom: 15px;
+}
+.c-cancel__field--textArea {
+  display: block;
+  width: 100%;
+  padding: 10px 12px 8px;
+  font-family: $font-primary-regular;
+  font-size: 14px;
+  border-radius: 4px;
+}
+.c-cancel__label--textArea {
+  margin-bottom: 5px;
+  margin-left: 0;
+  display: inline-block;
+  font-family: $font-primary-regular;
+  font-size: 14px;
+  color: $color-black;
+}
+
+.c-cancel__textArea {
+  width: 100%;
+  padding: 10px 12px 8px;
+  font-family: $font-primary-regular;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid;
+  outline: none;
+}
+
+.c-cancel__buttonBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 630px;
+
+  @include bp(tablet) {
+    flex-direction: row;
+  }
+
+  .c-button {
+    max-width: 240px;
+    margin-bottom: 12px;
+
     @include bp(tablet) {
       max-width: none;
       margin-right: 26px;

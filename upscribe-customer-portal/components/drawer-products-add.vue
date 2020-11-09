@@ -13,10 +13,33 @@ export default {
 
     ...mapGetters('activeSubscription', ['activeSubscription']),
 
+    ...mapGetters('products', ['hashedCollections']),
+
     ...mapState('products', ['products']),
 
     activeSubscriptionProducts() {
       return this.activeSubscription.items
+    },
+
+    featuredCollectionProducts() {
+      if (this.hashedCollections && this.hashedCollections.all) {
+        // this array may have repeat products
+        const productsList = this.hashedCollections.all.reduce(
+          (finalArr, collection) => {
+            return (finalArr = [...finalArr, ...collection.items])
+          },
+          []
+        )
+
+        const uniqueProducts = []
+        productsList.forEach((product) => {
+          if (!uniqueProducts.find((item) => item.id === product.id)) {
+            uniqueProducts.push(product)
+          }
+        })
+        return uniqueProducts
+      }
+      return []
     },
 
     intervalUnitDisplay() {
@@ -62,18 +85,22 @@ export default {
 
 <template>
   <div>
-    <h2 class="c-drawer__title">{{ atc['portal.addProductsDrawerTitle'] || 'Add Products' }}</h2>
+    <h2 class="c-drawer__title">{{
+      atc['portal.addProductsDrawerTitle'] || 'Add Products'
+    }}</h2>
 
     <p
       v-if="activeSubscription.interval && activeSubscription.period"
       class="c-drawer__subtitle"
-      >{{ atc['portal.editProductsDrawerInfoText'] || 'These products ship every'}} {{ activeSubscription.interval }}
-      {{ intervalUnitDisplay }}</p
+      >{{
+        atc['portal.editProductsDrawerInfoText'] || 'These products ship every'
+      }}
+      {{ activeSubscription.interval }} {{ intervalUnitDisplay }}</p
     >
 
     <div class="c-drawerDeliveryFrequency__options">
       <drawer-product-block
-        v-for="product in products"
+        v-for="product in featuredCollectionProducts"
         :key="product.id"
         :product="product"
         add

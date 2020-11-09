@@ -8,14 +8,19 @@
   >
     <div v-if="!showVariantSelector">
       <div v-if="!needUpdating && !swapping" class="c-modalSubscription">
-        <h2 v-if="editNextOrderFallback"
-          class="c-modalSubscription__title">
-          {{ atc['portal.productsGridNextOrderTitle'] || 'Add to Your Next Order' }}
+        <h2
+          v-if="editNextOrderFallback || $route.query.editNextOrder"
+          class="c-modalSubscription__title"
+        >
+          {{
+            atc['portal.productsGridNextOrderTitle'] || 'Add to Your Next Order'
+          }}
         </h2>
 
-        <h2 v-else
-          class="c-modalSubscription__title">
-          {{ atc['portal.productsGridSubscriptionTitle'] || 'Add to Subscription' }}
+        <h2 v-else class="c-modalSubscription__title">
+          {{
+            atc['portal.productsGridSubscriptionTitle'] || 'Add to Subscription'
+          }}
         </h2>
 
         <div class="c-modalSubscription__inner">
@@ -26,50 +31,37 @@
             @selectCollection="changeCurrentFilter"
           />
 
-          <div v-if="products && activeCollectionHandle === 'all' && currentCollection">
-            <div
-              v-for="(each, index) in quantityProductCollection"
-              :key="index"
-              class="c-modalSubscription__gridContain"
-              >
-                <div class="c-modalSubscription__grid">
-                  <product-grid-item
-                    v-for="(product, index2) in each.items"
-                    :key="product.id + index2"
-                    class="c-productsGrid__item"
-                    :product="product"
-                    :status="status"
-                    :is-swap="isSwap"
-                    @handleAddProductVariantToSubscription="handleAddProductVariantToSubscription"
-                    @handleQuantityChange="handleQuantityChange"
-                    @handleOpenSwapModal="handleOpenSwapModal"
-                    @handleRemove="handleRemove"
-                  />
-                </div>
-            </div>
-          </div>
-
           <div
-            v-else-if="products && activeCollectionHandle !== 'all' && currentCollection"
-            class="c-modalSubscription__gridContain"
-            >
+            v-if="
+              products && activeCollectionHandle === 'all' && currentCollection
+            "
+          >
+            <div class="c-modalSubscription__gridContain">
               <div class="c-modalSubscription__grid">
                 <product-grid-item
-                  v-for="(product, index) in quantityProductCollection.items"
-                  :key="product.id + index"
+                  v-for="product in allProducts"
+                  :key="product.id"
                   class="c-productsGrid__item"
                   :product="product"
                   :status="status"
                   :is-swap="isSwap"
-                  @handleAddProductVariantToSubscription="handleAddProductVariantToSubscription"
+                  @handleAddProductVariantToSubscription="
+                    handleAddProductVariantToSubscription
+                  "
                   @handleQuantityChange="handleQuantityChange"
                   @handleOpenSwapModal="handleOpenSwapModal"
                   @handleRemove="handleRemove"
                 />
               </div>
+            </div>
           </div>
 
-          <div v-else-if="products && activeCollectionHandle === 'all' && !currentCollection" class="c-modalSubscription__gridContain">
+          <div
+            v-else-if="
+              products && activeCollectionHandle === 'all' && !currentCollection
+            "
+            class="c-modalSubscription__gridContain"
+          >
             <div class="c-modalSubscription__grid">
               <product-grid-item
                 v-for="(product, index2) in withProductQuantity"
@@ -78,7 +70,9 @@
                 :product="product"
                 :status="status"
                 :is-swap="isSwap"
-                @handleAddProductVariantToSubscription="handleAddProductVariantToSubscription"
+                @handleAddProductVariantToSubscription="
+                  handleAddProductVariantToSubscription
+                "
                 @handleQuantityChange="handleQuantityChange"
                 @handleOpenSwapModal="handleOpenSwapModal"
                 @handleRemove="handleRemove"
@@ -86,7 +80,10 @@
             </div>
           </div>
 
-          <div v-else class="c-modalSubscription__grid c-modalSubscription__gridContain">
+          <div
+            v-else
+            class="c-modalSubscription__grid c-modalSubscription__gridContain"
+          >
             <content-placeholders
               v-for="(item, index) in [1, 2, 3, 4, 5, 6]"
               :key="index"
@@ -94,7 +91,10 @@
               class="c-productGridItem c-productsGrid__item"
               style="display: block;"
             >
-              <div class="c-productGridItem__imageWrap" style="margin-bottom: 10px">
+              <div
+                class="c-productGridItem__imageWrap"
+                style="margin-bottom: 10px"
+              >
                 <content-placeholders-img
                   class="c-productGridItem__image"
                   style="width: 140px; height: 140px;"
@@ -128,25 +128,35 @@
       </div>
 
       <div v-else class="c-modalMobile__wrapper">
-        <modal-shipping-require
-            @updateStatus="updateStatus"
-        />
+        <modal-shipping-require @updateStatus="updateStatus" />
       </div>
     </div>
     <div v-if="showVariantSelector">
-      <a @click="setVariantSelectProduct(null); showVariantSelector = false"><icon-chevron-right class="c-headerMobile__navLink--mobileIcon c-modalSubscription__backButton"/></a>
+      <a
+        @click="
+          setVariantSelectProduct(null)
+          showVariantSelector = false
+        "
+        ><icon-chevron-right
+          class="c-headerMobile__navLink--mobileIcon c-modalSubscription__backButton"
+      /></a>
       <variant-select-block
-          v-if="variantSelectProduct"
-          :product="variantSelectProduct"
-          :button-text="editNextOrderFallback ? (atc['portal.addProductToNextOrder'] || 'Add to Next Shipment') : (atc['portal.addProductToSubscription'] || 'Add to Subscription')"
-          @addProductVariantToSubscription="handleAddProductVariantToSubscription"
-        />
+        v-if="variantSelectProduct"
+        :product="variantSelectProduct"
+        :button-text="
+          editNextOrderFallback
+            ? atc['portal.addProductToNextOrder'] || 'Add to Next Shipment'
+            : atc['portal.addProductToSubscription'] || 'Add to Subscription'
+        "
+        @addProductVariantToSubscription="handleAddProductVariantToSubscription"
+      />
     </div>
   </modal-mobile-wrap>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import { windowSizes } from '@mixins/windowSizes'
 
 import ModalMobileWrap from '@components/modal-wrap-mobile.vue'
 import ProductGridItem from '@components/product-grid-item.vue'
@@ -169,6 +179,8 @@ export default {
     IconChevronRight,
   },
 
+  mixins: [windowSizes],
+
   props: {
     show: {
       type: Boolean,
@@ -188,7 +200,7 @@ export default {
     },
   },
 
-  data(){
+  data() {
     return {
       status: '',
       statusText: '',
@@ -200,8 +212,7 @@ export default {
     }
   },
 
-
-  computed:{
+  computed: {
     ...mapState('translations', ['atc']),
 
     ...mapState('products', ['products']),
@@ -223,30 +234,58 @@ export default {
     editNextOrderFallback() {
       const { editNextOrder, $route } = this
 
-      if ($route.query && $route.query.template && $route.query.template === 'next-shipment') return true
+      if (
+        $route.query &&
+        $route.query.template &&
+        $route.query.template === 'next-shipment'
+      )
+        return true
 
       return editNextOrder
     },
 
-    collectionOptions(){
+    collectionOptions() {
       let collectionOptionsArr = []
-       // Check if we have collections
-      if(Object.entries(this.hashedCollections).length > 0){
-        for(let each in this.hashedCollections){
-          if(each.toLowerCase() === 'all'){
-            collectionOptionsArr.unshift({title: 'All', handle: each.toLowerCase()})
+      // Check if we have collections
+      if (Object.entries(this.hashedCollections).length > 0) {
+        for (let each in this.hashedCollections) {
+          if (each.toLowerCase() === 'all') {
+            collectionOptionsArr.unshift({
+              title: 'All',
+              handle: each.toLowerCase(),
+            })
           } else {
-            collectionOptionsArr.push({title: this.hashedCollections[each].title, handle: each.toLowerCase()})
+            collectionOptionsArr.push({
+              title: this.hashedCollections[each].title,
+              handle: each.toLowerCase(),
+            })
           }
         }
       } else {
-        collectionOptionsArr.push({title: 'All', handle: 'all'})
+        collectionOptionsArr.push({ title: 'All', handle: 'all' })
       }
       return collectionOptionsArr
     },
 
-    currentCollection(){
+    currentCollection() {
       return this.hashedCollections[this.activeCollectionHandle]
+    },
+
+    allProducts() {
+      const productsList = this.hashedCollections.all.reduce(
+        (finalArr, collection) => {
+          return (finalArr = [...finalArr, ...collection.items])
+        },
+        []
+      )
+
+      const uniqueProducts = []
+      productsList.forEach((product) => {
+        if (!uniqueProducts.find((item) => item.id === product.id)) {
+          uniqueProducts.push(product)
+        }
+      })
+      return uniqueProducts
     },
 
     quantityProductCollection() {
@@ -260,54 +299,103 @@ export default {
       let updatedCollection = []
 
       // Hashed the value to use DP
-      for(let i = 0; i < activeSubscription.items.length; i++){
-         if(!variantItems[activeSubscription.items[i].variant_id]){
-           variantItems[activeSubscription.items[i].variant_id] = {id: activeSubscription.items[i].variant_id, quantity: activeSubscription.items[i].quantity}
-         } else {
-           variantItems[activeSubscription.items[i].variant_id].quantity += activeSubscription.items[i].quantity
-         }
+      for (let i = 0; i < activeSubscription.items.length; i++) {
+        if (!variantItems[activeSubscription.items[i].variant_id]) {
+          variantItems[activeSubscription.items[i].variant_id] = {
+            id: activeSubscription.items[i].variant_id,
+            quantity: activeSubscription.items[i].quantity,
+          }
+        } else {
+          variantItems[activeSubscription.items[i].variant_id].quantity +=
+            activeSubscription.items[i].quantity
+        }
       }
 
       // Add Quantity to product
-      if(activeCollectionHandle === 'all'){
-        for(let i = 0; i < currentCollection.length; i++){
+      if (activeCollectionHandle === 'all') {
+        for (let i = 0; i < currentCollection.length; i++) {
           let objectHolder = {}
           objectHolder['handle'] = currentCollection[i].handle
           objectHolder['title'] = currentCollection[i].title
-          objectHolder['items'] = currentCollection[i].items.map(each => variantItems[each.variants[0].id] ? {...each, quantity: variantItems[each.variants[0].id].quantity} : each)
+          objectHolder['items'] = currentCollection[i].items.map((each) =>
+            variantItems[each.variants[0].id]
+              ? {
+                  ...each,
+                  quantity: variantItems[each.variants[0].id].quantity,
+                }
+              : each
+          )
           updatedCollection.push(objectHolder)
         }
       } else {
         updatedCollection['title'] = currentCollection.title
         updatedCollection['handle'] = currentCollection.handle
-        updatedCollection['items'] = currentCollection.items.map(each => variantItems[each.variants[0].id] ? {...each, quantity: variantItems[each.variants[0].id].quantity} : each)
+        updatedCollection['items'] = currentCollection.items.map((each) =>
+          variantItems[each.variants[0].id]
+            ? { ...each, quantity: variantItems[each.variants[0].id].quantity }
+            : each
+        )
       }
       return updatedCollection
     },
 
-    withProductQuantity(){
+    withProductQuantity() {
       const { products } = this
       let variantItems = {}
       let productArray = products.slice()
 
-      for(let i = 0; i < this.activeSubscription.items.length; i++){
-        if(!variantItems[this.activeSubscription.items[i].variant_id]){
-           variantItems[this.activeSubscription.items[i].variant_id] = {id: this.activeSubscription.items[i].variant_id, quantity: this.activeSubscription.items[i].quantity}
+      for (let i = 0; i < this.activeSubscription.items.length; i++) {
+        if (!variantItems[this.activeSubscription.items[i].variant_id]) {
+          variantItems[this.activeSubscription.items[i].variant_id] = {
+            id: this.activeSubscription.items[i].variant_id,
+            quantity: this.activeSubscription.items[i].quantity,
+          }
         } else {
-           variantItems[this.activeSubscription.items[i].variant_id].quantity += this.activeSubscription.items[i].quantity
+          variantItems[
+            this.activeSubscription.items[i].variant_id
+          ].quantity += this.activeSubscription.items[i].quantity
         }
       }
 
-      productArray = productArray.map(each => variantItems[each.variants[0].id] ? {...each, quantity: variantItems[each.variants[0].id].quantity} : each)
+      productArray = productArray.map((each) =>
+        variantItems[each.variants[0].id]
+          ? { ...each, quantity: variantItems[each.variants[0].id].quantity }
+          : each
+      )
 
       return productArray
     },
   },
 
-  methods:{
+  mounted() {
+    const { windowWidth, $route } = this
+
+    // only if in mobile view, since it's completely different state handling..
+    if (windowWidth < 768) {
+      console.log('check for next-shipment route')
+
+      if (
+        $route.query &&
+        $route.query.template &&
+        $route.query.template === 'next-shipment'
+      ) {
+        this.setEditNextOrder(true)
+      } else {
+        this.setEditNextOrder(false)
+      }
+    }
+  },
+
+  methods: {
     ...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
 
-    ...mapMutations('shippingMethods', ['SET_SHIPPING_METHODS', 'setActiveEditShippingMethod', 'setNewSwapShippingMethod']),
+    ...mapMutations('editMode', ['setEditNextOrder']),
+
+    ...mapMutations('shippingMethods', [
+      'SET_SHIPPING_METHODS',
+      'setActiveEditShippingMethod',
+      'setNewSwapShippingMethod',
+    ]),
 
     ...mapMutations('variantSelectProduct', ['setVariantSelectProduct']),
 
@@ -322,74 +410,68 @@ export default {
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
-    changeCurrentFilter(collection){
+    changeCurrentFilter(collection) {
       this.activeCollectionHandle = collection.handle
     },
 
-    updateStatus(payload){
+    updateStatus(payload) {
       const { status, statusText, needUpdating } = payload
       this.status = status
       this.statusText = statusText
-      if(needUpdating === 'stop'){
+      if (needUpdating === 'stop') {
         this.needUpdating = false
       }
     },
 
-    handleOpenSwapModal(product){
+    handleOpenSwapModal(product) {
       this.setVariantSelectProduct(product)
       this.swapping = true
     },
 
-    handleCloseSwapModal(){
+    handleCloseSwapModal() {
       this.swapping = false
     },
 
     handleNewCheckoutUpdate(updateArray) {
       return new Promise((resolve, reject) => {
-
         let updateCount = updateArray.length
         let updatesFinished = 0
         this.status = 'updating'
         this.statusText = 'Saving'
-          // for each update
-          updateArray.forEach(async (update) => {
-            this.updating = true
-            try {
-              await update.updateAction
-              this.status = 'success'
-              this.statusText = 'saved successfully'
+        // for each update
+        updateArray.forEach(async (update) => {
+          this.updating = true
+          try {
+            await update.updateAction
+            this.status = 'success'
+            this.statusText = 'saved successfully'
 
-              if(this.swapping){
-                setTimeout(() => {
-                  this.closeModal()
-                }, 2000)
-              }
-
-              if(this.needUpdating){
-                this.needUpdating = false
-              }
-
-            } catch (e) {
-              this.handleNewCheckoutUpdateError(e, update)
-            } finally {
-              updatesFinished += 1
-              this.updating = false
+            if (this.swapping) {
+              setTimeout(() => {
+                this.closeModal()
+              }, 2000)
             }
 
-            if (updatesFinished === updateCount) {
-              resolve(true)
+            if (this.needUpdating) {
+              this.needUpdating = false
             }
-          })
+          } catch (e) {
+            this.handleNewCheckoutUpdateError(e, update)
+          } finally {
+            updatesFinished += 1
+            this.updating = false
+          }
+
+          if (updatesFinished === updateCount) {
+            resolve(true)
+          }
+        })
       })
     },
 
     handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
       console.log('handleNewCheckoutUpdateError: ', e)
-      if (
-        e &&
-        e.data &&
-        e.data.shipping_update_required
-      ) {
+      if (e && e.data && e.data.shipping_update_required) {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
         this.needUpdating = true
@@ -428,13 +510,18 @@ export default {
 
       // determine increase or decrease payload by the type param
       // coming from the quantity change event
-      const subscriptionItemPayload = type === 'increase' ? subscriptionIncreaseItemPayload : subscriptionDecreaseItemPayload
-      const nextItemPayload = type === 'increase' ? nextIncreaseItemPayload : nextDecreaseItemPayload
-
+      const subscriptionItemPayload =
+        type === 'increase'
+          ? subscriptionIncreaseItemPayload
+          : subscriptionDecreaseItemPayload
+      const nextItemPayload =
+        type === 'increase' ? nextIncreaseItemPayload : nextDecreaseItemPayload
 
       const updateSubscriptionPayload = {
         requestPayload: {
-          items: subscriptionItemPayload ? [subscriptionItemPayload] : undefined,
+          items: subscriptionItemPayload
+            ? [subscriptionItemPayload]
+            : undefined,
         },
       }
 
@@ -462,7 +549,6 @@ export default {
             `Quantity updated to ${quantity} on next order.`
           ),
         ]
-
       } else {
         // updateMessage = `Quantity updated to ${quantity}.`
         analyticsEventName = 'Upscribe Subscription Product Quantity Change'
@@ -473,7 +559,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Quantity updated to ${quantity} on subscription.`,
+            `Quantity updated to ${quantity} on subscription.`
           ),
         ]
       }
@@ -487,11 +573,7 @@ export default {
     },
 
     async handleRemove(product) {
-      const {
-        activeSubscription,
-        activeQueue,
-        editNextOrderFallback,
-      } = this
+      const { activeSubscription, activeQueue, editNextOrderFallback } = this
 
       const itemCount = editNextOrderFallback
         ? activeQueue.items.length
@@ -505,27 +587,30 @@ export default {
       // When data is coming from product item grid we do not have selected variant id
       let selectedVariant
 
-      if(!product.variant_id){
-        if(this.$route.query.template === 'next-shipment'){
-          selectedVariant = activeSubscription.next.items.find(item => item.product_id === product.id)
-        }
-        else {
-          selectedVariant = activeSubscription.items.find(item => item.product_id === product.id)
+      if (!product.variant_id) {
+        if (this.$route.query.template === 'next-shipment') {
+          selectedVariant = activeSubscription.next.items.find(
+            (item) => item.product_id === product.id
+          )
+        } else {
+          selectedVariant = activeSubscription.items.find(
+            (item) => item.product_id === product.id
+          )
         }
       }
 
-
       const { removePayload: nextRemoveItemPayload } = productChangeRequest({
-				variantId: product.variant_id || (selectedVariant && selectedVariant.variant_id),
-				editNextOrder: true,
-				subscription: activeSubscription,
+        variantId:
+          product.variant_id || (selectedVariant && selectedVariant.variant_id),
+        editNextOrder: true,
+        subscription: activeSubscription,
       })
-
 
       const {
         removePayload: subscriptionRemoveItemPayload,
       } = productChangeRequest({
-        variantId: product.variant_id || (selectedVariant && selectedVariant.variant_id),
+        variantId:
+          product.variant_id || (selectedVariant && selectedVariant.variant_id),
         editNextOrder: false,
         subscription: activeSubscription,
       })
@@ -535,7 +620,9 @@ export default {
 
       const updateSubscriptionPayload = {
         requestPayload: {
-          items: subscriptionRemoveItemPayload ? [subscriptionRemoveItemPayload] : undefined,
+          items: subscriptionRemoveItemPayload
+            ? [subscriptionRemoveItemPayload]
+            : undefined,
         },
       }
 
@@ -579,7 +666,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product removed from subscription`,
+            `Product removed from subscription`
           ),
         ]
       }
@@ -593,96 +680,99 @@ export default {
       })
     },
 
-    async handleAddProductVariantToSubscription(variantId, product, showVariantSelector) {
+    async handleAddProductVariantToSubscription(
+      variantId,
+      product,
+      showVariantSelector
+    ) {
       try {
+        console.log('product', product)
+        this.setVariantSelectProduct(product)
 
+        console.log('variantSelectProduct 1', this.variantSelectProduct)
 
-      console.log('product', product)
-      this.setVariantSelectProduct(product)
+        if (showVariantSelector) {
+          this.showVariantSelector = true
+          return
+        }
 
-      console.log('variantSelectProduct 1', this.variantSelectProduct)
+        console.log('variantSelectProduct 2', this.variantSelectProduct)
 
-      if(showVariantSelector) {
-        this.showVariantSelector = true
-        return
-      }
+        const {
+          // editNextOrder,
+          editNextOrderFallback,
+          activeSubscription,
+        } = this
 
-      console.log('variantSelectProduct 2', this.variantSelectProduct)
+        const { addPayload: nextAddItemPayload } = productChangeRequest({
+          variantId,
+          editNextOrder: true,
+          subscription: activeSubscription,
+        })
 
-      const {
-        // editNextOrder,
-        editNextOrderFallback,
-        activeSubscription,
-      } = this
+        const { addPayload: subscriptionAddItemPayload } = productChangeRequest(
+          {
+            variantId,
+            editNextOrder: false,
+            subscription: activeSubscription,
+          }
+        )
 
-      const { addPayload: nextAddItemPayload} = productChangeRequest({
-        variantId,
-        editNextOrder: true,
-        subscription: activeSubscription,
-      })
+        const updateSubscriptionPayload = {
+          requestPayload: {
+            items: subscriptionAddItemPayload
+              ? [subscriptionAddItemPayload]
+              : undefined,
+          },
+        }
 
-      const { addPayload: subscriptionAddItemPayload } = productChangeRequest({
-        variantId,
-        editNextOrder: false,
-        subscription: activeSubscription,
-      })
+        const nextOrderUpdatePayload = {
+          requestPayload: {
+            items: nextAddItemPayload ? [nextAddItemPayload] : undefined,
+          },
+        }
 
-      const updateSubscriptionPayload = {
-        requestPayload: {
-          items: subscriptionAddItemPayload ? [subscriptionAddItemPayload] : undefined,
-        },
-      }
+        let analyticsEventName, handleNewCheckoutUpdatePayload
+        let analyticsPayload = { product }
 
-      const nextOrderUpdatePayload = {
-        requestPayload: {
-          items: nextAddItemPayload ? [nextAddItemPayload] : undefined,
-        },
-      }
+        if (editNextOrderFallback) {
+          analyticsEventName = 'Upscribe Next Order Product Add'
 
-      let analyticsEventName, handleNewCheckoutUpdatePayload
-      let analyticsPayload = { product }
+          handleNewCheckoutUpdatePayload = [
+            buildNewCheckoutUpdatePayload(
+              this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
+              nextOrderUpdatePayload,
+              'subscriptions',
+              'UPDATE_NEXT_ORDER',
+              `Product add to next order.`
+            ),
+          ]
+        } else {
+          analyticsEventName = 'Upscribe Subscription Product Add'
 
-      if (editNextOrderFallback) {
-        analyticsEventName = 'Upscribe Next Order Product Add'
+          handleNewCheckoutUpdatePayload = [
+            buildNewCheckoutUpdatePayload(
+              this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+              updateSubscriptionPayload,
+              'subscriptions',
+              'UPDATE_SUBSCRIPTION',
+              `Product added to subscription.`
+            ),
+          ]
+        }
+        // hande everything in handleNewCheckoutUpdate function
+        await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
 
-        handleNewCheckoutUpdatePayload = [
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
-            nextOrderUpdatePayload,
-            'subscriptions',
-            'UPDATE_NEXT_ORDER',
-            `Product add to next order.`
-          ),
-        ]
+        this.triggerAnalyticsEvent({
+          event: analyticsEventName,
+          payload: analyticsPayload,
+        })
 
-      } else {
-        analyticsEventName = 'Upscribe Subscription Product Add'
+        console.log('variantSelectProduct', this.variantSelectProduct)
 
-        handleNewCheckoutUpdatePayload = [
-          buildNewCheckoutUpdatePayload(
-            this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
-            updateSubscriptionPayload,
-            'subscriptions',
-            'UPDATE_SUBSCRIPTION',
-            `Product added to subscription.`,
-          ),
-        ]
-      }
-      // hande everything in handleNewCheckoutUpdate function
-      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
-
-      this.triggerAnalyticsEvent({
-        event: analyticsEventName,
-        payload: analyticsPayload,
-      })
-
-      console.log('variantSelectProduct', this.variantSelectProduct)
-
-
-      this.closeModal()
-
+        this.closeModal()
       } catch (e) {
-        console.log('Error',e)
+        console.log('Error', e)
       }
     },
 
@@ -701,19 +791,25 @@ export default {
         subscription: activeSubscription,
       })
 
-      const { removePayload: nextRemoveSwappedItemPayload } = productChangeRequest({
+      const {
+        removePayload: nextRemoveSwappedItemPayload,
+      } = productChangeRequest({
         variantId: productToReplace.variant_id,
         editNextOrder: true,
         subscription: activeSubscription,
       })
 
-      const { addPayload: subscriptionAddSwapItemPayload } = productChangeRequest({
+      const {
+        addPayload: subscriptionAddSwapItemPayload,
+      } = productChangeRequest({
         variantId,
         editNextOrder: false,
         subscription: activeSubscription,
       })
 
-      const { removePayload: subscriptionRemoveSwappedItemPayload } = productChangeRequest({
+      const {
+        removePayload: subscriptionRemoveSwappedItemPayload,
+      } = productChangeRequest({
         variantId: productToReplace.variant_id,
         editNextOrder: false,
         subscription: activeSubscription,
@@ -737,14 +833,23 @@ export default {
 
       // create sub swap payload depending on the diff product upday payload options
       let subscriptionItemPayload = []
-      if (!subscriptionAddSwapItemPayload && !subscriptionRemoveSwappedItemPayload) {
+      if (
+        !subscriptionAddSwapItemPayload &&
+        !subscriptionRemoveSwappedItemPayload
+      ) {
         subscriptionItemPayload = false
       } else {
         if (subscriptionAddSwapItemPayload) {
-          subscriptionItemPayload = [...subscriptionItemPayload, subscriptionAddSwapItemPayload]
+          subscriptionItemPayload = [
+            ...subscriptionItemPayload,
+            subscriptionAddSwapItemPayload,
+          ]
         }
         if (subscriptionRemoveSwappedItemPayload) {
-          subscriptionItemPayload = [...subscriptionItemPayload, subscriptionRemoveSwappedItemPayload]
+          subscriptionItemPayload = [
+            ...subscriptionItemPayload,
+            subscriptionRemoveSwappedItemPayload,
+          ]
         }
       }
 
@@ -779,9 +884,7 @@ export default {
             `Product swapped on next order.`
           ),
         ]
-
       } else {
-
         analyticsEventName = 'Upscribe Subscription Product Swap'
 
         handleNewCheckoutUpdatePayload = [
@@ -790,7 +893,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product swapped on subscription.`,
+            `Product swapped on subscription.`
           ),
         ]
       }
@@ -810,8 +913,7 @@ export default {
 <style lang="scss">
 @import '@design';
 
-
-.c-modalSubscription__title{
+.c-modalSubscription__title {
   font-weight: 500;
   font-size: 16px;
   line-height: 21px;
@@ -830,7 +932,7 @@ export default {
   @include column(1/2, $cycle: 2, $gutter: 6);
 }
 
-.c-modalSubscription__gridContain{
+.c-modalSubscription__gridContain {
   padding: 0 16px;
 }
 
@@ -849,7 +951,7 @@ export default {
   text-align: center;
 }
 
-.c-modalSubscription__shippingTitle{
+.c-modalSubscription__shippingTitle {
   margin-bottom: 10px;
   font-family: $font-primary-regular;
   font-weight: bold;
@@ -858,7 +960,7 @@ export default {
   font-size: 24px;
   line-height: 32px;
 }
-.c-modalSubscription__shippingSubtitle{
+.c-modalSubscription__shippingSubtitle {
   margin-bottom: 20px;
   font-family: $font-primary-medium;
   font-weight: 500;
@@ -866,7 +968,7 @@ export default {
   line-height: 22px;
   color: $color-blue-secondary;
 }
-.c-modalSubscription__backButton{
+.c-modalSubscription__backButton {
   position: relative;
   margin-left: 10px;
   bottom: 15px;

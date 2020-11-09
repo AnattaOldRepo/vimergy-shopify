@@ -25,35 +25,49 @@ export default {
     ...mapState('products', ['products']),
     ...mapState('editMode', ['editNextOrder']),
 
-    collectionOfTitle(){
+    collectionOfTitle() {
       let collectionOfTitleArr = []
       // Check if we have collections
-      if(Object.entries(this.hashedCollections).length > 0){
-        for(let each in this.hashedCollections){
-          if(each.toLowerCase() === 'all'){
-            collectionOfTitleArr.unshift({title: 'All', handle: each.toLowerCase()})
+      if (Object.entries(this.hashedCollections).length > 0) {
+        for (let each in this.hashedCollections) {
+          if (each.toLowerCase() === 'all') {
+            collectionOfTitleArr.unshift({
+              title: 'All',
+              handle: each.toLowerCase(),
+            })
           } else {
-            collectionOfTitleArr.push({title: this.hashedCollections[each].title, handle: each.toLowerCase()})
+            collectionOfTitleArr.push({
+              title: this.hashedCollections[each].title,
+              handle: each.toLowerCase(),
+            })
           }
         }
       } else {
-        collectionOfTitleArr.push({title: 'All', handle: 'all'})
+        collectionOfTitleArr.push({ title: 'All', handle: 'all' })
       }
 
       return collectionOfTitleArr
     },
 
-    currentCollection(){
+    currentCollection() {
       return this.hashedCollections[this.currentActiveText]
     },
 
+    allProducts() {
+      const productsList = this.hashedCollections.all.reduce(
+        (finalArr, collection) => {
+          return (finalArr = [...finalArr, ...collection.items])
+        },
+        []
+      )
 
-    visibleCollections() {
-      const { currentCollection, visibleCollectionCount, currentActiveText } = this
-      if(currentCollection && currentActiveText === 'all'){
-        return currentCollection.slice().splice(0, visibleCollectionCount)
-      }
-      return undefined
+      const uniqueProducts = []
+      productsList.forEach((product) => {
+        if (!uniqueProducts.find((item) => item.id === product.id)) {
+          uniqueProducts.push(product)
+        }
+      })
+      return uniqueProducts
     },
   },
 
@@ -65,7 +79,7 @@ export default {
       this.visibleProductCount = this.products.length
     },
 
-    changeCurrentFilter(handle){
+    changeCurrentFilter(handle) {
       this.currentActiveText = handle
     },
   },
@@ -74,87 +88,98 @@ export default {
 
 <template>
   <div class="c-productsGrid">
-    <h2 v-if="editNextOrder" class="c-productsGrid__title"
-      >{{ atc['portal.productsGridNextOrderTitle'] || 'Add to Your Next Order' }}</h2
-    >
-    <h2 v-else class="c-productsGrid__title">{{ atc['portal.productsGridSubscriptionTitle'] || 'Add to Your Subscription' }}</h2>
+    <h2 v-if="editNextOrder" class="c-productsGrid__title">{{
+      atc['portal.productsGridNextOrderTitle'] || 'Add to Your Next Order'
+    }}</h2>
+    <h2 v-else class="c-productsGrid__title">{{
+      atc['portal.productsGridSubscriptionTitle'] || 'Add to Your Subscription'
+    }}</h2>
 
     <div class="c-productsGrid__inner">
-      <div v-if = "collectionOfTitle" class="c-productsGrid__top">
+      <div v-if="collectionOfTitle" class="c-productsGrid__top">
         <ul class="c-productsGrid__link-contain">
-          <li v-for = "(each, index) in collectionOfTitle"
-              :key="index"
-              :data-id="each.handle"
-              class="c-productsGrid__link"
-              :class="{'c-productsGrid__link--active': currentActiveText === each.handle}"
-              >
-              <button @click="changeCurrentFilter(each.handle)">
-                {{ each.title }}
-              </button>
+          <li
+            v-for="(each, index) in collectionOfTitle"
+            :key="index"
+            :data-id="each.handle"
+            class="c-productsGrid__link"
+            :class="{
+              'c-productsGrid__link--active': currentActiveText === each.handle,
+            }"
+          >
+            <button @click="changeCurrentFilter(each.handle)">
+              {{ each.title }}
+            </button>
           </li>
         </ul>
       </div>
 
       <div v-if="products && currentActiveText === 'all' && currentCollection">
-        <div
-          v-for = "(each, index) in visibleCollections"
-          :key = "index">
-            <div class="c-productsGrid__grid">
-              <product-grid-item
-                v-for="(product, index2) in each.items"
-                :key="product.id + index2"
-                class="c-productsGrid__item"
-                :product="product"
-              />
-            </div>
+        <div class="c-productsGrid__grid">
+          <product-grid-item
+            v-for="product in allProducts
+              .slice()
+              .splice(0, visibleProductCount)"
+            :key="product.id"
+            class="c-productsGrid__item"
+            :product="product"
+          />
         </div>
 
         <v-button
-            v-if="visibleCollectionCount < visibleCollections.length"
-            :centered="true"
-            class="c-productsGrid__showAllButton c-button--transparent"
-            :text="atc['portal.buttonBrowseAllButton'] || 'Show More'"
-            auto
-            size="small"
-            @onClick="showMoreProducts"
-          />
+          v-if="visibleCollectionCount < allProducts.length"
+          :centered="true"
+          class="c-productsGrid__showAllButton c-button--transparent"
+          :text="atc['portal.buttonBrowseAllButton'] || 'Show More'"
+          auto
+          size="small"
+          @onClick="showMoreProducts"
+        />
       </div>
 
       <div
         v-else-if="products && currentActiveText !== 'all' && currentCollection"
-        class="c-productsGrid__grid">
-          <h2 class = "c-productsGrid__grid-title"> {{ currentCollection.title }}</h2>
-          <div class="c-productsGrid__grid">
-            <product-grid-item
-              v-for="(product, index) in currentCollection.items"
-              :key="product.id + index"
-              class="c-productsGrid__item"
-              :product="product"
-            />
-          </div>
+        class="c-productsGrid__grid"
+      >
+        <h2 class="c-productsGrid__grid-title">
+          {{ currentCollection.title }}</h2
+        >
+        <div class="c-productsGrid__grid">
+          <product-grid-item
+            v-for="(product, index) in currentCollection.items"
+            :key="product.id + index"
+            class="c-productsGrid__item"
+            :product="product"
+          />
+        </div>
       </div>
 
       <div
-        v-else-if="products && currentActiveText === 'all' && !currentCollection"
-        class="c-productsGrid__grid">
-          <div class="c-productsGrid__grid">
-            <product-grid-item
-              v-for="(product, index) in products.slice().splice(0, visibleProductCount)"
-              :key="product.id + index"
-              class="c-productsGrid__item"
-              :product="product"
-            />
-          </div>
-
-          <v-button
-            v-if="visibleProductCount < products.length"
-            :centered="true"
-            class="c-productsGrid__showAllButton c-button--transparent"
-            :text="atc['portal.buttonBrowseAllButton'] || 'Show More'"
-            auto
-            size="small"
-            @onClick="showMoreProducts"
+        v-else-if="
+          products && currentActiveText === 'all' && !currentCollection
+        "
+        class="c-productsGrid__grid"
+      >
+        <div class="c-productsGrid__grid">
+          <product-grid-item
+            v-for="(product, index) in products
+              .slice()
+              .splice(0, visibleProductCount)"
+            :key="product.id + index"
+            class="c-productsGrid__item"
+            :product="product"
           />
+        </div>
+
+        <v-button
+          v-if="visibleProductCount < products.length"
+          :centered="true"
+          class="c-productsGrid__showAllButton c-button--transparent"
+          :text="atc['portal.buttonBrowseAllButton'] || 'Show More'"
+          auto
+          size="small"
+          @onClick="showMoreProducts"
+        />
       </div>
 
       <div v-else class="c-productsGrid__grid">
@@ -202,29 +227,29 @@ export default {
   }
 }
 
-.c-productsGrid__top{
+.c-productsGrid__top {
   overflow-x: auto;
   margin-bottom: 15px;
 }
 
-.c-productsGrid__link-contain{
+.c-productsGrid__link-contain {
   padding: 10px 0;
   margin: 0 0 30px;
   display: flex;
 
-  .c-productsGrid__link{
+  .c-productsGrid__link {
     list-style: none;
     white-space: nowrap;
     margin-right: 25px;
     cursor: pointer;
 
-    &--active{
+    &--active {
       font-weight: bold;
       padding-bottom: 5px;
-      @include border-focus
+      @include border-focus;
     }
 
-    button{
+    button {
       border: none;
       background-color: transparent;
       padding: 0;
@@ -242,7 +267,6 @@ export default {
   letter-spacing: 0.1px;
   color: $color-blue-secondary;
   text-align: left;
-
 }
 
 .c-productsGrid__inner {
@@ -279,7 +303,7 @@ export default {
   }
 }
 
-.c-productsGrid__grid-title{
+.c-productsGrid__grid-title {
   font-size: 14px;
   line-height: 15px;
   text-transform: uppercase;
@@ -288,5 +312,4 @@ export default {
   font-style: normal;
   color: $color-blue-secondary;
 }
-
 </style>

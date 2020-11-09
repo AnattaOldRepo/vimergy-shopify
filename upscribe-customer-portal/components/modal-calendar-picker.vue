@@ -80,7 +80,7 @@ export default {
 			if (!activeSubscriptionNextDate) return false
 			let currentDate = activeSubscriptionNextDate
 
-			const newDate = moment(unformattedNewDate).format('YYYYMMDDHHmmss')
+      const newDate = moment(unformattedNewDate).format('YYYYMMDDHHmmss')
 
 			let requestPayload = {
 				newDate,

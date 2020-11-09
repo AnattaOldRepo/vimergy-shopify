@@ -5,6 +5,7 @@ export const state = () => ({
   productsLoaded: false,
   productImages: null,
   productVariantId: '',
+  nextOrder: false,
 })
 
 export const mutations = {
@@ -39,8 +40,12 @@ export const mutations = {
     state.productImages = productImages
   },
 
-  setProductIdAndSubscriptionId(state, productVariantId) {
+  setProductIdAndSubscriptionId(
+    state,
+    { productVariantId, nextOrder = false }
+  ) {
     state.productVariantId = productVariantId
+    state.nextOrder = true
   },
 }
 
@@ -58,7 +63,7 @@ export const actions = {
     if (lastItem) {
       url = `/products/${storeDomain}?last=${lastItem}`
     } else {
-      url = `/products/${storeDomain}`
+      url = `/products/${storeDomain}?limit=100&fields=collections,handle,id,image,images,metafields,title,variants`
     }
 
     return new Promise((resolve, reject) => {
@@ -151,9 +156,8 @@ export const getters = {
     }
     return inOrderHashedCollections
   },
-
+  // gives currently selected product
   product(state, getters, rootState, rootGetters) {
-    console.log(state.productVariantId)
     let descriptionHolder = ''
     let firstPTag
     let firstPTagIndex
@@ -181,7 +185,12 @@ export const getters = {
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
 
-    const activeProduct = activeSubscription.items.find(
+    // in case of next order show next items else items
+    const productsList = state.nextOrder
+      ? activeSubscription.next && activeSubscription.next.items
+      : activeSubscription.items
+
+    const activeProduct = productsList.find(
       (each) => each.variant_id === state.productVariantId
     )
 

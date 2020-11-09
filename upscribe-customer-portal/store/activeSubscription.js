@@ -29,9 +29,6 @@ export const getters = {
     if (subscriptions[activeSubscriptionId]) {
       activeSubscription = subscriptions[activeSubscriptionId]
     }
-
-    console.log(subscriptions, '1')
-    console.log(activeSubscription, '2')
     return activeSubscription
   },
 

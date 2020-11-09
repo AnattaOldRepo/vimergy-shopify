@@ -180,9 +180,7 @@ export default {
           this.currencySymbol
         }${this.activeSubscription.total_price.toFixed(2)}</span>`
       } else {
-        return `<span class='c-order__header'>Next Shipment</span> <span class='c-order__headerDate'>${
-          this.nextShipDate
-        }</span>`
+        return `<span class='c-order__header'>Next Shipment</span> <span class='c-order__headerDate'>${this.nextShipDate}</span>`
       }
     },
 
@@ -303,6 +301,16 @@ export default {
           propertyHash = item.properties
         }
       }
+      // if the product is not available in subscripition items that means it is a case of one time product
+      // DO NOT TRUST properties['Subscription']
+      // check if products id exist in subscription.items
+      // no auto renew text
+      const subscriptionItemProducts = this.activeSubscription.items.map(
+        (item) => item.id
+      )
+      if (!subscriptionItemProducts.includes(item.id)) {
+        return ''
+      }
 
       let discountAmount = propertyHash['Discount Amount']
         ? propertyHash['Discount Amount']
@@ -340,7 +348,10 @@ export default {
     },
 
     openModal(productVariantId) {
-      this.setProductIdAndSubscriptionId(productVariantId)
+      this.setProductIdAndSubscriptionId({
+        productVariantId,
+        nextOrder: this.editNextOrder,
+      })
       this.isProductModalOpen = true
       this.closeAnimation = false
     },

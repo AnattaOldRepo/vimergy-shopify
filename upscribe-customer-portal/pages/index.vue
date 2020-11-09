@@ -1,7 +1,7 @@
 <template>
   <!-- Mobile Template -->
   <div v-if="windowWidth < 768" class="c-subscription">
-    <headline-banner v-if="atc['portal.notification']" />
+    <headline-banner v-if="atc['portal.notification'] && store && store.portal_notification_banner_enabled" />
 
     <mobile-screen-layout />
   </div>
@@ -153,7 +153,7 @@ export default {
       'subscriptionsLoaded',
     ]),
 
-    ...mapState('shop', ['shopData']),
+    ...mapState('shop', ['shopData', 'store']),
 
     ...mapState('editMode', ['editNextOrder']),
 
@@ -202,20 +202,21 @@ export default {
     toggleSubscriptions: {
       immediate: true,
       handler: function(newVal) {
-        if (newVal && newVal[0]) {
+        if (!newVal || !newVal.length) return
+        // this prevents subscripition from changing in mobile while changing pages
+        if (this.$route.query.template) return
+        // in case there is no susbscription, no sub id in Url
+        if (this.$route.query.subscriptionId) {
+          this.setActiveSubscriptionId(this.$route.query.subscriptionId)
+        } else {
           this.setActiveSubscriptionId(newVal[0].id)
         }
       },
     },
     subscriptionsLoaded() {
+      console.log('Loaded')
       this.getSubscriptionOrders()
     },
-  },
-
-  mounted() {
-    if (this.$route.query.subscriptionId) {
-      this.setActiveSubscriptionId(this.$route.query.subscriptionId)
-    }
   },
 
   methods: {

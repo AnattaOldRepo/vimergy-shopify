@@ -168,3 +168,14 @@ Update font names in /design/_typography
 Update fonts rules to /assets/css/settings/fonts.scss
 
 Upload fonts to /assets/fonts
+
+## Releases
+
+1. Create new release branch in upscribe-customer-portal
+2. Create new theme in upscribe demo shopify store
+3. Setup config.yml in upscribe-shopify-theme repo to deploy to demo store (replace the theme id with the one created in step 2)
+4. Start theme watch from root of upscribe-shopify-theme
+5. Build the customer portal yarn portal:build:<environment-endpoints>  (if in the main root of the upscribe-shopify-theme. OR yarn build:<environement-endpoints> (usually yarn build:stage)
+6. Run yarn portal:publish from root of upscribe-shopify-theme
+7. You will see the files being pushed up in your theme watch terminal that is running
+8. Release is setup on theme to be able to preview/QA

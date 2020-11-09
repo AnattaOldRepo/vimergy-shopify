@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import VButton from '@components/v-button.vue'
 // import QuantityChanger from '@components/quantity-changer.vue'
 import QuantityChangerManualEntry from '@components/quantity-changer-manual-entry.vue'
@@ -45,16 +45,21 @@ export default {
 
     ...mapState('products', ['productImages']),
 
-    ...mapState('shop', ['currencySymbol', 'nextOrderProductsSubscriptionPricing']),
+    ...mapState('shop', [
+      'currencySymbol',
+      'nextOrderProductsSubscriptionPricing',
+    ]),
 
     ...mapState('editMode', ['editNextOrder']),
+
+    ...mapGetters('activeSubscription', ['activeSubscription']),
 
     productBuiltProperties() {
       const { product } = this
       let finalProps = {}
       if (product.metafields) {
-        product.metafields.forEach(metafield => {
-          if (metafield.namespace === 'sf_upscribe' ) {
+        product.metafields.forEach((metafield) => {
+          if (metafield.namespace === 'sf_upscribe') {
             finalProps[metafield.key] = metafield.value
           }
         })
@@ -68,16 +73,29 @@ export default {
 
       const productProperties = product.properties || productBuiltProperties
 
-      if (!productProperties['Discount Amount'] && !productProperties['discount_amount']) return false
+      if (
+        !productProperties['Discount Amount'] &&
+        !productProperties['discount_amount']
+      )
+        return false
 
-      return productProperties['Discount Amount'] || productProperties['discount_amount']
+      return (
+        productProperties['Discount Amount'] ||
+        productProperties['discount_amount']
+      )
     },
 
+    // if the product is not available in subscripition items that means it is a case of one time product
+    // DO NOT TRUST properties['Subscription']
+    // check if products id exist in subscription.items
     isSubscriptionProduct() {
-      const { product } = this
-      if (!product.properties) return false
-
-      return !!product.properties['Subscription']
+      const subscriptionItemProducts = this.activeSubscription.items.map(
+        (item) => item.id
+      )
+      if (subscriptionItemProducts.includes(this.product.id)) {
+        return true
+      }
+      return false
     },
 
     productOptionDetails() {
@@ -92,9 +110,13 @@ export default {
 
       if (isSubscriptionProduct) {
         if (parseInt(discountAmount)) {
-          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${product.quantity} (-${discountAmount} off)`
+          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${
+            product.quantity
+          } (-${discountAmount} off)`
         } else {
-          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${product.quantity}`
+          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${
+            product.quantity
+          }`
         }
       } else {
         detail = `x${product.quantity}`
@@ -124,28 +146,48 @@ export default {
 
     productFirstVariantPrice() {
       const { product } = this
-      if (!product || !product.variants || !product.variants[0] || !product.variants[0].price) return false
+      if (
+        !product ||
+        !product.variants ||
+        !product.variants[0] ||
+        !product.variants[0].price
+      )
+        return false
       return product.variants[0].price
     },
 
     productFirstVariantSubscriptionPrice() {
-      const { productFirstVariantPrice, subscriptionDiscountAmount, subscriptionDiscountType } = this
-      if (!productFirstVariantPrice || !subscriptionDiscountAmount ||  !subscriptionDiscountType) return false
+      const {
+        productFirstVariantPrice,
+        subscriptionDiscountAmount,
+        subscriptionDiscountType,
+      } = this
+      if (
+        !productFirstVariantPrice ||
+        !subscriptionDiscountAmount ||
+        !subscriptionDiscountType
+      )
+        return false
 
-      const discountAmount = this.subscriptionDiscountAmount.replace(/\D/g,'')
+      const discountAmount = this.subscriptionDiscountAmount.replace(
+        /[^0-9.]/g,
+        ''
+      )
 
-        let calcDiscountAmount = 0
+      let calcDiscountAmount = 0
 
-        if (subscriptionDiscountType === 'percent') { // percentage
-            calcDiscountAmount = (productFirstVariantPrice * discountAmount) / 100
-
-        } else if (subscriptionDiscountType === 'fixed') { // fixed
-            calcDiscountAmount = discountAmount
-
-        } else {
-            console.log('discount_amount should include % for "percentage" or not for "fixed"')
-        }
-        return (productFirstVariantPrice - calcDiscountAmount).toFixed(2)
+      if (subscriptionDiscountType === 'percent') {
+        // percentage
+        calcDiscountAmount = (productFirstVariantPrice * discountAmount) / 100
+      } else if (subscriptionDiscountType === 'fixed') {
+        // fixed
+        calcDiscountAmount = discountAmount
+      } else {
+        console.log(
+          'discount_amount should include % for "percentage" or not for "fixed"'
+        )
+      }
+      return (productFirstVariantPrice - calcDiscountAmount).toFixed(2)
     },
   },
   methods: {
@@ -158,7 +200,6 @@ export default {
         product,
       })
     },
-
 
     quantityChange(type) {
       const { product } = this
@@ -203,32 +244,45 @@ export default {
             product.title
           }}</h3>
 
-          <span v-if="existingProduct && product.line_price" class="c-drawerProductBlock__price"
-            >{{ currencySymbol }}{{ parseFloat(product.line_price).toFixed(2) }}</span
+          <span
+            v-if="existingProduct && product.line_price"
+            class="c-drawerProductBlock__price"
+            >{{ currencySymbol
+            }}{{ parseFloat(product.line_price).toFixed(2) }}</span
           >
 
-          <span v-if="!existingProduct && productFirstVariantSubscriptionPrice && ((editNextOrder && nextOrderProductsSubscriptionPricing) || !editNextOrder )" class="c-drawerProductBlock__price"
-            >{{ currencySymbol }}{{ productFirstVariantSubscriptionPrice }}</span
+          <span
+            v-if="
+              !existingProduct &&
+                productFirstVariantSubscriptionPrice &&
+                ((editNextOrder && nextOrderProductsSubscriptionPricing) ||
+                  !editNextOrder)
+            "
+            class="c-drawerProductBlock__price"
+            >{{ currencySymbol
+            }}{{ productFirstVariantSubscriptionPrice }}</span
           >
         </div>
 
-        <span v-if="productOptionDetails" class="c-drawerProductBlock__discountInfo"
+        <span
+          v-if="productOptionDetails"
+          class="c-drawerProductBlock__discountInfo"
           >{{ productOptionDetails }}</span
         >
 
         <span
           v-if="product.quantity_discount_title"
           class="c-drawerProductBlock__discountInfo"
-        >{{ atc['labels.quantityDiscount'] || 'Quantity Discount'}} (-{{ product.quantity_discount_title }})</span>
-
-
+          >{{ atc['labels.quantityDiscount'] || 'Quantity Discount' }} (-{{
+            product.quantity_discount_title
+          }})</span
+        >
 
         <span
           v-if="product.variant_title"
           class="c-drawerProductBlock__detail"
           >{{ product.variant_title }}</span
         >
-
       </div>
     </div>
     <!-- eslint-disable -->
@@ -236,7 +290,7 @@ export default {
       <div class="c-drawerProductBlock__buttonsWrap">
         <v-button
           v-if="remove"
-          :class="{'control-is-updating': updating}"
+          :class="{ 'control-is-updating': updating }"
           class="c-drawerProductBlock__button c-drawerProductBlock__button--remove c-button--transparent"
           html='<svg width="14"  height="16" view-box="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 2.5H10.9062L9.84375 0.75C9.59375 0.34375 9.03125 0 8.5625 0H5.40625C4.9375 0 4.375 0.34375 4.125 0.75L3.0625 2.5H0.5C0.21875 2.5 0 2.75 0 3V3.5C0 3.78125 0.21875 4 0.5 4H1L1.65625 14.5938C1.6875 15.375 2.375 16 3.15625 16H10.8125C11.5938 16 12.2812 15.375 12.3125 14.5938L13 4H13.5C13.75 4 14 3.78125 14 3.5V3C14 2.75 13.75 2.5 13.5 2.5ZM5.40625 1.5H8.5625L9.15625 2.5H4.8125L5.40625 1.5ZM10.8125 14.5H3.15625L2.5 4H11.4688L10.8125 14.5Z" fill="#FF7777"/></svg>'
           @click.native="$emit('removeProduct', product)"
@@ -244,7 +298,7 @@ export default {
 
         <v-button
           v-if="swap"
-          :class="{'control-is-updating': updating}"
+          :class="{ 'control-is-updating': updating }"
           class="c-drawerProductBlock__button c-button--transparent bold"
           size="small"
           :text="atc['buttons.swapProduct'] || 'SWAP'"
@@ -253,7 +307,7 @@ export default {
 
         <v-button
           v-if="add"
-          :class="{'control-is-updating': updating}"
+          :class="{ 'control-is-updating': updating }"
           class="c-drawerProductBlock__button c-button--transparent c-drawerProductBlock__button--add"
           size="small"
           :text="atc['portal.addProductDrawer'] || 'Add & Subscribe'"
@@ -263,12 +317,11 @@ export default {
 
       <quantity-changer-manual-entry
         v-if="quantity"
-        :class="{'control-is-updating': updating}"
+        :class="{ 'control-is-updating': updating }"
         class="c-modalProductBlock__quantity"
         :quantity="product.quantity"
         @updateQuantity="quantityChangeManual"
       />
-
     </div>
   </div>
 </template>
@@ -317,7 +370,7 @@ export default {
   align-items: flex-start;
 }
 
-.c-drawerProductblock__infoInner{
+.c-drawerProductblock__infoInner {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -394,7 +447,7 @@ export default {
   margin-left: 20px;
 }
 
-.bold{
+.bold {
   font-weight: bold;
   letter-spacing: 1px;
 }

@@ -323,7 +323,7 @@ export const actions = {
       request({
         method: 'post',
         url: `/subscription/cancel/${storeDomain}/${customerId}/${subscriptionId}`,
-        data: JSON.stringify({ reason }),
+        data: JSON.stringify(reason),
       })
         .then((data) => {
           commit('SET_CANCELED_SUBSCRIPTION', data)

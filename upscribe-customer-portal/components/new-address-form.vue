@@ -154,7 +154,10 @@
           />
 
           <form-input
-            v-if="activePaymentType === 'braintree_card' || !activePaymentType"
+            v-if="
+              formName == 'billing-address' &&
+                (activePaymentType === 'braintree_card' || !activePaymentType)
+            "
             id="cvv"
             key="cvv"
             v-model="form.cvv"

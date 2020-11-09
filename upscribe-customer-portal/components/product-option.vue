@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
     product: {
@@ -17,6 +17,8 @@ export default {
     ...mapState('shop', ['currencySymbol']),
 
     ...mapState('translations', ['atc']),
+
+    ...mapGetters('activeSubscription', ['activeSubscription']),
 
     // productImage() {
     //   const { product } = this
@@ -50,11 +52,17 @@ export default {
       }
     },
 
+    // if the product is not available in subscripition items that means it is a case of one time product
+    // DO NOT TRUST properties['Subscription']
+    // check if products id exist in subscription.items
     isSubscriptionProduct() {
-      const { product } = this
-      if (!product.properties) return false
-
-      return !!product.properties['Subscription']
+      const subscriptionItemProducts = this.activeSubscription.items.map(
+        (item) => item.id
+      )
+      if (subscriptionItemProducts.includes(this.product.id)) {
+        return true
+      }
+      return false
     },
 
     productOptionDetails() {
@@ -69,9 +77,13 @@ export default {
 
       if (isSubscriptionProduct) {
         if (parseInt(discountAmount)) {
-          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${product.quantity} (-${discountAmount} off)`
+          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${
+            product.quantity
+          } (-${discountAmount} off)`
         } else {
-          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${product.quantity}`
+          detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${
+            product.quantity
+          }`
         }
       } else {
         detail = `x${product.quantity}`
@@ -102,17 +114,31 @@ export default {
       <span v-if="productOptionDetails" class="c-productOption__detail">{{
         productOptionDetails
       }}</span>
-      <span v-if="product.quantity_discount_title" class="c-productOption__detail">
-        {{ atc['labels.quantityDiscount'] || 'Quantity Discount'}} (-{{ product.quantity_discount_title }})
+      <span
+        v-if="product.quantity_discount_title"
+        class="c-productOption__detail"
+      >
+        {{ atc['labels.quantityDiscount'] || 'Quantity Discount' }} (-{{
+          product.quantity_discount_title
+        }})
       </span>
 
       <span v-if="product.variant_title" class="c-productOption__detail">{{
         product.variant_title
       }}</span>
 
-    <strong v-if="product.in_stock !== null && product.in_stock !== undefined && !product.in_stock" class="c-productOption__detail">
-      {{ atc['portal.itemOutOfStock'] || '(Out of stock. Excluded from total)' }}
-    </strong>
+      <strong
+        v-if="
+          product.in_stock !== null &&
+            product.in_stock !== undefined &&
+            !product.in_stock
+        "
+        class="c-productOption__detail"
+      >
+        {{
+          atc['portal.itemOutOfStock'] || '(Out of stock. Excluded from total)'
+        }}
+      </strong>
 
       <span
         v-if="showPrice && product && product.price"

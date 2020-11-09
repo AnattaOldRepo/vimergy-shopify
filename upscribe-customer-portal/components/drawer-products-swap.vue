@@ -17,8 +17,31 @@ export default {
 
     ...mapState('products', ['products']),
 
+    ...mapGetters('products', ['hashedCollections']),
+
     activeSubscriptionProducts() {
       return this.activeSubscription.items
+    },
+
+    featuredCollectionProducts() {
+      if (this.hashedCollections && this.hashedCollections.all) {
+        // this array may have repeat products
+        const productsList = this.hashedCollections.all.reduce(
+          (finalArr, collection) => {
+            return (finalArr = [...finalArr, ...collection.items])
+          },
+          []
+        )
+
+        const uniqueProducts = []
+        productsList.forEach((product) => {
+          if (!uniqueProducts.find((item) => item.id === product.id)) {
+            uniqueProducts.push(product)
+          }
+        })
+        return uniqueProducts
+      }
+      return []
     },
   },
 
@@ -37,19 +60,26 @@ export default {
 
 <template>
   <div>
-    <h2 class="c-drawer__title">{{ atc['portal.swapProductDrawerTitle'] || 'Swap Product' }}</h2>
+    <h2 class="c-drawer__title">{{
+      atc['portal.swapProductDrawerTitle'] || 'Swap Product'
+    }}</h2>
 
-    <p class="c-drawer__subtitle">{{ atc['portal.swapProductCurrentProductLabel'] || 'Current Product' }}</p>
+    <p class="c-drawer__subtitle">{{
+      atc['portal.swapProductCurrentProductLabel'] || 'Current Product'
+    }}</p>
 
     <div class="c-drawerDeliveryFrequency__options">
-      <drawer-product-block :product="swapProduct" existing-product/>
+      <drawer-product-block :product="swapProduct" existing-product />
     </div>
 
-    <p class="c-drawer__subtitle">{{ atc['portal.swapProductSelectNewProductPrompt'] || 'Select your New Product' }}</p>
+    <p class="c-drawer__subtitle">{{
+      atc['portal.swapProductSelectNewProductPrompt'] ||
+        'Select your New Product'
+    }}</p>
 
     <div class="c-drawerDeliveryFrequency__options">
       <drawer-product-block
-        v-for="product in products"
+        v-for="product in featuredCollectionProducts"
         :key="product.id"
         :product="product"
         swap

@@ -25,7 +25,7 @@
     </div>
 
     <div v-else class="c-skipShipment">
-      <div v-if="allDataLoaded && !shipmentSkipped" class="c-skipShipment__loading">
+      <div v-if="allDataLoaded && !shipmentSkipped && !isEmptyObject(atc)" class="c-skipShipment__loading">
         <h3 class="c-skipShipment__loadingText">{{ atc['portal.skipNextShipmentMessage'] || 'Skip your next shipment' }}</h3>
         <v-button :text="atc['buttons.skipShipment'] || 'Skip Shipment'" auto @click.native="skipShipment" />
       </div>
@@ -75,13 +75,25 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
     const { query } = this.$route
     this.error = null
 
-    if (!query) return
+    console.log('mounted skip shipment')
 
-    const { skipShipment, skipShipmentSubscriptionId, skipShipmentQueueId } = query
+    if (!query) {
+      console.log('missing query')
+      return
+    }
+
+    const { skipShipment, skipShipmentSubscriptionId, skipShipmentQueueId, customerId } = query
+
+    try {
+      const subscriptions = this.GET_SUBSCRIPTIONS(customerId)
+      console.log('skip got shipments', {subscriptions})
+    } catch(e) {
+      console.log({e})
+    }
 
     if (!skipShipment || !skipShipmentSubscriptionId) {
       return this.$nuxt.error({
@@ -110,6 +122,7 @@ export default {
 
     // only one subscription skip
     else {
+      console.log({skipShipmentSubscriptionId})
       this.setActiveSubscriptionId(parseInt(skipShipmentSubscriptionId))
     }
   },

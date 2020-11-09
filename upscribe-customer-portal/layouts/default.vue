@@ -185,7 +185,11 @@ export default {
 			this.$loadStoreSegment()
 			this.$loadStoreGtm()
 		}
-	},
+  },
+
+  mounted() {
+    console.log('mounted default layout')
+  },
 
 	methods: {
     ...mapActions('accessToken', ['VALIDATE_ACCESS_TOKEN']),

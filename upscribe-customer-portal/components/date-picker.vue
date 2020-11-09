@@ -1,6 +1,8 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
-import moment from 'moment'
+
+import moment from 'moment-timezone'
+
 var Pikaday = null
 
 if (process.browser) {
@@ -88,13 +90,6 @@ export default {
     const daysShortArray = atc['date-time.daysShort'] ? atc['date-time.daysShort'].split(',') : defaultDaysShort
 
     this.date = nextShipDate
-    // console.log({
-    //   previousMonthText,
-    //   nextMonthText,
-    //   monthsArray,
-    //   daysArray,
-    //   daysShortArray,
-    // })
 
     this.$nextTick(() => {
       const picker = new Pikaday({
@@ -102,8 +97,12 @@ export default {
         format: 'YYYY-MM-DD',
         bound: false,
         onSelect: () => {
-          this.date = picker.toString()
-          this.$emit('changeShipmentDate', picker.toString())
+          const timezoneName = moment.tz.guess()
+          let dateValue = moment(picker.getDate()).tz(timezoneName).startOf('day').hour(12).minute(0).format()
+
+          this.date = dateValue
+
+          this.$emit('changeShipmentDate', dateValue)
         },
         minDate: moment()
           .add(1, 'days')

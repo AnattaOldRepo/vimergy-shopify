@@ -38,11 +38,17 @@ export const actions = {
   async GET_SUBSCRIPTION_SHIPPING_METHODS({ rootState, rootGetters, commit }) {
     const { storeDomain, customerId } = rootState.route
     const { id } = rootGetters['activeSubscription/activeSubscription']
+    const { xUpscribeAccessToken  } = rootState.auth
+
     let url = `/subscription/shipping/${storeDomain}/${customerId}/${id}`
+
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           commit('SET_SHIPPING_METHODS', data)

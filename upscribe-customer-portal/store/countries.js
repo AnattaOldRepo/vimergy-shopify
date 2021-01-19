@@ -1,5 +1,3 @@
-// import request from '@scripts/axiosRequestWrapper.js'
-
 export const state = () => ({
   countries: {},
   shopCountryCodes: [],

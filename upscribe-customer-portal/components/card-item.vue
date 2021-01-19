@@ -1,16 +1,14 @@
 <script>
 import * as icons from '@state/cardIcons.js'
-import EditIcon from '@components/Icon/edit-icon.vue'
-import TrashIcon from '@components/Icon/trash-icon.vue'
+// import EditIcon from '@components/Icon/edit-icon.vue'
+// import TrashIcon from '@components/Icon/trash-icon.vue'
 import CreditCardIcon from '@components/Icon/credit-card-icon.vue'
 import LockIcon from '@components/Icon/lock-icon.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { windowSizes } from '@mixins/windowSizes'
 
 export default {
-  components:{
-    EditIcon,
-    TrashIcon,
+  components: {
     LockIcon,
     CreditCardIcon,
   },
@@ -49,9 +47,9 @@ export default {
       const { card } = this
       if (card.type.includes('card')) {
         return card.name || card.brand
-      } else if ( card.type === 'stripe_sepa_direct_debit') {
+      } else if (card.type === 'stripe_sepa_direct_debit') {
         return 'SEPA Direct Debit'
-      } else if ( card.type === 'braintree_paypal') {
+      } else if (card.type === 'braintree_paypal') {
         return 'PayPal'
       } else {
         return false
@@ -61,11 +59,12 @@ export default {
     paymentMethodDetailText() {
       const { card } = this
       if (card.type.includes('card')) {
-        return `*${card.last4} ${card.exp_month}/${card.exp_year} ${card.zipcode ? '<br>Zip: ' + card.zipcode : ''}`
-
+        return `*${card.last4} ${card.exp_month}/${card.exp_year} ${
+          card.zipcode ? '<br>Zip: ' + card.zipcode : ''
+        }`
       } else if (card.type === 'braintree_paypal') {
-        return `Account Email: ${ card.email || 'No email available for account'}`
-
+        return `Account Email: ${card.email ||
+          'No email available for account'}`
       } else if (card.type === 'stripe_sepa_direct_debit') {
         return `Acct *${card.last4} / Bank ${card.bank_code}`
       } else {
@@ -95,93 +94,98 @@ export default {
 </script>
 
 <template>
-  <div
-    v-if="card && windowWidth >= 768"
-    class="c-cardItem"
-  >
-    <div class="c-cardItem__inner" @click="$emit('selectCard')">
+  <div>
+    <div v-if="card" class="c-cardItem">
+      <div class="c-cardItem__inner" @click="$emit('selectCard')">
+        <div
+          v-if="card.status === 'void'"
+          class="tag is-warning c-cardItem__voidWarning"
+          >{{
+            atc['errors.invalidPaymentMethodTag'] || 'Invalid Payment Method'
+          }}</div
+        >
 
-      <span v-if="noEdit" class="c-cardItem__lock"><lock-icon /></span>
+        <span v-if="noEdit" class="c-cardItem__lock"><lock-icon /></span>
 
-      <div class="c-cardItem__left">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div v-if="card.type.includes('card') && cardSvg" class="c-cardItem__cardIcon" v-html="cardSvg"></div>
+        <div class="c-cardItem__left">
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div
+            v-if="card.type.includes('card') && cardSvg"
+            class="c-cardItem__cardIcon"
+            v-html="cardSvg"
+          ></div>
 
-        <div class="c-cardItem__info">
-          <span v-if="paymentMethodName" class="c-cardItem__name">{{ paymentMethodName }}</span>
+          <div class="c-cardItem__info">
+            <span v-if="paymentMethodName" class="c-cardItem__name">{{
+              paymentMethodName
+            }}</span>
 
-          <div class="c-cardItem__editText">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <span v-if="paymentMethodDetailText" class="c-cardItem__editTextInner" v-html="paymentMethodDetailText"/>
-
-            <div v-if="!noEdit" class="c-cardItem__edit" @click="$emit('editPaymentMethod')">
-              <span v-if="atc['actions.editActionText']" class="c-cardItem__editText">{{ atc['actions.editActionText'] }}</span>
-
-              <span v-else>
-                <edit-icon />
-              </span>
-
-              <span tabindex="0" @click.prevent="$emit('removePaymentMethod')">
-                <trash-icon />
-              </span>
+            <div class="c-cardItem__editText">
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <span
+                v-if="paymentMethodDetailText"
+                class="c-cardItem__editTextInner"
+                v-html="paymentMethodDetailText"
+              />
             </div>
           </div>
-
         </div>
-      </div>
 
-      <div v-if="!noEdit" class="c-option__select" :class="{ 'c-option__select--picked': isSelected }">
-          <span class="c-option__inner"></span>
-      </div>
-    </div>
-  </div>
-
-  <div
-    v-else
-    class="c-cardItem"
-  >
-    <div
-      class="c-cardItem__inner"
-      :class="{
-        'c-cardItem__inner--updating': status === 'updating'
-    }"
-      @click="$emit('selectCard')">
-      <div class="c-cardItem__left">
-        <credit-card-icon class="c-cardItem__card--mobile"/>
-
-        <div class="c-cardItem__info">
-          <span v-if="paymentMethodName" class="c-cardItem__name">{{ paymentMethodName }}</span>
-
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-if="paymentMethodDetailText" class="c-cardItem__editText c-cardItem__editText--mobile" v-html="paymentMethodDetailText"/>
-        </div>
-      </div>
-
-      <div v-if="!isEditingCard && !noEdit" class="c-option__select" :class="{ 'c-option__select--picked': isSelected }">
-          <span class="c-option__inner"></span>
-      </div>
-
-      <div v-else-if="isEditingCard && !noEdit" class="c-option__editing">
-          <nuxt-link
-              :to="{
-                query:{
-                  template: 'edit-modify-card',
-                  storeDomain,
-                  customerId,
-                }
-              }"
-              class="c-option__selectEdit"
-              @click.native="handleEditCardMobile(card)">
-                 {{ atc['portal.editCardDrawerTitle'] || 'Edit' }}
-            </nuxt-link>
-
-          <div v-if="isSelected" class="c-option__select" :class="{ 'c-option__select--picked': isSelected }">
+        <div v-if="!noEdit" class="c-option__action">
+          <div
+            class="c-option__select"
+            :class="{ 'c-option__select--picked': isSelected }"
+          >
             <span class="c-option__inner"></span>
           </div>
-
-          <div v-else class="c-option__select" :class="{ 'c-option__select--editing': isEditingCard }">
-              <span class="c-option__inner c-option__inner--editing"></span>
+          <div class="c-action__items">
+            <a @click="$emit('editPaymentMethod')">{{
+              atc['actions.editActionText'] || 'EDIT'
+            }}</a>
+            <a
+              class="c-action__items--delete"
+              @click.prevent="$emit('removePaymentMethod')"
+            >
+              {{ atc['actions.removeActionText'] || 'DELETE' }}</a
+            >
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="c-cardItem">
+      <div
+        class="c-cardItem__inner"
+        :class="{
+          'c-cardItem__inner--updating': status === 'updating',
+        }"
+        @click="$emit('selectCard')"
+      >
+        <div class="c-cardItem__left">
+          <credit-card-icon class="c-cardItem__card--mobile" />
+
+          <div class="c-cardItem__info">
+            <span v-if="paymentMethodName" class="c-cardItem__name">{{
+              paymentMethodName
+            }}</span>
+
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div
+              v-if="paymentMethodDetailText"
+              class="c-cardItem__editText c-cardItem__editText--mobile"
+              v-html="paymentMethodDetailText"
+            />
+
+            <div
+              v-if="card.status === 'void'"
+              class="tag is-warning c-cardItem__voidWarning u-mt-1"
+              >{{
+                atc['errors.invalidPaymentMethodTag'] ||
+                  'Invalid Payment Method'
+              }}</div
+            >
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -257,10 +261,34 @@ export default {
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 
-  &--updating{
+  &--updating {
     pointer-events: none;
+  }
+  .c-option__action {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+
+    justify-content: space-between;
+    .c-option__select {
+      align-self: flex-end;
+    }
+    .c-action__items {
+      display: flex;
+      justify-content: space-between;
+      a {
+        text-decoration: underline;
+        font-size: 14px;
+        @include bp(mobile-large-max) {
+          font-size: 12px;
+          margin-right: 5px;
+        }
+      }
+      .c-action__items--delete {
+        color: $color-red;
+      }
+    }
   }
 }
 
@@ -286,23 +314,23 @@ export default {
   width: 100%;
   color: $color-blue-secondary;
 
-  &--mobile{
-    color:$color-black;
+  &--mobile {
+    color: $color-black;
   }
 }
 
-.c-option__editing{
+.c-option__editing {
   display: flex;
   align-items: center;
 }
 
-.c-option__selectEdit{
-    margin-right: 10px;
-    font-size: 11px;
-    line-height: 15px;
-    text-decoration: none;
-    color: $color-blue-brand;
-  }
+.c-option__selectEdit {
+  margin-right: 10px;
+  font-size: 11px;
+  line-height: 15px;
+  text-decoration: none;
+  color: $color-blue-brand;
+}
 
 .c-cardItem__cardIcon {
   margin-right: 10px;
@@ -311,13 +339,13 @@ export default {
   }
 }
 
-.c-cardItem__left{
+.c-cardItem__left {
   display: flex;
-  width: 80%;
+  width: 75%;
   align-items: center;
 }
 
-.c-cardItem__lock{
+.c-cardItem__lock {
   position: absolute;
   top: 50%;
   right: 20px;
@@ -325,7 +353,7 @@ export default {
   transform: translateY(-50%);
 }
 
-.c-cardItem__card--mobile{
+.c-cardItem__card--mobile {
   margin-right: 12px;
 }
 </style>

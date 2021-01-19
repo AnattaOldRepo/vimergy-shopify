@@ -2,7 +2,7 @@
   <div v-if="activeSubscription && ordersLoaded">
     <portal to="header">
       <the-header
-        :middle-html="'Subscription ' + activeSubscription.id + ' | Past Shipments'"
+        :middle-html="middleHtml"
         mode="backwardRoute"
       />
     </portal>
@@ -38,6 +38,13 @@ export default {
     ...mapState('orders', ['subscriptionOrders', 'orders', 'ordersLoaded']),
 
     ...mapState('subscriptions', ['subscriptions']),
+
+    ...mapState('translations', ['atc']),
+
+    middleHtml() {
+      const { atc, activeSubscription } = this
+      return `${atc['labels.subscription'] || 'Subscription'} ${activeSubscription.id} ${atc['labels.pastShipments'] || 'Past Shipments'}`
+    },
 
     sortedOrders() {
       const { subscriptionOrders } = this

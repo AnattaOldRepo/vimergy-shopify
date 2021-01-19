@@ -1,74 +1,68 @@
 <template>
-  <div class="c-productRow">
-    <div v-if="products" class="c-productRow__imageWrap">
-      <div
-        v-for="(each, index) in products
-          .slice()
-          .splice(0, calculateProductEndNumber)"
-        :key="index"
-        class="c-productRow__imageContain"
-        @click="openModal(each.variant_id)"
-      >
-        <img
-          class="c-productRow__image"
-          :class="{
-            'c-productRow__image--disabled': isCancelledSubscriptionRoute,
-          }"
-          :src="
-            each.image_url
-              .replace('.png', '_320x.png')
-              .replace('.jpg', '_320x.jpg')
-          "
-          alt=""
-        />
+  <div>
+    <div
+      v-for="(product, index) in products"
+      :key="index"
+      class="c-product"
+      @click="goToFullProductDetails"
+    >
+      <img
+        class="c-product__image"
+        :class="{
+          'c-product__image--disabled': isCancelledSubscriptionRoute,
+        }"
+        :src="
+          product.image_url
+            .replace('.png', '_320x.png')
+            .replace('.jpg', '_320x.jpg')
+        "
+        alt=""
+        onerror="this.style.display='none'"
+      />
 
-        <span v-if="each.quantity > 1" class="c-productRow__quanity">
-          {{ each.quantity }}
-        </span>
+      <div class="c-product__description">
+        <h4>
+          {{ product.title }}
+          {{ product.quantity > 1 ? ' X ' + product.quantity : '' }}
+        </h4>
+        <p class="c-product__variantDescription">{{ product.variant_title }}</p>
+        <p v-if="oneTimeProducts(product.id)" class="c-product__shipment">
+          Ships One-Time in Next Shipment Only
+        </p>
+        <p v-else class="c-product__shipment">
+          {{
+            atc['portal.subscriptionSettingsDeliverEveryLabel'] || 'Ships every'
+          }}
+          {{ activeSubscription.interval + ' ' + intervalUnitDisplay }}
+        </p>
       </div>
 
-      <nuxt-link
-        v-if="products.length - calculateProductEndNumber >= 1"
-        class="c-button c-button--transparent c-productRow__button"
-        :to="{
-          query: {
-            template: 'order-next-shipment',
-            ...returnCancelledSubscriptionRoute,
-            storeDomain,
-            customerId,
-            ...editNextOrder,
-          },
-        }"
-      >
-        + {{ products.length - calculateProductEndNumber }}
-      </nuxt-link>
-
       <div class="c-productRow__buttonContainer">
-        <v-button
-          v-if="!isCancelledSubscriptionRoute"
-          class="c-productRow__rightButton"
-          @onClick="openAddToSubscriptionModal"
-        >
-          <plus-circle />
-        </v-button>
-
-        <nuxt-link
-          class="c-productRow__rightButton"
-          :to="{
-            query: {
-              template: 'order-next-shipment',
-              ...returnCancelledSubscriptionRoute,
-              storeDomain,
-              customerId,
-              ...editNextOrder,
-            },
-          }"
-        >
+        <a class="c-productRow__rightButton">
           <angle-right />
-        </nuxt-link>
+        </a>
       </div>
     </div>
 
+    <v-button
+      v-if="editNextOrder"
+      class="c-product_button"
+      @onClick="openAddToSubscriptionModal"
+    >
+      {{
+        atc['buttons.addProductToNextOrder'] || 'Add products to next shipment'
+      }}
+    </v-button>
+    <v-button
+      v-else
+      class="c-product_button"
+      @onClick="openAddToSubscriptionModal"
+    >
+      {{
+        atc['buttons.addProductToSubscription'] ||
+          'Add products to subscription'
+      }}
+    </v-button>
     <portal v-if="isProductModalOpen" to="modals">
       <modal-product
         :show="isProductModalOpen"
@@ -92,15 +86,14 @@
 <script>
 import { windowSizes } from '@mixins/windowSizes'
 import VButton from '@components/v-button.vue'
-import PlusCircle from '@components/Icon/plus-cicrle'
 import AngleRight from '@components/Icon/angle-right'
 import ModalProduct from '@components/modal-product.vue'
 import ModalSubscription from '@components/modal-subscription'
 import { mapGetters, mapMutations, mapState } from 'vuex'
+
 export default {
   components: {
     VButton,
-    PlusCircle,
     AngleRight,
     ModalProduct,
     ModalSubscription,
@@ -131,7 +124,11 @@ export default {
   },
 
   computed: {
+    ...mapState('translations', ['atc']),
+
     ...mapState('route', ['storeDomain', 'customerId']),
+
+    ...mapState('editMode', ['editNextOrder']),
 
     ...mapGetters('activeSubscription', ['activeSubscription']),
 
@@ -157,10 +154,35 @@ export default {
         return products.length
       }
     },
-    editNextOrder() {
-      return this.$route.query.template === 'next-shipment'
-        ? { editNextOrder: true }
-        : {}
+
+    intervalUnitDisplay() {
+      const { activeSubscription, atc } = this
+      let intervalUnit = activeSubscription.period
+      let plural = activeSubscription.interval > 1
+
+      let displayUnit = ''
+      if (intervalUnit.indexOf('day') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.days-unit'] || 'days'
+        } else {
+          displayUnit = atc['date-time.day-unit'] || 'day'
+        }
+      } else if (intervalUnit.indexOf('week') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.weeks-unit'] || 'weeks'
+        } else {
+          displayUnit = atc['date-time.week-unit'] || 'week'
+        }
+      } else if (intervalUnit.indexOf('month') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.months-unit'] || 'months'
+        } else {
+          displayUnit = atc['date-time.month-unit'] || 'month'
+        }
+      } else {
+        displayUnit = intervalUnit
+      }
+      return displayUnit
     },
   },
 
@@ -178,6 +200,19 @@ export default {
       this.closeAnimation = false
     },
 
+    goToFullProductDetails() {
+      const { returnCancelledSubscriptionRoute } = this
+      this.$router.push({
+        query: {
+          template: 'order-next-shipment',
+          ...returnCancelledSubscriptionRoute,
+          storeDomain: this.storeDomain,
+          customerId: this.customerId,
+          ...(this.$route.query.editNextOrder ? { editNextOrder: true } : {}),
+        },
+      })
+    },
+
     openAddToSubscriptionModal(payload) {
       this.isOpeningProductSubscription = true
       this.closeAnimation = false
@@ -188,6 +223,11 @@ export default {
       } else {
         this.isSwapSubscription = false
       }
+    },
+
+    oneTimeProducts(id) {
+      const idArray = this.activeSubscription.items.map((item) => item.id)
+      return !idArray.includes(id)
     },
 
     closeModal() {
@@ -203,20 +243,54 @@ export default {
 
 <style lang="scss">
 @import '@design';
-.c-productRow__imageWrap {
+.c-product {
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   max-width: 400px;
   padding: 8px 24px 8px 16px;
   margin: 0 auto;
   background-color: $color-white;
   border: 1px solid $color-blue-light-border;
   border-radius: 4px;
+  margin-bottom: 15px;
+  height: 70px;
 
   @media (min-width: 425px) {
     padding: 8px 16px 8px 16px;
   }
+  .c-product__image {
+    width: 50px;
+    height: auto;
+    cursor: pointer;
+    object-fit: cover;
+  }
+  .c-product__description {
+    padding: 0 10px;
+    flex: 1;
+    h4 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .c-product__variantDescription {
+      font-size: 12px;
+      font-weight: 500;
+      color: $color-secondary;
+      margin: 0;
+    }
+    .c-product__shipment {
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0;
+      color: $color-secondary;
+    }
+  }
+}
+
+.c-product_button {
+  width: 90%;
+  margin: auto;
 }
 
 .c-productRow__imageContain {
@@ -243,13 +317,6 @@ export default {
   font-size: 12px;
   background-color: $color-white;
   border-radius: 50%;
-}
-
-.c-productRow__image {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  object-fit: cover;
 }
 
 .c-productRow__button {

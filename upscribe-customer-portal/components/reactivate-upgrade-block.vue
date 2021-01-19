@@ -37,41 +37,68 @@ export default {
 
     isExpiredTrial() {
       const { activeSubscription } = this
-      return !activeSubscription.active && activeSubscription.cancellation_reason === 'Trial period has expired'
+      return (
+        !activeSubscription.active &&
+        activeSubscription.cancellation_reason === 'Trial period has expired'
+      )
     },
 
     isInactiveRegular() {
       const { activeSubscription } = this
-      return !activeSubscription.active && activeSubscription.cancellation_reason !== 'Trial period has expired'
+      return (
+        !activeSubscription.active &&
+        activeSubscription.cancellation_reason !== 'Trial period has expired'
+      )
     },
 
     remainingShipmentCount() {
-      return this.activeSubscription.charge_limit - this.activeSubscription.order_count
+      return (
+        this.activeSubscription.charge_limit -
+        this.activeSubscription.order_count
+      )
     },
 
     title() {
       const { activeSubscription, isTrial, remainingShipmentCount, atc } = this
       if (activeSubscription.active && isTrial) {
         if (remainingShipmentCount > 1) {
-          return atc['portal.reactivateUpgradeTrialRemainingPlural'] ? atc['portal.reactivateUpgradeTrialRemainingPlural'].replace('<remaining-shipment-count>', remainingShipmentCount) : `Your Trial Has ${remainingShipmentCount} Remaining Shipments`
+          return atc['portal.reactivateUpgradeTrialRemainingPlural']
+            ? atc['portal.reactivateUpgradeTrialRemainingPlural'].replace(
+                '<remaining-shipment-count>',
+                remainingShipmentCount
+              )
+            : `Your Trial Has ${remainingShipmentCount} Remaining Shipments`
         } else {
-          return atc['portal.reactivateUpgradeTrialRemainingSingular'] ? atc['portal.reactivateUpgradeTrialRemainingSingular'].replace('<remaining-shipment-count>', remainingShipmentCount) : `Your Trial Has ${remainingShipmentCount} Remaining Shipment`
+          return atc['portal.reactivateUpgradeTrialRemainingSingular']
+            ? atc['portal.reactivateUpgradeTrialRemainingSingular'].replace(
+                '<remaining-shipment-count>',
+                remainingShipmentCount
+              )
+            : `Your Trial Has ${remainingShipmentCount} Remaining Shipment`
         }
       } else if (!activeSubscription.active && isTrial) {
-        return atc['portal.reactivateUpgradeTrialEnded'] || 'Your Trial Has Ended'
+        return (
+          atc['portal.reactivateUpgradeTrialEnded'] || 'Your Trial Has Ended'
+        )
       } else {
-        return atc['portal.reactivateUpgradeSubscriptionInactive'] || 'Your Subscription Is Inactive'
+        return (
+          atc['portal.reactivateUpgradeSubscriptionInactive'] ||
+          'Your Subscription Is Inactive'
+        )
       }
     },
   },
 
   methods: {
-    ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION', 'ACTIVATE_SUBSCRIPTION']),
+    ...mapActions('subscriptions', [
+      'UPDATE_SUBSCRIPTION',
+      'ACTIVATE_SUBSCRIPTION',
+    ]),
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
     async handleReactivateSubscription() {
-      const { activeSubscription} = this
+      const { activeSubscription } = this
 
       let analyticsEventName = 'Upscribe Reactivate Subscription'
       let analyticsPayload = {
@@ -87,14 +114,14 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('handleReactivateSubscription error: ', e)
+        console.error('handleReactivateSubscription error: ', e)
       } finally {
         this.updating = false
       }
     },
 
     async handleReactivateTrialAsSubscription() {
-      const { activeSubscription} = this
+      const { activeSubscription } = this
 
       let analyticsEventName = 'Upscribe Reactivate Trial as Subscription'
       let analyticsPayload = {
@@ -110,14 +137,14 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('handleReactivateTrialAsSubscription error: ', e)
+        console.error('handleReactivateTrialAsSubscription error: ', e)
       } finally {
         this.updating = false
       }
     },
 
     async handleConvertTrialToSubscription() {
-      const { activeSubscription} = this
+      const { activeSubscription } = this
 
       const updatePayload = {
         requestPayload: {
@@ -139,39 +166,49 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('handleConvertTrialToSubscription error: ', e)
+        console.error('handleConvertTrialToSubscription error: ', e)
       } finally {
         this.updating = false
       }
-
     },
   },
 }
 </script>
 
 <template>
-  <subscription-block
-    key="trial-expired-sub-block"
-    :title="title"
-  >
+  <subscription-block key="trial-expired-sub-block" :title="title">
     <v-button
       v-if="isTrial && isActive"
       slot="button"
-      :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.convertTrialToSubscription'] || 'Convert Trial to Subscription')"
+      :text="
+        updating
+          ? atc['notices.updatingNotice'] || 'Updating'
+          : atc['buttons.convertTrialToSubscription'] ||
+            'Convert Trial to Subscription'
+      "
       @click.native="handleConvertTrialToSubscription"
     />
 
     <v-button
       v-else-if="isExpiredTrial || isInactiveTrial"
       slot="button"
-      :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.reactivateAsSubscription'] || 'Reactivate as Subscription')"
+      :text="
+        updating
+          ? atc['notices.updatingNotice'] || 'Updating'
+          : atc['buttons.reactivateAsSubscription'] ||
+            'Reactivate as Subscription'
+      "
       @click.native="handleReactivateTrialAsSubscription"
     />
 
     <v-button
       v-else-if="isInactiveRegular"
       slot="button"
-      :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.reactivateSubscription'] || 'Reactivate Subscription')"
+      :text="
+        updating
+          ? atc['notices.updatingNotice'] || 'Updating'
+          : atc['buttons.reactivateSubscription'] || 'Reactivate Subscription'
+      "
       @click.native="handleReactivateSubscription"
     />
   </subscription-block>

@@ -119,6 +119,11 @@
         :key="17"
       />
 
+      <mobile-screen-edit-subscription-name
+        v-else-if="templateQuery === 'edit-subscription-name'"
+        :key="18"
+      />
+
       <div
         v-else-if="
           !templateQuery && Object.keys(toggleSubscriptions).length < 1
@@ -154,6 +159,7 @@ import MobileScreenDatePicker from '@components/mobile-screen-date-picker'
 import MobileScreenActions from '@components/mobile-screen-actions.vue'
 import MobileScreenEditCard from '@components/mobile-screen-edit-card.vue'
 import MobileScreenDiscount from '@components/mobile-screen-discount.vue'
+import MobileScreenEditSubscriptionName from '@components/mobile-screen-edit-subscription-name.vue'
 import MobileOrderNextShipment from '@components/mobile-order-next-shipment.vue'
 import TheHeader from '@components/the-header'
 import SubscriptionPicker from '@components/subscription-picker.vue'
@@ -185,6 +191,7 @@ export default {
     SecondLoaderIcon,
     MobileScreenActions,
     MobileScreenDiscount,
+    MobileScreenEditSubscriptionName,
     MobileOrderNextShipment,
     All,
   },

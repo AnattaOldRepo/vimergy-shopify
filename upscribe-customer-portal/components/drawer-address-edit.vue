@@ -4,12 +4,14 @@ import { mapActions, mapState } from 'vuex'
 import NewAddressForm from '@components/new-address-form.vue'
 import AddressItem from '@components/address-item.vue'
 import VButton from '@components/v-button.vue'
+import Checkbox from '@components/checkbox.vue'
 
 export default {
   components: {
     NewAddressForm,
     AddressItem,
     VButton,
+    Checkbox,
   },
   props: {
     show: {
@@ -23,6 +25,7 @@ export default {
       addressName: null,
       addressMonth: null,
       addressYear: null,
+      applyToAllActiveSusbscriptions: false,
     }
   },
   computed: {
@@ -32,6 +35,11 @@ export default {
   },
   methods: {
     ...mapActions('addresses', ['UPDATE_ADDRESS']),
+    ...mapActions('subscriptions', [
+      'UPDATE_SUBSCRIPTION',
+      'GET_SUBSCRIPTIONS',
+    ]),
+    ...mapActions('customer', ['GET_CUSTOMER']),
 
     async updateAddress(address) {
       const { activeEditAddress, editNextOrder } = this
@@ -40,6 +48,7 @@ export default {
 
       try {
         if (editNextOrder) {
+          // shoppify
           await this.UPDATE_ADDRESS({
             address,
             addressId: activeEditAddress.id,
@@ -56,11 +65,21 @@ export default {
             addressId: activeEditAddress.id,
             updateSub: true,
           })
+          if (this.applyToAllActiveSusbscriptions) {
+            const updatePayload = {
+              requestPayload: {
+                shipping_address: address,
+              },
+              bulkUpdate: this.applyToAllActiveSusbscriptions,
+            }
+            await this.UPDATE_SUBSCRIPTION(updatePayload)
+          }
         }
-
+        await this.GET_CUSTOMER()
+        await this.GET_SUBSCRIPTIONS()
         this.$emit('setDrawerStatus', 'SUCCESS')
       } catch (e) {
-        console.log('address/UPDATE_ADDRESS error: ', e)
+        console.error('address/UPDATE_ADDRESS error: ', e)
         this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
       }
     },
@@ -75,13 +94,25 @@ export default {
 <template>
   <div v-if="activeEditAddress" class="c-drawer c-drawerEditAddress">
     <div class="c-drawer__inner">
-      <h2 class="c-drawer__title">{{ atc['portal.editAddressDrawerTitle'] || 'Edit Address' }}</h2>
+      <h2 class="c-drawer__title">{{
+        atc['portal.editAddressDrawerTitle'] || 'Edit Address'
+      }}</h2>
 
       <address-item no-edit :address="activeEditAddress" />
 
+      <checkbox
+        v-model="applyToAllActiveSusbscriptions"
+        :label="
+          atc['portal.applyToAllActiveSusbscriptions'] ||
+            'Apply to all active subscriptions'
+        "
+      />
+
       <new-address-form
         class="c-formBlock c-addressForm"
-        form-submit-button-text="Update Address"
+        :form-submit-button-text="
+          atc['buttons.updateAddress'] || 'Update Address'
+        "
         form-name="update-address"
         update-address
         :data-fill="activeEditAddress"

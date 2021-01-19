@@ -1,16 +1,20 @@
 <template>
   <div v-if="currentOpen" class="c-headlineBanner">
-      <div class="c-headlineBanner__inner">
-        <span
-          role = "button"
-          class="c-headlineBanner__close-icon"
-          aria-label="Close Icon"
-          @click = "closeAnnouncement">
-          <times-icon />
-        </span>
+    <div class="c-headlineBanner__inner">
+      <span
+        role="button"
+        class="c-headlineBanner__close-icon"
+        aria-label="Close Icon"
+        @click="closeAnnouncement"
+      >
+        <times-icon />
+      </span>
 
-        <h3 class="c-headlineBanner__announcement-text">{{ atc['portal.notification'] || 'Notification Banner'}}</h3>
-      </div>
+      <h3
+        class="c-headlineBanner__announcement-text"
+        v-html="atc['portal.notification'] || 'Notification Banner'"
+      ></h3>
+    </div>
   </div>
 </template>
 
@@ -18,23 +22,22 @@
 import TimesIcon from '@components/Icon/times-icon'
 import { mapState } from 'vuex'
 export default {
-
-  components:{
+  components: {
     TimesIcon,
   },
 
-  data(){
-    return{
+  data() {
+    return {
       currentOpen: true,
     }
   },
 
   computed: {
-   ...mapState('translations', ['atc']),
+    ...mapState('translations', ['atc']),
   },
 
-  methods:{
-    closeAnnouncement(){
+  methods: {
+    closeAnnouncement() {
       this.currentOpen = false
     },
   },
@@ -43,43 +46,48 @@ export default {
 <style lang="scss">
 @import '@design';
 
-.c-headlineBanner{
+.c-headlineBanner {
   padding: 0 16px;
-  @media (min-width: 420px){
-    padding: 0
+
+  @media (min-width: 420px) {
+    padding: 0;
   }
 }
 
-.c-headlineBanner__inner{
-  padding: 24px 32px 24px 16px;
-  background-color: $color-blue-light-border;
+.c-headlineBanner__inner {
   position: relative;
   width: 100%;
+  padding: 24px 32px 24px 16px;
   margin: 0 auto 20px;
+  background-color: $color-blue-light-border;
 
-  @include bp(mobile-large){
-      padding: 20px 24px;
+  @include bp(mobile-large) {
+    padding: 20px 24px;
   }
 }
 
-.c-headlineBanner__close-icon{
+.c-headlineBanner__close-icon {
   position: absolute;
   top: 10px;
   right: 10px;
   cursor: pointer;
 }
 
-.c-headlineBanner__announcement-text{
+.c-headlineBanner__announcement-text {
+  margin: 0 auto;
   font-size: 14px;
+  font-style: normal;
+  font-weight: normal;
   line-height: 21px;
   letter-spacing: 0.1px;
-  font-weight: normal;
-  font-style: normal;
-  margin: 0 auto;
+  a {
+    font-weight: bold;
+    color: $color-primary;
+  }
 
-  @include bp($mobile-large){
-    font-size: 17px;
+  @include bp($mobile-large) {
     max-width: 100%;
+    font-size: 17px;
   }
 }
 </style>

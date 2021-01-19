@@ -27,19 +27,24 @@ export default {
   },
   methods: {
     ...mapActions('addresses', ['DELETE_ADDRESS']),
+    ...mapActions('customer', ['GET_CUSTOMER']),
+    ...mapActions('subscriptions', ['GET_SUBSCRIPTIONS']),
 
     async removeAddress() {
-      const uniqueAddressString = this.createUniqueAddressString(
-        this.activeEditAddress
-      )
+      // const uniqueAddressString = this.createUniqueAddressString(
+      //   this.activeEditAddress
+      // )
 
       this.$emit('setDrawerStatus', 'PENDING')
       try {
-        await this.DELETE_ADDRESS(uniqueAddressString)
+        await this.DELETE_ADDRESS(this.activeEditAddress.id)
+        await this.GET_CUSTOMER()
+        await this.GET_SUBSCRIPTIONS()
+
         this.$emit('setDrawerStatus', 'SUCCESS')
         this.$emit('setMode', 'default')
       } catch (e) {
-        console.log('address/ADD_ADDRESS error: ', e)
+        console.error('address/ADD_ADDRESS error: ', e)
         this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
       }
     },
@@ -54,11 +59,14 @@ export default {
 <template>
   <div v-if="activeEditAddress" class="c-drawer">
     <div class="c-drawer__inner">
-      <h2 class="c-drawer__title">{{ atc['removeAddressDrawerTitle'] || 'Remove Address' }}</h2>
+      <h2 class="c-drawer__title">{{
+        atc['removeAddressDrawerTitle'] || 'Remove Address'
+      }}</h2>
 
-      <p class="c-drawer__subtitle"
-        >{{ atc['portal.removeAddressDrawerPrompt'] || 'Are you sure you want to remove this address?' }}</p
-      >
+      <p class="c-drawer__subtitle">{{
+        atc['portal.removeAddressDrawerPrompt'] ||
+          'Are you sure you want to remove this address?'
+      }}</p>
 
       <address-item
         :address="activeEditAddress"
@@ -66,9 +74,9 @@ export default {
         class="c-drawerAddressList__item"
       />
 
-      <v-button class="c-form__submitButton" @onClick="removeAddress"
-        >{{ atc['buttons.removeAddress'] || 'Remove Address' }}</v-button
-      >
+      <v-button class="c-form__submitButton" @onClick="removeAddress">{{
+        atc['buttons.removeAddress'] || 'Remove Address'
+      }}</v-button>
 
       <v-button
         class="c-drawerAddressRemove__cancelButton"

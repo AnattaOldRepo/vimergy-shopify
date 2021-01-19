@@ -1,10 +1,15 @@
 <template>
   <div v-if="newSwapShippingMethod">
     <div class="c-drawer">
-      <h2 class="c-drawer__title">{{ atc['portal.swapShippingMethodDrawerTitle'] || 'Swap Shipping Method' }}</h2>
+      <h2 class="c-drawer__title">{{
+        atc['portal.swapShippingMethodDrawerTitle'] || 'Swap Shipping Method'
+      }}</h2>
 
       <div class="c-drawer__inner">
-        <p class="c-drawer__subtitle">{{ atc['portal.swapShippingMethodCurrentLabel'] || 'Current Shipping Method' }}</p>
+        <p class="c-drawer__subtitle">{{
+          atc['portal.swapShippingMethodCurrentLabel'] ||
+            'Current Shipping Method'
+        }}</p>
         <div class="c-drawerCardSwap">
           <shipping-method-item
             :shipping-method="activeShippingMethod"
@@ -14,19 +19,26 @@
           />
         </div>
 
-        <p class="c-drawer__subtitle">{{ atc['portal.swapShippingMethodNewLabel'] || 'New Shipping Method' }}</p>
+        <p class="c-drawer__subtitle">{{
+          atc['portal.swapShippingMethodNewLabel'] || 'New Shipping Method'
+        }}</p>
         <div class="c-drawerCardList">
           <shipping-method-item
             :shipping-method="newSwapShippingMethod"
-            :is-selected="shippingMethodSwapHolder === newSwapShippingMethod"
+            :is-selected="true"
             no-edit
             class="c-defaultDrawerShippingMethodList__item"
             @click.native="seletectingShippingMethod(newSwapShippingMethod)"
           />
         </div>
 
-        <v-button class="c-form__submitButton" @onClick="swapShippingMethods"
-          >{{ atc['buttons.moveToNewShippingMethod'] || 'Move to New Shipping Method' }}</v-button
+        <v-button
+          class="c-form__submitButton u-mt-3"
+          @onClick="swapShippingMethods"
+          >{{
+            atc['buttons.moveToNewShippingMethod'] ||
+              'Move to New Shipping Method'
+          }}</v-button
         >
 
         <v-button
@@ -81,7 +93,6 @@ export default {
     ...mapState('editMode', ['editNextOrder']),
   },
 
-
   methods: {
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
@@ -95,7 +106,7 @@ export default {
       'UPDATE_NEXT_ORDER',
     ]),
 
-    seletectingShippingMethod(shippingMethod){
+    seletectingShippingMethod(shippingMethod) {
       this.shippingMethodSwapHolder = shippingMethod
     },
 
@@ -154,7 +165,7 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('swapShippingMethods error: ', e)
+        console.error('swapShippingMethods error: ', e)
         this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
       }
     },

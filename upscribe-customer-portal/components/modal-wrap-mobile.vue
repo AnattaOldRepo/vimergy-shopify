@@ -1,30 +1,38 @@
 <template>
-    <div v-show="show" class="modal-mask modal-mask--mobile" @click="close">
+  <div v-show="show" class="modal-mask modal-mask--mobile" @click="close">
+    <div
+      class="modal-container--mobile modal-inner-active"
+      :class="{ 'modal-inner-inactive': closeAnimation }"
+      @click.stop
+    >
       <div
-        class="modal-container--mobile modal-inner-active"
-        :class="{'modal-inner-inactive': closeAnimation}"
-        @click.stop>
-        <div
-          v-if="progressBarStatus"
-          class="c-modalWrapMobile__updateStatus"
-          :class="{
-            'c-modalWrapMobile__updateStatus--updating': progressBarStatus === 'updating',
-            'c-modalWrapMobile__updateStatus--success': progressBarStatus === 'success',
-            'c-modalWrapMobile__updateStatus--rejected': progressBarStatus === 'rejected',
-          }"
-        >
-          {{ progressBarMessage }}
-        </div>
-
-        <div class="modal-close__contain">
-          <span v-if="withCloseIcon" class="modal-close modal-close--mobile" @click="close">
-            <times-icon/>
-          </span>
-        </div>
-
-        <slot></slot>
+        v-if="progressBarStatus"
+        class="c-modalWrapMobile__updateStatus"
+        :class="{
+          'c-modalWrapMobile__updateStatus--updating':
+            progressBarStatus === 'updating',
+          'c-modalWrapMobile__updateStatus--success':
+            progressBarStatus === 'success',
+          'c-modalWrapMobile__updateStatus--rejected':
+            progressBarStatus === 'rejected',
+        }"
+      >
+        {{ progressBarMessage }}
       </div>
+
+      <div class="modal-close__contain">
+        <span
+          v-if="withCloseIcon"
+          class="modal-close modal-close--mobile"
+          @click="close"
+        >
+          <times-icon />
+        </span>
+      </div>
+
+      <slot></slot>
     </div>
+  </div>
 </template>
 
 <script>
@@ -42,11 +50,11 @@ export default {
       type: Boolean,
       default: true,
     },
-    progressBarStatus:{
+    progressBarStatus: {
       type: String,
       default: '',
     },
-    progressBarMessage:{
+    progressBarMessage: {
       type: String,
       default: '',
     },
@@ -80,17 +88,17 @@ export default {
 <style lang="scss">
 @import '@design';
 
-.modal-mask--mobile{
+.modal-mask--mobile {
   display: flex;
   justify-content: center;
   align-items: flex-end;
 
-  @include bp(mobile-large){
+  @include bp(mobile-large) {
     align-items: center;
   }
 }
 
-.modal-container--mobile{
+.modal-container--mobile {
   position: relative;
   max-height: 500px;
   min-height: 225px;
@@ -104,22 +112,22 @@ export default {
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   height: auto;
-  background-color:$color-white;
+  background-color: $color-white;
   margin: 0;
   transition: all 0.5s linear;
 
-  @media(min-width: 600px){
+  @media (min-width: 600px) {
     width: 375px;
     border-radius: 12px;
   }
 }
 
-.c-modalWrapMobile__updateStatus{
+.c-modalWrapMobile__updateStatus {
   position: sticky;
   top: 0px;
   left: 0;
   width: 100%;
-  height: auto;
+  height: 35px;
   background-color: $color-white;
   display: flex;
   justify-content: center;
@@ -130,48 +138,48 @@ export default {
   text-align: center;
   font-size: 12px;
   z-index: 100;
+  height: 40px;
 
-  &--updating{
+  &--updating {
     background-color: $color-blue-brand;
   }
 
-  &--success{
+  &--success {
     background-color: $color-success;
   }
 
-  &--rejected{
+  &--rejected {
     background-color: $color-danger;
   }
 }
 
-.modal-inner-active{
+.modal-inner-active {
   animation: upToTop 0.5s ease-out;
 }
 
-.modal-inner-inactive{
+.modal-inner-inactive {
   animation: downToBottom 0.5s linear;
 }
 
-
 @keyframes upToTop {
-  0%{
-    transform: translateY(200%)
+  0% {
+    transform: translateY(200%);
   }
-  100%{
-    transform: translateY(0)
-  }
-}
-
-@keyframes downToBottom{
-  0%{
-    transform: translateY(0)
-  }
-  100%{
-    transform: translateY(250%)
+  100% {
+    transform: translateY(0);
   }
 }
 
-.modal-close__contain{
+@keyframes downToBottom {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(250%);
+  }
+}
+
+.modal-close__contain {
   position: relative;
   height: 12px;
   margin-top: 15px;

@@ -7,7 +7,7 @@ export default ({ app, store }, inject) => {
       !store.state.shop ||
       !store.state.shop.google_tag_manager_id
     ) {
-      console.log('google_tag_manager_id not available')
+      console.error('google_tag_manager_id not available')
       return
     }
 
@@ -25,7 +25,6 @@ export default ({ app, store }, inject) => {
   })
 
   inject('loadStoreGtmTransactionSuccess', (orderData) => {
-    // console.log('loadStoreGtmTransactionSuccess order: ', orderData)
     const order = orderData.shopify_order
 
     if (
@@ -35,7 +34,7 @@ export default ({ app, store }, inject) => {
       !store.state.shop.google_tag_manager_id ||
       !order
     ) {
-      console.log('google_tag_manager_id or order not available')
+      console.error('google_tag_manager_id or order not available')
       return
     }
 
@@ -115,7 +114,7 @@ export default ({ app, store }, inject) => {
       !store.state.shop ||
       !store.state.shop.google_tag_manager_id
     ) {
-      console.log('google_tag_manager_id not available')
+      console.error('google_tag_manager_id not available')
       return
     }
 

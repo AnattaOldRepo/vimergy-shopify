@@ -1,61 +1,81 @@
 <template>
   <div class="c-addressPayment__formattedComponent">
     <portal to="header">
-      <the-header
-        middle-html="Payment Method"
-        mode="customized"
-        :customized-func-text="!isRemovingCard ? 'Edit' : 'Cancel'"
-        @headerAction="handleRemoveCard"
-      />
+      <the-header middle-html="Payment Method" mode="customized" />
     </portal>
+    <div class="u-mt-3">
+      <drawer-payment-method-add
+        v-if="mode === 'add'"
+        class="c-drawerCards c-drawer"
+        :show="show"
+        @setMode="handleSetMode"
+      />
 
-    <card-item
-        v-for="card in cards"
-        :key="card.id"
-        :card="card"
-        :is-selected="activeCard && card.id === activeCard.id"
-        class="c-drawerCardList__item"
-        previous-middle-text="Address & Payment"
-        :is-editing-card="isRemovingCard"
-        @selectCard="handleSelectCard(card)"
-    />
+      <drawer-payment-method-edit
+        v-if="mode === 'edit'"
+        class="c-drawerCards c-drawer"
+        :show="show"
+        @setMode="handleSetMode"
+        @removePaymentMethod="removePaymentMethod"
+      />
 
-    <functional-button-block
-      :internal-link="{
-        query: {
-          template: 'edit-add-card',
-          storeDomain,
-          customerId,
-        },
-      }"
-      title="Add Payment Methods"
-    >
-      <span slot="icon" class="c-functionalButtonBlock__icon">
-        <plus-icon fill="#A3B5BF"/>
-      </span>
-    </functional-button-block>
+      <drawer-card-remove
+        v-if="mode === 'remove'"
+        class="c-drawerCards c-drawer"
+        :show="show"
+        @setMode="handleSetMode"
+      />
+
+      <drawer-card-swap
+        v-if="mode === 'swap'"
+        class="c-drawerCards c-drawer"
+        :show="show"
+        @setMode="handleSetMode"
+      />
+
+      <drawer-card-list
+        v-if="mode === 'default'"
+        class="c-drawerCards c-drawer"
+        :show="show"
+        @setMode="handleSetMode"
+        @removePaymentMethod="removePaymentMethod"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import CardItem from '@components/card-item.vue'
-import PlusIcon from '@components/Icon/plus-icon'
-import FunctionalButtonBlock from '@components/functional-button-block.vue'
+// import CardItem from '@components/card-item.vue'
+// import PlusIcon from '@components/Icon/plus-icon'
+// import FunctionalButtonBlock from '@components/functional-button-block.vue'
 import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import TheHeader from '@components/the-header'
+import DrawerCardList from '@components/drawer-card-list.vue'
+import DrawerCardRemove from '@components/drawer-card-remove.vue'
+import DrawerCardSwap from '@components/drawer-card-swap.vue'
+import DrawerPaymentMethodAdd from '@components/drawer-payment-method-add.vue'
+import DrawerPaymentMethodEdit from '@components/drawer-payment-method-edit.vue'
 
 export default {
   components: {
-    CardItem,
-    PlusIcon,
-    FunctionalButtonBlock,
+    // CardItem,
+    // PlusIcon,
+    // FunctionalButtonBlock,
+    DrawerPaymentMethodAdd,
+    DrawerPaymentMethodEdit,
     TheHeader,
+    DrawerCardList,
+    DrawerCardRemove,
+    DrawerCardSwap,
   },
 
-  data(){
-    return{
+  data() {
+    return {
+      applyToAllActiveSusbscriptions: false,
       isEditingCard: false,
       isRemovingCard: false,
+      mode: 'default',
+      show: true,
     }
   },
 
@@ -65,6 +85,10 @@ export default {
     ...mapState('route', ['storeDomain', 'customerId']),
 
     ...mapGetters('cards', ['activeCard']),
+
+    ...mapGetters('subscriptions', ['subscriptionActive']),
+
+    ...mapState('translations', ['atc']),
   },
 
   methods: {
@@ -75,21 +99,25 @@ export default {
     ...mapActions('subscriptions', [
       'UPDATE_SUBSCRIPTION',
       'UPDATE_NEXT_ORDER',
+      'GET_SUBSCRIPTIONS',
     ]),
+
+    ...mapMutations('editMode', ['setEditNextOrder']),
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
     ...mapActions('cards', ['REMOVE_PAYMENT_METHOD']),
 
-    handleRemoveCard(){
-      this.isRemovingCard = !this.isRemovingCard
+    handleSetMode(mode) {
+      this.mode = mode
     },
-
+    handleDrawerStatus(status) {
+      this.status = status
+    },
 
     handleSelectCard(card) {
       if (card.id === this.activeCard.id) return
-      console.log({card})
-      if(this.isRemovingCard){
+      if (this.isRemovingCard) {
         this.removePaymentMethod(card.id, card.type, card.payment_customer_id)
       } else {
         this.setNewSwapCard(card)
@@ -105,20 +133,22 @@ export default {
       this.setMessage('Removing the Payment Method')
       this.setStatus('updating')
 
-      console.log({paymentMethodId, paymentType})
-
       try {
-        await this.REMOVE_PAYMENT_METHOD({paymentMethodId, paymentType, paymentCustomerId})
+        await this.REMOVE_PAYMENT_METHOD({
+          paymentMethodId,
+          paymentType,
+          paymentCustomerId,
+        })
 
         this.triggerAnalyticsEvent({
           event: analyticsEventName,
           payload: analyticsPayload,
         })
-        this.setMessage('Removed the Payment Method successfully')
+        this.$toast.success('Removed the Payment Method successfully')
         this.setStatus('success')
       } catch (e) {
-        console.log('card/REMOVE_PAYMENT_METHOD error: ', e)
-        this.setMessage(e.message)
+        this.$toast.error(e.message)
+        console.error('card/REMOVE_PAYMENT_METHOD error: ', e)
         this.setStatus('error')
       }
     },
@@ -131,6 +161,7 @@ export default {
         requestPayload: {
           payment_method_id: newSwapCard.id,
         },
+        bulkUpdate: this.applyToAllActiveSusbscriptions,
       }
 
       let updateAction
@@ -150,9 +181,9 @@ export default {
 
       try {
         await updateAction
-
         const newCard = this.activeCard
 
+        await this.GET_SUBSCRIPTIONS()
         this.triggerAnalyticsEvent({
           event: analyticsEventName,
           payload: {
@@ -164,7 +195,7 @@ export default {
         this.setStatus('success')
         this.setNewSwapCard(null)
       } catch (e) {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.setMessage(e.message)
         this.setStatus('error')
       }

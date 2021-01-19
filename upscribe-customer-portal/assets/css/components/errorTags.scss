@@ -1,0 +1,52 @@
+
+.c-cardForm__invalidPaymentMethod {
+  padding: .5em .75em;
+  align-items: center;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  background-color: $color-warning;
+  color: $color-black;
+
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.c-cardItem__voidWarning {
+  font-size: 12px;
+  background-color: $color-warning;
+  right: 8px;
+  top: 8px;
+  align-items: center;
+  border-radius: 4px;
+  color: $color-black;
+  display: inline-flex;
+  font-size: 0.75rem;
+  height: 2em;
+  justify-content: center;
+  line-height: 1.5;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  white-space: nowrap;
+
+  @include bp(tablet) {
+    position: absolute;
+  }
+}
+
+.c-cardTag__voidWarning {
+  font-size: 12px;
+  background-color: $color-warning;
+  align-items: center;
+  border-radius: 4px;
+  color: $color-black;
+  display: inline-flex;
+  font-size: 0.75rem;
+  height: 2em;
+  justify-content: center;
+  line-height: 1.5;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  white-space: nowrap;
+}

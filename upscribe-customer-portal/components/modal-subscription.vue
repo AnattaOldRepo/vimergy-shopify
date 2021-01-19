@@ -24,23 +24,66 @@
         </h2>
 
         <div class="c-modalSubscription__inner">
-          <collection-filter
-            v-if="collectionOptions"
-            :collection-option="collectionOptions"
-            :active-collection-handle="activeCollectionHandle"
-            @selectCollection="changeCurrentFilter"
-          />
+          <div v-if="products && products.length" class="c-collectionFilter">
+            <ul
+              v-if="!availableCollections || !availableCollections.length"
+              class="c-collectionFilter__inner"
+            >
+              <li
+                class="c-collectionFilter__headline c-collectionFilter__headline--active"
+              >
+                <span>{{ atc['portal.allProductsLabel'] || 'All' }}</span>
+              </li>
+            </ul>
 
-          <div
-            v-if="
-              products && activeCollectionHandle === 'all' && currentCollection
-            "
-          >
+            <ul v-else class="c-collectionFilter__inner">
+              <li
+                v-if="
+                  (uiSettings &&
+                    !uiSettings.disable_customer_portal_default_all_products_tab) ||
+                    !uiSettings
+                "
+                class="c-collectionFilter__headline"
+                :class="{
+                  'c-collectionFilter__headline--active': isEmptyObject(
+                    activeCollection
+                  ),
+                }"
+              >
+                <span
+                  role="button"
+                  tabindex="0"
+                  @click="changeCurrentFilter(false)"
+                >
+                  {{ atc['portal.allProductsLabel'] || 'All' }}
+                </span>
+              </li>
+              <li
+                v-for="collection in availableCollections"
+                :key="collection.id"
+                class="c-collectionFilter__headline"
+                :class="{
+                  'c-collectionFilter__headline--active':
+                    activeCollection && activeCollection.id === collection.id,
+                }"
+              >
+                <span
+                  role="button"
+                  tabindex="0"
+                  @click="changeCurrentFilter(collection)"
+                >
+                  {{ collection.title }}
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div v-if="products && products.length">
             <div class="c-modalSubscription__gridContain">
               <div class="c-modalSubscription__grid">
                 <product-grid-item
-                  v-for="product in allProducts"
-                  :key="product.id"
+                  v-for="(product, index) in products"
+                  :key="product.id + '-' + index"
                   class="c-productsGrid__item"
                   :product="product"
                   :status="status"
@@ -53,29 +96,11 @@
                   @handleRemove="handleRemove"
                 />
               </div>
-            </div>
-          </div>
 
-          <div
-            v-else-if="
-              products && activeCollectionHandle === 'all' && !currentCollection
-            "
-            class="c-modalSubscription__gridContain"
-          >
-            <div class="c-modalSubscription__grid">
-              <product-grid-item
-                v-for="(product, index2) in withProductQuantity"
-                :key="product.id + index2"
-                class="c-productsGrid__item"
-                :product="product"
-                :status="status"
-                :is-swap="isSwap"
-                @handleAddProductVariantToSubscription="
-                  handleAddProductVariantToSubscription
-                "
-                @handleQuantityChange="handleQuantityChange"
-                @handleOpenSwapModal="handleOpenSwapModal"
-                @handleRemove="handleRemove"
+              <vue-pagination
+                key="vue-pagination"
+                ref="vue-pagination"
+                :collection-id="activeCollection ? activeCollection.id : false"
               />
             </div>
           </div>
@@ -105,11 +130,6 @@
                 :lines="1"
                 class="c-productGridItem__title"
               />
-              <!-- <content-placeholders-text
-                style="height: 20px;"
-                :lines="1"
-                class="c-productGridItem__price"
-              /> -->
 
               <content-placeholders-img
                 style="height: 30px;"
@@ -140,7 +160,24 @@
         ><icon-chevron-right
           class="c-headerMobile__navLink--mobileIcon c-modalSubscription__backButton"
       /></a>
+
       <variant-select-block
+        v-if="variantSelectProduct"
+        :product="variantSelectProduct"
+        :button-text="
+          editNextOrder
+            ? atc['portal.addProductToNextOrder'] || 'Add to Next Shipment'
+            : atc['portal.addProductToSubscription'] || 'Add to Subscription'
+        "
+        :secondary-button-text="
+          !editNextOrder
+            ? atc['portal.addProductToNextOrder'] || 'Add to Next Shipment'
+            : atc['portal.addProductToSubscription'] || 'Add to Subscription'
+        "
+        @addProductVariantToSubscription="handleAddProductVariantToSubscription"
+      />
+
+      <!-- <variant-select-block
         v-if="variantSelectProduct"
         :product="variantSelectProduct"
         :button-text="
@@ -149,7 +186,7 @@
             : atc['portal.addProductToSubscription'] || 'Add to Subscription'
         "
         @addProductVariantToSubscription="handleAddProductVariantToSubscription"
-      />
+      /> -->
     </div>
   </modal-mobile-wrap>
 </template>
@@ -158,9 +195,9 @@
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import { windowSizes } from '@mixins/windowSizes'
 
+import VuePagination from '@components/vue-pagination'
 import ModalMobileWrap from '@components/modal-wrap-mobile.vue'
 import ProductGridItem from '@components/product-grid-item.vue'
-import CollectionFilter from '@components/collection-filter.vue'
 import ModalShippingRequire from '@components/modal-shipping-require.vue'
 import ModalSwap from '@components/modal-swap.vue'
 import productChangeRequest from '@utils/product-change-request.js'
@@ -170,9 +207,9 @@ import IconChevronRight from '@components/icon-chevron-right.vue'
 
 export default {
   components: {
+    VuePagination,
     ModalMobileWrap,
     ProductGridItem,
-    CollectionFilter,
     ModalShippingRequire,
     ModalSwap,
     VariantSelectBlock,
@@ -204,7 +241,6 @@ export default {
     return {
       status: '',
       statusText: '',
-      activeCollectionHandle: 'all',
       needUpdating: false,
       updating: false,
       swapping: false,
@@ -223,13 +259,20 @@ export default {
 
     ...mapState('swapProduct', ['swapProduct']),
 
+    ...mapState('collections', ['collections', 'activeCollection']),
+
     ...mapGetters('activeSubscription', [
       'activeSubscription',
       'activeSubscriptionNextOrder',
       'activeQueue',
     ]),
 
-    ...mapGetters('products', ['hashedCollections', 'product']),
+    ...mapState('shop', [
+      'customerPortalSubscriptionProductCollections',
+      'customerPortalNextOrderProductCollections',
+      'featuredPortalCollection',
+      'uiSettings',
+    ]),
 
     editNextOrderFallback() {
       const { editNextOrder, $route } = this
@@ -244,140 +287,67 @@ export default {
       return editNextOrder
     },
 
-    collectionOptions() {
-      let collectionOptionsArr = []
-      // Check if we have collections
-      if (Object.entries(this.hashedCollections).length > 0) {
-        for (let each in this.hashedCollections) {
-          if (each.toLowerCase() === 'all') {
-            collectionOptionsArr.unshift({
-              title: 'All',
-              handle: each.toLowerCase(),
-            })
-          } else {
-            collectionOptionsArr.push({
-              title: this.hashedCollections[each].title,
-              handle: each.toLowerCase(),
-            })
-          }
-        }
-      } else {
-        collectionOptionsArr.push({ title: 'All', handle: 'all' })
+    availableCollections() {
+      const {
+        collections,
+        editNextOrder,
+        customerPortalSubscriptionProductCollections,
+        customerPortalNextOrderProductCollections,
+        featuredPortalCollection,
+      } = this
+
+      let availableCollections
+
+      // use old method until they empty this out
+      if (featuredPortalCollection && featuredPortalCollection.length) {
+        availableCollections = collections.filter((collection) => {
+          return featuredPortalCollection.includes(collection.handle)
+        })
       }
-      return collectionOptionsArr
+
+      // new setup
+      else {
+        if (editNextOrder && !customerPortalNextOrderProductCollections)
+          return 'all'
+        if (!editNextOrder && !customerPortalSubscriptionProductCollections)
+          return 'all'
+
+        if (editNextOrder) {
+          availableCollections = collections.filter((collection) => {
+            return customerPortalNextOrderProductCollections.includes(
+              collection.handle
+            )
+          })
+        } else {
+          availableCollections = collections.filter((collection) => {
+            return customerPortalSubscriptionProductCollections.includes(
+              collection.handle
+            )
+          })
+        }
+      }
+
+      if (!availableCollections) return 'all'
+
+      return availableCollections
     },
 
     currentCollection() {
-      return this.hashedCollections[this.activeCollectionHandle]
-    },
-
-    allProducts() {
-      const productsList = this.hashedCollections.all.reduce(
-        (finalArr, collection) => {
-          return (finalArr = [...finalArr, ...collection.items])
-        },
-        []
-      )
-
-      const uniqueProducts = []
-      productsList.forEach((product) => {
-        if (!uniqueProducts.find((item) => item.id === product.id)) {
-          uniqueProducts.push(product)
-        }
-      })
-      return uniqueProducts
-    },
-
-    quantityProductCollection() {
-      const {
-        activeSubscription,
-        currentCollection,
-        activeCollectionHandle,
-      } = this
-
-      let variantItems = {}
-      let updatedCollection = []
-
-      // Hashed the value to use DP
-      for (let i = 0; i < activeSubscription.items.length; i++) {
-        if (!variantItems[activeSubscription.items[i].variant_id]) {
-          variantItems[activeSubscription.items[i].variant_id] = {
-            id: activeSubscription.items[i].variant_id,
-            quantity: activeSubscription.items[i].quantity,
-          }
-        } else {
-          variantItems[activeSubscription.items[i].variant_id].quantity +=
-            activeSubscription.items[i].quantity
-        }
-      }
-
-      // Add Quantity to product
-      if (activeCollectionHandle === 'all') {
-        for (let i = 0; i < currentCollection.length; i++) {
-          let objectHolder = {}
-          objectHolder['handle'] = currentCollection[i].handle
-          objectHolder['title'] = currentCollection[i].title
-          objectHolder['items'] = currentCollection[i].items.map((each) =>
-            variantItems[each.variants[0].id]
-              ? {
-                  ...each,
-                  quantity: variantItems[each.variants[0].id].quantity,
-                }
-              : each
-          )
-          updatedCollection.push(objectHolder)
-        }
-      } else {
-        updatedCollection['title'] = currentCollection.title
-        updatedCollection['handle'] = currentCollection.handle
-        updatedCollection['items'] = currentCollection.items.map((each) =>
-          variantItems[each.variants[0].id]
-            ? { ...each, quantity: variantItems[each.variants[0].id].quantity }
-            : each
-        )
-      }
-      return updatedCollection
-    },
-
-    withProductQuantity() {
-      const { products } = this
-      let variantItems = {}
-      let productArray = products.slice()
-
-      for (let i = 0; i < this.activeSubscription.items.length; i++) {
-        if (!variantItems[this.activeSubscription.items[i].variant_id]) {
-          variantItems[this.activeSubscription.items[i].variant_id] = {
-            id: this.activeSubscription.items[i].variant_id,
-            quantity: this.activeSubscription.items[i].quantity,
-          }
-        } else {
-          variantItems[
-            this.activeSubscription.items[i].variant_id
-          ].quantity += this.activeSubscription.items[i].quantity
-        }
-      }
-
-      productArray = productArray.map((each) =>
-        variantItems[each.variants[0].id]
-          ? { ...each, quantity: variantItems[each.variants[0].id].quantity }
-          : each
-      )
-
-      return productArray
+      return this.activeCollection
     },
   },
 
   mounted() {
     const { windowWidth, $route } = this
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
 
     // only if in mobile view, since it's completely different state handling..
     if (windowWidth < 768) {
-      console.log('check for next-shipment route')
-
       if (
-        $route.query &&
-        $route.query.template &&
-        $route.query.template === 'next-shipment'
+        ($route.query &&
+          $route.query.template &&
+          $route.query.template === 'next-shipment') ||
+        $route.query.editNextOrder
       ) {
         this.setEditNextOrder(true)
       } else {
@@ -386,10 +356,14 @@ export default {
     }
   },
 
+  destroyed() {
+    document.getElementsByTagName('body')[0].style.overflow = ''
+  },
+
   methods: {
     ...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
 
-    ...mapMutations('editMode', ['setEditNextOrder']),
+    ...mapActions('editMode', ['setEditNextOrder']),
 
     ...mapMutations('shippingMethods', [
       'SET_SHIPPING_METHODS',
@@ -410,8 +384,39 @@ export default {
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
+    ...mapMutations('collections', ['setActiveCollection']),
+
     changeCurrentFilter(collection) {
-      this.activeCollectionHandle = collection.handle
+      const { activeCollection } = this
+
+      if (!collection) {
+        // reset to all
+        this.setActiveCollection(false)
+        this.loadProductsByCollectionId(false)
+      } else {
+        // same filter ignore
+        if (activeCollection && collection.id === activeCollection.id) return
+
+        this.setActiveCollection(collection)
+        this.loadProductsByCollectionId(collection)
+      }
+    },
+
+    loadProductsByCollectionId(collection) {
+      let requestParams = {}
+
+      if (collection) {
+        requestParams['collection_id'] = collection.id
+      }
+
+      this.$nextTick(() => {
+        const paginationRef = this.$refs['vue-pagination']
+
+        // load page 1
+        if (paginationRef) {
+          paginationRef.onLoadMoreItems(1)
+        }
+      })
     },
 
     updateStatus(payload) {
@@ -470,13 +475,12 @@ export default {
     },
 
     handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-      console.log('handleNewCheckoutUpdateError: ', e)
       if (e && e.data && e.data.shipping_update_required) {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
         this.needUpdating = true
       } else {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
       }
 
       this.status = 'rejected'
@@ -615,9 +619,6 @@ export default {
         subscription: activeSubscription,
       })
 
-      // console.log({nextRemoveItemPayload})
-      // console.log({subscriptionRemoveItemPayload})
-
       const updateSubscriptionPayload = {
         requestPayload: {
           items: subscriptionRemoveItemPayload
@@ -680,23 +681,19 @@ export default {
       })
     },
 
-    async handleAddProductVariantToSubscription(
+    async handleAddProductVariantToSubscription({
       variantId,
       product,
-      showVariantSelector
-    ) {
+      addToNextOrder,
+      showVariantSelector,
+    }) {
       try {
-        console.log('product', product)
         this.setVariantSelectProduct(product)
-
-        console.log('variantSelectProduct 1', this.variantSelectProduct)
 
         if (showVariantSelector) {
           this.showVariantSelector = true
           return
         }
-
-        console.log('variantSelectProduct 2', this.variantSelectProduct)
 
         const {
           // editNextOrder,
@@ -768,11 +765,9 @@ export default {
           payload: analyticsPayload,
         })
 
-        console.log('variantSelectProduct', this.variantSelectProduct)
-
         this.closeModal()
       } catch (e) {
-        console.log('Error', e)
+        console.error('Error', e)
       }
     },
 
@@ -814,9 +809,6 @@ export default {
         editNextOrder: false,
         subscription: activeSubscription,
       })
-
-      // console.log({nextAddSwapItemPayload, nextRemoveSwappedItemPayload})
-      // console.log({subscriptionAddSwapItemPayload, subscriptionRemoveSwappedItemPayload})
 
       // create next swap payload depending on the diff product upday payload options
       let nextItemPayload = []
@@ -972,5 +964,28 @@ export default {
   position: relative;
   margin-left: 10px;
   bottom: 15px;
+}
+
+.c-collectionFilter {
+  overflow-x: scroll;
+  margin-bottom: 15px;
+}
+
+.c-collectionFilter__inner {
+  display: flex;
+  padding: 16px 0px 16px 50px;
+  justify-content: flex-start;
+  border-bottom: 1px solid $color-blue-light-border;
+}
+
+.c-collectionFilter__headline {
+  list-style: none;
+  white-space: nowrap;
+  margin-right: 15px;
+  cursor: pointer;
+
+  &--active {
+    font-weight: bold;
+  }
 }
 </style>

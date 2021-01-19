@@ -1,23 +1,28 @@
 <template>
   <div class="c-addressPayment__formattedComponent">
-     <portal to="header">
-        <the-header
-          middle-html="Edit Billing Address"
-          mode="customized"
-          customized-func-text="Cancel"
-          @headerAction="handleHeaderAction"
-        />
+    <portal to="header">
+      <the-header middle-html="Edit Billing Address" mode="customized" />
     </portal>
 
-      <new-address-form
-        ref="edit-billing-address-form"
-        class="c-formBlock--noPadding c-billingAddressForm"
-        :form-submit-button-text="atc['buttons.updateAddress'] || 'Update Address'"
-        form-name="billing-address"
-        :data-fill="activeBillingAddress"
-        :has-same-address="hasSameAddress"
-				@onSubmit="updateBillingAddress"
-      />
+    <checkbox
+      v-model="applyToAllActiveSusbscriptions"
+      class="u-mt-3"
+      :label="
+        atc['portal.applyToAllActiveSusbscriptions'] ||
+          'Apply to all active subscriptions'
+      "
+    />
+    <new-address-form
+      ref="edit-billing-address-form"
+      class="c-formBlock--noPadding c-billingAddressForm"
+      :form-submit-button-text="
+        atc['buttons.updateAddress'] || 'Update Address'
+      "
+      form-name="billing-address"
+      :data-fill="activeBillingAddress"
+      :has-same-address="hasSameAddress"
+      @onSubmit="updateBillingAddress"
+    />
   </div>
 </template>
 
@@ -26,38 +31,45 @@ import { isEqual } from 'lodash'
 import NewAddressForm from '@components/new-address-form.vue'
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import TheHeader from '@components/the-header'
+import Checkbox from '@components/checkbox.vue'
+
 export default {
-  components:{
+  components: {
     NewAddressForm,
     TheHeader,
+    Checkbox,
   },
 
-  data(){
+  data() {
     return {
-        hasSameAddress: true,
-        initialHasSameAddressState: null,
+      hasSameAddress: true,
+      initialHasSameAddressState: null,
+      applyToAllActiveSusbscriptions: false,
     }
   },
 
-  computed:{
+  computed: {
     ...mapState('translations', ['atc']),
 
-    ...mapGetters('activeSubscription', ['activeSubscription', 'activeBillingAddress']),
+    ...mapGetters('activeSubscription', [
+      'activeSubscription',
+      'activeBillingAddress',
+    ]),
 
     billingAddress() {
-			const { activeSubscription } = this
-			return activeSubscription.billing_address
-		},
-
-		shippingAddress() {
       const { activeSubscription } = this
-			return activeSubscription.shipping_address
-		},
+      return activeSubscription.billing_address
+    },
+
+    shippingAddress() {
+      const { activeSubscription } = this
+      return activeSubscription.shipping_address
+    },
   },
 
-  mounted(){
+  mounted() {
     const initialHasSameAddress = this.isSameAsSubscription()
-		this.hasSameAddress = initialHasSameAddress
+    this.hasSameAddress = initialHasSameAddress
     this.initialHasSameAddressState = initialHasSameAddress
   },
 
@@ -69,6 +81,8 @@ export default {
     ...mapActions('subscriptions', [
       'UPDATE_SUBSCRIPTION',
       'UPDATE_NEXT_ORDER',
+      'UPDATE_ALL_SUBS_ADDRESSES',
+      'GET_SUBSCRIPTIONS',
     ]),
 
     handleHeaderAction() {
@@ -78,7 +92,7 @@ export default {
     isSameAsSubscription() {
       const { shippingAddress, billingAddress } = this
 
-      if(billingAddress && shippingAddress){
+      if (billingAddress && shippingAddress) {
         const cleanedShippingAddress = {
           address1: shippingAddress.address1 || undefined,
           address2: shippingAddress.address2 || undefined,
@@ -126,6 +140,7 @@ export default {
         requestPayload: {
           billing_address: address,
         },
+        bulkUpdate: this.applyToAllActiveSusbscriptions,
       }
 
       let updateAction
@@ -149,10 +164,11 @@ export default {
           event: analyticsEventName,
           payload: analyticsPayload,
         })
+        await this.GET_SUBSCRIPTIONS()
         this.setMessage('Saved new Billing Address')
         this.setStatus('success')
       } catch (e) {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.setMessage(e.message)
         this.setStatus('error')
       }

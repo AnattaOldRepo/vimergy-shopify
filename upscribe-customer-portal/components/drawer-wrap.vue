@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapMutations} from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 // import { Linear } from 'gsap';
 
 /* eslint-disable vue/no-v-html */
@@ -52,7 +52,6 @@ export default {
       } else if (status === 'SUCCESS' || status.state === 'SUCCESS') {
         return 'c-drawerLogic__status--success'
       } else {
-        console.log('drawerStatusClass', status.state)
         return false
       }
     },
@@ -66,7 +65,6 @@ export default {
       } else if (status === 'SUCCESS' || status.state === 'SUCCESS') {
         return 'c-drawerLogic__statusMessage--success'
       } else {
-        console.log('drawerStatusClass', status.state)
         return false
       }
     },
@@ -78,7 +76,9 @@ export default {
       } else if (status === 'FAILURE' || status.state === 'FAILURE') {
         return atc['notices.updateErrorNotice'] || 'Error Saving'
       } else if (status === 'SUCCESS' || status.state === 'SUCCESS') {
-        return atc['notices.updateSavedSuccessfullyNotice'] || 'Saved Successfully'
+        return (
+          atc['notices.updateSavedSuccessfullyNotice'] || 'Saved Successfully'
+        )
       } else {
         return status
       }
@@ -98,8 +98,10 @@ export default {
       this.scrollMagicInitiated = false
       this.SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN(false)
     }
+    document.getElementsByTagName('body')[0].style.overflow = ''
   },
   mounted() {
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden'
     // close drawer on escape
     document.addEventListener('keydown', (e) => {
       if (this.show && e.keyCode === 27) {
@@ -177,16 +179,13 @@ export default {
           class="c-drawer__wrapper"
           :class="{ 'c-drawer__wrapper--nextOrderWarning': editNextOrder }"
         >
-          <p
+          <!-- <p
             v-if="editNextOrder && !manualDrawerWarning && !drawerSubscriptionHistoryOpen"
             class="c-drawerLogic__nextOrderWarning"
             >{{ atc['portal.portal.editModeNextOrderInfoText'] || 'Changes made will only affect your next order. To affect all shipments, toggle the Edit Mode.' }}</p
-          >
+          > -->
 
-          <p
-            v-else-if="manualDrawerWarning"
-            class="c-drawerLogic__nextOrderWarning"
-          >
+          <p v-if="manualDrawerWarning" class="c-drawerLogic__nextOrderWarning">
             {{ manualDrawerWarning }}
           </p>
           <slot slot />
@@ -243,7 +242,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   z-index: 2422271;
-  background-color: #F7F9FB;
+  background-color: #f7f9fb;
   backface-visibility: hidden;
   transition: transform 300ms ease;
   -webkit-overflow-scrolling: touch;
@@ -280,7 +279,7 @@ export default {
   flex: 1;
   width: 100%;
   padding: 0 20px;
-  background-color: #F7F9FB;
+  background-color: #f7f9fb;
 }
 
 .c-drawerLogic__nextOrderWarning {
@@ -331,12 +330,12 @@ export default {
   right: 32px;
   z-index: 1000;
   cursor: pointer;
-  border: 1px solid #A3B5BF;
+  border: 1px solid #a3b5bf;
   border-radius: 50%;
   width: 32px;
   height: 32px;
   padding: 6px;
-  fill: #A3B5BF;
+  fill: #a3b5bf;
 
   &--status {
     top: 40px;

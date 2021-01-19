@@ -2,16 +2,18 @@
   <div class="c-cardForm">
     <form-wrapper v-if="$v.form" :validator="$v.form">
       <form novalidate @submit.prevent="submit">
-
-        <div v-if="paymentMethodType.includes('card') && paymentMethodType === 'braintree_card'">
+        <div
+          v-if="
+            paymentMethodType === 'braintree_card' &&
+              requireBraintreeCvvValidation
+          "
+          class="c-cardFormWrapper"
+        >
           <div class="c-formGroupWrapper">
             <form-input
               id="expirationMonth"
               v-model="form.expirationMonth"
-              :class="{
-                'c-formGroup--half': paymentMethodType === 'braintree_card',
-                'c-formGroup--third': paymentMethodType !== 'braintree_card'
-              }"
+              class="c-formGroup--half"
               type="text"
               :label="atc['forms.cardExpirationMonthLabel'] || 'Exp Month'"
               maxlength="2"
@@ -22,10 +24,7 @@
             <form-input
               id="expirationYear"
               v-model="form.expirationYear"
-              :class="{
-                'c-formGroup--half': paymentMethodType === 'braintree_card',
-                'c-formGroup--third': paymentMethodType !== 'braintree_card'
-              }"
+              class="c-formGroup--half"
               type="text"
               maxlength="4"
               :label="atc['forms.cardExpirationYearLabel'] || 'Exp Year'"
@@ -37,10 +36,7 @@
             <form-input
               id="zipcode"
               v-model="form.zipcode"
-              :class="{
-                'c-formGroup--half': paymentMethodType === 'braintree_card',
-                'c-formGroup--third': paymentMethodType !== 'braintree_card'
-              }"
+              class="c-formGroup--half"
               type="text"
               :label="atc['forms.cardZipcodeLabel'] || 'Zipcode'"
               name="zipcode"
@@ -48,19 +44,19 @@
             />
 
             <form-input
-              v-if="paymentMethodType === 'braintree_card'"
               id="cvv"
               v-model="form.cvv"
               class="c-formGroup--half"
               type="number"
               label="CVV"
               name="cvv"
-              optional-label-text="(Optional)"
+              required
             />
           </div>
         </div>
 
-        <div v-else-if="paymentMethodType.includes('card')"
+        <div
+          v-else-if="paymentMethodType.includes('card')"
           class="c-formGroupWrapper"
         >
           <form-input
@@ -96,12 +92,21 @@
           />
         </div>
 
-        <div v-else-if="paymentMethodType == 'braintree_paypal'" class="notification">
-          <p>{{ atc['portal.paypalEditPaymentMethodMessage'] || 'Paypal account details can only be edited through the customer\'s PayPal account.' }}</p>
+        <div
+          v-else-if="paymentMethodType == 'braintree_paypal'"
+          class="notification"
+        >
+          <p>{{
+            atc['portal.paypalEditPaymentMethodMessage'] ||
+              "Paypal account details can only be edited through the customer's PayPal account."
+          }}</p>
         </div>
 
         <div v-else class="notification">
-          <p>{{ atc['portal.sepaEditPaymentMethodMessage'] || 'SEPA Direct Debit details can only be edited through the customer\'s bank account.' }}</p>
+          <p>{{
+            atc['portal.sepaEditPaymentMethodMessage'] ||
+              "SEPA Direct Debit details can only be edited through the customer's bank account."
+          }}</p>
         </div>
 
         <vue-checkbox
@@ -138,6 +143,14 @@
         @onClick="submit"
       >
         {{ formSubmitButtonText }}
+      </v-button>
+
+      <v-button
+        class="c-form__submitButton is-info c-cardCancelButton"
+        type="link"
+        @onClick="$emit('onRemove')"
+      >
+        {{ atc['buttons.removeCard'] || 'Remove Payment Method' }}
       </v-button>
 
       <form-submit-status
@@ -221,6 +234,8 @@ export default {
     }
   },
   validations() {
+    const { requireBraintreeCvvValidation } = this
+
     let final = {
       form: {},
       makeDefault: { required },
@@ -230,6 +245,13 @@ export default {
       final.form.expirationMonth = { numeric, required }
       final.form.expirationYear = { numeric, required }
       final.form.zipcode = { required }
+
+      if (
+        this.paymentMethodType === 'braintree_card' &&
+        requireBraintreeCvvValidation
+      ) {
+        final.form.cvv = { numeric, required }
+      }
     }
 
     return final
@@ -238,8 +260,24 @@ export default {
   computed: {
     ...mapState('translations', ['atc']),
 
+    ...mapState('shop', ['store', 'uiSettings']),
+
+    requireBraintreeCvvValidation() {
+      const { store, uiSettings } = this
+      return (
+        store &&
+        uiSettings &&
+        uiSettings.require_braintree_cvv_verification_for_updates
+      )
+    },
+
     cardData() {
-      const { form, makeDefault, paymentMethodType } = this
+      const {
+        form,
+        makeDefault,
+        paymentMethodType,
+        requireBraintreeCvvValidation,
+      } = this
       let cardData = {
         cardMonth: form.expirationMonth,
         cardYear: form.expirationYear,
@@ -247,7 +285,10 @@ export default {
         cardDefault: makeDefault,
       }
 
-      if (paymentMethodType === 'braintree_card') {
+      if (
+        paymentMethodType === 'braintree_card' &&
+        requireBraintreeCvvValidation
+      ) {
         cardData.cardCvv = form.cvv
       }
       return cardData
@@ -256,7 +297,6 @@ export default {
 
   mounted() {
     if (this.isCustomerDefaultPaymentMethod) {
-
       this.makeDefault = true
     }
   },
@@ -276,9 +316,6 @@ export default {
         })
         return
       }
-
-      console.log('PAYLOAD CARD DARA', this.cardData)
-
       // pass validation, submit payload event
       let payload = this.cardData
       this.$emit('onSubmit', payload)
@@ -296,5 +333,22 @@ export default {
 
 .c-cardForm {
   padding: 0;
+
+  .c-cardCancelButton {
+    margin-top: 10px;
+    border: 1px solid $color-red;
+  }
+  .c-cardcancelbutton::hover {
+    border: 1px solid $color-red;
+  }
+}
+
+.c-cardFormWrapper {
+  display: flex;
+  flex-direction: column;
+
+  @include bp(tablet) {
+    display: block;
+  }
 }
 </style>

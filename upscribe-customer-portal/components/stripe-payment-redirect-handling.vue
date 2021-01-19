@@ -10,9 +10,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('shop', [
-      'stripePublicKey',
-    ]),
+    ...mapState('shop', ['stripePublicKey']),
 
     ...mapState('payment', ['savedPaymentData', 'paymentType']),
   },
@@ -43,7 +41,6 @@ export default {
       this.stripe = stripe
 
       if (client_secret || livemode || source) {
-
         // payment validation available, compare values
         if (!this.isValidPaymentRedirectClientSecret(client_secret)) {
           this.error = 'Incorrect client secret. Please try again.'
@@ -57,12 +54,14 @@ export default {
         const sepaDebitSourcePayload = {
           type: savedPaymentData.type,
           sepa_debit: {
-              [savedPaymentData.type]: savedPaymentData.id,
+            [savedPaymentData.type]: savedPaymentData.id,
           },
           currency: savedPaymentData.currency,
           amount: savedPaymentData.amount,
           owner: {
-            name: savedPaymentData.name ? savedPaymentData.name : savedPaymentData.owner.name,
+            name: savedPaymentData.name
+              ? savedPaymentData.name
+              : savedPaymentData.owner.name,
           },
           redirect: {
             return_url: savedPaymentData.redirect.url,
@@ -70,20 +69,22 @@ export default {
           [savedPaymentData.type]: savedPaymentData[savedPaymentData.type],
         }
 
-        stripe.createSource(sepaDebitSourcePayload).then(result => {
-          this.error = result.error ? result.error.message : ''
+        stripe
+          .createSource(sepaDebitSourcePayload)
+          .then((result) => {
+            this.error = result.error ? result.error.message : ''
 
-          // process order
-          this.$emit('placeOrderResponseFromRedirect', {
-            fullResponse: result,
-            paymentData: result.source,
-            paymentType,
+            // process order
+            this.$emit('placeOrderResponseFromRedirect', {
+              fullResponse: result,
+              paymentData: result.source,
+              paymentType,
+            })
           })
-
-        }).catch(e => {
-          console.log('Create recurring source from redirect error: ', e)
-          this.$emit('processingRedirectPaymentVerification', false)
-        })
+          .catch((e) => {
+            console.error('Create recurring source from redirect error: ', e)
+            this.$emit('processingRedirectPaymentVerification', false)
+          })
       }
     },
   },
@@ -91,5 +92,5 @@ export default {
 </script>
 
 <template>
-  <div/>
+  <div />
 </template>

@@ -38,25 +38,7 @@ export default {
 
       if (!address || !aSubAddress) return false
 
-      const aSubAddressString =
-        aSubAddress.first_name +
-        aSubAddress.last_name +
-        aSubAddress.company +
-        aSubAddress.address1 +
-        aSubAddress.address2
-
-      const aSubCompare = aSubAddressString.replace(/\s+/g, '')
-
-      const addressString =
-        address.first_name +
-        address.last_name +
-        address.company +
-        address.address1 +
-        address.address2
-      let aCompare = addressString.replace(/\s+/g, '')
-
-      // eslint-disable-next-line eqeqeq
-      return aCompare == aSubCompare
+      return this.activeSubscription.shipping_address.id === address.id
     },
 
     handleEditAddress(addresses) {
@@ -67,7 +49,12 @@ export default {
     handleSelectAddress(addresses) {
       const { activeAddress } = this
 
-      if (!addresses || !activeAddress || !activeAddress.shipping_address) {
+      if (
+        !addresses ||
+        !activeAddress ||
+        (!activeAddress.shipping_address &&
+          activeAddress.shipping_address.id !== addresses.id)
+      ) {
         this.setNewSwapAddress(addresses)
         this.$emit('setMode', 'swap')
         return
@@ -111,11 +98,14 @@ export default {
 
 <template>
   <div class="c-drawerAddresss c-drawer">
-    <h2 class="c-drawer__title">{{ atc['portal.shippingAddressesDrawerTitle'] || 'Shipping Addresses' }}</h2>
+    <h2 class="c-drawer__title">{{
+      atc['portal.shippingAddressesDrawerTitle'] || 'Shipping Addresses'
+    }}</h2>
 
-    <p class="c-drawer__subtitle c-drawer__subtitle--info"
-      >{{ atc['portal.shippingAddressesDrawerPrompt'] || "Add new or select existing address to transfer the current subscription's shipping address."}}</p
-    >
+    <p class="c-drawer__subtitle c-drawer__subtitle--info">{{
+      atc['portal.shippingAddressesDrawerPrompt'] ||
+        "Add new or select existing address to transfer the current subscription's shipping address."
+    }}</p>
 
     <div v-if="addresses" class="c-drawer__inner">
       <div class="c-drawerAddressList">
@@ -130,7 +120,9 @@ export default {
         />
       </div>
 
-      <v-button class="c-form__submitButton" @onClick="$emit('setMode', 'add')"
+      <v-button
+        class="c-form__submitButton"
+        @onClick="$emit('setMode', 'add')"
         >{{ atc['portal.addAddressButton'] || 'Add Address' }}</v-button
       >
     </div>

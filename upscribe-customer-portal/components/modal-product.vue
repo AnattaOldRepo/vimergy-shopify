@@ -6,23 +6,29 @@
     :progress-bar-message="statusText"
     :close-animation="closeAnimation"
     @close="closeModal"
-    >
+  >
     <div v-if="product && !needUpdating">
       <transition :name="transitionComp" mode="out-in">
         <div v-if="!wantToLearnMore" :key="1">
           <div class="c-modalProduct c-modalMobile__wrapper">
             <img
-              :src="product.image_url
+              :src="
+                product.image_url
                   .replace('.png', '_320x.png')
-                  .replace('.jpg', '_320x.jpg')"
-              alt=''
+                  .replace('.jpg', '_320x.jpg')
+              "
+              alt=""
               class="c-modalProduct__image"
-              />
+            />
 
             <div class="c-modalProduct__info">
               <h2 class="c-modalProduct__title">{{ product.title }}</h2>
               <!-- eslint-disable -->
-              <p v-if="product.description" class="c-modalProduct__description" v-html="product.description"></p>
+              <p
+                v-if="product.description"
+                class="c-modalProduct__description"
+                v-html="product.description"
+              ></p>
 
               <v-button
                 v-if="product.full_description"
@@ -37,17 +43,19 @@
             <v-button
               v-if="canRemoveProduct"
               :disabled="status === 'updating'"
-              :class="{'control-is-updating': updating}"
+              :class="{ 'control-is-updating': updating }"
               class="c-modalProduct__removeButton c-button--transparent"
               html='<svg width="14"  height="16" view-box="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 2.5H10.9062L9.84375 0.75C9.59375 0.34375 9.03125 0 8.5625 0H5.40625C4.9375 0 4.375 0.34375 4.125 0.75L3.0625 2.5H0.5C0.21875 2.5 0 2.75 0 3V3.5C0 3.78125 0.21875 4 0.5 4H1L1.65625 14.5938C1.6875 15.375 2.375 16 3.15625 16H10.8125C11.5938 16 12.2812 15.375 12.3125 14.5938L13 4H13.5C13.75 4 14 3.78125 14 3.5V3C14 2.75 13.75 2.5 13.5 2.5ZM5.40625 1.5H8.5625L9.15625 2.5H4.8125L5.40625 1.5ZM10.8125 14.5H3.15625L2.5 4H11.4688L10.8125 14.5Z" fill="#FF7777"/></svg>'
-               @onClick="handleRemove(product)"
+              @onClick="handleRemove(product)"
             />
 
             <v-button
               class="c-modalProduct__swapButton c-button--transparent"
               :disabled="status === 'updating'"
-              @onClick="$emit('swapSubscription', {title: 'swap', product: product})"
-              >
+              @onClick="
+                $emit('swapSubscription', { title: 'swap', product: product })
+              "
+            >
               Swap
             </v-button>
 
@@ -64,7 +72,7 @@
 
               <quantity-changer-manual-entry
                 v-if="product.quantity"
-                :class="{'control-is-updating': updating}"
+                :class="{ 'control-is-updating': updating }"
                 :disabled="status === 'updating'"
                 class="c-modalProductBlock__quantity c-quantityChangerManual--mobile"
                 :quantity="product.quantity"
@@ -96,23 +104,31 @@
         </div>
 
         <div v-else class="c-modalProduct__fullDescriptionContainer" :key="2">
-            <div class="c-modalProduct__fullDescription--top">
-              <h2 class="c-modalProduct__fullDescriptionTitle">{{ product.title }}</h2>
-              <span class="c-modalProduct__fullDescriptionBackArrow" @click="handleLearnMore">
-                 <IconChevronRight class="c-modalProduct__fullDescriptionBackArrowIcon" />
-              </span>
-            </div>
+          <div class="c-modalProduct__fullDescription--top">
+            <h2 class="c-modalProduct__fullDescriptionTitle">{{
+              product.title
+            }}</h2>
+            <span
+              class="c-modalProduct__fullDescriptionBackArrow"
+              @click="handleLearnMore"
+            >
+              <IconChevronRight
+                class="c-modalProduct__fullDescriptionBackArrowIcon"
+              />
+            </span>
+          </div>
 
-            <div class="c-modalProduct__fullDescription--bottom" v-html="product.full_description" >
-            </div>
+          <div
+            class="c-modalProduct__fullDescription--bottom"
+            v-html="product.full_description"
+          >
+          </div>
         </div>
       </transition>
     </div>
 
     <div v-else-if="needUpdating" class="c-modalProduct__shippingRequire">
-      <modal-shipping-require
-        @updateStatus="updateStatus"
-      />
+      <modal-shipping-require @updateStatus="updateStatus" />
     </div>
   </modal-mobile-wrap>
 </template>
@@ -151,13 +167,13 @@ export default {
       type: Function,
       default: () => 1,
     },
-    closeAnimation:{
+    closeAnimation: {
       type: Boolean,
       default: false,
     },
   },
 
-  data(){
+  data() {
     return {
       status: '',
       statusText: '',
@@ -180,13 +196,11 @@ export default {
     ...mapGetters('products', ['product']),
 
     canRemoveProduct() {
-      const {editNextOrder, activeSubscription, activeQueue} = this
+      const { editNextOrder, activeSubscription, activeQueue } = this
 
       if (editNextOrder) {
         return activeQueue && activeQueue.items.length > 1
-      }
-
-      else {
+      } else {
         return activeSubscription && activeSubscription.items.length > 1
       }
     },
@@ -198,7 +212,6 @@ export default {
     ...mapMutations('shippingMethods', ['SET_SHIPPING_METHODS']),
 
     ...mapMutations('newCheckoutUpdates', ['setSavedNewCheckoutUpdate']),
-
 
     ...mapActions('subscriptions', [
       'UPDATE_SUBSCRIPTION',
@@ -217,7 +230,7 @@ export default {
       })
     },
 
-  async handleQuantityChangeManual({quantity, id, product}) {
+    async handleQuantityChangeManual({ quantity, id, product }) {
       if (this.updating) return
 
       if (parseInt(quantity) === 0) return this.handleRemove(product)
@@ -226,14 +239,14 @@ export default {
 
       const finalPayload = {
         requestPayload: {
-          items: [{quantity, id}],
+          items: [{ quantity, id }],
         },
       }
 
       this.updatingId = id
       this.quantityUpdating = true
 
-       let handleNewCheckoutUpdatePayload, analyticsEventName
+      let handleNewCheckoutUpdatePayload, analyticsEventName
       let analyticsPayload = {
         quantity,
         ...product,
@@ -252,7 +265,6 @@ export default {
             `Quantity updated to ${quantity} on next order.`
           ),
         ]
-
       } else {
         // updateMessage = `Quantity updated to ${quantity}.`
         analyticsEventName = 'Upscribe Subscription Product Quantity Change'
@@ -263,7 +275,7 @@ export default {
             finalPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Quantity updated to ${quantity} on subscription.`,
+            `Quantity updated to ${quantity} on subscription.`
           ),
         ]
       }
@@ -276,20 +288,20 @@ export default {
       })
     },
 
-    handleLearnMore(){
+    handleLearnMore() {
       this.wantToLearnMore = !this.wantToLearnMore
-      if(this.wantToLearnMore){
+      if (this.wantToLearnMore) {
         this.transitionComp = 'modal-slideOutIn'
       } else {
         this.transitionComp = 'modal-slideInOut'
       }
     },
 
-    updateStatus(payload){
+    updateStatus(payload) {
       const { status, statusText, needUpdating } = payload
       this.status = status
       this.statusText = statusText
-      if(needUpdating === 'stop'){
+      if (needUpdating === 'stop') {
         this.needUpdating = false
       }
     },
@@ -298,46 +310,40 @@ export default {
       this.status = 'updating'
       this.statusText = 'Saving'
       return new Promise((resolve, reject) => {
-
         let updateCount = updateArray.length
         let updatesFinished = 0
 
-          // for each update
-          updateArray.forEach(async (update) => {
-            this.updating = true
-            try {
-              await update.updateAction
-              this.status = 'success'
-              this.statusText = 'saved successfully'
-            } catch (e) {
-              this.handleNewCheckoutUpdateError(e, update)
-            } finally {
-              updatesFinished += 1
-              this.updating = false
-            }
+        // for each update
+        updateArray.forEach(async (update) => {
+          this.updating = true
+          try {
+            await update.updateAction
+            this.status = 'success'
+            this.statusText = 'saved successfully'
+          } catch (e) {
+            this.handleNewCheckoutUpdateError(e, update)
+          } finally {
+            updatesFinished += 1
+            this.updating = false
+          }
 
-            if (updatesFinished === updateCount) {
-              resolve(true)
-            }
-          })
+          if (updatesFinished === updateCount) {
+            resolve(true)
+          }
+        })
       })
     },
 
     handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-      console.log('handleNewCheckoutUpdateError: ', e)
-      if (
-        e &&
-        e.data &&
-        e.data.shipping_update_required
-      ) {
+      if (e && e.data && e.data.shipping_update_required) {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
         this.needUpdating = true
       } else {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
       }
-        this.status = 'rejected'
-        this.statusText = e.message
+      this.status = 'rejected'
+      this.statusText = e.message
     },
 
     quantityChange(type) {
@@ -368,11 +374,7 @@ export default {
     async handleQuantityChange({ type, id, quantity, variant_id, product }) {
       if (this.updating) return
 
-      const {
-        editNextOrder,
-        activeSubscription,
-      } = this
-
+      const { editNextOrder, activeSubscription } = this
 
       const {
         increasePayload: nextIncreaseItemPayload,
@@ -392,18 +394,20 @@ export default {
         subscription: activeSubscription,
       })
 
-      // console.log({nextIncreaseItemPayload, nextDecreaseItemPayload})
-      // console.log({subscriptionIncreaseItemPayload, subscriptionDecreaseItemPayload})
-
       // determine increase or decrease payload by the type param
       // coming from the quantity change event
-      const subscriptionItemPayload = type === 'increase' ? subscriptionIncreaseItemPayload : subscriptionDecreaseItemPayload
-      const nextItemPayload = type === 'increase' ? nextIncreaseItemPayload : nextDecreaseItemPayload
-
+      const subscriptionItemPayload =
+        type === 'increase'
+          ? subscriptionIncreaseItemPayload
+          : subscriptionDecreaseItemPayload
+      const nextItemPayload =
+        type === 'increase' ? nextIncreaseItemPayload : nextDecreaseItemPayload
 
       const updateSubscriptionPayload = {
         requestPayload: {
-          items: subscriptionItemPayload ? [subscriptionItemPayload] : undefined,
+          items: subscriptionItemPayload
+            ? [subscriptionItemPayload]
+            : undefined,
         },
       }
 
@@ -412,7 +416,6 @@ export default {
           items: nextItemPayload ? [nextItemPayload] : undefined,
         },
       }
-
 
       let analyticsEventName, handleNewCheckoutUpdatePayload
       let analyticsPayload = {
@@ -436,7 +439,6 @@ export default {
             `Quantity updated to ${quantity} on next order.`
           ),
         ]
-
       } else {
         analyticsEventName = 'Upscribe Subscription Product Quantity Change'
 
@@ -446,7 +448,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Quantity updated to ${quantity} on subscription.`,
+            `Quantity updated to ${quantity} on subscription.`
           ),
         ]
       }
@@ -458,7 +460,6 @@ export default {
         payload: analyticsPayload,
       })
     },
-
 
     async handleRemove(product) {
       if (this.updating) return
@@ -479,9 +480,7 @@ export default {
         })
       }
 
-      const {
-        removePayload: nextRemoveItemPayload,
-      } = productChangeRequest({
+      const { removePayload: nextRemoveItemPayload } = productChangeRequest({
         variantId: product.variant_id,
         editNextOrder: true,
         subscription: activeSubscription,
@@ -495,12 +494,11 @@ export default {
         subscription: activeSubscription,
       })
 
-      // console.log({nextRemoveItemPayload})
-      // console.log({subscriptionRemoveItemPayload})
-
       const updateSubscriptionPayload = {
         requestPayload: {
-          items: subscriptionRemoveItemPayload ? [subscriptionRemoveItemPayload] : undefined,
+          items: subscriptionRemoveItemPayload
+            ? [subscriptionRemoveItemPayload]
+            : undefined,
         },
       }
 
@@ -536,7 +534,6 @@ export default {
             `Product removed from next order.`
           ),
         ]
-
       } else {
         analyticsEventName = 'Upscribe Subscription Product Remove'
 
@@ -546,17 +543,17 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product removed from subscription`,
+            `Product removed from subscription`
           ),
         ]
       }
 
       // hande everything in handleNewCheckoutUpdate function
-      try{
+      try {
         await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
         this.closeModal()
-      } catch(e){
-        console.log(e)
+      } catch (e) {
+        console.error(e)
       }
 
       this.triggerAnalyticsEvent({
@@ -570,7 +567,7 @@ export default {
 
 <style lang="scss">
 @import '@design/_colors';
-.c-modalProduct__fullDescription--top{
+.c-modalProduct__fullDescription--top {
   display: flex;
   border-bottom: 1px solid $color-blue-light-border;
   padding: 0 16px 17px;
@@ -579,56 +576,56 @@ export default {
   justify-content: center;
 }
 
-.c-modalProduct__fullDescription--bottom{
-    padding: 17px 16px;
+.c-modalProduct__fullDescription--bottom {
+  padding: 17px 16px;
 }
 
-.c-modalProduct{
+.c-modalProduct {
   display: flex;
   margin-bottom: 10px;
 }
 
-.c-modalProduct__image{
+.c-modalProduct__image {
   min-width: 105px;
   height: 105px;
   margin-right: 12px;
   object-fit: contain;
   width: 50%;
 
-  @media (min-width: 425px){
+  @media (min-width: 425px) {
     min-width: 125px;
     height: 125px;
   }
 }
 
-.c-modalProduct__info{
+.c-modalProduct__info {
   width: 100%;
   padding-top: 10px;
 }
 
 .c-modalProduct__title,
-.c-modalProduct__description{
+.c-modalProduct__description {
   text-transform: capitalize;
   font-style: normal;
 }
 
-.c-modalProduct__title{
+.c-modalProduct__title {
   font-weight: 500;
   font-size: 16px;
   line-height: 21px;
 }
 
-.c-modalProduct__description{
+.c-modalProduct__description {
   color: $color-blue-secondary;
   font-size: 14px;
   line-height: 18px;
   margin-bottom: 0;
-  p{
+  p {
     margin-bottom: 0;
   }
 }
 
-.c-modalProduct__quantityControl{
+.c-modalProduct__quantityControl {
   // height: 48px;
   width: auto;
   // box-shadow: 0px 2px 1px 2px rgba(1, 1, 1, 0.1);
@@ -636,7 +633,7 @@ export default {
   // border-radius: 4px;
 }
 
-.c-modalProduct__quantityBox{
+.c-modalProduct__quantityBox {
   width: 48px;
   height: 100%;
   display: flex;
@@ -647,16 +644,16 @@ export default {
   border: 0px;
 
   &:hover,
-  &:focus{
+  &:focus {
     background-color: $color-white;
   }
 }
 
-.c-modalProduct__quantity{
+.c-modalProduct__quantity {
   font-weight: bold;
 }
 
-.c-modalProduct__swapButton{
+.c-modalProduct__swapButton {
   display: inline-block;
   width: 158px;
   text-align: center;
@@ -673,7 +670,7 @@ export default {
   letter-spacing: 0.8px;
   font-weight: bold;
   text-transform: uppercase;
-  text-align:center;
+  text-align: center;
   border-radius: 4px;
   color: $color-black;
   border: none;
@@ -681,20 +678,20 @@ export default {
   box-shadow: 0px 2px 1px 2px rgba(1, 1, 1, 0.1);
 }
 
-.c-modalProduct__buttonContain{
+.c-modalProduct__buttonContain {
   display: flex;
   justify-content: center;
   padding: 0 10px;
 }
 
-.c-modalProduct__swapButton{
+.c-modalProduct__swapButton {
   margin-right: 25px;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.8px;
   font-weight: bold;
   text-transform: uppercase;
-  text-align:center;
+  text-align: center;
   border-radius: 4px;
   color: $color-black;
   border: none;
@@ -702,11 +699,11 @@ export default {
   box-shadow: 0px 2px 1px 2px rgba(1, 1, 1, 0.1);
 }
 
-.c-modalProduct__shippingRequire{
+.c-modalProduct__shippingRequire {
   padding: 0 16px;
 }
 
-.c-modalProduct__learnMoreButton{
+.c-modalProduct__learnMoreButton {
   border: none;
   width: auto;
   padding: 0;
@@ -721,7 +718,7 @@ export default {
   color: $color-primary;
 }
 
-.c-modalProduct__fullDescriptionTitle{
+.c-modalProduct__fullDescriptionTitle {
   line-height: 21px;
   font-size: 16px;
   text-align: center;
@@ -731,12 +728,12 @@ export default {
   text-transform: capitalize;
 }
 
-.c-modalProduct__fullDescriptionBackArrow{
+.c-modalProduct__fullDescriptionBackArrow {
   position: absolute;
   left: 16px;
 }
 
-.c-modalProduct__fullDescriptionBackArrowIcon{
+.c-modalProduct__fullDescriptionBackArrowIcon {
   width: 16px;
   height: 16px;
   transform: rotateZ(180deg);

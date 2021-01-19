@@ -1,7 +1,7 @@
 <script>
 import BraintreePaypalElement from '@components/braintree-paypal-element.vue'
 import BraintreeCardElement from '@components/braintree-card-element.vue'
-import { mapState }  from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -28,14 +28,14 @@ export default {
       authorization: null,
       error: '',
       braintreeLoaded: false,
-   }
+    }
   },
   computed: {
     ...mapState('shop', ['braintreeClientToken']),
   },
   methods: {
     clearErrors() {
-      this.$emit('handleError', {type: false, message: false})
+      this.$emit('handleError', { type: false, message: false })
       this.error = false
     },
 
@@ -43,56 +43,51 @@ export default {
       this.$emit('handleChange', $event)
     },
     handlePlaceOrderResponse(response) {
-      // console.log('handlePlaceOrderResponse: ', response)
       this.$emit('placeOrderResponse', response)
     },
     handleCreatePaymentMethodResponse(response) {
-      // console.log('handleCreatePaymentMethodResponse: ', response)
       this.$emit('createPaymentMethodResponse', response)
     },
-    handleEnablebraintreePaymentRequest(val){
-      // console.log('handleEnablebraintreePaymentRequest', val)
+    handleEnablebraintreePaymentRequest(val) {
       this.$emit('enablebraintreePaymentRequest', val)
     },
     submitPaymentForm() {
-      // console.log('submit braintree')
-      this.$emit('handleError', {type: false, message: false})
+      this.$emit('handleError', { type: false, message: false })
     },
   },
 }
 </script>
 
 <template>
-<div>
-  <no-ssr>
-    <braintree-card-element
-      v-if="activePaymentType === 'braintree_card' && braintreeClientToken"
-      ref="active-payment-type-braintree_card"
-      :braintree-client-token="braintreeClientToken"
-      @handleChange="handleChange($event)"
-      @submitPaymentForm="$emit('submitPaymentForm')"
-      @placeOrderResponse="handlePlaceOrderResponse($event)"
-      @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
-    />
+  <div>
+    <no-ssr>
+      <braintree-card-element
+        v-if="activePaymentType === 'braintree_card' && braintreeClientToken"
+        ref="active-payment-type-braintree_card"
+        :braintree-client-token="braintreeClientToken"
+        @handleChange="handleChange($event)"
+        @submitPaymentForm="$emit('submitPaymentForm')"
+        @placeOrderResponse="handlePlaceOrderResponse($event)"
+        @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
+      />
 
-    <braintree-paypal-element
-      v-if="activePaymentType === 'braintree_paypal' && braintreeClientToken"
-      ref="active-payment-type-braintree_paypal"
-      :braintree-client-token="braintreeClientToken"
-      @handleChange="handleChange($event)"
-      @submitPaymentForm="$emit('submitPaymentForm')"
-      @placeOrderResponse="handlePlaceOrderResponse($event)"
-      @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
-    />
-
-  </no-ssr>
-</div>
+      <braintree-paypal-element
+        v-if="activePaymentType === 'braintree_paypal' && braintreeClientToken"
+        ref="active-payment-type-braintree_paypal"
+        :braintree-client-token="braintreeClientToken"
+        @handleChange="handleChange($event)"
+        @submitPaymentForm="$emit('submitPaymentForm')"
+        @placeOrderResponse="handlePlaceOrderResponse($event)"
+        @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
+      />
+    </no-ssr>
+  </div>
 </template>
 
 <style lang="scss">
 @import '@design';
 
-.c-braintreeErrors, {
+.c-braintreeErrors {
   margin: 20px 0;
   color: $color-error;
   padding: 20px;
@@ -105,17 +100,16 @@ export default {
   margin: 16px 0;
   color: #171725;
   padding: 20px;
-  background-color: #EAF1F4;
+  background-color: #eaf1f4;
   border-radius: 4px;
   font-size: 14px;
-  line-height: 18px
+  line-height: 18px;
 }
 
 .braintreeElement {
   background-color: $color-white;
   border: 1px solid $color-border;
 }
-
 
 .c-braintreeIban {
   display: block;
@@ -135,7 +129,7 @@ export default {
 
 .c-braintreeFormInput {
   &::placeholder {
-    color: #A3B5BF;
+    color: #a3b5bf;
     font-size: 14px;
   }
   &:focus {
@@ -145,7 +139,6 @@ export default {
 }
 
 .c-braintreeFormInput--select {
-
   .vs__dropdown-toggle {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -219,7 +212,6 @@ export default {
   margin-top: 4px;
 }
 
-
 .c-braintreeIban {
   display: block;
 }
@@ -242,7 +234,7 @@ export default {
     border-color: $color-input-border;
   }
   &::placeholder {
-    color: #A3B5BF;
+    color: #a3b5bf;
   }
 }
 
@@ -254,10 +246,10 @@ export default {
   border: 1px solid $color-input-border;
   font-size: 14px;
   background-color: $color-white;
-  color: #A3B5BF;
+  color: #a3b5bf;
 
   height: 44px;
-  border-color: #EAF1F4;
+  border-color: #eaf1f4;
 }
 
 input:focus,
@@ -273,5 +265,4 @@ input:focus,
 .braintreeElement--webkit-autofill {
   background-color: #fefde5 !important;
 }
-
 </style>

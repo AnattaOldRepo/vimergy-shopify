@@ -11,6 +11,7 @@ import DrawerDeliveryDate from '@components/drawer-delivery-date.vue'
 import DrawerProducts from '@components/drawer-products.vue'
 import DrawerShippingMethods from '@components/drawer-shipping-methods.vue'
 import DrawerDiscount from '@components/drawer-discount.vue'
+import VButton from '@components/v-button.vue'
 
 export default {
   components: {
@@ -22,6 +23,7 @@ export default {
     DrawerProducts,
     DrawerShippingMethods,
     DrawerDiscount,
+    VButton,
   },
   data() {
     return {
@@ -31,6 +33,9 @@ export default {
       shipTomorrowUpdating: false,
       drawerShippingMethodOpen: false,
       drawerDiscountOpen: false,
+      shipmentNowUpdate: '',
+      skipShipmentUpdate: '',
+      nextShipDate: false,
     }
   },
 
@@ -46,24 +51,28 @@ export default {
 
     ...mapState('editMode', ['editNextOrder']),
 
-    ...mapState('shop', ['currencySymbol']),
+    ...mapState('shop', ['currencySymbol', 'chargeNowEnabled']),
 
     atleastOneItemInStock() {
       const { activeQueue } = this
       let willShip = false
-      activeQueue.items.forEach(item => {
-        if (item.in_stock === null || item.in_stock === undefined || item.in_stock) {
+      activeQueue.items.forEach((item) => {
+        if (
+          item.in_stock === null ||
+          item.in_stock === undefined ||
+          item.in_stock
+        ) {
           willShip = true
         }
       })
       return willShip
     },
 
-    nextShipDate() {
-      const { activeSubscriptionNextDate } = this
-      if (!activeSubscriptionNextDate) return false
-      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMMM Do')
-    },
+    // nextShipDate() {
+    //   const { activeSubscriptionNextDate } = this
+    //   if (!activeSubscriptionNextDate) return false
+    //   return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMMM Do')
+    // },
 
     activeSubscriptionProducts() {
       const { activeQueue } = this
@@ -73,11 +82,17 @@ export default {
     totalPriceText() {
       const { atc, activeTotalPrice, currencySymbol } = this
       if (!activeTotalPrice) return false
-      return `${atc['labels.total'] || 'Total'}: ${currencySymbol}${activeTotalPrice}`
+      return `${atc['labels.total'] ||
+        'Total'}: ${currencySymbol}${activeTotalPrice}`
     },
 
     shippingMethod() {
-      const { activeSubscription, activeQueue, editNextOrder, currencySymbol } = this
+      const {
+        activeSubscription,
+        activeQueue,
+        editNextOrder,
+        currencySymbol,
+      } = this
 
       let shippingLines = null
 
@@ -129,33 +144,67 @@ export default {
   methods: {
     ...mapActions('shippingMethods', ['GET_SUBSCRIPTION_SHIPPING_METHODS']),
 
-    ...mapActions('subscriptions', ['SKIP_NEXT_SHIPMENT', 'SHIP_TOMORROW']),
+    ...mapActions('subscriptions', [
+      'GET_SUBSCRIPTIONS',
+      'SKIP_NEXT_SHIPMENT',
+      'SHIP_TOMORROW',
+      'SHIP_NOW',
+    ]),
 
     handleOpenShippingMethodDrawer() {
       this.GET_SUBSCRIPTION_SHIPPING_METHODS()
       this.drawerShippingMethodOpen = true
     },
 
+    refreshNextShipDate() {
+      const { activeSubscriptionNextDate } = this
+      if (!activeSubscriptionNextDate) return false
+      this.nextShipDate = moment(activeSubscriptionNextDate, 'YYYYMMDD').format(
+        'MMMM Do'
+      )
+      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMM Do')
+    },
+
     async skipNextShipment() {
-      this.skipShipmentUpdating = true
+      this.skipShipmentUpdate = 'Updating'
       try {
         await this.SKIP_NEXT_SHIPMENT()
-      } catch(e) {
-        console.log(e)
+      } catch (e) {
+        console.error('skipNextShipment e: ', e)
       } finally {
-        this.skipShipmentUpdating = false
+        this.skipShipmentUpdate = ''
       }
     },
 
+    async shipNow() {
+      this.shipmentNowUpdate = 'Updating'
+      try {
+        const createdCharge = await this.SHIP_NOW()
+        if (createdCharge.charge_error) {
+          console.error({
+            message: `Charge failed: ${createdCharge.charge_error}`,
+          })
+          this.$toast.error(`Charge failed: ${createdCharge.charge_error}`)
+        } else {
+          this.$toast.success(`Order created.`)
+          await this.GET_SUBSCRIPTIONS()
+        }
+      } catch (e) {
+        console.error('shipNow e:', e)
+        this.$toast.error(`Charge failed: ${e.message}`)
+      } finally {
+        this.shipmentNowUpdate = ''
+      }
+    },
 
     async shipTomorrow() {
-      this.shipTomorrowUpdating = true
+      this.shipmentNowUpdate = 'Updating'
       try {
         await this.SHIP_TOMORROW()
-      } catch(e) {
-        console.log(e)
+      } catch (e) {
+        console.error('shipTomorrow e: ', e)
       } finally {
-        this.shipTomorrowUpdating = false
+        this.shipmentNowUpdate = ''
       }
     },
   },
@@ -164,17 +213,20 @@ export default {
 
 <template>
   <subscription-block key="next" title="Your Next Order Settings">
-  <!-- <button @click.prevent="skipNextShipment">{{ skippingShipment ? 'Skipping' : 'Skip' }}</button>
+    <!-- <button @click.prevent="skipNextShipment">{{ skippingShipment ? 'Skipping' : 'Skip' }}</button>
 
   <button @click.prevent="shipTomorrow">{{ shipTomorrowUpdating ? 'Updating' : 'Ship Tomorrow' }}</button> -->
 
-
-    <subscription-block-option-wrap @onClick="drawerDeliveryDateOpen = true">
+    <subscription-block-option-wrap
+      v-if="activeSubscriptionNextDate"
+      custom-class-for-icon="c-subscriptionBlockOptionWrap__icon--floatTop"
+    >
       <subscription-block-option
-        v-if="nextShipDate"
+        v-if="refreshNextShipDate()"
         :title="atc['portal.subscriptionSettingsShipsOnLabel'] || 'Ships On'"
-        :text="nextShipDate"
+        :text="refreshNextShipDate()"
         text-large
+        @click.native="drawerDeliveryDateOpen = true"
       />
 
       <content-placeholders v-else>
@@ -188,7 +240,58 @@ export default {
           @close="drawerDeliveryDateOpen = false"
         />
       </portal>
+
+      <div class="c-subscriptionBlockMainSetting--firstBlock-contain">
+        <v-button
+          v-if="chargeNowEnabled"
+          key="ship-now-button"
+          class="c-button--auto c-subscriptionBlockMainSetting--button c-button--primary"
+          @click.native.stop="shipNow"
+        >
+          {{
+            shipmentNowUpdate
+              ? shipmentNowUpdate
+              : atc['buttons.shipNow'] || 'Ship Now'
+          }}
+        </v-button>
+
+        <v-button
+          v-else
+          key="ship-tomorrow-button"
+          class="c-button--auto c-subscriptionBlockMainSetting--button c-button--primary"
+          @click.native.stop="shipTomorrow"
+        >
+          {{
+            shipmentNowUpdate
+              ? shipmentNowUpdate
+              : atc['buttons.shipTomorrow'] || 'Ship Tomorrow'
+          }}
+        </v-button>
+
+        <v-button
+          class="c-button--auto c-subscriptionBlockMainSetting--button c-button--transparent"
+          @click.native.stop="skipNextShipment"
+        >
+          {{
+            skipShipmentUpdate
+              ? skipShipmentUpdate
+              : atc['buttons.skipNextShipment'] || 'Skip Next Shipment'
+          }}
+        </v-button>
+      </div>
     </subscription-block-option-wrap>
+
+    <content-placeholders v-else>
+      <content-placeholders-heading />
+    </content-placeholders>
+
+    <!-- Drawer Portal -->
+    <portal v-if="drawerDeliveryDateOpen" to="drawers">
+      <drawer-delivery-date
+        :show="drawerDeliveryDateOpen"
+        @close="drawerDeliveryDateOpen = false"
+      />
+    </portal>
 
     <subscription-block-option-wrap @onClick="drawerProductsOpen = true">
       <subscription-block-option
@@ -202,7 +305,10 @@ export default {
         />
 
         <strong v-if="!atleastOneItemInStock" class="c-outOfStockBlock">
-          {{ atc['portal.allItemsOutOfStockMessage'] || 'All items are out of stock. This charge will be skipped and attempted again next cycle.' }}
+          {{
+            atc['portal.allItemsOutOfStockMessage'] ||
+              'All items are out of stock. This charge will be skipped and attempted again next cycle.'
+          }}
         </strong>
       </subscription-block-option>
 
@@ -222,7 +328,11 @@ export default {
     <subscription-block-option-wrap @onClick="drawerDiscountOpen = true">
       <subscription-block-option
         v-if="discountText"
-        :title="discountAmount ? (atc['labels.activeDiscount'] || 'Active Discount') : (atc['labels.discount'] || 'Discount')"
+        :title="
+          discountAmount
+            ? atc['labels.activeDiscount'] || 'Active Discount'
+            : atc['labels.discount'] || 'Discount'
+        "
         :text="discountText"
         :text-med="!discountAmount"
       />
@@ -243,7 +353,10 @@ export default {
     <subscription-block-option-wrap @onClick="handleOpenShippingMethodDrawer">
       <subscription-block-option
         v-if="shippingMethod"
-        :title="atc['portal.subscriptionSettingsShippingMethodLabel'] || 'Shipping Method'"
+        :title="
+          atc['portal.subscriptionSettingsShippingMethodLabel'] ||
+            'Shipping Method'
+        "
         :text="shippingMethod"
         text-med
       />

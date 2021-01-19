@@ -1,7 +1,3 @@
-// import Vue from 'vue'
-
-// import request from '@utils/axiosRequestWrapper.js'
-
 export const state = () => ({
   savedNewCheckoutUpdates: [],
   newCheckoutUpdateUpdating: false,
@@ -26,9 +22,11 @@ export const actions = {
    *
    * @param {*} shippingMethods - shipping method update to pass along with origina update
    */
-  async COMPLETE_SAVED_NEW_CHECKOUT_UPDATE({ commit, dispatch, state }, shippingMethod) {
+  async COMPLETE_SAVED_NEW_CHECKOUT_UPDATE(
+    { commit, dispatch, state },
+    shippingMethod
+  ) {
     return new Promise((resolve, reject) => {
-
       const { savedNewCheckoutUpdates } = state
       if (!savedNewCheckoutUpdates) {
         reject(new Error('no savedNewCheckoutUpdate'))
@@ -38,9 +36,11 @@ export const actions = {
       let completedUpdates = 0
       let results = []
 
-
-      savedNewCheckoutUpdates.forEach(async update => {
-        const { updateActionPayload, updateActionStoreName, updateActionName,
+      savedNewCheckoutUpdates.forEach(async (update) => {
+        const {
+          updateActionPayload,
+          updateActionStoreName,
+          updateActionName,
         } = update
         const savedNewCheckoutUpdateWithShippingUpdate = {
           requestPayload: {
@@ -56,20 +56,22 @@ export const actions = {
         commit('newCheckoutUpdateUpdating', true)
 
         try {
-          const response = await dispatch(`${updateActionStoreName}/${updateActionName}`, savedNewCheckoutUpdateWithShippingUpdate, { root: true })
+          const response = await dispatch(
+            `${updateActionStoreName}/${updateActionName}`,
+            savedNewCheckoutUpdateWithShippingUpdate,
+            { root: true }
+          )
 
           results.push(response)
         } catch (e) {
-          console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+          console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
           reject(e)
-
         } finally {
           commit('newCheckoutUpdateUpdating', false)
           completedUpdates += 1
         }
 
         if (updatesLength === completedUpdates) {
-
           resolve(results)
           setTimeout(commit('clearUpdates'), 200)
         }

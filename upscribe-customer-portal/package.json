@@ -1,8 +1,13 @@
 {
+  "name": "upscribe-default-customer-portal",
+  "version": "1.1.5",
+  "repository": "git@github.com:anattadesign/upscribe-customer-portal.git",
+  "author": "Upscribe",
   "private": true,
   "dependencies": {
     "@enrian/vue-pikaday": "^1.0.3",
     "@nuxtjs/dotenv": "^1.3.0",
+    "@nuxtjs/toast": "^3.3.1",
     "@shopify/address": "^2.8.2",
     "add": "^2.0.6",
     "axios": "^0.18.0",
@@ -39,6 +44,7 @@
     "vue-google-autocomplete": "^1.1.0",
     "vue-js-toggle-button": "^1.3.2",
     "vue-loader": "^15.5.1",
+    "vue-pagination-2": "^3.0.6",
     "vue-pikaday": "^0.1.1",
     "vue-select": "^3.10.0",
     "vue-server-renderer": "2.6.10",

@@ -1,7 +1,14 @@
 <template>
   <!-- Mobile Template -->
   <div v-if="windowWidth < 768" class="c-subscription">
-    <headline-banner v-if="atc['portal.notification'] && store && store.portal_notification_banner_enabled" />
+    <headline-banner
+      v-if="
+        atc['portal.notification'] &&
+          store &&
+          store.portal_notification_banner_enabled
+      "
+      class="u-mt-4"
+    />
 
     <mobile-screen-layout />
   </div>
@@ -214,15 +221,22 @@ export default {
       },
     },
     subscriptionsLoaded() {
-      console.log('Loaded')
       this.getSubscriptionOrders()
     },
+  },
+
+  mounted() {
+    if (this.$route.query.editNextOrder) {
+      this.setEditNextOrder(true)
+    }
   },
 
   methods: {
     ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
 
     ...mapActions('orders', ['GET_SUBSCRIPTION_ORDERS']),
+
+    ...mapActions('editMode', ['setEditNextOrder']),
 
     redirect() {
       window.location.href = `https://${this.shopData.domain}`
@@ -255,7 +269,7 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
     },
   },

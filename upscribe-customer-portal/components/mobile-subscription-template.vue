@@ -5,10 +5,23 @@
   >
     <div v-if="hasProductRow" class="c-mobileSubscriptionTemplate--top">
       <h2 class="c-mobileSubscriptionTemplate__productTitle"
-        >Products | ${{ activeSubscription.total_price }}</h2
+        >{{
+          editNextOrder
+            ? 'Products in your next order'
+            : 'Products in your subscription'
+        }}
+        | {{ currencySymbol
+        }}{{
+          editNextOrder
+            ? activeSubscription.next.total_price
+            : activeSubscription.total_price
+        }}</h2
       >
       <product-row
-        v-if="$route.query.template === 'next-shipment'"
+        v-if="
+          $route.query.template === 'next-shipment' ||
+            $route.query.editNextOrder
+        "
         :products="activeSubscription.next.items"
         :shopify-order-id="activeSubscription.shopify_order_id"
       />
@@ -41,11 +54,13 @@
 import ProductRow from '@components/product-row.vue'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 import ModalCalendarPicker from '@components/modal-calendar-picker.vue'
+// import SubscriptionHeadline from '@components/subscription-headline.vue'
 
 export default {
   components: {
     ProductRow,
     ModalCalendarPicker,
+    // SubscriptionHeadline,
   },
 
   props: {
@@ -73,6 +88,8 @@ export default {
     ...mapState('tranlations', ['atc']),
 
     ...mapState('editMode', ['editNextOrder']),
+
+    ...mapState('shop', ['currencySymbol']),
 
     isOpeningOrder() {
       return !!this.$route.query.orderId

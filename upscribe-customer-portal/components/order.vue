@@ -1,10 +1,10 @@
 <template>
-  <div v-if="orders && atc && orderAlternativeForRefreshingPage" class="c-order__main">
+  <div
+    v-if="orders && atc && orderAlternativeForRefreshingPage"
+    class="c-order__main"
+  >
     <portal to="header">
-      <the-header
-        :middle-html="currentOpenOrderActive"
-        mode="backwardRoute"
-      />
+      <the-header :middle-html="currentOpenOrderActive" mode="backwardRoute" />
     </portal>
 
     <div class="c-order__info">
@@ -12,7 +12,11 @@
         >{{ atc['labels.orderStatus'] || 'Status' }}: {{ orderStatus }}</span
       >
       <span class="c-order__infoOrderNumber"
-        >{{ atc['labels.order'] || 'Order' }} #: {{ orderAlternativeForRefreshingPage.id || orderAlternativeForRefreshingPage.shopify_order_id }}</span
+        >{{ atc['labels.order'] || 'Order' }} #:
+        {{
+          orderAlternativeForRefreshingPage.id ||
+            orderAlternativeForRefreshingPage.shopify_order_id
+        }}</span
       >
     </div>
 
@@ -31,20 +35,24 @@
 
           <div class="c-order__lineItemContentBox">
             <div class="c-order__lineItemTitleBox">
-              <h2 class="c-order__lineItemTitle">{{
-                item.title
-              }}</h2>
+              <h2 class="c-order__lineItemTitle">{{ item.title }}</h2>
 
               <span class="c-order__lineItemSubtitle">{{
                 productOptionDetails(item)
               }}</span>
 
-              <span class="c-order__subText c-order__subTextQuantity is-faded">{{ atc['labels.quantityShort'] || 'QTY' }}: {{ item.quantity }}</span>
+              <span class="c-order__subText c-order__subTextQuantity is-faded"
+                >{{ atc['labels.quantityShort'] || 'QTY' }}:
+                {{ item.quantity }}</span
+              >
             </div>
 
             <div class="c-order__subText c-order__priceControl u-font-bold">
               <!-- <span class="c-order__priceOnly">{{ currencySymbol }}{{ item.price.toFixed(2) }}</span> -->
-              <span>{{ currencySymbol }}{{ (item.price * item.quantity).toFixed(2)}}</span>
+              <span
+                >{{ currencySymbol
+                }}{{ (item.price * item.quantity).toFixed(2) }}</span
+              >
             </div>
           </div>
         </div>
@@ -54,7 +62,12 @@
     <div class="c-order__pricingSection u-font-bold">
       <div v-if="orderAlternativeForRefreshingPage" class="c-order__pricing">
         <span>{{ atc['labels.subtotal'] || 'Subtotal' }}</span>
-        <span>{{ currencySymbol }}{{ orderAlternativeForRefreshingPage.total_line_items_price.toFixed(2) }}</span>
+        <span
+          >{{ currencySymbol
+          }}{{
+            orderAlternativeForRefreshingPage.total_line_items_price.toFixed(2)
+          }}</span
+        >
       </div>
 
       <div class="c-order__pricing">
@@ -62,21 +75,32 @@
         <span>{{ currencySymbol }}{{ shippingPrice }}</span>
       </div>
 
-      <div v-if="historyOrder || orderAlternativeForRefreshingPage.total_tax" class="c-order__pricing">
+      <div
+        v-if="historyOrder || orderAlternativeForRefreshingPage.total_tax"
+        class="c-order__pricing"
+      >
         <span>{{ atc['labels.tax'] || 'Tax' }}</span>
-        <span v-if="orderAlternativeForRefreshingPage.total_tax">{{ currencySymbol }}{{ orderAlternativeForRefreshingPage.total_tax.toFixed(2) }}</span>
+        <span v-if="orderAlternativeForRefreshingPage.total_tax"
+          >{{ currencySymbol
+          }}{{ orderAlternativeForRefreshingPage.total_tax.toFixed(2) }}</span
+        >
         <span v-else>--</span>
       </div>
 
-      <div class="c-order__pricing">
+      <div class="c-order__pricing" v-if="shopifyDiscount">
         <span>{{ atc['portal.discountCode'] || 'Discount Code' }}</span>
-        <span  v-if="shopifyDiscount"> {{ shopifyDiscountCode }} ({{ shopifyDiscountAmountDisplay }})</span>
+        <span v-if="shopifyDiscount">
+          {{ shopifyDiscountCode }} ({{ shopifyDiscountAmountDisplay }})</span
+        >
         <span v-else>--</span>
       </div>
 
       <div class="c-order__pricing c-order__pricing--total">
         <span>{{ atc['labels.total'] || 'Total' }}</span>
-        <span>{{ currencySymbol }}{{ orderAlternativeForRefreshingPage.total_price.toFixed(2) }}</span>
+        <span
+          >{{ currencySymbol
+          }}{{ orderAlternativeForRefreshingPage.total_price.toFixed(2) }}</span
+        >
       </div>
     </div>
   </div>
@@ -87,7 +111,7 @@ import { mapState, mapMutations, mapGetters } from 'vuex'
 import moment from 'moment'
 import TheHeader from '@components/the-header'
 export default {
-  components:{
+  components: {
     TheHeader,
   },
 
@@ -115,18 +139,26 @@ export default {
 
     ...mapState('orders', ['orders']),
 
-     ...mapGetters('activeSubscription', [
+    ...mapGetters('activeSubscription', [
       'activeSubscriptionNextDate',
       'activeSubscription',
     ]),
 
     shopifyDiscount() {
-      const { orderAlternativeForRefreshingPage: { discount_applications} = {} } = this
-      return (discount_applications && discount_applications.length) ? discount_applications[0] : false
+      const {
+        orderAlternativeForRefreshingPage: { discount_applications } = {},
+      } = this
+      return discount_applications && discount_applications.length
+        ? discount_applications[0]
+        : false
     },
 
-    currentOpenOrderActive(){
-      return `<span class='c-order__header'>${this.prettyDate}</span> <span class='c-order__headerDate'>${this.currencySymbol}${this.orderAlternativeForRefreshingPage.total_price.toFixed(2)}</span>`
+    currentOpenOrderActive() {
+      return `<span class='c-order__header'>${
+        this.prettyDate
+      }</span> <span class='c-order__headerDate'>${
+        this.currencySymbol
+      }${this.orderAlternativeForRefreshingPage.total_price.toFixed(2)}</span>`
     },
 
     shopifyDiscountCode() {
@@ -172,7 +204,8 @@ export default {
         return orderAlternativeForRefreshingPage.shipping_lines[0].price
       } else {
         return orderAlternativeForRefreshingPage.total_shipping_price_set
-          ? orderAlternativeForRefreshingPage.total_shipping_price_set.shop_money.amount
+          ? orderAlternativeForRefreshingPage.total_shipping_price_set
+              .shop_money.amount
           : 0
       }
     },
@@ -180,14 +213,22 @@ export default {
     prettyDate() {
       const { orderAlternativeForRefreshingPage, isOriginalCharge } = this
       const date = isOriginalCharge
-        ? moment(orderAlternativeForRefreshingPage.created_at, 'YYYYMMDD').format('MMM D, YYYY')
-        : moment(orderAlternativeForRefreshingPage.processed_at).format('MMM D, YYYY')
+        ? moment(
+            orderAlternativeForRefreshingPage.created_at,
+            'YYYYMMDD'
+          ).format('MMM D, YYYY')
+        : moment(orderAlternativeForRefreshingPage.processed_at).format(
+            'MMM D, YYYY'
+          )
       return date
     },
 
     // determin if coming from subscriptions array or shopify order array
     isOriginalCharge() {
-      if (this.orderAlternativeForRefreshingPage && this.orderAlternativeForRefreshingPage.shopify_order_id !== undefined) {
+      if (
+        this.orderAlternativeForRefreshingPage &&
+        this.orderAlternativeForRefreshingPage.shopify_order_id !== undefined
+      ) {
         return true
       } else {
         return false
@@ -200,22 +241,24 @@ export default {
       return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MM-DD')
     },
 
-    orderAlternative(){
+    orderAlternative() {
       const { orders, $route } = this
       let order
-      if(orders){
-        order = orders.find(each => each.id === parseInt($route.query.orderId))
+      if (orders) {
+        order = orders.find(
+          (each) => each.id === parseInt($route.query.orderId)
+        )
       }
       return order
     },
 
-    isCancelledSubscriptionRoute(){
+    isCancelledSubscriptionRoute() {
       return this.$route.query.route === 'cancelledSubscriptions'
     },
 
-    orderAlternativeForRefreshingPage(){
+    orderAlternativeForRefreshingPage() {
       const { order, orderAlternative, historyOrder } = this
-      if(historyOrder && order && order.shopify_order_id !== undefined){
+      if (historyOrder && order && order.shopify_order_id !== undefined) {
         return order
       } else {
         return orderAlternative
@@ -238,7 +281,7 @@ export default {
     ...mapMutations('swapProduct', ['setSwapProduct']),
 
     productOptionDetails(item) {
-      const { isOriginalCharge } = this
+      const { isOriginalCharge, atc } = this
       if (!item.properties) return false
 
       let propertyHash = {}
@@ -254,9 +297,11 @@ export default {
       let discountAmount = propertyHash['Discount Amount']
         ? propertyHash['Discount Amount']
         : false
-      let detail = `Auto Renew x${item.quantity}`
+      let detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${
+        item.quantity
+      }`
       if (discountAmount) {
-        detail += ` (${discountAmount} OFF)`
+        detail += ` (${discountAmount} ${atc['labels.off'] || 'OFF'})`
       }
       return detail
     },
@@ -289,7 +334,7 @@ export default {
 }
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 @import '@design';
 .c-order__info {
   display: flex;
@@ -314,7 +359,6 @@ export default {
   color: $color-blue-secondary;
 }
 
-
 .c-order__infoTrackingNumber {
   display: block;
   margin-bottom: 9px;
@@ -322,7 +366,6 @@ export default {
   font-weight: 400;
   line-height: 16px;
 }
-
 
 .c-order__lineItem {
   display: flex;
@@ -399,7 +442,7 @@ export default {
   color: $color-blue-secondary;
 }
 
-.c-order__subText{
+.c-order__subText {
   font-size: 16px;
   line-height: 18px;
   text-transform: capitalize;
@@ -409,23 +452,23 @@ export default {
   text-align: center;
 }
 
-.c-order__subTextQuantity{
+.c-order__subTextQuantity {
   font-size: 14px;
 }
 
-.c-order__priceControl{
+.c-order__priceControl {
   display: flex;
   flex-direction: column;
-  @include bp(mobile-large){
+  @include bp(mobile-large) {
     flex-direction: row;
   }
 }
 
-.c-order__priceOnly{
+.c-order__priceOnly {
   flex-direction: column;
   margin-bottom: 10px;
-  @include bp(mobile-large){
-     margin-right: 20px;
+  @include bp(mobile-large) {
+    margin-right: 20px;
   }
 }
 
@@ -501,7 +544,7 @@ export default {
     font-size: 14px;
     color: $color-black;
 
-    &:first-child{
+    &:first-child {
       color: $color-blue-secondary;
     }
   }
@@ -511,28 +554,28 @@ export default {
       margin-top: 12px;
       font-family: $font-primary-medium;
 
-      &:nth-child(2){
+      &:nth-child(2) {
         font-weight: bold;
       }
     }
   }
 }
 
-.c-order__headline-price{
+.c-order__headline-price {
   color: $color-blue-secondary;
   margin-left: 12px;
 }
 
 .c-order__header,
-.c-order__headerDate{
+.c-order__headerDate {
   font-weight: 500;
 }
 
-.c-order__headerDate{
+.c-order__headerDate {
   color: $color-blue-secondary;
 }
 
-.c-order__priceContain{
+.c-order__priceContain {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -540,7 +583,7 @@ export default {
   height: 100%;
 }
 
-.c-order__openEditQuantity{
+.c-order__openEditQuantity {
   cursor: pointer;
   font-size: 12px;
   line-height: 16px;

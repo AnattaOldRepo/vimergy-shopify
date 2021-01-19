@@ -1,28 +1,54 @@
 <template>
   <div v-if="activeSubscription" class="c-subscriptionHeadline">
-    <h2 class="c-subscriptionHeadline__title"><strong>Subscription</strong> <span> {{ activeSubscription.id }}</span></h2>
+    <h2 v-if="activeSubscription.name" class="c-subscriptionHeadline__title"
+      ><strong>Subscription</strong>
+      <span>{{ activeSubscription.name }}</span>
+      <!-- <span>
+        <a class="button is-info c-subscriptionName__edit"
+          @click.prevent="drawerEditSubscriptionNameOpen = true"
+          >Edit Name
+        </a>
+      </span> -->
+    </h2>
+
+    <h2 v-else class="c-subscriptionHeadline__title"
+      ><strong>#</strong> <span> {{ activeSubscription.id }}</span></h2
+    >
 
     <div
       v-if="activeSubscription.active"
       class="c-subscriptionHeadline__button-contain"
-      @click="pickingEdit($event)">
+      @click="pickingEdit($event)"
+    >
       <v-button
         data-id="button-edit-subscription"
         data-next-order="false"
+        size="large"
         class="c-subscriptionHeadline__button"
-        :class="{'c-subscriptionHeadline__button--active': buttonActive === 'button-edit-subscription'}">
-        Edit Subscription Details
+        :class="{
+          'c-subscriptionHeadline__button--active':
+            buttonActive === 'button-edit-subscription',
+        }"
+      >
+        {{
+          atc['labels.editSubscriptionDetailsEdit'] || 'Subscription Details'
+        }}
       </v-button>
 
       <v-button
         data-id="button-edit-next-order"
         data-next-order="true"
+        size="large"
         class="c-subscriptionHeadline__button c-subscriptionHeadline__button--secondary"
-        :class="{'c-subscriptionHeadline__button--active': buttonActive === 'button-edit-next-order'}">
-        Edit Next Shipment
+        :class="{
+          'c-subscriptionHeadline__button--active':
+            buttonActive === 'button-edit-next-order',
+        }"
+      >
+        {{ atc['labels.editNextShipment'] || 'Edit Next Shipment' }}
       </v-button>
 
-      <p
+      <!-- <p
         v-if="deliveredDate"
         class="c-subscriptionHeadline__button c-subscriptionHeadline__button--text displayOnly">
         Previous Shipment <span>({{ deliveredDate }})</span>
@@ -43,8 +69,7 @@
           height="14"
           fill="#000000"
         />
-      </span>
-
+      </span> -->
 
       <!-- Drawer Portal Variants -->
       <portal v-if="drawerSubscriptionHistoryOpen" to="drawers">
@@ -61,7 +86,12 @@
         v-if="isTrial && isActive"
         slot="button"
         class="c-button--primary c-subscriptionHeadline__button--mobile bold"
-        :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.convertTrialToSubscription'] || 'Convert Trial to Subscription')"
+        :text="
+          updating
+            ? atc['notices.updatingNotice'] || 'Updating'
+            : atc['buttons.convertTrialToSubscription'] ||
+              'Convert Trial to Subscription'
+        "
         @click.native="handleConvertTrialToSubscription"
       />
 
@@ -69,7 +99,12 @@
         v-else-if="isExpiredTrial || isInactiveTrial"
         slot="button"
         class="c-button--primary c-subscriptionHeadline__button--mobile bold"
-        :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.reactivateAsSubscription'] || 'Reactivate as Subscription')"
+        :text="
+          updating
+            ? atc['notices.updatingNotice'] || 'Updating'
+            : atc['buttons.reactivateAsSubscription'] ||
+              'Reactivate as Subscription'
+        "
         @click.native="handleReactivateTrialAsSubscription"
       />
 
@@ -77,7 +112,11 @@
         v-else-if="isInactiveRegular"
         slot="button"
         class="c-button--primary c-subscriptionHeadline__button--mobile bold"
-        :text="updating ? (atc['notices.updatingNotice'] || 'Updating') : (atc['buttons.reactivateSubscription'] || 'Reactivate Subscription')"
+        :text="
+          updating
+            ? atc['notices.updatingNotice'] || 'Updating'
+            : atc['buttons.reactivateSubscription'] || 'Reactivate Subscription'
+        "
         @click.native="handleReactivateSubscription"
       />
     </div>
@@ -89,27 +128,34 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import moment from 'moment'
 import VButton from '@components/v-button.vue'
 import DrawerSubscriptionHistory from '@components/drawer-subscription-history.vue'
-import HistoryIcon from '@components/Icon/history-icon'
+// import HistoryIcon from '@components/Icon/history-icon'
 import { windowSizes } from '@mixins/windowSizes'
 
 export default {
-  components:{
+  components: {
     VButton,
     DrawerSubscriptionHistory,
-    HistoryIcon,
+    // HistoryIcon,
   },
 
   mixins: [windowSizes],
 
-  data(){
-    return{
+  data() {
+    return {
       buttonActive: 'button-edit-subscription',
       drawerSubscriptionHistoryOpen: false,
+      drawerEditSubscriptionNameOpen: false,
       updating: false,
     }
   },
 
-  computed:{
+  mounted() {
+    if (this.$route.query.editNextOrder) {
+      this.buttonActive = 'button-edit-next-order'
+    }
+  },
+
+  computed: {
     ...mapState('subscriptions', ['subscriptions']),
 
     ...mapState('orders', ['subscriptionOrders']),
@@ -142,32 +188,43 @@ export default {
 
     isExpiredTrial() {
       const { activeSubscription } = this
-      return !activeSubscription.active && activeSubscription.cancellation_reason === 'Trial period has expired'
+      return (
+        !activeSubscription.active &&
+        activeSubscription.cancellation_reason === 'Trial period has expired'
+      )
     },
 
     isInactiveRegular() {
       const { activeSubscription } = this
-      return !activeSubscription.active && activeSubscription.cancellation_reason !== 'Trial period has expired'
+      return (
+        !activeSubscription.active &&
+        activeSubscription.cancellation_reason !== 'Trial period has expired'
+      )
     },
 
     remainingShipmentCount() {
-      return this.activeSubscription.charge_limit - this.activeSubscription.order_count
+      return (
+        this.activeSubscription.charge_limit -
+        this.activeSubscription.order_count
+      )
     },
 
     isOriginalCharge() {
-      if(this.subscriptionOrders && this.subscriptionOrders[0]){
+      if (this.subscriptionOrders && this.subscriptionOrders[0]) {
         return !!this.subscriptionOrders[0].shopify_order_id
       }
       return ''
     },
 
-    deliveredDate(){
+    deliveredDate() {
       const { subscriptionOrders, isOriginalCharge } = this
       let fullFillmentText
       let date
 
-      if(subscriptionOrders.length > 0){
-        fullFillmentText = subscriptionOrders[0].fulfillment_status ? subscriptionOrders[0].fulfillment_status : subscriptionOrders[0].financial_status
+      if (subscriptionOrders.length > 0) {
+        fullFillmentText = subscriptionOrders[0].fulfillment_status
+          ? subscriptionOrders[0].fulfillment_status
+          : subscriptionOrders[0].financial_status
         date = isOriginalCharge
           ? moment(subscriptionOrders[0].created_at, 'YYYYMMDD').format('MMM D')
           : moment(subscriptionOrders[0].processed_at).format('MMM D')
@@ -175,8 +232,8 @@ export default {
         return false
       }
 
-      if(fullFillmentText && fullFillmentText.includes('_')){
-          fullFillmentText = fullFillmentText.split('_').join(' ')
+      if (fullFillmentText && fullFillmentText.includes('_')) {
+        fullFillmentText = fullFillmentText.split('_').join(' ')
       }
 
       return `${fullFillmentText} ${date}`
@@ -184,29 +241,40 @@ export default {
   },
 
   methods: {
-    ...mapMutations('editMode', ['setEditNextOrder']),
+    ...mapActions('editMode', ['setEditNextOrder']),
+
     ...mapMutations('orders', ['SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN']),
 
     ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
 
     ...mapActions('orders', ['GET_SUBSCRIPTION_ORDERS']),
 
-    ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION', 'ACTIVATE_SUBSCRIPTION', 'GET_SUBSCRIPTIONS']),
+    ...mapActions('subscriptions', [
+      'UPDATE_SUBSCRIPTION',
+      'ACTIVATE_SUBSCRIPTION',
+      'GET_SUBSCRIPTIONS',
+    ]),
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
-    pickingEdit(e){
+    pickingEdit(e) {
       const { id, nextOrder } = e.target.dataset
-      if(id === 'button-subscription-history'){
+      if (id === 'button-subscription-history') {
         this.drawerSubscriptionHistoryOpen = true
         this.SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN(true)
       } else if (id) {
-          this.buttonActive = id
+        this.buttonActive = id
       }
 
-      if(nextOrder){
+      if (nextOrder) {
         this.setEditNextOrder(nextOrder === 'true')
       }
+      const { fullPath } = this.$route
+      const query =
+        id === 'button-edit-next-order'
+          ? { editNextOrder: true }
+          : { editNextOrder: '' }
+      this.$router.push({ path: fullPath, query })
     },
 
     async handleReactivateSubscription() {
@@ -226,7 +294,7 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('handleReactivateSubscription error: ', e)
+        console.error('handleReactivateSubscription error: ', e)
       } finally {
         await this.GET_SUBSCRIPTIONS()
         // Set route getting new subscription as current route dynamically
@@ -254,7 +322,7 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('handleReactivateTrialAsSubscription error: ', e)
+        console.error('handleReactivateTrialAsSubscription error: ', e)
       } finally {
         await this.GET_SUBSCRIPTIONS()
         this.setActiveSubscriptionId(activeSubscription.id)
@@ -287,7 +355,7 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('handleConvertTrialToSubscription error: ', e)
+        console.error('handleConvertTrialToSubscription error: ', e)
       } finally {
         await this.GET_SUBSCRIPTIONS()
         this.setActiveSubscriptionId(activeSubscription.id)
@@ -302,111 +370,111 @@ export default {
 
 <style lang="scss">
 @import '@design';
-$color-id: #A3B5BF;
+$color-id: #a3b5bf;
 
-.c-subscriptionHeadline{
-  margin: 20px 0 60px;
+.c-subscriptionHeadline {
+  margin: 0px 0 40px;
 
-  @include bp(tablet-large){
-    padding: 0
+  @include bp(tablet-large) {
+    padding: 0;
+    margin: 20px 0 60px;
   }
 }
 
-.c-subscriptionHeadline__title{
+.c-subscriptionHeadline__title {
   font-size: 32px;
   line-height: 42px;
   font-style: normal;
   text-transform: capitalize;
 
   span {
-    color: $color-id
+    color: $color-id;
+  }
+  @include bp(mobile-large-max) {
+    display: none;
   }
 }
 
-.c-subscriptionHeadline__button-contain{
+.c-subscriptionHeadline__button-contain {
   display: flex;
-  margin-top: 10px;
-  width: auto;
+  margin-top: 30px;
   align-items: center;
+  max-width: 33%;
+  @include bp(tablet) {
+    max-width: 100%;
+    margin: 10px;
+    max-width: 60%;
+  }
+  @include bp(desktop) {
+    max-width: 33%;
+  }
 }
 
-.c-subscriptionHeadline__button{
-  margin-right: 20px;
-  font-size: 14px;
+.c-subscriptionHeadline__button {
+  font-size: 12px;
   line-height: 18px;
-  background-color: transparent;
+  height: 45px;
   cursor: pointer;
   border: none;
   padding: 10px 0px;
   position: relative;
   display: inline-block;
-  width: auto;
+  background: transparent;
   color: $color-black;
   font-weight: 400;
   transition: none;
-  border-bottom: 3px solid transparent;
+  border: 1px solid $color-primary;
 
-  &:hover{
-    @include border-focus;
+  &:hover {
     background-color: transparent;
   }
 
-  &:focus{
-    @include border-focus;
-    background-color: transparent;
+  &--secondary {
+    // margin-right: 40px;
   }
 
-  &--secondary{
-    margin-right: 40px;
-
-    &:before{
-      content: '';
-      background-color: $color-gray-400;
-      height: 50%;
-      width: 1px;
-      position: absolute;
-      right: -20px;
-    }
+  &--active {
+    color: $color-white;
+    background: $color-primary;
   }
 
-  &--active{
-    font-weight: bold;
-    @include border-focus
+  &--active:hover {
+    background: $color-primary;
   }
 
-  &--text{
+  &--text {
     margin: 0 20px 0 0;
   }
 
-  &--focusNoborder:focus{
+  &--focusNoborder:focus {
     border-color: transparent;
   }
 }
 
-.displayOnly{
+.displayOnly {
   pointer-events: none;
-  span{
+  span {
     text-transform: capitalize;
   }
 }
 
-.c-subscriptionHeadline__button--icon{
+.c-subscriptionHeadline__button--icon {
   padding: 0px;
-  fill: $color-black
+  fill: $color-black;
 }
 
-.c-subscriptionHeadline__reactiveBlock{
+.c-subscriptionHeadline__reactiveBlock {
   margin-top: 16px;
   max-width: 400px;
 }
 
-.bold{
+.bold {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   font-weight: bold;
 }
 
-.c-subscriptionHeadline__button--mobile{
+.c-subscriptionHeadline__button--mobile {
   width: auto;
   padding: 12px 24px;
 }

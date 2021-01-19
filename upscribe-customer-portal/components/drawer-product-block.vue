@@ -43,7 +43,7 @@ export default {
   computed: {
     ...mapState('translations', ['atc']),
 
-    ...mapState('products', ['productImages']),
+    ...mapState('products', ['productImages', 'products']),
 
     ...mapState('shop', [
       'currencySymbol',
@@ -65,6 +65,11 @@ export default {
         })
       }
       return finalProps
+    },
+
+    oneTimeProduct() {
+      const idArray = this.activeSubscription.items.map((item) => item.id)
+      return !idArray.includes(this.product.id)
     },
 
     subscriptionDiscountAmount() {
@@ -125,6 +130,17 @@ export default {
       return detail
     },
 
+    subscribeAndSaveText() {
+      const discount = this.product.properties['Discount Amount']
+      if (discount) {
+        if (this.atc['button.subscribeAndSave']) {
+          return this.atc['button.subscribeAndSave'].replace('{X}', discount)
+        }
+        return `Subscribe and save ${discount}`
+      }
+      return 'Subscribe'
+    },
+
     subscriptionDiscountType() {
       const { subscriptionDiscountAmount } = this
       if (!subscriptionDiscountAmount) return false
@@ -183,7 +199,7 @@ export default {
         // fixed
         calcDiscountAmount = discountAmount
       } else {
-        console.log(
+        console.error(
           'discount_amount should include % for "percentage" or not for "fixed"'
         )
       }
@@ -235,6 +251,7 @@ export default {
           class="c-drawerProductBlock__image"
           :src="productImage"
           :alt="productImage.alt ? productImage.alt : product.title"
+          onerror="this.style.display='none'"
         />
       </div>
 
@@ -291,15 +308,15 @@ export default {
         <v-button
           v-if="remove"
           :class="{ 'control-is-updating': updating }"
-          class="c-drawerProductBlock__button c-drawerProductBlock__button--remove c-button--transparent"
+          class="c-drawerProductBlock__button c-drawerProductBlock__button--remove c-button--alt"
           html='<svg width="14"  height="16" view-box="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 2.5H10.9062L9.84375 0.75C9.59375 0.34375 9.03125 0 8.5625 0H5.40625C4.9375 0 4.375 0.34375 4.125 0.75L3.0625 2.5H0.5C0.21875 2.5 0 2.75 0 3V3.5C0 3.78125 0.21875 4 0.5 4H1L1.65625 14.5938C1.6875 15.375 2.375 16 3.15625 16H10.8125C11.5938 16 12.2812 15.375 12.3125 14.5938L13 4H13.5C13.75 4 14 3.78125 14 3.5V3C14 2.75 13.75 2.5 13.5 2.5ZM5.40625 1.5H8.5625L9.15625 2.5H4.8125L5.40625 1.5ZM10.8125 14.5H3.15625L2.5 4H11.4688L10.8125 14.5Z" fill="#FF7777"/></svg>'
           @click.native="$emit('removeProduct', product)"
         />
 
         <v-button
-          v-if="swap"
+          v-if="swap && products.length > 1"
           :class="{ 'control-is-updating': updating }"
-          class="c-drawerProductBlock__button c-button--transparent bold"
+          class="c-drawerProductBlock__button c-button--alt bold"
           size="small"
           :text="atc['buttons.swapProduct'] || 'SWAP'"
           @click.native="$emit('swapProduct', product)"
@@ -308,7 +325,7 @@ export default {
         <v-button
           v-if="add"
           :class="{ 'control-is-updating': updating }"
-          class="c-drawerProductBlock__button c-button--transparent c-drawerProductBlock__button--add"
+          class="c-drawerProductBlock__button c-button--alt c-drawerProductBlock__button--add"
           size="small"
           :text="atc['portal.addProductDrawer'] || 'Add & Subscribe'"
           @click.native="$emit('variantSelectProduct', product)"
@@ -323,6 +340,20 @@ export default {
         @updateQuantity="quantityChangeManual"
       />
     </div>
+
+    <v-button
+      v-if="editNextOrder && oneTimeProduct"
+      :class="{ 'control-is-updating': updating }"
+      class="c-button--alt c-drawerProductBlock__button--add u-mt-4"
+      :text="subscribeAndSaveText"
+      @click.native="
+        $emit('subscribe', {
+          product,
+          variantId: product.variant_id,
+          addToNextOrder: false,
+        })
+      "
+    />
   </div>
 </template>
 

@@ -1,10 +1,7 @@
 <template>
   <div>
     <portal to="header">
-      <the-header
-        middle-html="Change Ship Date"
-        mode="backwardRoute"
-      />
+      <the-header middle-html="Change Ship Date" mode="backwardRoute" />
     </portal>
 
     <date-picker
@@ -14,7 +11,6 @@
     />
   </div>
 </template>
-
 
 <script>
 import DatePicker from '@components/date-picker'
@@ -29,12 +25,12 @@ export default {
 
   computed: {
     ...mapGetters('activeSubscription', [
-			'activeSubscription',
-			'activeSubscriptionNextDate',
-		]),
+      'activeSubscription',
+      'activeSubscriptionNextDate',
+    ]),
   },
 
-  methods:{
+  methods: {
     ...mapMutations('mobileGlobalManagement', ['setMessage', 'setStatus']),
 
     ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION_QUEUE']),
@@ -69,7 +65,7 @@ export default {
         this.setMessage('Saved new Shipment Date')
         this.setStatus('success')
       } catch (e) {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.setMessage(e.message)
         this.setStatus('error')
       }

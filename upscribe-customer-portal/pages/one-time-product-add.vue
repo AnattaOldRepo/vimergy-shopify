@@ -1,51 +1,73 @@
 <template>
-<div>
-  <portal to="header">
-    <the-header />
-  </portal>
+  <div>
+    <portal to="header">
+      <the-header />
+    </portal>
 
-  <div v-if="products && productImages && initedAddAction" class="c-oneTimeProductAdd">
-    <one-time-thank-you
-      v-if="oneTimeAdded"
-      :active-subscription="activeSubscription"
-      :active-charge="activeSubscription.next"
-      :oto-product="otoProduct"
-      :oto-variant="otoVariant"
-      class="c-oneTimeProductAdd__thankYou"
-    />
+    <div
+      v-if="products && productImages && initedAddAction"
+      class="c-oneTimeProductAdd"
+    >
+      <one-time-thank-you
+        v-if="oneTimeAdded"
+        :active-subscription="activeSubscription"
+        :active-charge="activeSubscription.next"
+        :oto-product="otoProduct"
+        :oto-variant="otoVariant"
+        class="c-oneTimeProductAdd__thankYou"
+      />
 
-    <drawer-shipping-method-list
-      v-else-if="showShippingMethodUpdateModal"
-      class="c-drawerShippingMethodList c-drawerProducts c-drawer"
-      select-during-product-update
-      :oto-shipping-update-add="showShippingMethodUpdateModal"
-      @completedSavedUpdated="handleCompletedOtoAdd"
-      @error="handleOtoAddShippingUpdateError"
-    />
+      <drawer-shipping-method-list
+        v-else-if="showShippingMethodUpdateModal"
+        class="c-drawerShippingMethodList c-drawerProducts c-drawer"
+        select-during-product-update
+        :oto-shipping-update-add="showShippingMethodUpdateModal"
+        @completedSavedUpdated="handleCompletedOtoAdd"
+        @error="handleOtoAddShippingUpdateError"
+      />
 
-    <div v-else class="c-oneTimeProductAdd__loading">
-      <h2 v-if="error" class="c-oneTimeProductAdd__loadingText">{{ error.message === 'NETWORK ERROR' ? 'Network Error, please wait a moment and then refresh the page.' : error.message }}</h2>
-      <h2 v-else class="c-oneTimeProductAdd__loadingText">{{ oneTimeOrderAddingMessage }}</h2>
-      <second-loader-icon class="c-oneTimeProductAdd__loadingIcon" />
+      <div v-else class="c-oneTimeProductAdd__loading">
+        <h2 v-if="error" class="c-oneTimeProductAdd__loadingText">{{
+          error.message === 'NETWORK ERROR'
+            ? 'Network Error, please wait a moment and then refresh the page.'
+            : error.message
+        }}</h2>
+        <h2 v-else class="c-oneTimeProductAdd__loadingText">{{
+          oneTimeOrderAddingMessage
+        }}</h2>
+        <second-loader-icon class="c-oneTimeProductAdd__loadingIcon" />
+      </div>
+    </div>
+
+    <div v-else class="c-oneTimeProductAdd">
+      <div
+        v-if="allDataLoaded && !oneTimeAdded"
+        class="c-oneTimeProductAdd__loading"
+      >
+        <img
+          v-if="productImage && productImage.src"
+          class="c-oneTimeProductAdd__image"
+          :src="productImage.src"
+        />
+        <h3 class="c-oneTimeProductAdd__loadingText">{{
+          addOtoProductToNextOrderMessage
+        }}</h3>
+        <v-button
+          :text="atc['buttons.addProductGridItem'] || 'Add'"
+          auto
+          @click.native="addOtoProduct"
+        />
+      </div>
+
+      <div v-else class="c-oneTimeProductAdd__loading">
+        <h2 class="c-oneTimeProductAdd__loadingText">{{
+          atc['portal.oneTimeOrderLoadingMessage'] ||
+            'Fetching your one-time product...'
+        }}</h2>
+        <second-loader-icon class="c-oneTimeProductAdd__loadingIcon" />
+      </div>
     </div>
   </div>
-
-  <div v-else class="c-oneTimeProductAdd">
-    <div  v-if="allDataLoaded && !oneTimeAdded" class="c-oneTimeProductAdd__loading">
-      <img v-if="productImage && productImage.src" class="c-oneTimeProductAdd__image" :src="productImage.src" />
-      <h3 class="c-oneTimeProductAdd__loadingText">{{ addOtoProductToNextOrderMessage }}</h3>
-      <v-button :text="atc['buttons.addProductGridItem'] || 'Add'" auto @click.native="addOtoProduct" />
-
-    </div>
-
-    <div v-else class="c-oneTimeProductAdd__loading">
-      <h2
-        class="c-oneTimeProductAdd__loadingText"
-      >{{ atc['portal.oneTimeOrderLoadingMessage'] || 'Fetching your one-time product...' }}</h2>
-      <second-loader-icon class="c-oneTimeProductAdd__loadingIcon" />
-    </div>
-  </div>
-</div>
 </template>
 
 <script>
@@ -95,7 +117,12 @@ export default {
     ...mapState('products', ['products', 'productImages']),
 
     allDataLoaded() {
-      if (this.otoVariablesSet && this.activeSubscription && this.activeSubscription.id && this.products) {
+      if (
+        this.otoVariablesSet &&
+        this.activeSubscription &&
+        this.activeSubscription.id &&
+        this.products
+      ) {
         return true
       } else {
         return false
@@ -109,9 +136,7 @@ export default {
           .replace('<oto-product-title>', otoProduct.title)
           .replace('<oto-variant-title>', otoVariant.title)
       } else {
-        return `Add ${otoProduct.title} (${
-          otoVariant.title
-        }) to your next shipment`
+        return `Add ${otoProduct.title} (${otoVariant.title}) to your next shipment`
       }
     },
 
@@ -122,9 +147,7 @@ export default {
           .replace('<oto-product-title>', otoProduct.title)
           .replace('<oto-variant-title>', otoVariant.title)
       } else {
-        return `Adding ${otoProduct.title} (${
-          otoVariant.title
-        }) to your next shipment...`
+        return `Adding ${otoProduct.title} (${otoVariant.title}) to your next shipment...`
       }
     },
 
@@ -162,7 +185,8 @@ export default {
 
     productImage() {
       const { productImages, otoProduct, otoProductVariantId } = this
-      if (!productImages && !otoProduct.image_url && !otoProduct.image) return false
+      if (!productImages && !otoProduct.image_url && !otoProduct.image)
+        return false
 
       if (
         otoProductVariantId &&
@@ -178,57 +202,57 @@ export default {
     },
   },
 
-	async beforeMount() {
-		const query = this.$route.query
+  async beforeMount() {
+    const query = this.$route.query
 
-		let customerId = false
-		let storeDomain = false
+    let customerId = false
+    let storeDomain = false
 
-		// set from liquid account profile
-		if (window.upscribeCustomerId) {
-			customerId = window.upscribeCustomerId
-		}
+    // set from liquid account profile
+    if (window.upscribeCustomerId) {
+      customerId = window.upscribeCustomerId
+    }
 
-		// set from liquid account profile
-		if (window.upscribeStoreDomain) {
-			storeDomain = window.upscribeStoreDomain
-		}
+    // set from liquid account profile
+    if (window.upscribeStoreDomain) {
+      storeDomain = window.upscribeStoreDomain
+    }
 
-		// set from query params
-		if (query && query.customerId) {
-			customerId = query.customerId
-		}
+    // set from query params
+    if (query && query.customerId) {
+      customerId = query.customerId
+    }
 
-		// set from query params
-		if (query && query.storeDomain) {
-			storeDomain = query.storeDomain
-		}
+    // set from query params
+    if (query && query.storeDomain) {
+      storeDomain = query.storeDomain
+    }
 
-		this.customerId = customerId
-		this.storeDomain = storeDomain
-	},
+    this.customerId = customerId
+    this.storeDomain = storeDomain
+  },
 
   async mounted() {
     const { query } = this.$route
 
     if (!query) return
 
-		const { storeDomain, customerId } = this
+    const { storeDomain, customerId } = this
 
-		if (!storeDomain || !customerId) {
-			return this.$nuxt.error({
-				statusCode: 404,
-				message: `Error Loading Portal. ${
-					!storeDomain ? 'Invalid store domain.' : 'Invalid customer ID.'
-				}`,
-			})
-		} else {
-			this.setStoreDomain(storeDomain)
-			this.setCustomerId(customerId)
+    if (!storeDomain || !customerId) {
+      return this.$nuxt.error({
+        statusCode: 404,
+        message: `Error Loading Portal. ${
+          !storeDomain ? 'Invalid store domain.' : 'Invalid customer ID.'
+        }`,
+      })
+    } else {
+      this.setStoreDomain(storeDomain)
+      this.setCustomerId(customerId)
 
-			this.$loadStoreSegment()
-			this.$loadStoreGtm()
-		}
+      this.$loadStoreSegment()
+      this.$loadStoreGtm()
+    }
 
     this.showShippingMethodUpdateModal = false
     this.error = null
@@ -252,6 +276,7 @@ export default {
       })
     }
 
+    this.setEditNextOrder(true)
     this.setOtoProductVariantId(otoProductVariantId)
     this.setOtoQueueId(otoQueueId)
     this.setOtoSubscriptionId(otoSubscriptionId)
@@ -259,39 +284,33 @@ export default {
 
     this.setActiveSubscriptionId(parseInt(otoSubscriptionId))
 
-    // console.log({
-    //   otoProductVariantId: this.otoProductVariantId,
-    //   otoQueueId: this.otoQueueId,
-    //   otoSubscriptionId: this.otoSubscriptionId,
-    //   otoAddProduct: this.otoAddProduct,
-    // })
-
     this.$nextTick(() => {
       this.otoVariablesSet = true
     })
 
-			try {
-				await Promise.all([
-					this.GET_CUSTOMER(),
-					this.GET_SUBSCRIPTIONS(),
-          this.GET_PRODUCTS(),
-					this.GET_SHOP(),
-        ])
-      } catch(e) {
-        console.log(e)
-      }
+    try {
+      await Promise.all([
+        this.GET_CUSTOMER(),
+        this.GET_SUBSCRIPTIONS(),
+        this.GET_SHOP(),
+      ])
+
+      await this.GET_PRODUCTS()
+    } catch (e) {
+      console.error(e)
+    }
   },
 
   methods: {
     ...mapActions('shop', ['GET_SHOP']),
 
-		...mapActions('customer', ['GET_CUSTOMER']),
+    ...mapActions('customer', ['GET_CUSTOMER']),
 
     ...mapMutations('route', ['setCustomerId', 'setStoreDomain']),
 
     ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
 
-		...mapActions('subscriptions', ['GET_SUBSCRIPTIONS']),
+    ...mapActions('subscriptions', ['GET_SUBSCRIPTIONS']),
 
     ...mapActions('products', ['GET_PRODUCTS']),
 
@@ -314,7 +333,7 @@ export default {
 
     ...mapActions('subscriptions', ['UPDATE_NEXT_ORDER']),
 
-    ...mapMutations('editMode', ['setEditNextOrder']),
+    ...mapActions('editMode', ['setEditNextOrder']),
 
     handleCompletedOtoAdd() {
       this.showShippingMethodUpdateModal = false
@@ -326,54 +345,44 @@ export default {
     },
 
     handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-      console.log('e', e)
-      if (
-        e &&
-        e.data &&
-        e.data.shipping_update_required
-      ) {
+      console.error('e', e)
+      if (e && e.data && e.data.shipping_update_required) {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
 
         this.showShippingMethodUpdateModal = true
       } else {
-        console.log('subscription/OTO_ADD_PRODUCT error: ', e)
+        console.error('subscription/OTO_ADD_PRODUCT error: ', e)
         this.error = { state: 'FAILURE', message: e.message }
       }
     },
 
     handleNewCheckoutUpdate(updateArray) {
       return new Promise((resolve, reject) => {
-
         let updateCount = updateArray.length
         let successes = 0
 
-          // for each update
-          updateArray.forEach(async (update) => {
-            try {
-              await update.updateAction
-              successes += 1
+        // for each update
+        updateArray.forEach(async (update) => {
+          try {
+            await update.updateAction
+            successes += 1
+          } catch (e) {
+            this.handleNewCheckoutUpdateError(e, update)
+          }
 
-            } catch (e) {
-              this.handleNewCheckoutUpdateError(e, update)
-            }
-
-            if (successes === updateCount) {
-              this.$emit('setDrawerStatus', 'SUCCESS')
-              this.$emit('setMode', 'edit')
-              resolve(true)
-            }
-          })
+          if (successes === updateCount) {
+            this.$emit('setDrawerStatus', 'SUCCESS')
+            this.$emit('setMode', 'edit')
+            resolve(true)
+          }
+        })
       })
     },
 
     async addOtoProduct() {
       const vm = this
-      const {
-        otoProductVariantId,
-        activeSubscription,
-        otoProduct,
-      } = this
+      const { otoProductVariantId, activeSubscription, otoProduct } = this
       this.initedAddAction = true
 
       const productChangeRequestResponse = productChangeRequest({
@@ -406,7 +415,7 @@ export default {
         await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
         this.oneTimeAdded = true
       } catch (e) {
-        console.log('addOtoProduct error: ', e)
+        console.error('addOtoProduct error: ', e)
         this.handleUpdateError(e, {
           ...handleNewCheckoutUpdatePayload,
         })

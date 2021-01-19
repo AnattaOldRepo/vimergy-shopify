@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 export const mutations = {
-  stateChanged: function (data) {
+  stateChanged: function(data) {
     window.dataLayer = window.dataLayer || []
     window._rsq = window._rsq || []
 
@@ -24,8 +24,6 @@ export const mutations = {
     }
 
     if ('upscribeAnalytics/pushAnalyticsEvent' === data.mutation.type) {
-      // console.log('tracking pushAnalyticsEvent', data.mutation)
-
       const { event, segmentEventName, payload, analytics } = data.mutation
       // const { customerId, subscriptionId, queueId } = payload
 
@@ -39,8 +37,6 @@ export const mutations = {
           analytics: gtmPayload.analytics,
         })
       }
-
-      // console.log('window.analytics', window.analytics)
 
       //  Segment
       if (window.analytics) {
@@ -61,7 +57,6 @@ export const mutations = {
 
           // Default Segment Event
         } else {
-          // console.log('track', { event, segmentEventName, payload, analytics })
           window.analytics.track(payload.event, {
             ...payload.payload,
             analytics: { ...window.UpscribeAnalytics },

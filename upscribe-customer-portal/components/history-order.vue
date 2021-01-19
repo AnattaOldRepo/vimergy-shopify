@@ -6,7 +6,10 @@
       @click="toggleOrder"
     >
       <span class="c-historyOrder__title"
-        >{{ prettyDate }} <span class = "c-historyOrder__headline-price">{{ currencySymbol }}{{ order.total_price.toFixed(2) }}</span></span
+        >{{ prettyDate }}
+        <span class="c-historyOrder__headline-price"
+          >{{ currencySymbol }}{{ order.total_price.toFixed(2) }}</span
+        ></span
       >
 
       <icon-chevron-right class="c-historyOrder__icon" />
@@ -15,15 +18,20 @@
     <div v-if="orderOpen && atc" class="c-historyOrder__main">
       <div class="c-historyOrder__info">
         <span class="c-historyOrder__infoStatus"
-          >{{ atc['labels.orderStatus'] || 'Order Status' }}: {{ orderStatus }}</span
+          >{{ atc['labels.orderStatus'] || 'Order Status' }}:
+          {{ orderStatus }}</span
         >
         <span class="c-historyOrder__infoOrderNumber"
-          >{{ atc['labels.order'] || 'Order' }} #: {{ order.id || order.shopify_order_id }}</span
+          >{{ atc['labels.order'] || 'Order' }} #:
+          {{ order.id || order.shopify_order_id }}</span
         >
 
-        <div v-if="shopifyDiscount" class="c-historyOrder__infoDiscount">
-          <span>{{ atc['portal.discountCode'] || 'Discount Code' }}: {{ shopifyDiscountCode }} ({{ shopifyDiscountAmountDisplay }})</span>
-        </div>
+        <!-- <div v-if="shopifyDiscount" class="c-historyOrder__infoDiscount">
+          <span
+            >{{ atc['portal.discountCode'] || 'Discount Code' }}:
+            {{ shopifyDiscountCode }} ({{ shopifyDiscountAmountDisplay }})</span
+          >
+        </div> -->
       </div>
 
       <div class="c-historyOrder__lineItems">
@@ -36,14 +44,16 @@
             <div v-if="productImage(item)" class="c-historyOrder__imageWrap">
               <!-- v-if="productImages" -->
               <!-- <img class="c-historyOrder__image" :src="productImages[item.shopify_product_id]"/> -->
-              <img class="c-historyOrder__image" :src="productImage(item)" />
+              <img
+                class="c-historyOrder__image"
+                :src="productImage(item)"
+                onerror="this.style.display='none'"
+              />
             </div>
 
             <div class="c-historyOrder__lineItemContentBox">
               <div class="c-historyOrder__lineItemTitleBox">
-                <h2 class="c-historyOrder__lineItemTitle">{{
-                  item.title
-                }}</h2>
+                <h2 class="c-historyOrder__lineItemTitle">{{ item.title }}</h2>
                 <span class="c-historyOrder__lineItemSubtitle">{{
                   productOptionDetails(item)
                 }}</span>
@@ -52,12 +62,18 @@
               <div
                 class="c-historyOrder__itemItemPricingBox c-historyOrder__itemItemPricingBox--desktop"
               >
-                <span class="is-faded">{{ atc['labels.quantityShort'] || 'QTY' }}: {{ item.quantity }}</span>
-                <span class="is-faded">{{ currencySymbol }}{{ item.price }}</span>
+                <span class="is-faded"
+                  >{{ atc['labels.quantityShort'] || 'QTY' }}:
+                  {{ item.quantity }}</span
+                >
+                <span class="is-faded" v-if="item.quantity > 1"
+                  >{{ currencySymbol }}{{ item.price }}</span
+                >
 
-                <span class="u-font-bold">{{ currencySymbol }}{{
-                  (item.price * item.quantity).toFixed(2)
-                }}</span>
+                <span class="u-font-bold"
+                  >{{ currencySymbol
+                  }}{{ (item.price * item.quantity).toFixed(2) }}</span
+                >
               </div>
             </div>
           </div>
@@ -65,11 +81,17 @@
           <div
             class="c-historyOrder__itemItemPricingBox c-historyOrder__itemItemPricingBox--mobile"
           >
-            <span class="is-faded">{{ atc['labels.quantityShort'] || 'QTY' }}: {{ item.quantity }}</span>
-            <span class="is-faded">{{ currencySymbol }}{{ item.price }}</span>
-            <span class="u-font-bold">{{ currencySymbol }}{{
-             (item.price * item.quantity).toFixed(2)
-            }}</span>
+            <span class="is-faded"
+              >{{ atc['labels.quantityShort'] || 'QTY' }}:
+              {{ item.quantity }}</span
+            >
+            <span class="is-faded" v-if="item.quantity > 1"
+              >{{ currencySymbol }}{{ item.price }}</span
+            >
+            <span class="u-font-bold"
+              >{{ currencySymbol
+              }}{{ (item.price * item.quantity).toFixed(2) }}</span
+            >
           </div>
         </div>
       </div>
@@ -77,7 +99,10 @@
       <div class="c-historyOrder__pricingSection u-font-bold">
         <div class="c-historyOrder__pricing">
           <span>{{ atc['labels.subtotal'] || 'Subtotal' }}</span>
-          <span>{{ currencySymbol }}{{ order.total_line_items_price.toFixed(2) }}</span>
+          <span
+            >{{ currencySymbol
+            }}{{ order.total_line_items_price.toFixed(2) }}</span
+          >
         </div>
 
         <div class="c-historyOrder__pricing">
@@ -87,7 +112,9 @@
 
         <div class="c-historyOrder__pricing">
           <span>{{ atc['labels.tax'] || 'Tax' }}</span>
-          <span v-if="order.total_tax">{{ currencySymbol }}{{ order.total_tax.toFixed(2) }}</span>
+          <span v-if="order.total_tax"
+            >{{ currencySymbol }}{{ order.total_tax.toFixed(2) }}</span
+          >
           <span v-else>--</span>
         </div>
 
@@ -101,22 +128,27 @@
 
   <div v-else class="c-historyOrder">
     <nuxt-link
-        class="c-historyOrder__head c-historyOrder__head--link"
-        :to="{
-          query: {
-              template: 'order',
-              orderId: order.id,
-              storeDomain,
-              customerId,
-            },
-        }"
-        @click="setOrderForMobileLayout"
+      class="c-historyOrder__head c-historyOrder__head--link"
+      :to="{
+        query: {
+          template: 'order',
+          orderId: order.id,
+          storeDomain,
+          customerId,
+        },
+      }"
+      @click="setOrderForMobileLayout"
+    >
+      <span class="c-historyOrder__title"
+        >{{ prettyDate }}
+        <span class="c-historyOrder__headline-price"
+          >{{ currencySymbol }}{{ order.total_price.toFixed(2) }}</span
+        ></span
       >
-        <span class="c-historyOrder__title"
-          >{{ prettyDate }} <span class = "c-historyOrder__headline-price">{{ currencySymbol }}{{ order.total_price.toFixed(2) }}</span></span
-        >
 
-        <icon-chevron-right class="c-historyOrder__icon c-historyOrder__icon--right" />
+      <icon-chevron-right
+        class="c-historyOrder__icon c-historyOrder__icon--right"
+      />
     </nuxt-link>
   </div>
 </template>
@@ -155,8 +187,10 @@ export default {
     ...mapState('products', ['productImages']),
 
     shopifyDiscount() {
-      const { order: { discount_applications} = {} } = this
-      return (discount_applications && discount_applications.length) ? discount_applications[0] : false
+      const { order: { discount_applications } = {} } = this
+      return discount_applications && discount_applications.length
+        ? discount_applications[0]
+        : false
     },
 
     shopifyDiscountCode() {
@@ -177,16 +211,18 @@ export default {
 
     orderStatus() {
       const { order, isOriginalCharge } = this
-      let fullFillmentText = order.fulfillment_status ? order.fulfillment_status : order.financial_status
+      let fullFillmentText = order.fulfillment_status
+        ? order.fulfillment_status
+        : order.financial_status
       if (isOriginalCharge) {
         return 'Paid'
       }
 
-      if(fullFillmentText && fullFillmentText.includes('_')){
-          fullFillmentText = fullFillmentText.split('_').join(' ')
+      if (fullFillmentText && fullFillmentText.includes('_')) {
+        fullFillmentText = fullFillmentText.split('_').join(' ')
       }
 
-      return  fullFillmentText
+      return fullFillmentText
     },
 
     orderLineItems() {
@@ -235,7 +271,7 @@ export default {
   methods: {
     ...mapMutations('orders', ['setCurrentOrderForMobile']),
 
-    setOrderForMobileLayout(){
+    setOrderForMobileLayout() {
       this.setCurrentOrderForMobile(this.order)
     },
 
@@ -244,7 +280,7 @@ export default {
     },
 
     productOptionDetails(item) {
-      const { isOriginalCharge } = this
+      const { isOriginalCharge, atc } = this
       if (!item.properties) return false
 
       let propertyHash = {}
@@ -260,9 +296,11 @@ export default {
       let discountAmount = propertyHash['Discount Amount']
         ? propertyHash['Discount Amount']
         : false
-      let detail = `Auto Renew x${item.quantity}`
+      let detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${
+        item.quantity
+      }`
       if (discountAmount) {
-        detail += ` (${discountAmount} OFF)`
+        detail += ` (${discountAmount} ${atc['labels.off'] || 'OFF'})`
       }
       return detail
     },
@@ -304,7 +342,7 @@ export default {
   background-color: $color-white;
   border: 1px solid $color-blue-light-border;
 
-  @include bp(tablet){
+  @include bp(tablet) {
     border-radius: 5px;
     margin-bottom: 20px;
   }
@@ -318,7 +356,7 @@ export default {
   padding: 17px 24px;
   cursor: pointer;
 
-  &--link{
+  &--link {
     text-decoration: none;
   }
 }
@@ -339,7 +377,7 @@ export default {
     transform: rotate(270deg);
   }
 
-  &--right{
+  &--right {
     transform: none;
   }
 }
@@ -387,7 +425,6 @@ export default {
   font-weight: 400;
   line-height: 16px;
 }
-
 
 .c-historyOrder__lineItem {
   display: flex;
@@ -536,7 +573,7 @@ export default {
     font-size: 14px;
     color: $color-black;
 
-    &:first-child{
+    &:first-child {
       color: $color-blue-secondary;
     }
   }
@@ -548,14 +585,14 @@ export default {
       font-weight: 500;
       color: $color-black;
 
-      &:nth-child(2){
+      &:nth-child(2) {
         font-weight: bold;
       }
     }
   }
 }
 
-.c-historyOrder__headline-price{
+.c-historyOrder__headline-price {
   color: $color-blue-secondary;
   margin-left: 12px;
 }

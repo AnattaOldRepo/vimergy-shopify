@@ -54,11 +54,14 @@ export default {
 
 <template>
   <div class="c-drawerCards c-drawer">
-    <h2 class="c-drawer__title">{{ atc['portal.paymentMethodsDrawerTitle'] || 'Payment Methods' }}</h2>
+    <h2 class="c-drawer__title">{{
+      atc['portal.paymentMethodsDrawerTitle'] || 'Payment Methods'
+    }}</h2>
 
-    <p class="c-drawer__subtitle"
-      >{{ atc['portal.paymentMethodsDrawerPrompt'] || 'Add new or select existing payment method to transfer subscription billing to that payment method.' }}</p
-    >
+    <p class="c-drawer__subtitle">{{
+      atc['portal.paymentMethodsDrawerPrompt'] ||
+        'Add new or select existing payment method to transfer subscription billing to that payment method.'
+    }}</p>
 
     <div class="c-drawer__inner">
       <div class="c-drawerCardList">
@@ -75,7 +78,9 @@ export default {
       </div>
 
       <div class="c-drawerCard__button-bottom">
-        <v-button class="c-form__submitButton" @onClick="$emit('setMode', 'add')"
+        <v-button
+          class="c-form__submitButton"
+          @onClick="$emit('setMode', 'add')"
           >{{ atc['buttons.addCard'] || 'Add New Payment Method' }}</v-button
         >
       </div>
@@ -85,6 +90,12 @@ export default {
 
 <style lang="scss">
 @import '@design';
+
+.c-drawer__title {
+  @include bp(mobile-large-max) {
+    display: none;
+  }
+}
 
 .c-drawerCardList {
   display: flex;
@@ -96,6 +107,7 @@ export default {
 
 .c-drawerCardList__item {
   cursor: pointer;
+  width: 100%;
   .c-cardItem__inner {
     transition: all 0.2s ease;
 

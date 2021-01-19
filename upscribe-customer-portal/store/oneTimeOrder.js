@@ -33,8 +33,9 @@ export const mutations = {
 }
 
 export const actions = {
-  async ADD_OTO_PRODUCT_TO_OTO_QUEUE({ commit, state }) {
+  async ADD_OTO_PRODUCT_TO_OTO_QUEUE({ commit, state, rootState }) {
     const { otoQueueId, otoSubscriptionId, otoProductVariantId } = state
+    const { xUpscribeAccessToken } = rootState.auth
 
     const requestPayload = {
       items: [
@@ -52,10 +53,10 @@ export const actions = {
         data: JSON.stringify(requestPayload),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((data) => {
-          console.log('otofinished', data)
           commit('subscriptions/SET_UPDATED_NEXT_ORDER', data, { root: true })
 
           // delay for the subscriptions to finish updating

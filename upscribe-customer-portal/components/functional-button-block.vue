@@ -1,11 +1,20 @@
 <template>
-  <nuxt-link v-if="internalLink"  class="c-functionalButtonBlock" :to="internalLink">
+  <a
+    v-if="internalLink"
+    class="c-functionalButtonBlock"
+    :to="internalLink"
+    @click="scrollToTop"
+  >
     <div class="c-functionalButtonBlock--left">
       <slot name="icon"></slot>
       <!-- eslint-disable -->
       <span class="c-functionalButtonBlock__title">
         {{ title }}
-        <span v-if="secondText" class="c-functionalButtonBlock__secondText" v-html="secondText">
+        <span
+          v-if="secondText"
+          class="c-functionalButtonBlock__secondText"
+          v-html="secondText"
+        >
         </span>
       </span>
     </div>
@@ -13,17 +22,24 @@
     <div v-if="!noArrowIcon" class="c-functionalButtonBlock--right">
       <angle-right />
     </div>
-  </nuxt-link>
+  </a>
 
   <!-- Display block Only -->
 
-  <div v-else-if="displayOnly" class="c-functionalButtonBlock__contain marginBottomBlock">
+  <div
+    v-else-if="displayOnly"
+    class="c-functionalButtonBlock__contain marginBottomBlock"
+  >
     <h2 class="c-functionalButtonBlock__header">{{ header }}</h2>
     <div class="c-functionalButtonBlock">
       <div class="c-functionalButtonBlock--left">
         <slot name="icon"></slot>
 
-        <span v-if="secondText" class="c-functionalButtonBlock__secondText" v-html="secondText">
+        <span
+          v-if="secondText"
+          class="c-functionalButtonBlock__secondText"
+          v-html="secondText"
+        >
         </span>
       </div>
     </div>
@@ -31,15 +47,17 @@
 
   <!-- Normal Button -->
 
-  <v-button v-else
-    class="c-functionalButtonBlock"
-    @onClick="buttonFunc">
-     <div class="c-functionalButtonBlock--left">
+  <v-button v-else class="c-functionalButtonBlock" @onClick="buttonFunc">
+    <div class="c-functionalButtonBlock--left">
       <slot name="icon"></slot>
 
       <span class="c-functionalButtonBlock__title">
         {{ title }}
-        <span v-if="secondText" class="c-functionalButtonBlock__secondText" v-html="secondText">
+        <span
+          v-if="secondText"
+          class="c-functionalButtonBlock__secondText"
+          v-html="secondText"
+        >
         </span>
       </span>
     </div>
@@ -54,7 +72,7 @@
 import AngleRight from '@components/Icon/angle-right'
 import VButton from '@components/v-button'
 export default {
-  components:{
+  components: {
     AngleRight,
     VButton,
   },
@@ -70,16 +88,16 @@ export default {
       default: () => {},
     },
     // For Button
-    buttonFunc:{
+    buttonFunc: {
       type: Function,
       default: () => {},
     },
-    header:{
+    header: {
       type: String,
       default: '',
     },
     // Default
-    displayOnly:{
+    displayOnly: {
       type: Boolean,
       default: false,
     },
@@ -96,16 +114,22 @@ export default {
       default: false,
     },
   },
+  methods: {
+    scrollToTop() {
+      document.documentElement.scrollTop = 0
+      this.$router.push(this.internalLink)
+    },
+  },
 }
 </script>
 
 <style lang="scss">
 @import '@design';
-.c-functionalButtonBlock__contain{
-   max-width: 400px;
+.c-functionalButtonBlock__contain {
+  max-width: 400px;
 }
 
-.c-functionalButtonBlock{
+.c-functionalButtonBlock {
   padding: 17px 26px 17px 15px;
   max-width: 400px;
   background-color: $color-white;
@@ -116,7 +140,7 @@ export default {
   justify-content: space-between;
 
   &:hover,
-  &:focus{
+  &:focus {
     background-color: $color-white;
   }
 }
@@ -129,31 +153,31 @@ export default {
   font-weight: 500;
 }
 
-.c-functionalButtonBlock__secondText{
+.c-functionalButtonBlock__secondText {
   color: #888888;
 }
 
-.c-functionalButtonBlock--left{
+.c-functionalButtonBlock--left {
   display: flex;
   align-items: center;
 }
 
-.c-functionalButtonBlock--right{
+.c-functionalButtonBlock--right {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.c-functionalButtonBlock__icon{
+.c-functionalButtonBlock__icon {
   margin-right: 12px;
 }
 
-.c-functionalButtonBlock__small-text{
+.c-functionalButtonBlock__small-text {
   font-size: 12px;
   line-height: 16px;
 }
 
-.c-functionalButtonBlock__header{
+.c-functionalButtonBlock__header {
   margin-bottom: 8px;
   font-style: normal;
   font-weight: 500;
@@ -164,7 +188,7 @@ export default {
   line-height: 16px;
 }
 
-.marginBottomBlock{
+.marginBottomBlock {
   margin-bottom: 24px;
 }
 </style>

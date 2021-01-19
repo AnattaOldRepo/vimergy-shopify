@@ -3,11 +3,13 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 
 import DrawerWrap from '@components/drawer-wrap.vue'
 import NewAddressForm from '@components/new-address-form.vue'
+import Checkbox from '@components/checkbox.vue'
 
 export default {
   components: {
     DrawerWrap,
     NewAddressForm,
+    Checkbox,
   },
   props: {
     show: {
@@ -18,6 +20,7 @@ export default {
   data: () => {
     return {
       drawerStatus: null,
+      applyToAllActiveSusbscriptions: false,
     }
   },
   computed: {
@@ -29,6 +32,8 @@ export default {
       'activeShippingAddress',
       'activeSubscription',
     ]),
+
+    ...mapState('customer', ['paymentCards', 'customerShopifyId']),
 
     deliveryEveryText() {
       const { activeSubscription } = this
@@ -78,7 +83,10 @@ export default {
     ...mapActions('subscriptions', [
       'UPDATE_SUBSCRIPTION',
       'UPDATE_NEXT_ORDER',
+      'UPDATE_ALL_SUBS_ADDRESSES',
     ]),
+
+    ...mapActions('subscriptions', ['GET_SUBSCRIPTIONS']),
 
     async updateShippingAddress(address) {
       const { editNextOrder } = this
@@ -86,6 +94,7 @@ export default {
         requestPayload: {
           shipping_address: address,
         },
+        bulkUpdate: this.applyToAllActiveSusbscriptions,
       }
 
       let updateAction
@@ -102,10 +111,10 @@ export default {
         analyticsEventName = 'Upscribe Subscription Shipping Address Update'
         updateAction = this.UPDATE_SUBSCRIPTION(updatePayload)
       }
-
       try {
         this.drawerStatus = 'PENDING'
         await updateAction
+        await this.GET_SUBSCRIPTIONS()
         this.drawerStatus = 'SUCCESS'
 
         this.triggerAnalyticsEvent({
@@ -113,7 +122,7 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.drawerStatus = { state: 'FAILURE', message: e.message }
       }
     },
@@ -143,6 +152,14 @@ export default {
         }}
         {{ deliveryEveryText }} {{ intervalUnitDisplay }}
       </p>
+
+      <checkbox
+        v-model="applyToAllActiveSusbscriptions"
+        :label="
+          atc['portal.applyToAllActiveSusbscriptions'] ||
+            'Apply to all active subscriptions'
+        "
+      />
 
       <new-address-form
         class="c-formBlock--noPadding c-shippingAddressForm"

@@ -1,86 +1,60 @@
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import ProductGridItem from '@components/product-grid-item.vue'
-import VButton from '@components/v-button.vue'
 import { windowSizes } from '@mixins/windowSizes.js'
-
+import VuePagination from '@components/vue-pagination'
 export default {
   components: {
     ProductGridItem,
-    VButton,
+    VuePagination,
   },
   mixins: [windowSizes],
-  data: function() {
-    return {
-      currentActiveText: 'all',
-      visibleCollectionCount: 3,
-      visibleProductCount: 9,
-    }
-  },
-
   computed: {
-    ...mapGetters('products', ['hashedCollections']),
-
     ...mapState('translations', ['atc']),
     ...mapState('products', ['products']),
     ...mapState('editMode', ['editNextOrder']),
 
-    collectionOfTitle() {
-      let collectionOfTitleArr = []
-      // Check if we have collections
-      if (Object.entries(this.hashedCollections).length > 0) {
-        for (let each in this.hashedCollections) {
-          if (each.toLowerCase() === 'all') {
-            collectionOfTitleArr.unshift({
-              title: 'All',
-              handle: each.toLowerCase(),
-            })
-          } else {
-            collectionOfTitleArr.push({
-              title: this.hashedCollections[each].title,
-              handle: each.toLowerCase(),
-            })
-          }
-        }
+    ...mapState('collections', [
+      'collections',
+      'activeCollection',
+      'availableCollections',
+    ]),
+
+    ...mapState('translations', ['atc']),
+    ...mapState('shop', [
+      'customerPortalSubscriptionProductCollections',
+      'customerPortalNextOrderProductCollections',
+      'featuredPortalCollection',
+      'uiSettings',
+    ]),
+  },
+  methods: {
+    ...mapMutations('collections', ['setActiveCollection']),
+    changeCurrentFilter(collection) {
+      const { activeCollection } = this
+      if (!collection) {
+        // reset to all
+        this.setActiveCollection(false)
+        this.loadProductsByCollectionId(false)
       } else {
-        collectionOfTitleArr.push({ title: 'All', handle: 'all' })
+        // same filter ignore
+        if (activeCollection && collection.id === activeCollection.id) return
+        this.setActiveCollection(collection)
+        this.loadProductsByCollectionId(collection)
       }
-
-      return collectionOfTitleArr
     },
-
-    currentCollection() {
-      return this.hashedCollections[this.currentActiveText]
-    },
-
-    allProducts() {
-      const productsList = this.hashedCollections.all.reduce(
-        (finalArr, collection) => {
-          return (finalArr = [...finalArr, ...collection.items])
-        },
-        []
-      )
-
-      const uniqueProducts = []
-      productsList.forEach((product) => {
-        if (!uniqueProducts.find((item) => item.id === product.id)) {
-          uniqueProducts.push(product)
+    loadProductsByCollectionId(collection) {
+      let requestParams = {}
+      if (collection) {
+        requestParams['collection_id'] = collection.id
+      }
+      this.$nextTick(() => {
+        const paginationRef = this.$refs['vue-pagination']
+        // load page 1
+        if (paginationRef) {
+          paginationRef.onLoadMoreItems(1)
         }
       })
-      return uniqueProducts
-    },
-  },
-
-  methods: {
-    showMoreProducts() {
-      // Don't use hashedCollection length here. Why? Because we added all collection manually, so it's going to cause problem!!!!
-      this.visibleCollectionCount = this.products.length
-
-      this.visibleProductCount = this.products.length
-    },
-
-    changeCurrentFilter(handle) {
-      this.currentActiveText = handle
     },
   },
 }
@@ -96,89 +70,63 @@ export default {
     }}</h2>
 
     <div class="c-productsGrid__inner">
-      <div v-if="collectionOfTitle" class="c-productsGrid__top">
-        <ul class="c-productsGrid__link-contain">
+      <div v-if="products && products.length" class="c-productsGrid__top">
+        <ul
+          v-if="!availableCollections || !availableCollections.length"
+          class="c-productsGrid__link-contain"
+        >
+          <li class="c-productsGrid__link c-productsGrid__link--active">
+            <button>{{ atc['portal.allProductsLabel'] || 'All' }}</button>
+          </li>
+        </ul>
+
+        <ul v-else class="c-productsGrid__link-contain">
           <li
-            v-for="(each, index) in collectionOfTitle"
-            :key="index"
-            :data-id="each.handle"
+            v-if="
+              (uiSettings &&
+                !uiSettings.disable_customer_portal_default_all_products_tab) ||
+                !uiSettings
+            "
             class="c-productsGrid__link"
             :class="{
-              'c-productsGrid__link--active': currentActiveText === each.handle,
+              'c-productsGrid__link--active': isEmptyObject(activeCollection),
             }"
           >
-            <button @click="changeCurrentFilter(each.handle)">
-              {{ each.title }}
+            <button @click="changeCurrentFilter(false)">{{
+              atc['portal.allProductsLabel'] || 'All'
+            }}</button>
+          </li>
+
+          <li
+            v-for="collection in availableCollections"
+            :key="collection.id"
+            class="c-productsGrid__link"
+            :class="{
+              'c-productsGrid__link--active':
+                activeCollection && activeCollection.id === collection.id,
+            }"
+          >
+            <button @click="changeCurrentFilter(collection)">
+              {{ collection.title }}
             </button>
           </li>
         </ul>
       </div>
 
-      <div v-if="products && currentActiveText === 'all' && currentCollection">
+      <div v-if="products && products.length">
         <div class="c-productsGrid__grid">
           <product-grid-item
-            v-for="product in allProducts
-              .slice()
-              .splice(0, visibleProductCount)"
-            :key="product.id"
+            v-for="(product, index) in products"
+            :key="product.id + '-' + index"
             class="c-productsGrid__item"
             :product="product"
           />
         </div>
 
-        <v-button
-          v-if="visibleCollectionCount < allProducts.length"
-          :centered="true"
-          class="c-productsGrid__showAllButton c-button--transparent"
-          :text="atc['portal.buttonBrowseAllButton'] || 'Show More'"
-          auto
-          size="small"
-          @onClick="showMoreProducts"
-        />
-      </div>
-
-      <div
-        v-else-if="products && currentActiveText !== 'all' && currentCollection"
-        class="c-productsGrid__grid"
-      >
-        <h2 class="c-productsGrid__grid-title">
-          {{ currentCollection.title }}</h2
-        >
-        <div class="c-productsGrid__grid">
-          <product-grid-item
-            v-for="(product, index) in currentCollection.items"
-            :key="product.id + index"
-            class="c-productsGrid__item"
-            :product="product"
-          />
-        </div>
-      </div>
-
-      <div
-        v-else-if="
-          products && currentActiveText === 'all' && !currentCollection
-        "
-        class="c-productsGrid__grid"
-      >
-        <div class="c-productsGrid__grid">
-          <product-grid-item
-            v-for="(product, index) in products
-              .slice()
-              .splice(0, visibleProductCount)"
-            :key="product.id + index"
-            class="c-productsGrid__item"
-            :product="product"
-          />
-        </div>
-
-        <v-button
-          v-if="visibleProductCount < products.length"
-          :centered="true"
-          class="c-productsGrid__showAllButton c-button--transparent"
-          :text="atc['portal.buttonBrowseAllButton'] || 'Show More'"
-          auto
-          size="small"
-          @onClick="showMoreProducts"
+        <vue-pagination
+          key="vue-pagination"
+          ref="vue-pagination"
+          :collection-id="activeCollection ? activeCollection.id : false"
         />
       </div>
 
@@ -201,12 +149,6 @@ export default {
             :lines="1"
             class="c-productGridItem__title"
           />
-          <!-- <content-placeholders-text
-            style="height: 20px;"
-            :lines="1"
-            class="c-productGridItem__price"
-          /> -->
-
           <content-placeholders-img
             style="height: 30px;"
             class="c-productGridItem__button"
@@ -219,36 +161,30 @@ export default {
 
 <style lang="scss">
 @import '@design';
-
 .c-productsGrid {
   @include bp(tablet-max) {
     max-width: 500px;
     margin: 0 auto;
   }
 }
-
 .c-productsGrid__top {
   overflow-x: auto;
   margin-bottom: 15px;
 }
-
 .c-productsGrid__link-contain {
   padding: 10px 0;
   margin: 0 0 30px;
   display: flex;
-
   .c-productsGrid__link {
     list-style: none;
     white-space: nowrap;
     margin-right: 25px;
     cursor: pointer;
-
     &--active {
       font-weight: bold;
       padding-bottom: 5px;
       @include border-focus;
     }
-
     button {
       border: none;
       background-color: transparent;
@@ -257,7 +193,6 @@ export default {
     }
   }
 }
-
 .c-productsGrid__title {
   margin-bottom: 22px;
   font-family: $font-primary-medium;
@@ -268,41 +203,23 @@ export default {
   color: $color-blue-secondary;
   text-align: left;
 }
-
 .c-productsGrid__inner {
   padding: 20px 20px 58px;
   border: 1px solid $color-blue-light-border;
   background-color: $color-white;
-
   @include bp(tablet-large) {
     padding: 36px 40px 58px;
   }
 }
-
 .c-productsGrid__grid {
   @include clearfix;
 }
-
 .c-productsGrid__item {
   @include column(1/2, $cycle: 2, $gutter: 6);
-
   @include bp(tablet-large) {
     @include column(1/3, $cycle: 3);
   }
 }
-
-.c-productsGrid__showAllButton {
-  margin: 8px auto 0;
-  padding: 12px 20px;
-  font-size: 12px;
-  line-height: 16px;
-  text-transform: uppercase;
-  font-weight: bold;
-  @include bp(tablet-large) {
-    margin: 45px auto 0;
-  }
-}
-
 .c-productsGrid__grid-title {
   font-size: 14px;
   line-height: 15px;
@@ -311,5 +228,8 @@ export default {
   font-weight: normal;
   font-style: normal;
   color: $color-blue-secondary;
+}
+.pagination {
+  width: 100%;
 }
 </style>

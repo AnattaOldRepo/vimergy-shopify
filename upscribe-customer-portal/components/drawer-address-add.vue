@@ -2,11 +2,13 @@
 import { mapState, mapActions } from 'vuex'
 import VButton from '@components/v-button.vue'
 import NewAddressForm from '@components/new-address-form.vue'
+import Checkbox from '@components/checkbox.vue'
 
 export default {
   components: {
     VButton,
     NewAddressForm,
+    Checkbox,
   },
   props: {
     show: {
@@ -19,6 +21,7 @@ export default {
       loadedStripe: false,
       completeStripeAddressInfo: false,
       stripeOptions: {},
+      applyToAllActiveSusbscriptions: false,
     }
   },
   computed: {
@@ -28,15 +31,31 @@ export default {
   },
   methods: {
     ...mapActions('addresses', ['CREATE_ADDRESS']),
+    ...mapActions('subscriptions', [
+      'UPDATE_SUBSCRIPTION',
+      'GET_SUBSCRIPTIONS',
+    ]),
+    ...mapActions('customer', ['GET_CUSTOMER']),
 
     async addAddress(address) {
       this.$emit('setDrawerStatus', 'PENDING')
       try {
         await this.CREATE_ADDRESS(address)
+        if (this.applyToAllActiveSusbscriptions) {
+          const updatePayload = {
+            requestPayload: {
+              shipping_address: address,
+            },
+            bulkUpdate: this.applyToAllActiveSusbscriptions,
+          }
+          await this.UPDATE_SUBSCRIPTION(updatePayload)
+        }
+        await this.GET_CUSTOMER()
+        await this.GET_SUBSCRIPTIONS()
         this.$emit('setDrawerStatus', 'SUCCESS')
         this.$emit('setMode', 'default')
       } catch (e) {
-        console.log('address/ADD_ADDRESS error: ', e)
+        console.error('address/ADD_ADDRESS error: ', e)
         this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
       }
     },
@@ -47,12 +66,22 @@ export default {
 <template>
   <div class=" c-drawer">
     <div class="c-drawer__inner">
-      <h2 class="c-drawer__title">{{ atc['portal.addAddressDrawerTitle'] || 'Add Address' }}</h2>
+      <h2 class="c-drawer__title">{{
+        atc['portal.addAddressDrawerTitle'] || 'Add Address'
+      }}</h2>
+
+      <checkbox
+        v-model="applyToAllActiveSusbscriptions"
+        :label="
+          atc['portal.applyToAllActiveSusbscriptions'] ||
+            'Apply to all active subscriptions'
+        "
+      />
 
       <new-address-form
         class="c-formBlock c-addressForm"
-        form-submit-button-text="Update Address"
-        form-name="update-address"
+        form-submit-button-text="Add Address"
+        :form-name="atc['buttons.addNewAddress'] || 'update-address'"
         no-data-fill
         @onSubmit="addAddress"
       />

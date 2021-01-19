@@ -6,7 +6,6 @@ export const state = () => ({
 
 export const mutations = {
   setActiveSubscriptionId(state, orderId) {
-    console.log(orderId, 1212123)
     state.activeSubscriptionId = orderId
   },
 

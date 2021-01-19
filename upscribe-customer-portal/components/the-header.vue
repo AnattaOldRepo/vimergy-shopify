@@ -20,17 +20,16 @@ export default {
       default: false,
     },
 
-    mode:{
+    mode: {
       type: String,
       default: 'default',
     },
 
-    customizedFuncText:{
+    customizedFuncText: {
       type: String,
       default: '',
     },
   },
-
 
   computed: {
     ...mapState('translations', ['atc']),
@@ -49,7 +48,10 @@ export default {
 
   <!-- Tablet DropDown -->
 
-  <div v-else-if ="windowWidth < 1024 && windowWidth >= 768" class="c-headerTablet">
+  <div
+    v-else-if="windowWidth < 1024 && windowWidth >= 768"
+    class="c-headerTablet"
+  >
     <mobile-header-tablet />
   </div>
 
@@ -75,14 +77,19 @@ export default {
 }
 
 .c-header__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
   max-width: 1300px;
   height: 100%;
   padding: 0 20px;
   margin: 0 auto;
+
+  @include bp(desktop) {
+    flex-direction: column;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .c-header__navUp {
@@ -90,9 +97,9 @@ export default {
   align-items: center;
   justify-content: flex-start;
   width: 100%;
+  margin-top: 20px;
   margin-left: -30px;
 }
-
 
 .c-header__navLink {
   display: flex;
@@ -105,16 +112,16 @@ export default {
   color: $color-black;
   text-decoration: none;
   text-transform: capitalize;
-  transition: all 0.1s ease;
   border-bottom: 3px solid transparent;
+  transition: all 0.1s ease;
 
   &--middle {
     padding: 0;
     padding-bottom: 6px;
-    margin: 20px 25px;
+    margin: 30px 25px;
   }
 
-  &:hover{
+  &:hover {
     @include border-focus;
   }
 }
@@ -122,8 +129,7 @@ export default {
 .nuxt-link-exact-active {
   font-weight: bold;
 
-
-  @include bp(tablet){
+  @include bp(tablet) {
     @include border-focus;
   }
 }
@@ -145,31 +151,38 @@ export default {
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  .c-header__logo {
+    img {
+      width: auto;
+      height: 70px;
+    }
+  }
 }
 
 .c-header__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 12px 20px;
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .c-headerTablet,
-.c-headerMobile{
+.c-headerMobile {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
-.c-headerTablet{
+.c-headerTablet {
+  justify-content: space-between;
   padding: 13px 32px;
 }
 
-.c-headerMobile{
+.c-headerMobile {
   padding: 18px 24px;
 }
 
@@ -183,18 +196,30 @@ export default {
   max-width: 1280px;
   height: auto;
   margin: 0 auto;
+  .c-headerTablet__menu {
+    width: 50%;
+    margin: auto;
+    margin-top: 10px;
+  }
 }
 
-.c-headerMobile__image{
-    max-width: 200px;
-    max-height: 49px;
-    object-fit: contain;
+.c-headerMobile__image {
+  max-width: 200px;
+  max-height: 40px;
+  object-fit: contain;
 }
 
-.c-headerTablet__inner-top{
+.c-headerTablet__inner-top {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
+  .c-header__logo {
+    img {
+      width: auto;
+      height: 50px;
+    }
+  }
 }
 
 .c-headerTablet__backToAccount,
@@ -235,9 +260,9 @@ export default {
   font-family: $font-primary-medium;
   font-size: 14px;
   font-weight: 500;
+  font-weight: bold;
   color: $color-black;
   text-decoration: none;
-  font-weight: bold;
 
   &:visited,
   &:active,
@@ -269,7 +294,7 @@ export default {
   border-top: 1px solid $color-blue-light-border;
 }
 
-.c-headerMobile__logout-icon{
+.c-headerMobile__logout-icon {
   cursor: pointer;
 }
 
@@ -296,13 +321,13 @@ export default {
   &:focus,
   &:active {
     color: $color-link;
-    border-bottom: 0px;
+    border-bottom: 0;
   }
 }
 
-.c-headerMobile__navLink{
-  padding: 0px;
+.c-headerMobile__navLink {
   width: auto;
+  padding: 0;
 }
 
 .c-headerMobile__navLinkIcon {
@@ -317,40 +342,44 @@ export default {
   }
 }
 
-.c-header__backToAccount{
-  &:hover{
+.c-header__backToAccount {
+  &:hover {
     border: none;
   }
 }
 
-.c-headerMobile__navLink--mobileIcon{
+.c-headerMobile__navLink--mobileIcon {
   width: 15px;
   height: 21px;
   cursor: pointer;
   transform: rotateZ(180deg);
 
-  &:hover{
-    border: 0px
+  &:hover {
+    border: 0;
   }
 }
+.c-headerMobile__navLink--white {
+  fill: $color-white;
+}
 
-.c-headerMobile__title{
+.c-headerMobile__title {
+  margin: auto;
   font-size: 16px;
+  font-weight: 600;
   line-height: 21px;
   color: $color-black;
-  font-weight: 600;
   text-transform: capitalize;
 }
 
-.c-headerMobile__customizedButton{
-  border: none;
+.c-headerMobile__customizedButton {
+  min-width: 0;
   color: $color-blue-brand;
   background-color: transparent;
-  min-width: 0px;
+  border: none;
 
   &:hover,
-  &:focus{
-    background-color: transparent
+  &:focus {
+    background-color: transparent;
   }
 }
 </style>

@@ -21,7 +21,7 @@
             },
           }"
           >{{
-            atc['portal.headerAllSubscription'] || 'All Subscriptions'
+            atc['portal.headerAllSubscriptions'] || 'Your Subscriptions'
           }}</nuxt-link
         >
         <nuxt-link
@@ -34,7 +34,7 @@
             },
           }"
           >{{
-            atc['portal.headerYourSubscription'] || 'Your Subscriptions'
+            atc['portal.headerYourSubscription'] || 'Subscriptions Details'
           }}</nuxt-link
         >
         <nuxt-link
@@ -51,30 +51,25 @@
           }}</nuxt-link
         >
         <nuxt-link
-          v-if="subscriptionInActive.length"
           class="c-header__navLink c-header__navLink--middle"
           :to="{
-            name: 'index',
+            name: 'address',
             query: {
-              route: 'cancelledSubscriptions',
               storeDomain,
               customerId,
             },
           }"
         >
-          {{
-            atc['portal.cancelledSubscriptions'] || 'Cancelled Subscriptions'
-          }}
+          {{ atc['labels.addresses'] || 'Addresses' }}
         </nuxt-link>
       </div>
+      <v-button
+        class="c-button--auto c-header__button c-button--transparent"
+        size="small"
+        @onClick="signOut"
+        >{{ atc['portal.headerSignOut'] || 'Sign Out' }}</v-button
+      >
     </nav>
-
-    <v-button
-      class="c-button--auto c-header__button c-button--transparent"
-      size="small"
-      @onClick="signOut"
-      >{{ atc['portal.headerSignOut'] || 'Sign Out' }}</v-button
-    >
   </div>
 </template>
 
@@ -99,7 +94,7 @@ export default {
 
     ...mapState('route', ['storeDomain', 'customerId']),
 
-    ...mapState('shop', ['shopData']),
+    ...mapState('shop', ['shopData', 'storeLogo']),
 
     ...mapGetters('subscriptions', [
       'subscriptionActive',

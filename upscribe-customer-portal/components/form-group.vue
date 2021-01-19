@@ -376,7 +376,7 @@ export default {
   padding-top: 8px;
   font-size: 12px;
   color: $color-error;
-  display: none;
+  // display: none;
 
   @include bp(tablet){
     display: block;

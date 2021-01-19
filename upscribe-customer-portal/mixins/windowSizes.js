@@ -8,7 +8,7 @@ export const windowSizes = {
     }
   },
 
-  mounted() {
+  created() {
     // set resize listener
     window.addEventListener('resize', throttle(this.setWindowSizes, 100))
     this.setWindowSizes()

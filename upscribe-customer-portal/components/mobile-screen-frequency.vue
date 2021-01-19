@@ -2,7 +2,15 @@
   <div v-if="activeSubscription" class="c-details__delieveryOptions">
     <portal to="header">
       <the-header
-        :middle-html="'Subscription ' + activeSubscription.id"
+        :middle-html="
+          activeSubscription.name
+            ? `${atc['labels.subscription'] || 'Subscription'} ${
+                activeSubscription.name
+              }`
+            : `${atc['labels.subscription'] || 'Subscription'} ${
+                activeSubscription.id
+              }`
+        "
         mode="backwardRoute"
       />
     </portal>
@@ -15,26 +23,32 @@
       :handle-change-frequency="handleChangeFrequency"
       :interval-unit="intervalUnit"
       :interval-unit-display="intervalUnitDisplay"
-      previous-middle-text="Edit Subscription Details"
+      :previous-middle-text="
+        atc['labels.editSubscriptionDetails'] || 'Edit Subscription Details'
+      "
     />
   </div>
 </template>
 
 <script>
 import DeliveryFrequencyItem from '@components/delivery-frequency-item.vue'
-import {  mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import TheHeader from '@components/the-header'
 
 export default {
-  components:{
+  components: {
     DeliveryFrequencyItem,
     TheHeader,
   },
 
-  computed:{
+  computed: {
     ...mapState('translations', ['atc']),
 
-    ...mapGetters('activeSubscription', ['activeSubscription', 'activeSubscriptionNextDate', 'activeQueue']),
+    ...mapGetters('activeSubscription', [
+      'activeSubscription',
+      'activeSubscriptionNextDate',
+      'activeQueue',
+    ]),
 
     intervalUnit() {
       const { activeSubscription } = this
@@ -42,7 +56,6 @@ export default {
         activeSubscription.items[0].properties['Interval Unit']
       return intervalUnitInner || 'day'
     },
-
 
     deliveryFrequencies() {
       const { activeSubscription } = this
@@ -94,7 +107,7 @@ export default {
         this.setMessage('Saved new Delivery Frequency')
         this.setStatus('success')
       } catch (e) {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.setMessage(e.message)
         this.setStatus('error')
       }

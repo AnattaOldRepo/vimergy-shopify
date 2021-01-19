@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 
 import SubscriptionBlock from '@components/subscription-block.vue'
 import SubscriptionBlockOptionWrap from '@components/subscription-block-option-wrap.vue'
@@ -7,7 +7,8 @@ import SubscriptionBlockOption from '@components/subscription-block-option.vue'
 import VButton from '@components/v-button.vue'
 
 import DrawerBillingAddresses from '@components/drawer-billing-addresses.vue'
-import DrawerShippingAddresses from '@components/drawer-shipping-addresses.vue'
+// import DrawerShippingAddresses from '@components/drawer-shipping-addresses.vue'
+import DrawerAddresses from '@components/drawer-addresses.vue'
 import DrawerCards from '@components/drawer-cards.vue'
 
 export default {
@@ -16,9 +17,10 @@ export default {
     SubscriptionBlockOptionWrap,
     SubscriptionBlockOption,
     VButton,
-    DrawerShippingAddresses,
+    // DrawerShippingAddresses,
     DrawerBillingAddresses,
     DrawerCards,
+    DrawerAddresses,
   },
   data() {
     return {
@@ -39,6 +41,8 @@ export default {
       'activeShippingAddress',
       'activeSubscription',
     ]),
+
+    ...mapState('subscriptions', ['subscriptionsLoaded']),
 
     ...mapGetters('cards', ['activeCard']),
 
@@ -84,26 +88,63 @@ export default {
       const { activeCard } = this
       if (!activeCard) return false
 
-      const { last4, exp_month, exp_year, type, bank_code, zipcode } = activeCard
+      const {
+        last4,
+        exp_month,
+        exp_year,
+        type,
+        bank_code,
+        zipcode,
+      } = activeCard
 
       if (type.includes('card')) {
-        return `CARD *${last4} ${exp_month}/${exp_year}<br> ${zipcode ? 'Zip: ' + zipcode : ''}`
-      }
-
-      else if (type === 'braintree_paypal') {
-        return `Account Email: ${ activeCard.email || 'No email available for account'}`
-      }
-
-      else if (type === 'stripe_sepa_direct_debit') {
+        return `CARD *${last4} ${exp_month}/${exp_year}<br> ${
+          zipcode ? 'Zip: ' + zipcode : ''
+        }`
+      } else if (type === 'braintree_paypal') {
+        return `Account Email: ${activeCard.email ||
+          'No email available for account'}`
+      } else if (type === 'stripe_sepa_direct_debit') {
         return `Acct *${last4} / Bank ${bank_code}`
-      }
-
-      else {
+      } else {
         return false
       }
     },
   },
+
+  watch: {
+    subscriptionsLoaded(subscriptionsLoaded) {
+      const { $route } = this
+
+      if (subscriptionsLoaded) {
+        const loadActionState = $route.query
+          ? $route.query
+            ? $route.query.loadActionState
+            : false
+          : false
+        if (loadActionState === 'edit-payment-method') {
+          this.drawerCardsOpen = true
+        }
+      }
+    },
+  },
+
+  mounted() {
+    const { $route, subscriptionsLoaded } = this
+    const loadActionState = $route.query
+      ? $route.query
+        ? $route.query.loadActionState
+        : false
+      : false
+
+    if (loadActionState === 'edit-payment-method' && subscriptionsLoaded) {
+      this.drawerCardsOpen = true
+    }
+  },
+
   methods: {
+    ...mapMutations('cards', ['setActiveEditCard']),
+
     async handleCancelSubscription() {
       const { customerId, storeDomain } = this
 
@@ -123,7 +164,11 @@ export default {
   <subscription-block
     key="details"
     :title="
-      editNextOrder ? (atc['portal.subscriptionDetailsNextOrderTitle'] || 'Your Next Order Details') : (atc['portal.subscriptionDetailsSubscriptionTitle'] || 'Your Subscription Details')
+      editNextOrder
+        ? atc['portal.subscriptionDetailsNextOrderTitle'] ||
+          'Your Next Order Details'
+        : atc['portal.subscriptionDetailsSubscriptionTitle'] ||
+          'Your Subscription Details'
     "
   >
     <subscription-block-option-wrap
@@ -131,7 +176,10 @@ export default {
     >
       <subscription-block-option
         v-if="formattedShippingAddress"
-        :title="atc['portal.subscriptionDetailsShippingAddressLabel'] || 'Shipping Address'"
+        :title="
+          atc['portal.subscriptionDetailsShippingAddressLabel'] ||
+            'Shipping Address'
+        "
         :html="formattedShippingAddress"
         :text-med="true"
       />
@@ -142,8 +190,13 @@ export default {
 
       <!-- Drawer Portal -->
       <portal v-if="drawerShippingAddressesOpen" to="drawers">
-        <drawer-shipping-addresses
+        <!-- <drawer-shipping-addresses
           :show="drawerShippingAddressesOpen"
+          @close="drawerShippingAddressesOpen = false"
+        /> -->
+        <drawer-addresses
+          :show="drawerShippingAddressesOpen"
+          initial-mode="list"
           @close="drawerShippingAddressesOpen = false"
         />
       </portal>
@@ -154,7 +207,10 @@ export default {
     >
       <subscription-block-option
         v-if="formattedBillingAddress"
-        :title="atc['portal.subscriptionDetailsBillingAddressLabel'] || 'Billing Address'"
+        :title="
+          atc['portal.subscriptionDetailsBillingAddressLabel'] ||
+            'Billing Address'
+        "
         :html="formattedBillingAddress"
         :text-med="true"
       />
@@ -172,28 +228,51 @@ export default {
       </portal>
     </subscription-block-option-wrap>
 
-    <subscription-block-option-wrap @onClick="drawerCardsOpen = true">
+    <subscription-block-option-wrap
+      @onClick="
+        setActiveEditCard(activeCard)
+        drawerCardsOpen = true
+      "
+    >
       <subscription-block-option
-				v-if="activeSubscription && paymentInfo"
-        :title="atc['portal.subscriptionDetailsPaymentMethodLabel'] || 'Payment Method'"
+        v-if="activeSubscription && paymentInfo"
+        :title="
+          atc['portal.subscriptionDetailsPaymentMethodLabel'] ||
+            'Payment Method'
+        "
         :text-med="true"
-        @onClick="drawerCardsOpen = true"
+        @onClick="
+          setActiveEditCard(activeCard)
+          drawerCardsOpen = true
+        "
       >
-        <span v-if="activeCard.type === 'stripe_sepa_direct_debit'" class="c-portalBlockOption__text">SEPA Direct Debit <br></span>
+        <span
+          v-if="activeCard.type === 'stripe_sepa_direct_debit'"
+          class="c-portalBlockOption__text"
+          >SEPA Direct Debit <br
+        /></span>
 
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <span class="c-portalBlockOption__text" v-html="paymentInfo"/>
+        <span class="c-portalBlockOption__text" v-html="paymentInfo" />
 
+        <div
+          v-if="activeCard.status === 'void'"
+          class="c-cardTag__voidWarning u-mt-2"
+          >{{
+            atc['errors.invalidPaymentMethodTag'] || 'Invalid Payment Method'
+          }}</div
+        >
       </subscription-block-option>
 
-			<subscription-block-option
-				v-else-if="activeSubscription && !activeCard"
-				@onClick="drawerCardsOpen = true"
-			>
-				<span class="c-portalBlockOption__text--small">{{ atc['portal.subscriptionDetailsPaymentMethodLabelNoPayment'] ||
-						'No Payment Method attached to this Subscription. Click here to add one.' }}</span>
-			</subscription-block-option>
-
+      <subscription-block-option
+        v-else-if="activeSubscription && !activeCard"
+        @onClick="drawerCardsOpen = true"
+      >
+        <span class="c-portalBlockOption__text--small">{{
+          atc['portal.subscriptionDetailsPaymentMethodLabelNoPayment'] ||
+            'No Payment Method attached to this Subscription. Click here to add one.'
+        }}</span>
+      </subscription-block-option>
 
       <content-placeholders v-else>
         <content-placeholders-heading />
@@ -208,11 +287,11 @@ export default {
       </portal>
     </subscription-block-option-wrap>
 
-    <div class= "c-subscriptionBlock__button-contain">
+    <div class="c-subscriptionBlock__button-contain">
       <v-button
         v-if="!editNextOrder && activeSubscription.active"
         slot="button"
-        class = "c-subscriptionBlockDetails__button c-button--danger"
+        class="c-subscriptionBlockDetails__button c-button--danger"
         :text="atc['buttons.cancelSubscription'] || 'Cancel Subscription'"
         @onClick="handleCancelSubscription"
       />
@@ -221,11 +300,13 @@ export default {
 </template>
 
 <style lang="scss">
-.c-subscriptionBlock__button-contain{
+@import '@design';
+
+.c-subscriptionBlock__button-contain {
   padding: 25px 0;
 }
 
-.c-subscriptionBlockDetails__button{
+.c-subscriptionBlockDetails__button {
   padding: 12px 20px;
   font-size: 12px;
   line-height: 16px;
@@ -236,9 +317,8 @@ export default {
   margin: 0 auto;
 }
 
-.c-portalBlockOption__text{
+.c-portalBlockOption__text {
   font-size: 18px;
   line-height: 23px;
 }
-
 </style>

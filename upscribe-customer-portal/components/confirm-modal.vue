@@ -60,12 +60,10 @@ export default {
       })
     },
     confirm() {
-      console.log('agree')
       this.resolve(true)
       this.$emit('close')
     },
     deny() {
-      console.log('deny')
       this.resolve(false)
       this.$emit('close')
     },

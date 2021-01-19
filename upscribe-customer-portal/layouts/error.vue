@@ -44,7 +44,8 @@
 
     <h1 v-if="shopData && shopData.name">{{ shopData.name }}</h1>
 
-    <p v-if="error.message" class="c-errorOne__text">{{ error.message }}</p>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <p v-if="error.message" class="c-errorOne__text" v-html="error.message"/>
     <p v-else class="c-errorOne__text"
       >Error loading account portal. Please login and try again.</p
     >

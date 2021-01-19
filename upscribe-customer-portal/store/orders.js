@@ -25,9 +25,8 @@ export const mutations = {
     state.subscriptionOrders = val
   },
 
-
-  SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN(state, bool){
-    state.drawerSubscriptionHistoryOpen =  bool
+  SET_DRAWER_SUBSCRIPTION_HISTORY_OPEN(state, bool) {
+    state.drawerSubscriptionHistoryOpen = bool
   },
 
   setCurrentOrderForMobile(state, val) {
@@ -38,11 +37,15 @@ export const mutations = {
 export const actions = {
   async GET_ORDERS({ rootState, commit }) {
     const { storeDomain, customerId } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url: `/orders/${storeDomain}/${customerId}`,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           const orders = data.items
@@ -53,7 +56,7 @@ export const actions = {
           resolve(data)
         })
         .catch((error) => {
-          console.log('GET_ORDERS error: ', error)
+          console.error('GET_ORDERS error: ', error)
           commit('setOrdersLoaded', false)
           reject(error)
         })
@@ -62,6 +65,7 @@ export const actions = {
 
   async CHECK_FOR_PROCESSING_SUBS({ rootState }) {
     const { storeDomain, customerId } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     let params = {
       limit: 10,
@@ -75,12 +79,15 @@ export const actions = {
         method: 'get',
         url: `/orders/${storeDomain}/${customerId}?limit=100`,
         params,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           resolve(data)
         })
         .catch((error) => {
-          console.log('CHECK_FOR_PROCESSING_SUBS error: ', error)
+          console.error('CHECK_FOR_PROCESSING_SUBS error: ', error)
           reject(error)
         })
     })
@@ -91,6 +98,7 @@ export const actions = {
     subscriptionShopifyOrderId
   ) {
     const { storeDomain, customerId } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     let params = {
       limit: 20,
@@ -104,13 +112,16 @@ export const actions = {
         method: 'get',
         url: `/orders/${storeDomain}/${customerId}`,
         params,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           resolve(data)
           commit('setSubscriptionOrder', data.items)
         })
         .catch((error) => {
-          console.log('CHECK_FOR_PROCESSING_SUBS error: ', error)
+          console.error('CHECK_FOR_PROCESSING_SUBS error: ', error)
           reject(error)
         })
     })

@@ -1,5 +1,5 @@
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   data() {
@@ -28,7 +28,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('editMode', ['setEditNextOrder']),
+    ...mapActions('editMode', ['setEditNextOrder']),
 
     handleToggleEditNextOrder(event) {
       this.setEditNextOrder(event.value)

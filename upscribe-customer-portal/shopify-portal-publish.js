@@ -7,7 +7,7 @@ const pageAccountTemplate = '../templates/page.account-subscriptions.liquid'
 const customerAccountTemplate =
   '../templates/customers/account.subscriptions.liquid'
 
-const globalVariablesScript = `<script>window.upscribeStoreDomain = '{{ shop.permanent_domain }}';window.upscribeCustomerId = '{{ customer.id }}';</script> `
+const globalVariablesScript = `<script>window.upscribeStoreDomain = '{{ shop.permanent_domain }}';window.upscribeCustomerId = '{{ customer.id }}';window.customer = '{{ customer | json }}';window.customerMetafieldAccessToken = {% if customer.metafields.customer['upscribe-access-token'] %}"{{ customer.metafields.customer['upscribe-access-token'] }}"{% else %}false{% endif %};</script> `
 
 // Delete old nuxt script bundles and old subscription account template
 del.sync(['../assets/upscribe_*'], {
@@ -58,7 +58,7 @@ fs.readFile('./dist/index.html', 'utf8', function(err, data) {
     }
   })
 
-  console.log({
+  console.info({
     scriptFileNames,
     styleFileNames,
   })
@@ -82,10 +82,10 @@ fs.readFile('./dist/index.html', 'utf8', function(err, data) {
 
   fs.writeFile(pageAccountTemplate, finalPageHtml, function(err) {
     if (err) throw err
-    console.log(`${pageAccountTemplate} created successfully!`)
+    console.error(`${pageAccountTemplate} created successfully!`)
   })
   fs.writeFile(customerAccountTemplate, finalPageHtml, function(err) {
     if (err) throw err
-    console.log(`${customerAccountTemplate} created successfully!`)
+    console.error(`${customerAccountTemplate} created successfully!`)
   })
 })

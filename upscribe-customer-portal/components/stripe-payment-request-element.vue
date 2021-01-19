@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   props: {
     stripePublicKey: {
@@ -12,28 +12,68 @@ export default {
       stripe: null,
       prButton: null,
       // paymentRequestAvailable: false,
-      enabledCountryCodes: ['AE', 'AT', 'AU', 'BE', 'BR', 'CA', 'CH', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HK', 'IE', 'IN', 'IT', 'JP', 'LT', 'LU', 'LV', 'MX', 'MY', 'NL', 'NO', 'NZ', 'PH', 'PL', 'PT', 'RO', 'SE', 'SG', 'SI', 'SK', 'US'],
+      enabledCountryCodes: [
+        'AE',
+        'AT',
+        'AU',
+        'BE',
+        'BR',
+        'CA',
+        'CH',
+        'CZ',
+        'DE',
+        'DK',
+        'EE',
+        'ES',
+        'FI',
+        'FR',
+        'GB',
+        'GR',
+        'HK',
+        'IE',
+        'IN',
+        'IT',
+        'JP',
+        'LT',
+        'LU',
+        'LV',
+        'MX',
+        'MY',
+        'NL',
+        'NO',
+        'NZ',
+        'PH',
+        'PL',
+        'PT',
+        'RO',
+        'SE',
+        'SG',
+        'SI',
+        'SK',
+        'US',
+      ],
     }
   },
   computed: {
-    ...mapState('checkout', ['checkoutData']),
+    ...mapState('shop', ['shopData']),
+
+    ...mapGetters('activeSubscription', ['activeSubscription']),
 
     isPaymentRequestCountry() {
-      const { checkoutData, enabledCountryCodes } = this
-      const { billing_address } = checkoutData
+      const { enabledCountryCodes, shopData } = this
+      const { country_code } = shopData
 
-      return enabledCountryCodes.indexOf(billing_address.country_code) > -1
+      return enabledCountryCodes.indexOf(country_code) > -1
     },
 
     paymentRequestObject() {
-      const { checkoutData } = this
-      const { payment_due, currency, billing_address } = checkoutData
+      const { shopData, activeSubscription } = this
       return {
-        country: billing_address.country_code || 'US',
-        currency: currency.toLowerCase(),
-          total: {
+        country: shopData.country_code,
+        currency: shopData.currency.toLowerCase(),
+        total: {
           label: 'Total',
-          amount: payment_due * 100,
+          amount: Math.floor(activeSubscription.total_price * 100),
         },
         requestPayerName: true,
         requestPayerEmail: true,
@@ -50,43 +90,45 @@ export default {
       return
     }
 
-    const paymentRequest = stripe.paymentRequest(paymentRequestObject)
+    window.paymentRequest = stripe.paymentRequest(paymentRequestObject)
 
     // Create an instance of the card Element.
     const prButton = elements.create('paymentRequestButton', {
-      paymentRequest,
+      paymentRequest: window.paymentRequest,
     })
 
     this.stripe = stripe
     this.prButton = prButton
 
     // Check the availability of the Payment Request API first.
-    paymentRequest.canMakePayment().then((result) => {
-      // console.log('canmakepayment: ', { result})
+    window.paymentRequest.canMakePayment().then((result) => {
       if (result) {
         prButton.mount('#payment-request-button')
-        this.$emit('enableStripePaymentRequest', true)
+        this.$nextTick(() => {
+          this.$emit('enableStripePaymentRequest', true)
+        })
       } else {
-        // this.paymentRequestAvailable = false
-        // this.$emit('enableStripePaymentRequest', false)
+        this.paymentRequestAvailable = false
+        this.$nextTick(() => {
+          this.$emit('enableStripePaymentRequest', false)
+        })
       }
     })
 
-    paymentRequest.on('token', (ev) => {
-      this.createPaymentMethod(ev)
+    window.paymentRequest.on('token', (ev) => {
+      this.placeOrder(ev)
+
+      ev.complete('success')
     })
   },
   methods: {
-    createPaymentMethod(result) {
-      // console.log('success place order in type', {
-      //   fullResponse: result,
-      //   paymentData: result,
-      //   paymentType: 'stripe_payment_request',
-      // })
-      // stripeTokenHandler(result.token);
-      this.$emit('placeOrderResponse', {
+    placeOrder(result) {
+      if (this.placeOrderPending) return
+
+      this.$emit('createPaymentMethodResponse', {
         fullResponse: result,
-        paymentData: result.token,
+        newPaymentData: result.token,
+        updatePaymentData: result.token.card,
         paymentType: 'stripe_payment_request',
       })
     },
@@ -95,12 +137,12 @@ export default {
 </script>
 
 <template>
-<div class="c-stripePayRequest__wrapper">
-  <!-- <p class="c-stripePayRequest__text">Or use</p> -->
-  <div id="payment-request-button" class="c-stripePayRequest__button">
-    <!-- A Stripe Element will be inserted here. -->
+  <div class="c-stripePayRequest__wrapper">
+    <!-- <p class="c-stripePayRequest__text">Or use</p> -->
+    <div id="payment-request-button" class="c-stripePayRequest__button">
+      <!-- A Stripe Element will be inserted here. -->
+    </div>
   </div>
-</div>
 </template>
 
 <style lang="scss" scoped>
@@ -114,11 +156,9 @@ export default {
   text-align: center;
 }
 .c-stripePayRequest__button {
-
 }
 
 .c-stripePayRequest__button {
   height: auto !important;
 }
-
 </style>

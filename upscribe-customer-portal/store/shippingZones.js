@@ -14,15 +14,20 @@ export const actions = {
   // Get available shopp shopping zones
   GET_SHIPPING_ZONES({ commit, rootState }) {
     const { storeDomain } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     if (!storeDomain) {
-      return console.log('storeDomain not available')
+      console.error('storeDomain not available')
+      return
     }
 
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url: `/shipping/zones/${storeDomain}`,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((response) => {
           commit('SET_SHIPPING_ZONES', response)
@@ -32,7 +37,7 @@ export const actions = {
           resolve(response)
         })
         .catch((error) => {
-          console.log('error: ', error)
+          console.error('error: ', error)
           reject(error)
         })
     })

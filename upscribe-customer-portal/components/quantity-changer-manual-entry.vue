@@ -39,12 +39,18 @@ export default {
 
 <template>
   <div v-if="!isUpdating" class="c-quantityChangerManual__quantityBox">
-    <input v-model="quantityLocal" type="number" class="c-quantityChangerManual__quantity"/>
+    <input
+      v-model="quantityLocal"
+      type="number"
+      class="c-quantityChangerManual__quantity"
+    />
 
-    <a href=""
-      class="is-info c-button c-drawerProductBlock__button c-button--transparent bold c-button--small"
+    <a
+      href=""
+      class="is-info c-button c-drawerProductBlock__button c-button--alt bold c-button--small"
       @click.prevent="saveQuantity"
-    >Save QTY</a>
+      >Save QTY</a
+    >
   </div>
 
   <div v-else class="button is-loading control-is-updating">Updating</div>
@@ -105,7 +111,6 @@ export default {
   padding: 10px;
   border-radius: 5px;
   margin-right: 10px;
+  margin-bottom: 0;
 }
-
-
 </style>

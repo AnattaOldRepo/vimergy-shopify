@@ -18,8 +18,6 @@ export const mutations = {
   },
 
   pushAnalyticsEvent(state, { event, payload }) {
-    console.log('pushAnalyticsEvent')
-
     state.events.push({
       event,
       detail: payload,
@@ -44,11 +42,8 @@ export const actions = {
    * Update global analytics variable on changes
    */
   updateWindowUpscribeAnalytics({ commit, state, rootState }) {
-    // console.log('rootState', rootState)
     const { customer = false } = rootState.customer
     const { shopData = false } = rootState.shop
-
-    console.log('updateWindowUpscribeAnalytics')
 
     const analytics = {
       store: shopData,
@@ -97,7 +92,7 @@ export const actions = {
     // window.addEventListener('Order Completed', logAnalyticsEvent)
     // window.addEventListener('Upsell Product Added', logAnalyticsEvent)
 
-    console.log('Upscribe Analytics Events Set')
+    console.info('Upscribe Analytics Events Set')
   },
 
   /**
@@ -126,7 +121,6 @@ export const actions = {
         passedEvent = 'Discount Removed'
         break
       default:
-      // console.log('analyticsDiscount Error: ', event)
     }
 
     dispatch('triggerAnalyticsEvent', {

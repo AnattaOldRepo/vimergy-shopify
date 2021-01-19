@@ -13,27 +13,39 @@
       />
 
       <div v-else class="c-skipShipment__loading">
-        <h2 v-if="error" class="c-skipShipment__loadingText">{{ error.message === 'NETWORK ERROR' ? 'Network Error, please wait a moment and then refresh the page.' : error.message }}</h2>
+        <h2 v-if="error" class="c-skipShipment__loadingText">{{
+          error.message === 'NETWORK ERROR'
+            ? 'Network Error, please wait a moment and then refresh the page.'
+            : error.message
+        }}</h2>
 
-        <h2
-          v-else
-          class="c-skipShipment__loadingText"
-        >{{ atc['portal.skippingNextShipmentMessage'] || 'Skipping your next shipment...' }}</h2>
+        <h2 v-else class="c-skipShipment__loadingText">{{
+          atc['portal.skippingNextShipmentMessage'] ||
+            'Skipping your next shipment...'
+        }}</h2>
 
         <second-loader-icon class="c-skipShipment__loadingIcon" />
       </div>
     </div>
 
     <div v-else class="c-skipShipment">
-      <div v-if="allDataLoaded && !shipmentSkipped && !isEmptyObject(atc)" class="c-skipShipment__loading">
-        <h3 class="c-skipShipment__loadingText">{{ atc['portal.skipNextShipmentMessage'] || 'Skip your next shipment' }}</h3>
-        <v-button :text="atc['buttons.skipShipment'] || 'Skip Shipment'" auto @click.native="skipShipment" />
+      <div
+        v-if="allDataLoaded && !shipmentSkipped && !isEmptyObject(atc)"
+        class="c-skipShipment__loading"
+      >
+        <h3 class="c-skipShipment__loadingText">{{
+          atc['portal.skipNextShipmentMessage'] || 'Skip your next shipment'
+        }}</h3>
+        <v-button
+          :text="atc['buttons.skipShipment'] || 'Skip Shipment'"
+          auto
+          @click.native="skipShipment"
+        />
       </div>
 
       <div v-else class="c-skipShipment__loading">
         <second-loader-icon class="c-skipShipment__loadingIcon" />
       </div>
-
     </div>
   </div>
 </template>
@@ -65,6 +77,8 @@ export default {
   computed: {
     ...mapGetters('activeSubscription', ['activeSubscription']),
 
+    ...mapState('activeSubscription', ['activeSubscriptionId']),
+
     ...mapState('translations', ['activeLanguageCode', 'atc']),
 
     allDataLoaded() {
@@ -79,20 +93,21 @@ export default {
     const { query } = this.$route
     this.error = null
 
-    console.log('mounted skip shipment')
-
     if (!query) {
-      console.log('missing query')
       return
     }
 
-    const { skipShipment, skipShipmentSubscriptionId, skipShipmentQueueId, customerId } = query
+    const {
+      skipShipment,
+      skipShipmentSubscriptionId,
+      skipShipmentQueueId,
+      customerId,
+    } = query
 
     try {
-      const subscriptions = this.GET_SUBSCRIPTIONS(customerId)
-      console.log('skip got shipments', {subscriptions})
-    } catch(e) {
-      console.log({e})
+      this.GET_SUBSCRIPTIONS(customerId)
+    } catch (e) {
+      console.error({ e })
     }
 
     if (!skipShipment || !skipShipmentSubscriptionId) {
@@ -109,7 +124,7 @@ export default {
       let queueIds = skipShipmentQueueId.split(',')
 
       // set multiple queu/sub combos for multiple manual passed id requests
-      subIds.forEach((subId,index) => {
+      subIds.forEach((subId, index) => {
         this.multipleSkipValues.push({
           subscriptionId: parseInt(subIds[index]),
           queueId: parseInt(queueIds[index]),
@@ -122,24 +137,32 @@ export default {
 
     // only one subscription skip
     else {
-      console.log({skipShipmentSubscriptionId})
       this.setActiveSubscriptionId(parseInt(skipShipmentSubscriptionId))
     }
   },
 
   methods: {
-    ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION_QUEUE']),
+    ...mapActions('subscriptions', [
+      'UPDATE_SUBSCRIPTION_QUEUE',
+      'GET_SUBSCRIPTIONS',
+    ]),
 
     ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
     async skipShipment() {
-      const { activeSubscription, multipleSkipValues, multipleSubscriptionUpdates } = this
+      const {
+        activeSubscription,
+        multipleSkipValues,
+        multipleSubscriptionUpdates,
+      } = this
 
       const { next, interval, period } = activeSubscription
 
-      if (!next) return false
+      if (!next) {
+        return false
+      }
 
       this.initedSkipAction = true
 
@@ -162,18 +185,23 @@ export default {
       try {
         // all updates
         if (multipleSubscriptionUpdates) {
-          const updatedCharges = await Promise.all(multipleSkipValues.map(valObj => this.UPDATE_SUBSCRIPTION_QUEUE({
-            ...requestPayload,
-            subscriptionId: valObj.subscriptionId,
-            queueId: valObj.queueId,
-          })))
+          const updatedCharges = await Promise.all(
+            multipleSkipValues.map((valObj) =>
+              this.UPDATE_SUBSCRIPTION_QUEUE({
+                ...requestPayload,
+                subscriptionId: valObj.subscriptionId,
+                queueId: valObj.queueId,
+              })
+            )
+          )
           this.thankYouCharge = updatedCharges
           // http://localhost:3000/#/skip-shipment?storeDomain=upscribe-demo.myshopify.com&customerId=1051286306867&skipShipmentSubscriptionId=556,558&skipShipmentQueueId=3137,2512&skipShipment=true
-
         }
         // single update
         else {
-          const updatedCharge = await this.UPDATE_SUBSCRIPTION_QUEUE(requestPayload)
+          const updatedCharge = await this.UPDATE_SUBSCRIPTION_QUEUE(
+            requestPayload
+          )
           this.thankYouCharge = updatedCharge
         }
         this.triggerAnalyticsEvent({
@@ -184,7 +212,7 @@ export default {
         // this.removeSkipShipmentUrlParams()
       } catch (e) {
         this.error = { state: 'FAILURE', message: e.message }
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
       }
     },
 

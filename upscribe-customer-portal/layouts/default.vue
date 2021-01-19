@@ -1,37 +1,33 @@
 <template>
-	<section class="c-portal">
-		<the-header v-if="windowWidth >= 768" />
+  <section class="c-portal">
+    <the-header v-if="windowWidth >= 768" />
 
-		<portal-target v-else name="header" class="header-portal" />
+    <portal-target v-else name="header" class="header-portal" />
+    <div class="c-portal__main">
+      <loading-block
+        v-if="newCheckoutSubscriptionProcessing"
+        :text="
+          atc['portal.accountSubscriptionsUpdatingMessage'] ||
+            'Please wait a moment as we update your account with your new subscription.'
+        "
+        height="500px"
+        min-height="500px"
+      />
 
-		<div class="c-portalBar">
-		   <a href="https://vimeo.com/468150046/5a738789cf">CLICK TO LEARN HOW TO EDIT YOUR SUBSCRIPTION</a>
-		</div>
 
-		<div class="c-portal__main">
-			<loading-block
-				v-if="newCheckoutSubscriptionProcessing"
-				:text="
-					atc['portal.accountSubscriptionsUpdatingMessage'] ||
-						'Please wait a moment as we update your account with your new subscription.'
-				"
-				height="500px"
-				min-height="500px"
-			/>
+      <nuxt v-else :key="activeLanguageCode" />
+    </div>
 
-			<nuxt v-else :key="activeLanguageCode" />
-		</div>
+    <portal-target name="drawers" />
 
-		<portal-target name="drawers" />
+    <portal-target name="modals" />
 
-		<portal-target name="modals" />
+    <portal-target name="confirm" />
 
-		<portal-target name="confirm" />
+    <portal-target name="float-buttons" />
 
-		<portal-target name="float-buttons" />
-
-		<navigation-mobile v-if="windowWidth < 768" />
-	</section>
+    <!-- <navigation-mobile v-if="windowWidth < 768" /> -->
+  </section>
 </template>
 
 <script>
@@ -39,192 +35,405 @@
 
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import { removeQueryParam } from '@utils/helpers'
-import NavigationMobile from '@components/global/navigation-mobile'
+// import NavigationMobile from '@components/global/navigation-mobile'
 import { windowSizes } from '@mixins/windowSizes'
 import TheHeader from '@components/the-header.vue'
 // import LanguagePicker from '@components/language-picker.vue'
 import LoadingBlock from '@components/loading-block.vue'
 
 export default {
-	components: {
-		// LanguagePicker,
-		NavigationMobile,
-		LoadingBlock,
-		TheHeader,
-	},
-	mixins: [windowSizes],
+  components: {
+    // LanguagePicker,
+    // NavigationMobile,
+    LoadingBlock,
+    TheHeader,
+  },
+  mixins: [windowSizes],
 
-	data: () => {
-		return {
-			customerId: null,
+  data: () => {
+    return {
+      customerId: null,
       storeDomain: null,
-      accessToken: null,
-      tokenChecked: false,
-			newCheckoutSubscriptionProcessing: false,
-		}
-	},
 
-	computed: {
-		// ...mapState('translations', ['translationList']),
+      validToken: false,
+      newCheckoutSubscriptionProcessing: false,
+    }
+  },
 
-		...mapState('shop', ['shopData']),
+  computed: {
+    ...mapState('auth', ['accessTokenValid', 'xUpscribeAccessToken']),
 
-		...mapState('oneTimeOrder', [
-			'otoProductVariantId',
-			'otoQueueId',
-			'otoSubscriptionId',
-			'otoAddProduct',
-			'otoSkipShipment',
-		]),
+    ...mapState('shop', ['shopData']),
 
-		...mapState('subscriptions', [
-			'noActiveSubscriptions',
-			'updateSubscriptionPromptOpen',
-		]),
+    ...mapState('oneTimeOrder', [
+      'otoProductVariantId',
+      'otoQueueId',
+      'otoSubscriptionId',
+      'otoAddProduct',
+      'otoSkipShipment',
+    ]),
 
-		...mapState('products', ['products']),
+    ...mapState('subscriptions', [
+      'noActiveSubscriptions',
+      'updateSubscriptionPromptOpen',
+    ]),
 
-		...mapState('translations', [
-			'translationList',
-			'translations',
-			'activeLanguageCode',
-			'atc',
-		]),
+    ...mapState('products', ['products']),
 
-		...mapGetters('translations', [
-			'activeLanguageName',
-			'activeLanguageNativeName',
-		]),
+    ...mapState('translations', [
+      'translationList',
+      'translations',
+      'activeLanguageCode',
+      'atc',
+    ]),
 
-		...mapState('customer', ['customerShopify']),
-	},
+    ...mapGetters('translations', [
+      'activeLanguageName',
+      'activeLanguageNativeName',
+    ]),
 
-	async created() {
+    ...mapState('customer', ['customerShopify']),
+  },
+
+  async created() {
     const query = this.$route.query
 
-    const isAccessTokenRequiredRoute = window.location.href.indexOf('account-subscriptions') >= 0
+    let customer = false
+    let customerId = false
 
-		let customerId = false
     let storeDomain = false
-    let accessToken = false
+    let emailAccessToken = false
+    let customerMetafieldAccessToken = false
 
-		// set from liquid account profile
-		if (window.upscribeCustomerId) {
-			customerId = window.upscribeCustomerId
-		}
-
-		// set from liquid account profile
-		if (window.upscribeStoreDomain) {
-			storeDomain = window.upscribeStoreDomain
-		}
-
-		// set from query params
-		if (query && query.customerId) {
-			customerId = query.customerId
-		}
-
-		// set from query params
-		if (query && query.storeDomain) {
-			storeDomain = query.storeDomain
+    // set from liquid account profile
+    if (window.customer) {
+      customer = window.customer
     }
 
-		// set from query params
-		if (query && query.token) {
-			accessToken = query.token
-		}
+    // set from liquid account profile
+    if (window.upscribeCustomerId) {
+      customerId = window.upscribeCustomerId
+    }
 
-		this.customerId = customerId
+    // set from liquid account profile
+    if (window.upscribeStoreDomain) {
+      storeDomain = window.upscribeStoreDomain
+    }
+
+    if (window.customerMetafieldAccessToken) {
+      customerMetafieldAccessToken = window.customerMetafieldAccessToken
+    }
+
+    // set from query params
+    if (query && query.customerId) {
+      customerId = query.customerId
+    }
+
+    // set from query params
+    if (query && query.storeDomain) {
+      storeDomain = query.storeDomain
+    }
+
+    // set from query params
+    if (query && query.token) {
+      emailAccessToken = query.token
+    }
+
+    this.customerId = customerId
     this.storeDomain = storeDomain
-    this.accessToken = accessToken
+    this.emailAccessToken = emailAccessToken
+
+    // redirect desktop to all subscriptions page
+    // renaming all page to index will break all the links in the customer panel
+
+    // if (this.windowWidth > 768) {
+    //   this.$router.push({
+    //     name: 'all',
+    //     query: {
+    //       storeDomain,
+    //       customerId,
+    //     },
+    //   })
+    // }
+
+    // ^ We can't redirect all pages that will break the email actions
 
     // if page-account only load if access token is valid
 
-
-		if (!storeDomain || !customerId) {
-			return this.$nuxt.error({
-				statusCode: 404,
-				message: `Error Loading Portal. ${
-					!storeDomain ? 'Invalid store domain.' : 'Invalid customer ID.'
-				}`,
-			})
+    if (!storeDomain || !customerId) {
+      return this.$nuxt.error({
+        statusCode: 404,
+        message: `Error Loading Portal. ${
+          !storeDomain ? 'Invalid store domain.' : 'Invalid customer ID.'
+        }`,
+      })
     }
 
     this.setStoreDomain(storeDomain)
     this.setCustomerId(customerId)
 
+    let protectedEndpointsEnabled = false
 
-    if (isAccessTokenRequiredRoute) {
-      console.log('accesstokenrequired route')
-      let validToken
+    try {
+      const shopResponse = await this.GET_SHOP()
+
+      if (shopResponse.data.allow_secure_customer_endpoints) {
+        protectedEndpointsEnabled = true
+      }
+    } catch (e) {
+      console.error(e)
+      return this.$nuxt.error({
+        statusCode: 404,
+        message: e.message || 'Error Loading Portal. Please reload the page.',
+      })
+    }
+
+    let isAccessTokenRequiredRouteByEmail =
+      window.location.href.indexOf('pages/account-subscriptions') >= 0 ||
+      (this.$route.query && this.$route.query.token)
+    let isAccessTokenRequiredByShopifyCustomerMetafield =
+      !isAccessTokenRequiredRouteByEmail && protectedEndpointsEnabled
+
+    if (isAccessTokenRequiredByShopifyCustomerMetafield) {
+      if (window.location.href.indexOf('localhost') > -1) {
+        if (!this.$route.query.metafieldToken) {
+          return this.$nuxt.error({
+            statusCode: 404,
+            message:
+              'You are running this customer portal on localhost in development mode. Please use a valid token in the metafieldToken query parameter in your URL to develop locally (Functionality in release/1.1.0 or disabled protected customer routes in the Upscribe Admin.)',
+          })
+        } else {
+          // manually replace the token if running in localhost
+          customerMetafieldAccessToken = this.$route.query.metafieldToken
+        }
+      }
+
+      let validToken = false
+
+      if (customerMetafieldAccessToken) {
+        try {
+          validToken = await this.VALIDATE_CUSTOMER_METAFIELD_ACCESS_TOKEN({
+            customerId,
+            accessToken: customerMetafieldAccessToken,
+          })
+          this.validToken = customerMetafieldAccessToken
+          this.setXUpscribeAccessToken(customerMetafieldAccessToken)
+          this.setAccessTokenValid(true)
+        } catch (e) {
+          console.error('VALIDATE_CUSTOMER_METAFIELD_ACCESS_TOKEN error:', e)
+
+          if (
+            e.message === 'Invalid token' ||
+            e === 'Header Credentials missing'
+          ) {
+            try {
+              const result = await this.GENERATE_CUSTOMER_METAFIELD_ACCESS_TOKEN(
+                { customerId }
+              )
+              await new Promise((resolve) => setTimeout(resolve, 1000))
+
+              window.location.reload()
+            } catch (e) {
+              console.error(
+                'error while generating customer access token on metafield, e: ',
+                e
+              )
+              window.location = `https://${storeDomain}/account/login`
+            }
+          } else {
+            return this.$nuxt.error({
+              statusCode: 404,
+              message:
+                e.message || 'Error Loading Portal. Please reload the page.',
+            })
+          }
+        }
+      }
+
+      if (!validToken) {
+        // redirect to account login page
+        this.validToken = false
+
+        // trigger token generate on customer
+        // reload page
+        // after the reload everything will be checked again
+
+        try {
+          const result = await this.GENERATE_CUSTOMER_METAFIELD_ACCESS_TOKEN({
+            customerId,
+          })
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+
+          window.location.reload()
+        } catch (e) {
+          console.error(
+            'error while generating customer access token on metafield, e: ',
+            e
+          )
+          window.location = `https://${storeDomain}/account/login`
+        }
+      } else {
+        await this.initialDataLoad()
+        this.$loadStoreSegment()
+        this.$loadStoreGtm()
+      }
+    } else if (isAccessTokenRequiredRouteByEmail) {
+      if (!emailAccessToken) {
+        console.error('no email access token')
+        window.location = `https://${storeDomain}/account/login`
+      }
+
+      let validToken = false
       try {
         validToken = await this.VALIDATE_ACCESS_TOKEN({
           customerId,
-          accessToken,
+          accessToken: emailAccessToken,
         })
-      } catch(e) {
-        console.log(e)
+        this.validToken = validToken
+      } catch (e) {
+        console.error(e)
+        return this.$nuxt.error({
+          statusCode: 404,
+          message: e.message || 'Error Loading Portal. Please reload the page.',
+        })
       } finally {
         this.tokenChecked = true
       }
 
-      if (!validToken && this.tokenChecked) {
+      if (!validToken) {
         // redirect to account login page
         this.validToken = false
-        console.log('invalide access token')
+
         window.location = `https://${storeDomain}/account/login`
       } else {
         await this.initialDataLoad()
         this.$loadStoreSegment()
         this.$loadStoreGtm()
       }
+    } else {
+      await this.initialDataLoad()
+      this.$loadStoreSegment()
+      this.$loadStoreGtm()
+    }
+  },
+
+  async mounted() {
+    const { $route, customerId, storeDomain } = this
+    const { query } = $route
+
+    if (query && query.loadActionState) {
+      let loadActionState = query.loadActionState
+
+      if (loadActionState === 'edit-payment-method') {
+        let loadStatePaymentMethodId = query.paymentMethodId
+        if (!loadStatePaymentMethodId) {
+          return
+        }
+
+        let paymentMethods = []
+
+        try {
+          const paymentMethodsResponse = await this.GET_CARDS()
+          paymentMethods = paymentMethodsResponse.items
+        } catch (e) {
+          console.error(e)
+          return this.$nuxt.error({
+            statusCode: 404,
+            message:
+              e.message || 'Error Loading Portal. Please reload the page.',
+          })
+        }
+
+        let loadStatePaymentMethod = false
+
+        paymentMethods.forEach((method) => {
+          if (method.id === loadStatePaymentMethodId) {
+            loadStatePaymentMethod = method
+          }
+        })
+
+        // set state to update that payment method
+        this.setLoadActionState('edit-payment-method')
+        this.setActiveEditCard(loadStatePaymentMethod)
+
+        // clean up url for reloads
+        var cleanedQueryParamsUrl = removeQueryParam(
+          'loadActionState',
+          window.location.href
+        )
+        cleanedQueryParamsUrl = removeQueryParam(
+          'paymentMethodId',
+          cleanedQueryParamsUrl
+        )
+
+        if (this.windowWidth < 768) {
+          this.$router.push({
+            query: {
+              storeDomain,
+              customerId,
+              template: 'edit-modify-card',
+            },
+          })
+        }
+
+        window.setTimeout(() => {
+          window.history.replaceState({}, document.title, cleanedQueryParamsUrl)
+        }, 200)
+      }
     }
 
-    // continue load
-    else {
-			await this.initialDataLoad()
-			this.$loadStoreSegment()
-			this.$loadStoreGtm()
-		}
+    // if (!this.validToken) {
+    //   window.location = `https://${storeDomain}/account/login`
+    // }
   },
 
-  mounted() {
-    console.log('mounted default layout')
-  },
+  methods: {
+    ...mapActions('auth', [
+      'VALIDATE_ACCESS_TOKEN',
+      'VALIDATE_CUSTOMER_METAFIELD_ACCESS_TOKEN',
+      'GENERATE_CUSTOMER_METAFIELD_ACCESS_TOKEN',
+    ]),
 
-	methods: {
-    ...mapActions('accessToken', ['VALIDATE_ACCESS_TOKEN']),
+    ...mapMutations('auth', ['setXUpscribeAccessToken', 'setAccessTokenValid']),
 
-		...mapActions('shop', ['GET_SHOP']),
+    ...mapActions('shop', ['GET_SHOP']),
 
-		...mapActions('translations', ['GET_TRANSLATION', 'GET_TRANSLATION_LIST']),
+    ...mapActions('translations', ['GET_TRANSLATION', 'GET_TRANSLATION_LIST']),
 
-		...mapMutations('translations', ['setActiveLanguageCode']),
+    ...mapMutations('translations', ['setActiveLanguageCode']),
 
-		...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
+    ...mapMutations('activeSubscription', ['setActiveSubscriptionId']),
 
-		...mapMutations('subscriptions', [
-			'setUpdateSubscriptionPromptOpen',
-			'setNoActiveSubscriptions',
-		]),
+    ...mapMutations('subscriptions', [
+      'setUpdateSubscriptionPromptOpen',
+      'setNoActiveSubscriptions',
+    ]),
 
-		...mapActions('subscriptions', ['GET_SUBSCRIPTIONS']),
+    ...mapActions('subscriptions', ['GET_SUBSCRIPTIONS']),
 
-		...mapActions('customer', ['GET_CUSTOMER']),
+    ...mapActions('customer', ['GET_CUSTOMER']),
 
-		...mapActions('products', ['GET_PRODUCTS']),
+    ...mapActions('products', ['GET_PRODUCTS']),
 
-		...mapActions('orders', ['CHECK_FOR_PROCESSING_SUBS']),
+    ...mapActions('collections', ['GET_COLLECTIONS']),
 
-		// ...mapActions('cards', ['GET_CARDS']),
+    ...mapActions('orders', ['CHECK_FOR_PROCESSING_SUBS']),
 
-		...mapMutations('route', ['setCustomerId', 'setStoreDomain']),
+    ...mapActions('cards', ['GET_CARDS']),
 
-		...mapMutations('editMode', ['setEditNextOrder']),
+    ...mapMutations('cards', ['setActiveEditCard']),
 
-		async initialDataLoad() {
+    ...mapMutations('route', ['setCustomerId', 'setStoreDomain']),
+
+    ...mapMutations('loadActionState', ['setLoadActionState']),
+    // ...mapActions('cards', ['GET_CARDS']),
+
+    ...mapMutations('editMode', ['setEditNextOrder']),
+
+    async initialDataLoad() {
       const vm = this
-			const { $route } = this
-			const { query } = $route
+      const { $route, accessTokenValid, xUpscribeAccessToken } = this
+      const { query } = $route
       const { customerId, direct_from_checkout } = query
 
       // Direct from checkout logic
@@ -240,27 +449,28 @@ export default {
           const [
             customer,
             subscriptions,
-            products,
+            collections,
             shop,
             translationList,
           ] = await Promise.all([
             this.GET_CUSTOMER(),
             this.GET_SUBSCRIPTIONS(customerId),
-            this.GET_PRODUCTS(),
+            this.GET_COLLECTIONS(),
             this.GET_SHOP(),
             this.GET_TRANSLATION_LIST(),
-            // this.GET_CARDS(),
+            this.GET_CARDS(),
           ])
 
+          const products = await this.GET_PRODUCTS({ baseStateLoad: true })
+
+          if (!customer) {
+            return this.$nuxt.error({
+              statusCode: 404,
+              message: 'Unable to ',
+            })
+          }
+
           await this.setupIntialTranslations(customer)
-
-          // console.log(customer,
-          //   subscriptions,
-          //   products,
-          //   shop,
-          //   translationList)
-
-          // console.log({ subscriptions })
 
           if (
             subscriptions &&
@@ -291,8 +501,6 @@ export default {
               }
             })
 
-            // console.log({ activeSubs })
-
             if (activeSubs.length) {
               this.setNoActiveSubscriptions(false)
             } else {
@@ -301,10 +509,10 @@ export default {
             }
           }
         } catch (error) {
-          console.log('initialDataLoad error: ', error)
+          console.error('initialDataLoad error: ', error)
           this.$nextTick(() => {
             if (this.noActiveSubscriptions) {
-              console.log('no active subscriptions')
+              console.error('no active subscriptions')
             } else {
               let errorMessage = false
 
@@ -312,57 +520,67 @@ export default {
                 errorMessage =
                   'There were no subscriptions found with this account.'
               }
+
+              if (error.status === 401) {
+                errorMessage = 'Customer token invalid.'
+              }
+
+              if (error === 'Header Credentials missing') {
+                errorMessage = 'Header Credentials missing'
+              }
+
               return this.$nuxt.error({
                 statusCode: 404,
                 message:
-                  errorMessage || 'Error Loading Portal. Please reload the page.',
+                  errorMessage ||
+                  'Error Loading Portal. Please reload the page.',
               })
             }
           })
         }
       }
-		},
+    },
 
-		// Setup Intial Translation
-		async setupIntialTranslations(customer) {
-			const preferredLanguage =
-				customer && customer.shopify && customer.shopify.language
-					? customer.shopify.language
-					: 'en'
-			// first get avilable languages
-			await this.GET_TRANSLATION_LIST()
+    // Setup Intial Translation
+    async setupIntialTranslations(customer) {
+      const preferredLanguage =
+        customer && customer.shopify && customer.shopify.language
+          ? customer.shopify.language
+          : 'en'
+      // first get avilable languages
+      await this.GET_TRANSLATION_LIST()
 
-			if (!this.shopData) {
-				const checkoutStoreDomain = this.$route.query.store
-				const shopResponse = await this.GET_SHOP({ checkoutStoreDomain })
+      if (!this.shopData) {
+        const checkoutStoreDomain = this.$route.query.store
+        const shopResponse = await this.GET_SHOP({ checkoutStoreDomain })
 
-				this.SET_SHOP_DATA(shopResponse.data)
-			}
+        this.SET_SHOP_DATA(shopResponse.data)
+      }
 
-			if (this.initialLanguageSet) {
-				return
-			}
+      if (this.initialLanguageSet) {
+        return
+      }
 
-			if (!this.translationList) {
-				return
-			}
+      if (!this.translationList) {
+        return
+      }
 
-			let defaultLanguage = 'en'
+      let defaultLanguage = 'en'
 
-			// use preferred lanuage from customer's checkout if available
-			if (
-				preferredLanguage &&
-				this.translationList.includes(preferredLanguage)
-			) {
-				defaultLanguage = preferredLanguage
-			}
+      // use preferred lanuage from customer's checkout if available
+      if (
+        preferredLanguage &&
+        this.translationList.includes(preferredLanguage)
+      ) {
+        defaultLanguage = preferredLanguage
+      }
 
-			await this.GET_TRANSLATION({ language: defaultLanguage })
-			this.setActiveLanguageCode(defaultLanguage)
-			this.initialLanguageSet = true
-		},
+      await this.GET_TRANSLATION({ language: defaultLanguage })
+      this.setActiveLanguageCode(defaultLanguage)
+      this.initialLanguageSet = true
+    },
 
-		async pollForNewCheckoutSubscriptionProcessing() {
+    async pollForNewCheckoutSubscriptionProcessing() {
       const vm = this
       return new Promise(async (resolve, reject) => {
         if (vm.newCheckoutSubscriptionProcessing) {
@@ -403,7 +621,7 @@ export default {
         }
       })
     },
-	},
+  },
 }
 </script>
 
@@ -417,42 +635,42 @@ input,
 textarea,
 button,
 select {
-	font-size: unset;
-	font-family: unset;
-	font-style: unset;
-	font-weight: unset;
-	color: unset;
-	line-height: unset;
-	box-sizing: border-box;
-	font-family: $font-primary-regular, 'Helvetica Neue', Arial, sans-serif;
-	font-size: 16px;
-	word-spacing: 1px;
-	-ms-text-size-adjust: 100%;
-	-webkit-text-size-adjust: 100%;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-font-smoothing: antialiased;
+  font-size: unset;
+  font-family: unset;
+  font-style: unset;
+  font-weight: unset;
+  color: unset;
+  line-height: unset;
+  box-sizing: border-box;
+  font-family: $font-primary-regular, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
-	margin: 0;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 h2,
 .h2 {
-	letter-spacing: 0.1px;
+  letter-spacing: 0.1px;
 }
 
 .c-portal {
-	min-height: 100vh;
-	position: relative;
-	background-color: #f7f9fb;
+  min-height: 100vh;
+  position: relative;
+  background-color: #f7f9fb;
 
-	@include bp(tablet) {
-		background-color: transparent;
-	}
+  @include bp(tablet) {
+    background-color: transparent;
+  }
 }
 
 .c-portalBar {
@@ -466,182 +684,182 @@ h2,
 }
 
 .c-portal__main {
-	padding: 25px 0 58px;
-	display: flex;
-	flex-direction: column;
-	min-height: 100%;
+  padding: 0 0 58px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 
-	@include bp(tablet) {
-		min-height: calc(100vh - 100px);
-		background-color: #f7f9fb;
-		padding: 0 0 25px;
-	}
+  @include bp(tablet) {
+    min-height: calc(100vh - 100px);
+    background-color: #f7f9fb;
+    padding: 0 0 25px;
+  }
 
-	@include bp(tablet-large) {
-		padding: 0;
-	}
+  @include bp(tablet-large) {
+    padding: 0;
+  }
 
-	&--center {
-		display: flex;
-		align-content: center;
-		justify-content: center;
-		height: 100%;
-	}
+  &--center {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
+  }
 }
 
 .c-noSubscriptions {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 15px 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0 10px;
 }
 
 .c-noSubscriptions__text {
-	margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 
 .c-addressPayment__formattedComponent {
-	max-width: 400px;
-	margin: 0 auto;
-	padding: 0 16px;
-	@media (min-width: 420px) {
-		padding: 0;
-	}
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0 16px;
+  @media (min-width: 420px) {
+    padding: 0;
+  }
 }
 
 .c-portal__languagePickerWrap {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	padding: 36px 20px 0;
-	width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 36px 20px 0;
+  width: 100%;
 }
 
 .c-modalMobile__wrapper {
-	padding: 0 16px;
+  padding: 0 16px;
 }
 
 .page-enter-active {
-	animation: acrossIn 0.5s linear both;
+  animation: acrossIn 0.5s linear both;
 
-	@include bp(tablet){
-		animation: empty 0;
-	}
+  @include bp(tablet) {
+    animation: empty 0;
+  }
 }
 
 .page-leave-active {
-	animation: acrossOut 0.5s linear both;
+  animation: acrossOut 0.5s linear both;
 
-	@include bp(tablet){
-		animation: empty 0;
-	}
+  @include bp(tablet) {
+    animation: empty 0;
+  }
 }
 
 @-webkit-keyframes acrossIn {
-	0% {
-		-webkit-transform: translate3d(-100%, 0, 0);
-	}
-	100% {
-		-webkit-transform: translate3d(0, 0, 0);
-	}
+  0% {
+    -webkit-transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+  }
 }
 
 @keyframes acrossIn {
-	0% {
-		transform: translate3d(-100%, 0, 0);
-	}
-	100% {
-		transform: translate3d(0, 0, 0);
-	}
+  0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @-webkit-keyframes acrossOut {
-	0% {
-		-webkit-transform: translate3d(0, 0, 0);
-	}
-	100% {
-		-webkit-transform: translate3d(100%, 0, 0);
-	}
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(100%, 0, 0);
+  }
 }
 
 @keyframes acrossOut {
-	0% {
-		transform: translate3d(0, 0, 0);
-	}
-	100% {
-		transform: translate3d(100%, 0, 0);
-	}
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
 }
 
 .slideOutIn-enter-active {
-	width: 100%;
-	animation: moveIn 0.5s linear both;
+  width: 100%;
+  animation: moveIn 0.5s linear both;
 
-	@include bp(tablet){
-		animation: empty 0;
-	}
+  @include bp(tablet) {
+    animation: empty 0;
+  }
 }
 
 .slideOutIn-leave-active {
-	width: 100%;
-	animation: leaveOut 0.5s linear both;
+  width: 100%;
+  animation: leaveOut 0.5s linear both;
 
-	@include bp(tablet){
-		animation: empty 0;
-	}
+  @include bp(tablet) {
+    animation: empty 0;
+  }
 }
 
 @-webkit-keyframes moveIn {
-	0% {
-		-webkit-transform: translate3d(100%, 0, 0);
-	}
-	100% {
-		-webkit-transform: translate3d(0, 0, 0);
-	}
+  0% {
+    -webkit-transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+  }
 }
 
 @keyframes moveIn {
-	0% {
-		transform: translate3d(100%, 0, 0);
-	}
-	100% {
-		transform: translate3d(0, 0, 0);
-	}
+  0% {
+    transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @-webkit-keyframes leaveOut {
-	0% {
-		-webkit-transform: translate3d(0, 0, 0);
-	}
-	100% {
-		-webkit-transform: translate3d(-100%, 0, 0);
-	}
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(-100%, 0, 0);
+  }
 }
 
 @keyframes leaveOut {
-	0% {
-		transform: translate3d(0, 0, 0);
-	}
-	100% {
-		transform: translate3d(-100%, 0, 0);
-	}
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
 }
 
 .disabled-click {
-	pointer-events: none;
+  pointer-events: none;
 }
 
 .header-portal {
-	min-height: 60px;
-	background-color: $color-white;
+  min-height: 60px;
+  background-color: $color-white;
 }
 
 .loading-text {
-	font-family: $font-primary-regular;
-	font-size: 22px;
-	font-weight: 500;
-	color: $color-primary;
-	text-align: center;
+  font-family: $font-primary-regular;
+  font-size: 22px;
+  font-weight: 500;
+  color: $color-primary;
+  text-align: center;
 }
 </style>

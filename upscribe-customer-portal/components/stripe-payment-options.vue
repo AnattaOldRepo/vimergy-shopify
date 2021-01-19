@@ -5,8 +5,7 @@ import StripeSepaElement from '@components/stripe-sepa-element.vue'
 // import StripeIdealElement from '@components/stripe-ideal-element.vue'
 // import StripeBancontactElement from '@components/stripe-bancontact-element.vue'
 
-// import StripePaymentRequestElement from '@components/stripe-payment-request-element.vue'
-
+import StripePaymentRequestElement from '@components/stripe-payment-request-element.vue'
 
 export default {
   components: {
@@ -15,7 +14,7 @@ export default {
     // StripeSofortElement,
     // StripeIdealElement,
     // StripeBancontactElement,
-    // StripePaymentRequestElement,
+    StripePaymentRequestElement,
   },
   props: {
     activePaymentType: {
@@ -38,30 +37,26 @@ export default {
   data: () => {
     return {
       stripeOptions: {},
-   }
+    }
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     handleChange($event) {
       this.$emit('handleChange', $event)
     },
 
-    handleClear(){
-      if(this.$refs['active-payment-type-stripe_card']){
+    handleClear() {
+      if (this.$refs['active-payment-type-stripe_card']) {
         this.$refs['active-payment-type-stripe_card'].handleClear()
-      } else if(this.$refs['active-payment-type-stripe_sepa_direct_debit']){
+      } else if (this.$refs['active-payment-type-stripe_sepa_direct_debit']) {
         this.$refs['active-payment-type-stripe_sepa_direct_debit'].handleClear()
       }
     },
-    handleCreateStripeCardToken(token) {
-      // console.log({token})
-    },
+    handleCreateStripeCardToken(token) {},
     handleCreatePaymentMethodResponse(response) {
       this.$emit('createPaymentMethodResponse', response)
     },
-    handleEnableStripePaymentRequest(val){
+    handleEnableStripePaymentRequest(val) {
       this.$emit('enableStripePaymentRequest', val)
     },
   },
@@ -69,25 +64,25 @@ export default {
 </script>
 
 <template>
-<div>
-  <no-ssr>
-    <stripe-card-element
-      v-if="activePaymentType === 'stripe_card'"
-      ref="active-payment-type-stripe_card"
-      :stripe-public-key="stripePublicKey"
-      @handleChange="handleChange($event)"
-      @submitPaymentForm="$emit('submitPaymentForm')"
-      @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
-    />
-    <stripe-sepa-element
-      v-if="activePaymentType === 'stripe_sepa_direct_debit'"
-      ref="active-payment-type-stripe_sepa_direct_debit"
-      :stripe-public-key="stripePublicKey"
-      @handleChange="handleChange($event)"
-      @submitPaymentForm="$emit('submitPaymentForm')"
-      @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
-    />
-    <!--
+  <div>
+    <no-ssr>
+      <stripe-card-element
+        v-if="activePaymentType === 'stripe_card'"
+        ref="active-payment-type-stripe_card"
+        :stripe-public-key="stripePublicKey"
+        @handleChange="handleChange($event)"
+        @submitPaymentForm="$emit('submitPaymentForm')"
+        @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
+      />
+      <stripe-sepa-element
+        v-if="activePaymentType === 'stripe_sepa_direct_debit'"
+        ref="active-payment-type-stripe_sepa_direct_debit"
+        :stripe-public-key="stripePublicKey"
+        @handleChange="handleChange($event)"
+        @submitPaymentForm="$emit('submitPaymentForm')"
+        @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
+      />
+      <!--
    <stripe-bancontact-element
       v-if="activePaymentType === 'stripe_bancontact'"
       ref="active-payment-type-stripe_bancontact"
@@ -112,23 +107,29 @@ export default {
       @submitPaymentForm="$emit('submitPaymentForm')"
       @placeOrderResponse="handlePlaceOrderResponse($event)"
     />
-   <stripe-payment-request-element
-      ref="active-payment-type-strpe_payment_request"
-      :class="{'js-strip-payment-request-element-is-hidden': (!stripePaymentRequestEnabled || activePaymentType !== 'stripe_payment_request')}"
-      :stripe-public-key="stripePublicKey"
-      @enableStripePaymentRequest="handleEnableStripePaymentRequest($event)"
-      @handleChange="handleChange($event)"
-      @submitPaymentForm="$emit('submitPaymentForm')"
-      @placeOrderResponse="handlePlaceOrderResponse($event)"
-    /> -->
-  </no-ssr>
-</div>
+    -->
+
+      <stripe-payment-request-element
+        ref="active-payment-type-strpe_payment_request"
+        :class="{
+          'js-strip-payment-request-element-is-hidden':
+            !stripePaymentRequestEnabled ||
+            activePaymentType !== 'stripe_payment_request',
+        }"
+        :stripe-public-key="stripePublicKey"
+        @enableStripePaymentRequest="handleEnableStripePaymentRequest($event)"
+        @handleChange="handleChange($event)"
+        @submitPaymentForm="$emit('submitPaymentForm')"
+        @createPaymentMethodResponse="handleCreatePaymentMethodResponse($event)"
+      />
+    </no-ssr>
+  </div>
 </template>
 
 <style lang="scss">
 @import '@design';
 
-.c-paymentMethodErrors, {
+.c-paymentMethodErrors {
   margin: 20px 0;
   color: $color-error;
   padding: 20px;
@@ -141,10 +142,10 @@ export default {
   margin: 16px 0;
   color: #171725;
   padding: 20px;
-  background-color: #EAF1F4;
+  background-color: #eaf1f4;
   border-radius: 4px;
   font-size: 14px;
-  line-height: 18px
+  line-height: 18px;
 }
 .js-strip-payment-request-element-is-hidden {
   display: none;
@@ -153,7 +154,6 @@ export default {
 .StripeElement {
   background-color: $color-white;
 }
-
 
 .c-stripeIban {
   display: block;
@@ -173,7 +173,7 @@ export default {
 
 .c-stripeFormInput {
   &::placeholder {
-    color: #A3B5BF;
+    color: #a3b5bf;
     font-size: 14px;
   }
   &:focus {
@@ -183,13 +183,10 @@ export default {
 }
 
 .c-stripeFormInput--text {
-  border: 1px solid #EAF1F4;
-
+  border: 1px solid #eaf1f4;
 }
 
-
 .c-stripeFormInput--select {
-
   .vs__dropdown-toggle {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -208,7 +205,7 @@ export default {
     cursor: pointer;
     height: 42px;
     padding: 0 16px 0 4px;
-    border: 1px solid #EAF1F4;
+    border: 1px solid #eaf1f4;
     outline: none;
     white-space: nowrap;
   }
@@ -216,7 +213,7 @@ export default {
   .vs__search {
     font-size: 14px;
     &::placeholder {
-      color: #A3B5BF;
+      color: #a3b5bf;
       font-size: 14px;
     }
   }
@@ -227,11 +224,11 @@ export default {
   height: 40px;
   padding: 10px 12px;
   border-radius: 4px;
-  border: 1px solid #EAF1F4;
+  border: 1px solid #eaf1f4;
   font-size: 14px;
 
   &::placeholder {
-    color: #A3B5BF;
+    color: #a3b5bf;
   }
 }
 
@@ -283,7 +280,7 @@ export default {
     border-color: $color-primary;
   }
   &::placeholder {
-    color: #A3B5BF;
+    color: #a3b5bf;
   }
 }
 
@@ -295,10 +292,10 @@ c-strinput,
   border: 1px solid $color-border;
   font-size: 14px;
   background-color: $color-white;
-  color: #A3B5BF;
+  color: #a3b5bf;
 
   height: 44px;
-  border-color: #EAF1F4;
+  border-color: #eaf1f4;
 }
 
 input:focus,
@@ -314,5 +311,4 @@ input:focus,
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
 }
-
 </style>

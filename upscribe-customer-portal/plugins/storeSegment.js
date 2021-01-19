@@ -6,12 +6,11 @@ export default ({ app, store }, inject) => {
       !store.state.shop ||
       !store.state.shop.segment_analytics_id
     ) {
-      console.log('segment_analytics_id not available')
+      console.error('segment_analytics_id not available')
       return
     }
 
     const { segment_analytics_id } = store.state.shop
-    console.log('segment_analytics_id ID', segment_analytics_id)
     ;(function() {
       // Create a queue, but don't obliterate an existing one!
       var analytics = (window.analytics = window.analytics || [])

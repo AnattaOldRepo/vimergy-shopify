@@ -24,7 +24,11 @@
     :is-light="isLight"
     @focusInput="inputFocused = true"
   >
-    <discount-tag-outline-icon v-if="iconName === 'discountTagOutlineIcon'" slot="icon" class="c-formGroup__icon"/>
+    <discount-tag-outline-icon
+      v-if="iconName === 'discountTagOutlineIcon'"
+      slot="icon"
+      class="c-formGroup__icon"
+    />
 
     <input
       v-if="!select"
@@ -34,7 +38,12 @@
       slot-scope="{ validator }"
       :name="name"
       class="c-formInput"
-      :class="{ isLocked: isLocked, isDisabled: disabled, isLight: isLight, 'input--middle': inputMiddle }"
+      :class="{
+        isLocked: isLocked,
+        isDisabled: disabled,
+        isLight: isLight,
+        'input--middle': inputMiddle,
+      }"
       :required="required"
       :type="type"
       :placeholder="placeholder"
@@ -68,7 +77,7 @@
       <vue-select
         :id="id"
         v-model="modelValue"
-        style="margin-top:30px; display: none;"
+        style=" display: none;margin-top:30px;"
         :class="{ isLocked: isLocked, isDisabled: disabled }"
         :name="name"
         :type="type"
@@ -214,7 +223,7 @@ export default {
       },
       set(value) {
         if (this.name === 'phone') {
-          this.$emit('input', value.replace(/\D/g,''))
+          this.$emit('input', value.replace(/\D/g, ''))
         } else {
           this.$emit('input', value)
         }
@@ -271,13 +280,12 @@ export default {
 
 .c-formInput {
   width: 100%;
+  height: 47px;
   padding: 25px 11px 6px;
-
-  font-size: 14px;
   font-family: $font-primary-regular;
+  font-size: 14px;
   border: 1px solid $color-blue-light-background;
   border-radius: 5px;
-  height: 47px;
 
   &.isLocked,
   &.isDisabled {
@@ -285,8 +293,8 @@ export default {
   }
 
   &.isLight {
-    border-color: $color-border;
     padding-left: 40px;
+    border-color: $color-border;
   }
 
   @include bp(tablet) {
@@ -294,9 +302,9 @@ export default {
   }
 
   &:focus {
-    outline: none;
-    background: transparent;
     z-index: 10;
+    background: transparent;
+    outline: none;
   }
 
   .c-formGroup--focused & {
@@ -304,68 +312,65 @@ export default {
   }
 
   .hasError & {
-    border-color: $color-error;
-    background: transparent;
     z-index: 10;
-    margin-bottom: 35px;
+    // @include bp(tablet) {
+    //   margin-bottom: 35px;
+    // }
   }
 
-  &::placeholder{
+  &::placeholder {
     color: $color-placeholder;
   }
 }
 
 .c-formSelect {
-  height: 42px;
-  background-color: #fff;
-  max-width: 300px;
   width: 100%;
-  font-size: 16px;
+  max-width: 300px;
+  height: 42px;
   padding: 10px 8px 8px;
+  font-size: 16px;
+  background-color: #fff;
   border: 1px solid gray;
   border-radius: 5px;
 }
 
-
-
-
 .v-select {
-	position: relative;
+  position: relative;
   font-family: $font-primary-regular;
   background-color: $color-white;
 }
 
 .v-select,
 .v-select * {
-	box-sizing: border-box
+  box-sizing: border-box;
 }
 
 @-webkit-keyframes vSelectSpinner {
-	0% {
-		transform: rotate(0deg)
-	}
-	to {
-		transform: rotate(1turn)
-	}
+  0% {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 @keyframes vSelectSpinner {
-	0% {
-		transform: rotate(0deg)
-	}
-	to {
-		transform: rotate(1turn)
-	}
+  0% {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 .vs__fade-enter-active,
 .vs__fade-leave-active {
-	transition: opacity .15s cubic-bezier(1, .5, .8, 1)
+  transition: opacity 0.15s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
 .vs__fade-enter,
 .vs__fade-leave-to {
-	opacity: 0
+  opacity: 0;
 }
 
 .vs--disabled .vs__clear,
@@ -373,79 +378,78 @@ export default {
 .vs--disabled .vs__open-indicator,
 .vs--disabled .vs__search,
 .vs--disabled .vs__selected {
-	cursor: not-allowed;
-	background-color: #f8f8f8
+  cursor: not-allowed;
+  background-color: #f8f8f8;
 }
 
-.v-select[dir=rtl] .vs__actions {
-	padding: 0 3px 0 6px
+.v-select[dir='rtl'] .vs__actions {
+  padding: 0 3px 0 6px;
 }
 
-.v-select[dir=rtl] .vs__clear {
-	margin-left: 6px;
-	margin-right: 0
+.v-select[dir='rtl'] .vs__clear {
+  margin-right: 0;
+  margin-left: 6px;
 }
 
-.v-select[dir=rtl] .vs__deselect {
-	margin-left: 0;
-	margin-right: 2px
+.v-select[dir='rtl'] .vs__deselect {
+  margin-right: 2px;
+  margin-left: 0;
 }
 
-.v-select[dir=rtl] .vs__dropdown-menu {
-	text-align: right
+.v-select[dir='rtl'] .vs__dropdown-menu {
+  text-align: right;
 }
 
 .vs__dropdown-toggle {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	display: flex;
-	padding: 0 0 4px;
-	background: none;
-	border-radius: 4px;
-  white-space: normal;
-
-  font-size: 16px;
-  outline: none;
   position: relative;
-  text-align: left;
+  display: flex;
   width: 100%;
-  cursor: pointer;
   height: 46px;
+  padding: 0 0 4px;
   padding: 16px;
+  font-size: 16px;
+  text-align: left;
+  white-space: normal;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
   border: 1px solid $color-blue-light-background;
+  border-radius: 4px;
   border-radius: 5px;
   outline: none;
-  white-space: nowrap;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .vs__selected-options {
-	display: flex;
-	flex-basis: 100%;
-	flex-grow: 1;
-	flex-wrap: wrap;
-	padding: 0 2px;
-	position: relative
+  position: relative;
+  display: flex;
+  flex-basis: 100%;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  padding: 0 2px;
 }
 
 .vs__actions {
-	display: flex;
-	align-items: center;
-	padding: 4px 6px 0 3px
+  display: flex;
+  align-items: center;
+  padding: 4px 6px 0 3px;
 }
 
 .vs--searchable .vs__dropdown-toggle {
-	cursor: text
+  cursor: text;
 }
 
 .vs--unsearchable .vs__dropdown-toggle {
-	cursor: pointer
+  cursor: pointer;
 }
 
 .vs--open .vs__dropdown-toggle {
-	border-bottom-color: transparent;
-	border-bottom-left-radius: 0;
   border-color: $color-black;
+  border-bottom-color: transparent;
+  border-bottom-left-radius: 0;
 }
 
 .hasError .vs__dropdown-toggle {
@@ -453,117 +457,114 @@ export default {
 }
 
 .vs__open-indicator {
-	fill: rgba(60, 60, 60, .5);
-	transform: scale(.8);
-	transition: transform .15s cubic-bezier(1, -.115, .975, .855);
-	transition-timing-function: cubic-bezier(1, -.115, .975, .855)
+  fill: rgba(60, 60, 60, 0.5);
+  transition: transform 0.15s cubic-bezier(1, -0.115, 0.975, 0.855);
+  transition-timing-function: cubic-bezier(1, -0.115, 0.975, 0.855);
+  transform: scale(0.8);
 }
 
 .vs--open .vs__open-indicator {
-	transform: rotate(180deg) scale(.8)
+  transform: rotate(180deg) scale(0.8);
 }
 
 .vs--loading .vs__open-indicator {
-	opacity: 0
+  opacity: 0;
 }
 
 .vs__clear {
-	fill: rgba(60, 60, 60, .5);
-	padding: 0;
-	border: 0;
-	background-color: transparent;
-	cursor: pointer;
-	margin-right: 8px
+  padding: 0;
+  margin-right: 8px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  fill: rgba(60, 60, 60, 0.5);
 }
 
 .vs__dropdown-menu {
-	display: block;
-	position: absolute;
-	top: calc(100% - 1px);
-	left: 0;
-	z-index: 1000;
-	padding: 5px 0;
-	margin: 0;
-	width: 100%;
-	max-height: 350px;
-	min-width: 200px;
-	overflow-y: auto;
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  z-index: 1000;
+  display: block;
+  width: 100%;
+  min-width: 200px;
+  max-height: 350px;
+  padding: 5px 0;
+  margin: 0;
   overflow-x: visible;
-	box-shadow: 0 3px 6px 0 rgba(0, 0, 0, .15);
-	border: 1px solid rgba(60, 60, 60, .26);
-	border-top-style: none;
-	border-radius: 0 0 4px 4px;
-	text-align: left;
-	list-style: none;
-	background: #fff
+  overflow-y: auto;
+  text-align: left;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(60, 60, 60, 0.26);
+  border-top-style: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
 }
 
 .vs__no-options {
-	text-align: center
+  text-align: center;
 }
 
 .vs__dropdown-option {
-	line-height: 1.42857143;
-	display: block;
-	padding: 3px 20px;
+  display: block;
   width: 100%;
-	clear: both;
-	color: #333;
-	white-space: nowrap
+  padding: 3px 20px;
+  clear: both;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
 }
 
 .vs__dropdown-option:hover {
-	cursor: pointer
+  cursor: pointer;
 }
 
 .vs__dropdown-option--highlight {
-	background: #5897fb;
-	color: #fff
+  color: #fff;
+  background: #5897fb;
 }
 
 .vs__dropdown-option--disabled {
-	background: inherit;
-	color: rgba(60, 60, 60, .5)
+  color: rgba(60, 60, 60, 0.5);
+  background: inherit;
 }
 
 .vs__dropdown-option--disabled:hover {
-	cursor: inherit
+  cursor: inherit;
 }
 
 .vs__selected {
-	display: flex;
-	align-items: center;
-	background-color: #f0f0f0;
-	border: 1px solid rgba(60, 60, 60, .26);
-	border-radius: 4px;
-	color: #333;
-	line-height: 1.4;
-	margin: 4px 2px 0;
-  padding: 0 .25em;
-
-  padding: 0;
-  margin: 0;
-  font-size: 14px;
+  display: flex;
+  margin: 4px 2px 0;
   margin-left: -5px;
+  // padding: 0 .25em;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333;
+  // align-items: center;
+  background-color: #f0f0f0;
+  border: 1px solid rgba(60, 60, 60, 0.26);
+  border-radius: 4px;
 }
 
 .vs__deselect {
-	display: inline-flex;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	margin-left: 4px;
-	padding: 0;
-	border: 0;
-	cursor: pointer;
-	background: none;
-	fill: rgba(60, 60, 60, .5);
-	text-shadow: 0 1px 0 #fff
+  display: inline-flex;
+  padding: 0;
+  margin-left: 4px;
+  text-shadow: 0 1px 0 #fff;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  fill: rgba(60, 60, 60, 0.5);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .vs--single .vs__selected {
-	background-color: transparent;
-	border-color: transparent
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .c-formGroup {
@@ -571,111 +572,110 @@ export default {
     position: absolute;
     opacity: 0;
   }
+
+  &.hasError {
+    margin-bottom: 35px;
+  }
 }
 
 .vs--single.vs--searching .vs__selected {
-	display: none
+  display: none;
 }
 
 .vs__search::-webkit-search-cancel-button {
-	display: none
+  display: none;
 }
 
 .vs__search::-ms-clear,
 .vs__search::-webkit-search-decoration,
 .vs__search::-webkit-search-results-button,
 .vs__search::-webkit-search-results-decoration {
-	display: none
+  display: none;
 }
 
 .vs__search,
 .vs__search:focus {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	line-height: 1.4;
-	font-size: 1em;
-	border: 1px solid transparent;
-	border-left: none;
-	outline: none;
-	margin: 4px 0 0;
-	padding: 0 7px;
-	background: none;
-	box-shadow: none;
-	width: 0;
-	max-width: 100%;
-	flex-grow: 1
+  flex-grow: 1;
+  width: 0;
+  max-width: 100%;
+  padding: 0 7px;
+  margin: 4px 0 0;
+  font-size: 1em;
+  line-height: 1.4;
+  background: none;
+  border: 1px solid transparent;
+  border-left: none;
+  outline: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .vs__search::-webkit-input-placeholder {
-	color: $color-placeholder
+  color: $color-placeholder;
 }
 
 .vs__search::-moz-placeholder {
-	color: $color-placeholder
+  color: $color-placeholder;
 }
 
 .vs__search:-ms-input-placeholder {
-	color: $color-placeholder
+  color: $color-placeholder;
 }
 
 .vs__search::-ms-input-placeholder {
-	color: $color-placeholder
+  color: $color-placeholder;
 }
 
 .vs__search::placeholder {
-	color: $color-placeholder
+  color: $color-placeholder;
 }
 
 .vs--unsearchable .vs__search {
-	opacity: 1
+  opacity: 1;
 }
 
 .vs--unsearchable .vs__search:hover {
-	cursor: pointer
+  cursor: pointer;
 }
 
 .vs--single.vs--searching:not(.vs--open):not(.vs--loading) .vs__search {
-	opacity: .2
+  opacity: 0.2;
 }
 
 .vs__spinner {
-	align-self: center;
-	opacity: 0;
-	font-size: 5px;
-	text-indent: -9999em;
-	overflow: hidden;
-	border: .9em solid hsla(0, 0%, 39.2%, .1);
-	border-left-color: rgba(60, 60, 60, .45);
-	transform: translateZ(0);
-	-webkit-animation: vSelectSpinner 1.1s linear infinite;
-	animation: vSelectSpinner 1.1s linear infinite;
-	transition: opacity .1s
+  align-self: center;
+  overflow: hidden;
+  font-size: 5px;
+  text-indent: -9999em;
+  border: 0.9em solid hsla(0, 0%, 39.2%, 0.1);
+  border-left-color: rgba(60, 60, 60, 0.45);
+  opacity: 0;
+  transition: opacity 0.1s;
+  transform: translateZ(0);
+  -webkit-animation: vSelectSpinner 1.1s linear infinite;
+  animation: vSelectSpinner 1.1s linear infinite;
 }
 
 .vs__spinner,
-.vs__spinner:after {
-	border-radius: 50%;
-	width: 5em;
-	height: 5em
+.vs__spinner::after {
+  width: 5em;
+  height: 5em;
+  border-radius: 50%;
 }
 
 .vs--loading .vs__spinner {
-	opacity: 1
+  opacity: 1;
 }
 
-.input--middle{
-  border-radius: 0px;
-  @include bp(tablet){
+.input--middle {
+  border-radius: 0;
+
+  @include bp(tablet) {
     border-radius: 5px;
   }
 }
+
 /*# sourceMappingURL=vue-select.css.map*/
-
-
-
-
-
-
-
 </style>

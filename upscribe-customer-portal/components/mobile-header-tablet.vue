@@ -8,16 +8,20 @@
         {{ atc['portal.headerBackToAccount'] || 'Back to account' }}
       </a>
 
-      <a
+      <!-- <a
         class="c-headerTablet__navOpener"
-        href=""
         @click.prevent="mobileNavOpen = !mobileNavOpen"
         >{{ activePageName }}
         <icon-chevron-right
           class="c-headerTablet__navOpenerIcon"
           :class="{ 'c-headerTablet__navOpenerIcon--open': mobileNavOpen }"
         />
-      </a>
+      </a> -->
+      <!--
+      <div class="c-header__logo">
+        <img :src="storeLogo" />
+      </div> -->
+      <navigation-menu class="c-headerTablet__menu" />
 
       <v-button
         class="c-button--auto c-header__button c-button--transparent"
@@ -28,7 +32,7 @@
       </v-button>
     </div>
 
-    <nav v-if="mobileNavOpen" class="c-headerTablet__nav">
+    <!-- <nav v-if="mobileNavOpen" class="c-headerTablet__nav">
       <nuxt-link
         class="c-headerTablet__navLink"
         :to="{
@@ -88,7 +92,7 @@
         @click.native="mobileNavOpen = false"
         >{{ atc['portal.cancelledSubscriptions'] || 'Cancelled Subscriptions' }}
       </nuxt-link>
-    </nav>
+    </nav> -->
   </div>
 </template>
 
@@ -96,11 +100,13 @@
 import { mapState, mapGetters } from 'vuex'
 import IconChevronRight from '@components/icon-chevron-right.vue'
 import VButton from '@components/v-button.vue'
+import NavigationMenu from '@components/global/navigation-menu.vue'
 
 export default {
   components: {
     IconChevronRight,
     VButton,
+    NavigationMenu,
   },
 
   data() {
@@ -116,6 +122,8 @@ export default {
       'subscriptionActive',
       'subscriptionInActive',
     ]),
+
+    ...mapState('shop', ['shopData', 'storeLogo']),
 
     ...mapState('route', ['storeDomain', 'customerId']),
 

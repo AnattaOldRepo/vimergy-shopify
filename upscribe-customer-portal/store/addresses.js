@@ -92,8 +92,9 @@ export const actions = {
   async CREATE_ADDRESS({ rootState, commit, dispatch }, address) {
     const { storeDomain } = rootState.route
     const { customerShopifyId } = rootState.customer
+    const { xUpscribeAccessToken } = rootState.auth
 
-    const url = `/admin/customer/address/${storeDomain}/${customerShopifyId}`
+    const url = `/customer/address/${storeDomain}/${customerShopifyId}`
 
     return new Promise((resolve, reject) => {
       request({
@@ -102,10 +103,10 @@ export const actions = {
         data: JSON.stringify(address),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((response) => {
-          commit('SET_NEW_ADDRESS', response.data)
           resolve(response)
         })
         .catch((error) => {
@@ -120,8 +121,9 @@ export const actions = {
   ) {
     const { storeDomain } = rootState.route
     const { customerShopifyId } = rootState.customer
+    const { xUpscribeAccessToken } = rootState.auth
 
-    const url = `/admin/customer/address/update/${storeDomain}/${customerShopifyId}/${addressId}`
+    const url = `/customer/address/update/${storeDomain}/${customerShopifyId}/${addressId}`
 
     return new Promise((resolve, reject) => {
       request({
@@ -130,6 +132,7 @@ export const actions = {
         data: JSON.stringify(address),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((response) => {
@@ -141,7 +144,7 @@ export const actions = {
             return
           }
 
-          commit('SET_UPDATED_ADDRESS', response.data)
+          // commit('SET_UPDATED_ADDRESS', response.data)
           if (updateSub) {
             dispatch(
               'subscriptions/UPDATE_SUBSCRIPTION',
@@ -159,7 +162,7 @@ export const actions = {
           resolve(response)
         })
         .catch((error) => {
-          console.log('error', error)
+          console.error('error', error)
           reject(error)
         })
     })
@@ -168,13 +171,17 @@ export const actions = {
   async DELETE_ADDRESS({ rootState, commit, dispatch }, addressId) {
     const { storeDomain } = rootState.route
     const { customerShopifyId } = rootState.customer
+    const { xUpscribeAccessToken } = rootState.auth
 
-    const url = `/admin/customer/address/delete/${storeDomain}/${customerShopifyId}/${addressId}`
+    const url = `/customer/address/delete/${storeDomain}/${customerShopifyId}/${addressId}`
 
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((response) => {
           if (!response) {

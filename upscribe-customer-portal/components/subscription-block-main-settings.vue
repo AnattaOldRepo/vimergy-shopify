@@ -14,7 +14,6 @@ import DrawerShippingMethods from '@components/drawer-shipping-methods.vue'
 
 import VButton from '@components/v-button.vue'
 
-
 export default {
   components: {
     SubscriptionBlock,
@@ -52,13 +51,17 @@ export default {
 
     ...mapState('editMode', ['editNextOrder']),
 
-    ...mapState('shop', ['currencySymbol']),
+    ...mapState('shop', ['currencySymbol', 'chargeNowEnabled']),
 
     atleastOneItemInStock() {
       const { activeSubscription } = this
       let willShip = false
-      activeSubscription.items.forEach(item => {
-        if (item.in_stock === null || item.in_stock === undefined || item.in_stock) {
+      activeSubscription.items.forEach((item) => {
+        if (
+          item.in_stock === null ||
+          item.in_stock === undefined ||
+          item.in_stock
+        ) {
           willShip = true
         }
       })
@@ -108,16 +111,27 @@ export default {
 
     totalPriceText() {
       const { activeTotalPrice, currencySymbol, atc, activeSubscription } = this
-      let totalTaxText =  ''
-      if(activeSubscription.total_tax){
-        totalTaxText = `<div><span class ='total__title'>${atc['labels.tax'] || 'TAX' }</span>: <strong>${currencySymbol}${activeSubscription.total_tax}</strong></div>`
+      let totalTaxText = ''
+      if (activeSubscription.total_tax) {
+        totalTaxText = `<div><span class ='total__title'>${atc['labels.tax'] ||
+          'TAX'}</span>: <strong>${currencySymbol}${
+          activeSubscription.total_tax
+        }</strong></div>`
       }
       if (!activeTotalPrice) return false
-      return `${totalTaxText} <span class ='total__title'>${atc['labels.total'] || 'TOTAL' }</span>: <strong>${currencySymbol}${activeTotalPrice}</strong>`
+      return `${totalTaxText} <span class ='total__title'>${atc[
+        'labels.total'
+      ] ||
+        'TOTAL'}</span>: <strong>${currencySymbol}${activeTotalPrice}</strong>`
     },
 
     shippingMethod() {
-      const { activeSubscription, activeQueue, editNextOrder, currencySymbol } = this
+      const {
+        activeSubscription,
+        activeQueue,
+        editNextOrder,
+        currencySymbol,
+      } = this
 
       let shippingLines = null
 
@@ -141,7 +155,9 @@ export default {
 
     trialSubscription() {
       const { activeSubscription } = this
-      return (activeSubscription.charge_limit && activeSubscription.charge_limit > 0)
+      return (
+        activeSubscription.charge_limit && activeSubscription.charge_limit > 0
+      )
     },
 
     trialChargeLength() {
@@ -156,7 +172,12 @@ export default {
       const { trialChargeLength, completedOrderCount, atc } = this
       let trialOrdersRemaining = trialChargeLength - completedOrderCount
 
-      return atc['portal.trialOrdersRemainingMessage'] ? atc['portal.trialOrdersRemainingMessage'].replace('<trial-orders-remaining>', trialOrdersRemaining) : `Trial: ${trialOrdersRemaining} Orders Remaining`
+      return atc['portal.trialOrdersRemainingMessage']
+        ? atc['portal.trialOrdersRemainingMessage'].replace(
+            '<trial-orders-remaining>',
+            trialOrdersRemaining
+          )
+        : `Trial: ${trialOrdersRemaining} Orders Remaining`
     },
   },
 
@@ -176,12 +197,19 @@ export default {
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
-    ...mapActions('subscriptions', ['SKIP_NEXT_SHIPMENT', 'SHIP_TOMORROW']),
+    ...mapActions('subscriptions', [
+      'GET_SUBSCRIPTIONS',
+      'SKIP_NEXT_SHIPMENT',
+      'SHIP_TOMORROW',
+      'SHIP_NOW',
+    ]),
 
     refreshNextShipDate() {
       const { activeSubscriptionNextDate } = this
       if (!activeSubscriptionNextDate) return false
-      this.nextShipDate = moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMMM Do')
+      this.nextShipDate = moment(activeSubscriptionNextDate, 'YYYYMMDD').format(
+        'MMMM Do'
+      )
       return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMM Do')
     },
 
@@ -204,13 +232,11 @@ export default {
 
         this.triggerAnalyticsEvent({
           event: 'Migrated Trial to Subscription',
-          payload: { charge_limit: 0},
+          payload: { charge_limit: 0 },
         })
       } catch (e) {
-        console.log('reactive subscription error: ', e)
-
+        console.error('reactive subscription error: ', e)
       } finally {
-
         this.migratingTrialToSubscription = false
       }
     },
@@ -219,10 +245,33 @@ export default {
       this.skipShipmentUpdate = 'Updating'
       try {
         await this.SKIP_NEXT_SHIPMENT()
-      } catch(e) {
-        console.log('skipNextShipment e: ', e)
-      } finally{
-      this.skipShipmentUpdate = ''
+      } catch (e) {
+        console.error('skipNextShipment e: ', e)
+      } finally {
+        this.skipShipmentUpdate = ''
+      }
+    },
+
+    async shipNow() {
+      this.shipmentNowUpdate = 'Updating'
+      try {
+        const createdCharge = await this.SHIP_NOW()
+        if (createdCharge.charge_error) {
+          console.error({
+            message: `Charge failed: ${createdCharge.charge_error}`,
+          })
+          this.$toast.error(`Charge failed: ${createdCharge.charge_error}`)
+        } else {
+          this.$toast.success(`Your order has been created.`, {
+            duration: 5000,
+          })
+          await this.GET_SUBSCRIPTIONS()
+        }
+      } catch (e) {
+        console.error('shipNow e:', e)
+        this.$toast.error(`Charge failed: ${e.message}`)
+      } finally {
+        this.shipmentNowUpdate = ''
       }
     },
 
@@ -230,8 +279,8 @@ export default {
       this.shipmentNowUpdate = 'Updating'
       try {
         await this.SHIP_TOMORROW()
-      } catch(e) {
-        console.log('shipTomorrow e: ', e)
+      } catch (e) {
+        console.error('shipTomorrow e: ', e)
       } finally {
         this.shipmentNowUpdate = ''
       }
@@ -241,14 +290,18 @@ export default {
 </script>
 
 <template>
-  <subscription-block key="setting"
-    :title="atc['portal.subscriptionSettingsSubscriptionTitle'] || 'Subscription Settings'"
+  <subscription-block
+    key="setting"
+    :title="
+      atc['portal.subscriptionSettingsSubscriptionTitle'] ||
+        'Subscription Settings'
+    "
   >
     <subscription-block-option-wrap
       v-if="activeSubscriptionNextDate"
       custom-class-for-icon="c-subscriptionBlockOptionWrap__icon--floatTop"
-      @click.native="drawerDeliveryDateOpen=true"
-      >
+      @click.native="drawerDeliveryDateOpen = true"
+    >
       <subscription-block-option
         v-if="refreshNextShipDate()"
         :title="atc['portal.subscriptionSettingsShipsOnLabel'] || 'Ships On'"
@@ -268,17 +321,42 @@ export default {
         />
       </portal>
 
-      <div class = "c-subscriptionBlockMainSetting--firstBlock-contain">
+      <div class="c-subscriptionBlockMainSetting--firstBlock-contain">
         <v-button
+          v-if="chargeNowEnabled"
+          key="ship-now-button"
           class="c-button--auto c-subscriptionBlockMainSetting--button c-button--primary"
-          @click.native.stop="shipTomorrow">
-          {{ shipmentNowUpdate ? shipmentNowUpdate : 'Ship Now'}}
+          @click.native.stop="shipNow"
+        >
+          {{
+            shipmentNowUpdate
+              ? shipmentNowUpdate
+              : atc['buttons.shipNow'] || 'Ship Now'
+          }}
         </v-button>
 
-       <v-button
+        <v-button
+          v-else
+          key="ship-tomorrow-button"
+          class="c-button--auto c-subscriptionBlockMainSetting--button c-button--primary"
+          @click.native.stop="shipTomorrow"
+        >
+          {{
+            shipmentNowUpdate
+              ? shipmentNowUpdate
+              : atc['buttons.shipTomorrow'] || 'Ship Tomorrow'
+          }}
+        </v-button>
+
+        <v-button
           class="c-button--auto c-subscriptionBlockMainSetting--button c-button--transparent"
-          @click.native.stop="skipNextShipment">
-           {{ skipShipmentUpdate ? skipShipmentUpdate : 'Skip Next Shipment'}}
+          @click.native.stop="skipNextShipment"
+        >
+          {{
+            skipShipmentUpdate
+              ? skipShipmentUpdate
+              : atc['buttons.skipNextShipment'] || 'Skip Next Shipment'
+          }}
         </v-button>
       </div>
     </subscription-block-option-wrap>
@@ -288,7 +366,9 @@ export default {
     >
       <subscription-block-option
         v-if="deliveryEveryText"
-        :title="atc['portal.subscriptionSettingsDeliverEveryLabel'] || 'Deliver Every'"
+        :title="
+          atc['portal.subscriptionSettingsDeliverEveryLabel'] || 'Deliver Every'
+        "
         :text="deliveryEveryText + ' ' + intervalUnitDisplay"
         text-large
       />
@@ -318,7 +398,10 @@ export default {
           />
 
           <strong v-if="!atleastOneItemInStock" class="c-outOfStockBlock">
-            {{ atc['portal.allItemsOutOfStockMessage'] || 'All items are out of stock. This charge will be skipped and attempted again next cycle.' }}
+            {{
+              atc['portal.allItemsOutOfStockMessage'] ||
+                'All items are out of stock. This charge will be skipped and attempted again next cycle.'
+            }}
           </strong>
         </div>
 
@@ -337,10 +420,15 @@ export default {
       </portal>
     </subscription-block-option-wrap>
 
-    <subscription-block-option-wrap @click.native="handleOpenShippingMethodDrawer">
+    <subscription-block-option-wrap
+      @click.native="handleOpenShippingMethodDrawer"
+    >
       <subscription-block-option
         v-if="shippingMethod"
-        :title="atc['portal.subscriptionSettingsShippingMethodLabel'] || 'Shipping Method'"
+        :title="
+          atc['portal.subscriptionSettingsShippingMethodLabel'] ||
+            'Shipping Method'
+        "
         :text="shippingMethod"
         text-med
       />
@@ -359,7 +447,7 @@ export default {
     </subscription-block-option-wrap>
 
     <subscription-block-option-wrap no-action text-only>
-      <subscription-block-option v-if="totalPriceText" :html = "totalPriceText"/>
+      <subscription-block-option v-if="totalPriceText" :html="totalPriceText" />
       <content-placeholders v-else>
         <!-- <content-placeholders-heading /> -->
         <content-placeholders-text
@@ -374,22 +462,27 @@ export default {
       slot="button"
       class="c-trialSubscription"
     >
-      <h3 class="c-trialSubscription__title">{{ trialOrdersRemainingMessage }}</h3>
+      <h3 class="c-trialSubscription__title">{{
+        trialOrdersRemainingMessage
+      }}</h3>
 
       <v-button
         class="c-trialSubscription__button"
-        :text="migratingTrialToSubscription ? (atc['notices.migratingNotice'] || 'Migrating') : (atc['buttons.migrateTrialToSubscription'] || 'Migrate Trial to Subscription')"
+        :text="
+          migratingTrialToSubscription
+            ? atc['notices.migratingNotice'] || 'Migrating'
+            : atc['buttons.migrateTrialToSubscription'] ||
+              'Migrate Trial to Subscription'
+        "
         @click.native="handleMigrateTrialToSubscription"
       />
     </div>
-
   </subscription-block>
 </template>
 
 <style lang="scss">
 @import '@design/_colors';
 @import '@design/_breakpoints';
-
 
 .c-trialSubscription__title {
   text-align: center;
@@ -398,31 +491,31 @@ export default {
 .c-trialSubscription__button {
 }
 
-.c-subscriptionBlockMainSetting--firstBlock-contain{
+.c-subscriptionBlockMainSetting--firstBlock-contain {
   display: flex;
   margin-top: 20px;
   flex-direction: column;
 
-  @include bp(tablet-large){
+  @include bp(tablet-large) {
     flex-direction: row;
   }
 
-  button{
-    &:nth-child(1){
+  button {
+    &:nth-child(1) {
       margin-bottom: 15px;
-      @include bp(tablet-large){
+      @include bp(tablet-large) {
         margin-bottom: 0;
         margin-right: 3px;
       }
 
-      @include bp(desktop){
-          margin-right: 6px;
+      @include bp(desktop) {
+        margin-right: 6px;
       }
     }
   }
 }
 
-.c-subscriptionBlockMainSetting--button{
+.c-subscriptionBlockMainSetting--button {
   padding: 12px 20px;
   text-transform: uppercase;
   font-weight: bold;
@@ -431,7 +524,7 @@ export default {
   line-height: 16px;
 }
 
-.total__title{
+.total__title {
   color: $color-blue-secondary;
   font-weight: 500;
   letter-spacing: 0.08em;

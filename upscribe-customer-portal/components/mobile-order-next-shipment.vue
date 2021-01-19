@@ -1,10 +1,78 @@
 <template>
   <div v-if="activeSubscription && atc" class="c-order__main">
     <portal to="header">
-      <the-header :middle-html="currentOpenOrderActive" mode="backwardRoute" />
+      <the-header
+        :middle-html="
+          activeSubscription.name
+            ? `Subscription ${activeSubscription.name}`
+            : `Subscription ${activeSubscription.id}`
+        "
+        mode="backwardRoute"
+      />
     </portal>
 
-    <div class="c-order__lineItems">
+    <p
+      v-if="activeSubscription.interval && activeSubscription.period"
+      class="c-drawer__subtitle u-mt-4"
+      >{{
+        atc['portal.editProductsDrawerInfoText'] || 'These products ship every'
+      }}
+      {{ activeSubscription.interval }} {{ intervalUnitDisplay }}</p
+    >
+
+    <div class="c-drawerDeliveryFrequency__options">
+      <drawer-product-block
+        v-for="(product, index) in subscriptionProducts"
+        :key="product.id + '-' + index"
+        :product="product"
+        :remove="subscriptionProducts.length > 1"
+        swap
+        quantity
+        existing-product
+        @swapProduct="openAddToSubscriptionModal({ title: 'swap', product })"
+        @removeProduct="handleRemove(product)"
+        @quantityChange="handleQuantityChange(product)"
+        @quantityChangeManual="handleQuantityChangeManual"
+      />
+    </div>
+
+    <p v-if="editNextOrder && oneTimeProducts.length" class="c-drawer__subtitle"
+      >{{
+        atc['portal.productsShipNextOrderOnly'] ||
+          'These products ship one-time in your next shipment only'
+      }}
+    </p>
+
+    <div
+      v-if="editNextOrder && oneTimeProducts.length"
+      class="c-drawerDeliveryFrequency__options"
+    >
+      <drawer-product-block
+        v-for="(product, index) in oneTimeProducts"
+        :key="product.id + '-' + index"
+        :product="product"
+        :remove="oneTimeProducts.length > 1"
+        swap
+        quantity
+        existing-product
+        @swapProduct="openAddToSubscriptionModal({ title: 'swap', product })"
+        @removeProduct="handleRemove(product)"
+        @quantityChange="handleQuantityChange(product)"
+        @quantityChangeManual="handleQuantityChangeManual"
+        @subscribe="handleAddProductVariantToSubscription"
+      />
+    </div>
+
+    <div
+      class="c-drawer__actionButtons"
+      @click="isOpeningProductSubscription = true"
+    >
+      <v-button class="c-form__submitButton c-button"
+        >{{ atc['buttons.addProducts'] || 'Add Products' }}
+      </v-button>
+    </div>
+
+    <!-- <div class="c-order__lineItems">
       <div
         v-for="(item, index) in orderLineItems"
         :key="index"
@@ -12,8 +80,6 @@
       >
         <div class="c-order__topItemWrap">
           <div v-if="productImage(item)" class="c-order__imageWrap">
-            <!-- v-if="productImages" -->
-            <!-- <img class="c-order__image" :src="productImages[item.shopify_product_id]"/> -->
             <img class="c-order__image" :src="productImage(item)" />
           </div>
 
@@ -100,7 +166,7 @@
           }}{{ activeSubscription.total_price.toFixed(2) }}</span
         >
       </div>
-    </div>
+    </div> -->
 
     <portal v-if="isProductModalOpen" to="modals">
       <modal-product
@@ -123,16 +189,23 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import ModalProduct from '@components/modal-product'
 import moment from 'moment'
+import VButton from '@components/v-button.vue'
 import TheHeader from '@components/the-header'
 import ModalSubscription from '@components/modal-subscription'
+import DrawerProductBlock from '@components/drawer-product-block'
+import productChangeRequest from '@utils/product-change-request.js'
+import { buildNewCheckoutUpdatePayload } from '@utils/newCheckoutUpdateHelpers'
+
 export default {
   components: {
     ModalProduct,
     TheHeader,
+    VButton,
     ModalSubscription,
+    DrawerProductBlock,
   },
 
   props: {
@@ -163,6 +236,8 @@ export default {
     ...mapGetters('activeSubscription', [
       'activeSubscriptionNextDate',
       'activeSubscription',
+      'activeSubscriptionNextOrder',
+      'activeQueue',
     ]),
 
     shopifyDiscount() {
@@ -252,6 +327,36 @@ export default {
       return !!this.activeSubscription.shopify_order_id
     },
 
+    intervalUnitDisplay() {
+      const { activeSubscription, atc } = this
+      let intervalUnit = activeSubscription.period
+      let plural = activeSubscription.interval > 1
+
+      let displayUnit = ''
+      if (intervalUnit.indexOf('day') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.days-unit'] || 'days'
+        } else {
+          displayUnit = atc['date-time.day-unit'] || 'day'
+        }
+      } else if (intervalUnit.indexOf('week') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.weeks-unit'] || 'weeks'
+        } else {
+          displayUnit = atc['date-time.week-unit'] || 'week'
+        }
+      } else if (intervalUnit.indexOf('month') > -1) {
+        if (plural) {
+          displayUnit = atc['date-time.months-unit'] || 'months'
+        } else {
+          displayUnit = atc['date-time.month-unit'] || 'month'
+        }
+      } else {
+        displayUnit = intervalUnit
+      }
+      return displayUnit
+    },
+
     nextShipDate() {
       const { activeSubscriptionNextDate } = this
       if (!activeSubscriptionNextDate) return false
@@ -267,6 +372,26 @@ export default {
 
     nextOrder() {
       return this.activeSubscription.next
+    },
+
+    oneTimeProducts() {
+      if (this.editNextOrder) {
+        const idArray = this.activeSubscription.items.map((item) => item.id)
+        return this.activeSubscription.next.items.filter(
+          (item) => !idArray.includes(item.id)
+        )
+      }
+      return []
+    },
+
+    subscriptionProducts() {
+      if (this.editNextOrder) {
+        const idArray = this.activeSubscription.items.map((item) => item.id)
+        return this.activeSubscription.next.items.filter((item) =>
+          idArray.includes(item.id)
+        )
+      }
+      return this.activeSubscription.items
     },
   },
 
@@ -284,8 +409,39 @@ export default {
 
     ...mapMutations('swapProduct', ['setSwapProduct']),
 
+    ...mapActions('subscriptions', [
+      'UPDATE_SUBSCRIPTION',
+      'UPDATE_NEXT_ORDER',
+    ]),
+
+    ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
+
+    handleNewCheckoutUpdate(updateArray) {
+      return new Promise((resolve, reject) => {
+        let updateCount = updateArray.length
+        let updatesFinished = 0
+
+        // for each update
+        updateArray.forEach(async (update) => {
+          try {
+            await update.updateAction
+            this.$toast.success('Successfully updated')
+          } catch (e) {
+            this.$toast.error('Oops! Some error occurred')
+            console.error(e)
+          } finally {
+            updatesFinished += 1
+          }
+
+          if (updatesFinished === updateCount) {
+            resolve(true)
+          }
+        })
+      })
+    },
+
     productOptionDetails(item) {
-      const { isOriginalCharge } = this
+      const { isOriginalCharge, atc } = this
       if (!item.properties) return false
 
       let propertyHash = {}
@@ -315,9 +471,11 @@ export default {
       let discountAmount = propertyHash['Discount Amount']
         ? propertyHash['Discount Amount']
         : false
-      let detail = `Auto Renew x${item.quantity}`
+      let detail = `${atc['labels.autoRenew'] || 'Auto Renew'} x${
+        item.quantity
+      }`
       if (discountAmount) {
-        detail += ` (${discountAmount} OFF)`
+        detail += ` (${discountAmount} ${atc['labels.off'] || 'OFF'})`
       }
       return detail
     },
@@ -368,12 +526,239 @@ export default {
       }
     },
 
+    async handleAddProductVariantToSubscription({
+      variantId,
+      product,
+      addToNextOrder,
+    }) {
+      const { activeSubscription, variantSelectProduct } = this
+
+      const { addPayload: nextAddItemPayload } = productChangeRequest({
+        variantId,
+        editNextOrder: true,
+        subscription: activeSubscription,
+      })
+
+      const { addPayload: subscriptionAddItemPayload } = productChangeRequest({
+        variantId,
+        editNextOrder: false,
+        subscription: activeSubscription,
+      })
+
+      const updateSubscriptionPayload = {
+        requestPayload: {
+          items: subscriptionAddItemPayload
+            ? [subscriptionAddItemPayload]
+            : undefined,
+        },
+      }
+
+      const nextOrderUpdatePayload = {
+        requestPayload: {
+          items: nextAddItemPayload ? [nextAddItemPayload] : undefined,
+        },
+      }
+
+      let analyticsEventName, handleNewCheckoutUpdatePayload
+
+      if (addToNextOrder) {
+        analyticsEventName = 'Upscribe Next Order Product Add'
+
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
+            nextOrderUpdatePayload,
+            'subscriptions',
+            'UPDATE_NEXT_ORDER',
+            `Product add to next order.`
+          ),
+        ]
+      } else {
+        analyticsEventName = 'Upscribe Subscription Product Add'
+
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+            updateSubscriptionPayload,
+            'subscriptions',
+            'UPDATE_SUBSCRIPTION',
+            `Product added on subscription.`
+          ),
+        ]
+      }
+
+      this.$emit('setDrawerStatus', 'PENDING')
+
+      // hande everything in handleNewCheckoutUpdate function
+      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+
+      this.$emit('setDrawerStatus', 'SUCCESS')
+      this.$emit('setMode', 'edit')
+
+      this.triggerAnalyticsEvent({
+        event: analyticsEventName,
+        payload: { product: variantSelectProduct },
+      })
+    },
+
     closeModal() {
       this.closeAnimation = true
       setTimeout(() => {
         this.isProductModalOpen = false
         this.isOpeningProductSubscription = false
       }, 500)
+    },
+
+    async handleRemove(product) {
+      if (this.updating) return
+
+      const { activeSubscription, activeQueue, editNextOrder } = this
+
+      const itemCount = editNextOrder
+        ? activeQueue.items.length
+        : activeSubscription.items.length
+
+      if (itemCount <= 1) {
+        this.$router.push({
+          name: 'cancel',
+        })
+      }
+
+      const { removePayload: nextRemoveItemPayload } = productChangeRequest({
+        variantId: product.variant_id,
+        editNextOrder: true,
+        subscription: activeSubscription,
+      })
+
+      const {
+        removePayload: subscriptionRemoveItemPayload,
+      } = productChangeRequest({
+        variantId: product.variant_id,
+        editNextOrder: false,
+        subscription: activeSubscription,
+      })
+
+      const updateSubscriptionPayload = {
+        requestPayload: {
+          items: subscriptionRemoveItemPayload
+            ? [subscriptionRemoveItemPayload]
+            : undefined,
+        },
+      }
+
+      const nextOrderUpdatePayload = {
+        requestPayload: {
+          items: nextRemoveItemPayload ? [nextRemoveItemPayload] : undefined,
+        },
+      }
+
+      let handleNewCheckoutUpdatePayload, analyticsEventName
+
+      if (editNextOrder) {
+        analyticsEventName = 'Upscribe Next Order Product Removed'
+
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_NEXT_ORDER(nextOrderUpdatePayload),
+            nextOrderUpdatePayload,
+            'subscriptions',
+            'UPDATE_NEXT_ORDER',
+            `Product removed from next order.`
+          ),
+        ]
+      } else {
+        analyticsEventName = 'Upscribe Subscription Product Removed'
+
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_SUBSCRIPTION(updateSubscriptionPayload),
+            updateSubscriptionPayload,
+            'subscriptions',
+            'UPDATE_SUBSCRIPTION',
+            `Product removed from subscription`
+          ),
+        ]
+      }
+
+      // this.removeUpdating = false
+      // this.updatingId = null
+      this.$emit('setDrawerStatus', 'PENDING')
+
+      // hande everything in handleNewCheckoutUpdate function
+      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+
+      this.$emit('setDrawerStatus', 'SUCCESS')
+      this.$emit('setMode', 'edit')
+      this.triggerAnalyticsEvent({
+        event: analyticsEventName,
+        payload: { product },
+      })
+    },
+
+    handleQuantityChange(quantity) {
+      const { product } = this
+
+      this.handleQuantityChangeManual({
+        quantity: quantity,
+        id: product.id,
+        product,
+      })
+    },
+
+    async handleQuantityChangeManual({ quantity, id, product }) {
+      if (parseInt(quantity) === 0) return this.handleRemove(product)
+
+      const { editNextOrder } = this
+
+      const finalPayload = {
+        requestPayload: {
+          items: [{ quantity, id }],
+        },
+      }
+
+      this.updatingId = id
+      this.quantityUpdating = true
+
+      let handleNewCheckoutUpdatePayload, analyticsEventName
+      let analyticsPayload = {
+        quantity,
+        ...product,
+      }
+
+      if (editNextOrder) {
+        // updateMessage = `Quantity updated to ${quantity} on next order.`
+        analyticsEventName = 'Upscribe Next Order Product Quantity Change'
+
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_NEXT_ORDER(finalPayload),
+            finalPayload,
+            'subscriptions',
+            'UPDATE_NEXT_ORDER',
+            `Quantity updated to ${quantity} on next order.`
+          ),
+        ]
+      } else {
+        // updateMessage = `Quantity updated to ${quantity}.`
+        analyticsEventName = 'Upscribe Subscription Product Quantity Change'
+
+        handleNewCheckoutUpdatePayload = [
+          buildNewCheckoutUpdatePayload(
+            this.UPDATE_SUBSCRIPTION(finalPayload),
+            finalPayload,
+            'subscriptions',
+            'UPDATE_SUBSCRIPTION',
+            `Quantity updated to ${quantity} on subscription.`
+          ),
+        ]
+      }
+      // hande everything in handleNewCheckoutUpdate function
+      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+
+      this.triggerAnalyticsEvent({
+        event: analyticsEventName,
+        payload: analyticsPayload,
+      })
     },
   },
 }

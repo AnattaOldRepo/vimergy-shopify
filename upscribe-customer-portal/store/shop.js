@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Vue from 'vue'
 const API = process.env.API
 
 export const state = () => ({
@@ -11,13 +12,15 @@ export const state = () => ({
   storeLogo: null,
   shopifyStorefrontAccessToken: null,
   currencySymbol: null,
-  featuredPortalCollection: null,
   nextOrderProductsSubscriptionPricing: null,
 
-  cancellationReasons: null,
-  nestedCancellationReasonsEnabled: null,
-  nestedCancellationReasonMap: null,
-  nestedCancellationReasons: null,
+  featuredPortalCollection: null,
+  customerPortalSubscriptionProductCollections: null,
+  customerPortalNextOrderProductCollections: null,
+
+  chargeNowEnabled: null,
+
+  uiSettings: null,
 })
 
 export const mutations = {
@@ -26,6 +29,13 @@ export const mutations = {
 
     state.shopData = data.shop
     state.featuredPortalCollection = data.featured_portal_collections
+
+    state.customerPortalSubscriptionProductCollections =
+      data.customer_portal_subscription_product_collections
+
+    state.customerPortalNextOrderProductCollections =
+      data.customer_portal_next_order_product_collections
+
     state.stripePublicKey = data.stripe_public_key
     state.braintreeClientToken = data.braintree_client_token
 
@@ -45,23 +55,31 @@ export const mutations = {
 
     state.nextOrderProductsSubscriptionPricing = !data.one_time_price_enabled
 
+    state.chargeNowEnabled = data.charge_now_customer_enabled
+
     state.cancellationReasons = data.cancellation_reasons
 
-    state.nestedCancellationReasonsEnabled = data.nested_cancellation_reasons_enabled
+    state.nestedCancellationReasonsEnabled =
+      data.nested_cancellation_reasons_enabled
     state.nestedCancellationReasons = data.nested_cancellation_reasons
 
-    console.log({nested_cancellation_reasons: data.nested_cancellation_reasons})
+    Vue.set(state, 'uiSettings', data.ui_settings)
 
-    if (data.nested_cancellation_reasons && data.nested_cancellation_reasons[0] && typeof data.nested_cancellation_reasons[0] === 'object' && data.nested_cancellation_reasons[0] !== null) {
+    if (
+      data.nested_cancellation_reasons &&
+      data.nested_cancellation_reasons[0] &&
+      typeof data.nested_cancellation_reasons[0] === 'object' &&
+      data.nested_cancellation_reasons[0] !== null
+    ) {
       let final = {}
 
-      data.nested_cancellation_reasons.forEach(reason => {
+      data.nested_cancellation_reasons.forEach((reason) => {
         if (reason.children) {
           final[reason.id] = reason
-          reason.children.forEach(reason2 => {
+          reason.children.forEach((reason2) => {
             if (reason2.children) {
               final[reason2.id] = reason2
-              reason2.children.forEach(reason3 => {
+              reason2.children.forEach((reason3) => {
                 final[reason3.id] = reason3
               })
             } else {
@@ -77,7 +95,6 @@ export const mutations = {
     // Set shop currency
     let currencyCode = data.shop.currency
     if (!currencyCode) {
-      console.log('No currency code available on store, using USD default')
       currencyCode = 'USD'
     }
     let zeroAmount = 0
@@ -109,7 +126,7 @@ export const actions = {
           resolve(response)
         })
         .catch((error) => {
-          console.log('GET_SHOP error: ', error)
+          console.error('GET_SHOP error: ', error)
           reject(error)
         })
     })

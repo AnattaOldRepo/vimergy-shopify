@@ -128,7 +128,7 @@ export default {
 
     ...mapActions('activeSubscription', ['fakeActiveSubscriptionUpdate']),
 
-    ...mapMutations('editMode', ['setEditNextOrder']),
+    ...mapActions('editMode', ['setEditNextOrder']),
 
     async addOtoProduct() {
       const vm = this

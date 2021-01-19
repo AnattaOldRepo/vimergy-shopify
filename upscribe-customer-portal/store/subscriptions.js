@@ -37,8 +37,6 @@ export const mutations = {
         ...subscription,
         next: updatedNext,
       })
-    } else {
-      console.log('no set updated queue index')
     }
   },
 
@@ -103,14 +101,21 @@ export const mutations = {
 }
 
 export const actions = {
-  async GET_SUBSCRIPTIONS({ rootState, commit, dispatch }, customerPayloadId = null) {
+  async GET_SUBSCRIPTIONS(
+    { rootState, commit, dispatch },
+    customerPayloadId = null
+  ) {
     const { storeDomain, customerId } = rootState.route
     const usedPayloadId = customerPayloadId || customerId
+    const { xUpscribeAccessToken } = rootState.auth
 
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url: `/subscriptions/${storeDomain}/${usedPayloadId}`,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           const subscriptions = data.items
@@ -130,18 +135,23 @@ export const actions = {
   },
 
   //* ** note this is using stripe customer id instead of shopify order id as orderId */
+  // Paylod has bulkUpdate == true then add ?massUpdate=1 in query
   async UPDATE_SUBSCRIPTION({ rootState, rootGetters, commit }, payload) {
     const { storeDomain } = rootState.route
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
+    const { xUpscribeAccessToken } = rootState.auth
+
     const shopifyCustomerId = activeSubscription.shopify_customer_id
     const { requestPayload, subscriptionId = false } = payload
 
     const requestSubscriptionId = subscriptionId || activeSubscription.id
 
-    console.log({payload})
     let url = `/subscription/update/${storeDomain}/${shopifyCustomerId}/${requestSubscriptionId}`
-    console.log({url})
+
+    if (payload.bulkUpdate) {
+      url = `/subscription/update/${storeDomain}/${shopifyCustomerId}/${requestSubscriptionId}?massUpdate=1`
+    }
 
     return new Promise((resolve, reject) => {
       request({
@@ -150,11 +160,11 @@ export const actions = {
         data: JSON.stringify(requestPayload),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((data) => {
           commit('SET_UPDATED_SUBSCRIPTION', data)
-
           resolve(data)
         })
         .catch((error) => {
@@ -163,9 +173,14 @@ export const actions = {
     })
   },
 
-  async UPDATE_SUBSCRIPTION_QUEUE({ rootGetters, commit }, { newDate, skip, subscriptionId, queueId}) {
+  async UPDATE_SUBSCRIPTION_QUEUE(
+    { rootGetters, commit, rootState },
+    { newDate, skip, subscriptionId, queueId }
+  ) {
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
+    const { xUpscribeAccessToken } = rootState.auth
+
     // used manual passed values or fallback on active subscription
     let finalSubscriptionId = subscriptionId || activeSubscription.id
     let finalQueueId = queueId || activeSubscription.next.id
@@ -183,6 +198,7 @@ export const actions = {
         data: JSON.stringify(requestPayload),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((data) => {
@@ -231,7 +247,7 @@ export const actions = {
       )
       return skipResponse
     } catch (e) {
-      console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+      console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
       return false
     }
   },
@@ -272,14 +288,51 @@ export const actions = {
       )
       return skipResponse
     } catch (e) {
-      console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+      console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
       return false
     }
   },
 
-  async UPDATE_NEXT_ORDER({ rootGetters, commit }, updatePayload) {
+  async SHIP_NOW({ rootState, dispatch, rootGetters, commit }) {
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
+    const { next } = activeSubscription
+    const { xUpscribeAccessToken } = rootState.auth
+    const { storeDomain } = rootState.route
+
+    if (!next) return false
+    const subscriptionId = activeSubscription.id
+    const queueId = next.id
+
+    return new Promise((resolve, reject) => {
+      request({
+        method: 'get',
+        url: `/subscription/queue/charge/${storeDomain}/${subscriptionId}/${queueId}`,
+        headers: { 'x-upscribe-access-token': xUpscribeAccessToken },
+      })
+        .then((response) => {
+          commit('SET_UPDATED_NEXT_ORDER', response)
+          commit('SET_UPDATED_SUBSCRIPTION_QUEUE', response)
+          dispatch(
+            'upscribeAnalytics/triggerAnalyticsEvent',
+            {
+              event: 'Upscribe Charge Now',
+              payload: { subscriptionId, queueId },
+            },
+            { root: true }
+          )
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
+
+  async UPDATE_NEXT_ORDER({ rootGetters, commit, rootState }, updatePayload) {
+    const activeSubscription =
+      rootGetters['activeSubscription/activeSubscription']
+    const { xUpscribeAccessToken } = rootState.auth
 
     const subscriptionId = activeSubscription.id
     const queueId = activeSubscription.next.id
@@ -290,13 +343,19 @@ export const actions = {
       requestPayload.date = newDate
     }
 
+    let url = `/subscription/queue/${subscriptionId}/${queueId}`
+    if (requestPayload.bulkUpdate) {
+      url = `/subscription/queue/${subscriptionId}/${queueId}?massUpdate=1`
+    }
+
     return new Promise((resolve, reject) => {
       request({
         method: 'post',
-        url: `/subscription/queue/${subscriptionId}/${queueId}`,
+        url,
         data: JSON.stringify(requestPayload),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((data) => {
@@ -317,13 +376,17 @@ export const actions = {
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
     const { customerId, storeDomain } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
     const subscriptionId = activeSubscription.id
 
     return new Promise((resolve, reject) => {
       request({
         method: 'post',
         url: `/subscription/cancel/${storeDomain}/${customerId}/${subscriptionId}`,
-        data: JSON.stringify(reason),
+        data: JSON.stringify({ reason }),
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           commit('SET_CANCELED_SUBSCRIPTION', data)
@@ -343,12 +406,17 @@ export const actions = {
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
     const { customerId, storeDomain } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
+
     const subscriptionId = manualSubscriptionId || activeSubscription.id
 
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url: `/subscription/activate/${storeDomain}/${customerId}/${subscriptionId}`,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           commit('SET_ACTIVATED_SUBSCRIPTION', data)

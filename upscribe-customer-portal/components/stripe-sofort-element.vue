@@ -1,7 +1,5 @@
 <script>
-
 import { mapState, mapMutations } from 'vuex'
-
 
 export default {
   props: {
@@ -18,35 +16,35 @@ export default {
         {
           label: 'Austria',
           code: 'AT',
-          },
+        },
         {
           label: 'Belgium',
           code: 'BE',
-          },
+        },
         {
           label: 'Germany',
           code: 'DE',
-          },
+        },
         {
           label: 'Italy',
           code: 'IT',
-          },
+        },
         {
           label: 'Netherlands',
           code: 'NL',
-          },
+        },
         {
           label: 'Poland',
           code: 'PL',
-          },
+        },
         {
           label: 'Spain',
           code: 'EA',
-          },
+        },
         {
           label: 'Switzerland',
           code: 'CH',
-          },
+        },
       ],
       name: '',
       error: '',
@@ -55,7 +53,8 @@ export default {
         base: {
           padding: '10px 12px',
           color: '#32325d',
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
           fontSmoothing: 'antialiased',
           fontSize: '16px',
           '::placeholder': {
@@ -73,7 +72,9 @@ export default {
     ...mapState('payment', ['paymentType', 'paymentSource']),
 
     sofortCountryCode() {
-      return (this.sofortCountry && this.sofortCountry.code) ? this.sofortCountry.code : false
+      return this.sofortCountry && this.sofortCountry.code
+        ? this.sofortCountry.code
+        : false
     },
   },
   mounted() {
@@ -93,7 +94,7 @@ export default {
     handleChange($event) {
       const { name, sofortCountryCode } = this
       this.error = $event.error ? $event.error.message : ''
-      this.$emit('handleChange', {complete: (name && sofortCountryCode) })
+      this.$emit('handleChange', { complete: name && sofortCountryCode })
     },
     createPaymentMethod() {
       const { name, checkoutData, sofortCountryCode } = this
@@ -115,7 +116,7 @@ export default {
         },
       }
 
-      this.stripe.createSource(sofortSourceData).then( async result => {
+      this.stripe.createSource(sofortSourceData).then(async (result) => {
         if (result.error) {
           this.error = result.error.message
           return
@@ -145,7 +146,6 @@ export default {
           },
         }
 
-
         // http://localhost:3000/
         // ?client_secret=src_client_secret_GTSjZWvgRkG5GcIIYpuEeJlr
         // &currentStep=3
@@ -155,10 +155,7 @@ export default {
         // &store=upscribe-demo.myshopify.com
         // &token=17a7fe2bdab0f9815b295877d355cfb8
 
-        console.log({sepaDebitSourcePayload})
-
         // const createSepaDebitSourceResponse = await this.CREATE_SEPA_DEBIT_SOURCE({sepaDebitSourcePayload })
-        // console.log({createSepaDebitSourceResponse})
 
         // // vm.$emit('placeOrderResponse', result.token)
         // this.$emit('placeOrderResponse', {
@@ -166,7 +163,6 @@ export default {
         //   paymentData: result.source,
         //   paymentType: 'stripe_ideal',
         // })
-
       })
     },
   },
@@ -174,51 +170,62 @@ export default {
 </script>
 
 <template>
-<form class="c-stripeIban" @submit.prevent="$emit('submitPaymentForm')">
-  <div class="form-row inline c-stripeFormSplitGroups">
-    <div class="col c-paymentMethodFormGroup">
-      <!-- <label for="name" class="c-stripeFormLabel">
+  <form class="c-stripeIban" @submit.prevent="$emit('submitPaymentForm')">
+    <div class="form-row inline c-stripeFormSplitGroups">
+      <div class="col c-paymentMethodFormGroup">
+        <!-- <label for="name" class="c-stripeFormLabel">
         Name
       </label> -->
-      <input v-model="name" class="c-stripeFormInput--text" placeholder="Full Name" required @change="handleChange">
+        <input
+          v-model="name"
+          class="c-stripeFormInput--text"
+          placeholder="Full Name"
+          required
+          @change="handleChange"
+        />
+      </div>
     </div>
-  </div>
 
-  <div class="form-row mb-20" style="margin-bottom:20px">
-    <!-- <label for="sofort-country-code" class="c-stripeFormLabel mb-20">
+    <div class="form-row mb-20" style="margin-bottom:20px">
+      <!-- <label for="sofort-country-code" class="c-stripeFormLabel mb-20">
       Bank Country
     </label> -->
-    <div id="sofort-country-code" class="c-stripeFormInput" style="padding:0">
-      <v-select
-        v-model="sofortCountry"
-        class="c-stripeFormInput--select"
-        :options="sofortCountryCodeOptions"
-        :clearable="false"
-        placeholder="Country"
-        @search:focus="inputFocused = true"
-        @search:blur="inputFocused = false"
-        @input="handleChange"
-      />
+      <div id="sofort-country-code" class="c-stripeFormInput" style="padding:0">
+        <v-select
+          v-model="sofortCountry"
+          class="c-stripeFormInput--select"
+          :options="sofortCountryCodeOptions"
+          :clearable="false"
+          placeholder="Country"
+          @search:focus="inputFocused = true"
+          @search:blur="inputFocused = false"
+          @input="handleChange"
+        />
+      </div>
     </div>
-  </div>
 
-  <!-- Used to display form errors. -->
-  <div v-if="error" id="sepa-error-message" class="c-paymentMethodErrors" role="alert">{{ error }}</div>
+    <!-- Used to display form errors. -->
+    <div
+      v-if="error"
+      id="sepa-error-message"
+      class="c-paymentMethodErrors"
+      role="alert"
+      >{{ error }}</div
+    >
 
-  <!-- Display mandate acceptance text. -->
-  <div id="mandate-acceptance" class="c-stripeInfo">
-    By providing your IBAN and confirming this payment, you are
-    authorizing {{ shopData.name }} and Stripe, our payment service
-    provider, to send instructions to your bank to debit your account and
-    your bank to debit your account in accordance with those instructions.
-    You are entitled to a refund from your bank under the terms and
-    conditions of your agreement with your bank. A refund must be claimed
-    within 8 weeks starting from the date on which your account was debited.
-  </div>
-</form>
+    <!-- Display mandate acceptance text. -->
+    <div id="mandate-acceptance" class="c-stripeInfo">
+      By providing your IBAN and confirming this payment, you are authorizing
+      {{ shopData.name }} and Stripe, our payment service provider, to send
+      instructions to your bank to debit your account and your bank to debit
+      your account in accordance with those instructions. You are entitled to a
+      refund from your bank under the terms and conditions of your agreement
+      with your bank. A refund must be claimed within 8 weeks starting from the
+      date on which your account was debited.
+    </div>
+  </form>
 </template>
 
 <style lang="scss" scoped>
 @import '@design';
-
 </style>

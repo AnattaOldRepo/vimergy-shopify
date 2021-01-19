@@ -34,7 +34,6 @@ export const mutations = {
 
   SET_TRANSLATION_LIST(state, translationList) {
     if (!translationList || !translationList.length) {
-      console.log('no translationList: ', translationList)
       return
     }
 
@@ -59,6 +58,7 @@ export const mutations = {
 export const actions = {
   GET_TRANSLATION_LIST({ rootState, commit }) {
     const { storeDomain } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     if (!storeDomain) return
 
@@ -66,6 +66,9 @@ export const actions = {
       request({
         method: 'get',
         url: `/i18n/${storeDomain}`,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((response) => {
           commit('SET_TRANSLATION_LIST', response)
@@ -79,6 +82,7 @@ export const actions = {
 
   GET_ALL_TRANSLATIONS({ rootState, commit }) {
     const { storeDomain } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     if (!storeDomain) return
 
@@ -88,6 +92,9 @@ export const actions = {
         url: `/i18n/${storeDomain}`,
         params: {
           all: true,
+        },
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((response) => {
@@ -102,6 +109,7 @@ export const actions = {
 
   GET_TRANSLATION({ rootState, commit }, { language }) {
     const { storeDomain } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     if (!storeDomain) return
 
@@ -111,6 +119,9 @@ export const actions = {
         url: `/i18n/${storeDomain}`,
         params: {
           language,
+        },
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((response) => {

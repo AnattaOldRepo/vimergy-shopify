@@ -71,7 +71,7 @@ export default {
   height: auto;
   padding: 13px 0 12px;
   font-family: $font-primary-medium;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   color: $color-white;
   text-decoration: none;

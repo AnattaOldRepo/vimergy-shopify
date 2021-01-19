@@ -1,158 +1,61 @@
 <template>
   <div v-if="activeSubscription">
     <portal to="header">
-        <the-header
-          :middle-html="'Subscription ' + activeSubscription.id"
-          mode="backwardRoute"
-        />
+      <the-header
+        :middle-html="
+          activeSubscription.name
+            ? `${atc['labels.subscription'] || 'Subscription'} ${
+                activeSubscription.name
+              }`
+            : `${atc['labels.subscription'] || 'Subscription'} ${
+                activeSubscription.id
+              }`
+        "
+        mode="backwardRoute"
+      />
     </portal>
 
-    <mobile-subscription-template functional-block-title="Edit">
-      <div slot="functionality-block" class="c-mobileSubscriptionTemplate__tools">
-        <!-- Subscription & Details Block -->
-        <functional-button-block
-          :internal-link="{
-              query: {
-                template: 'details',
-                ...returnCancelledSubscriptionRoute,
-                storeDomain,
-                customerId,
-              },
-            }"
-          title="Subscription Details"
-          class="c-subscriptionMobilePage__tool"
-        >
-          <span slot="icon" class="c-functionalButtonBlock__icon">
-            <subscription-icon />
-          </span>
-        </functional-button-block>
+    <!-- subscription info starts  -->
+    <div class="u-mt-3 c-mobileSubscriptionInfo">
+      <p v-if="editNextOrder">
+        You are <strong> editing your {{ nextShipDate }} order. </strong>
+        <br />
+        To edit your Subscription only.
+        <a @click="changeMode(false)"><strong> CLICK HERE </strong></a>
+      </p>
 
-        <!-- Next Shipment Block -->
-        <functional-button-block
-          v-if="!isCancelledSubscriptionRoute"
-          :internal-link="{
-              query: {
-                template: 'next-shipment',
-                ...returnCancelledSubscriptionRoute,
-                storeDomain,
-                customerId,
-              },
-            }"
-          title="Next Shipment"
-          :second-text="shipmentDate"
-          class="c-subscriptionMobilePage__tool"
-        >
-          <span slot="icon" class="c-functionalButtonBlock__icon">
-            <shipping-timed-icon />
-          </span>
-        </functional-button-block>
+      <p v-else>
+        You are <strong> Editing your subscription</strong>
+        <br />
+        To edit your {{ nextShipDate }} order only .
+        <a @click="changeMode(true)"> <strong> CLICK HERE </strong></a>
+      </p>
+    </div>
 
-        <!-- Last Shipment Block -->
-        <functional-button-block
-          v-else
-          no-arrow-icon
-          title="Last Shipment"
-          :second-text="deliveredDate"
-          class="c-subscriptionMobilePage__tool disabled-click"
-        >
-          <span slot="icon" class="c-functionalButtonBlock__icon">
-            <shipping-timed-icon />
-          </span>
-        </functional-button-block>
+    <!-- subscription info ends  -->
 
-        <!-- Adress & Payment Block -->
-        <functional-button-block
-          :internal-link="{
-            query: {
-              template: 'address-payment',
-              ...returnCancelledSubscriptionRoute,
-              storeDomain,
-              customerId,
-            },
-          }"
-          title="Address & Payment"
-          class="c-subscriptionMobilePage__tool"
-        >
-          <span slot="icon" class="c-functionalButtonBlock__icon">
-            <credit-card-icon />
-          </span>
-        </functional-button-block>
+    <mobile-screen-details class="u-mt-3" />
 
-        <!-- Past Shipment -->
-        <functional-button-block
-          :internal-link="{
-            query: {
-              template: 'history',
-              ...returnCancelledSubscriptionRoute,
-              storeDomain,
-              customerId,
-            },
-          }"
-          title="Past Shipments"
-          :second-text="pastShipmentText"
-          class="c-subscriptionMobilePage__tool c-subscriptionMobilePage__toolLast"
-        >
-          <span slot="icon" class="c-functionalButtonBlock__icon">
-            <history-icon/>
-          </span>
-        </functional-button-block>
-
-        <!-- Cancel Subscription -->
-        <functional-button-block
-          v-if="!isCancelledSubscriptionRoute"
-          :internal-link="{
-            path: '/cancel',
-            query: {
-              storeDomain,
-              customerId,
-            },
-          }"
-          title="Cancel Subscription"
-        >
-          <span slot="icon" class="c-functionalButtonBlock__icon">
-              <cross-circle-icon />
-          </span>
-        </functional-button-block>
-
-        <p class="c-subscriptionMobilePage__idText">Subscription ID: {{ activeSubscription.id }}</p>
-      </div>
-    </mobile-subscription-template>
-
-    <portal v-if="isCancelledSubscriptionRoute" to="float-buttons">
-       <mobile-float-buttons />
-    </portal>
- </div>
+    <mobile-screen-address-payment class="u-mt-3" />
+  </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import FunctionalButtonBlock from '@components/functional-button-block.vue'
-import ShippingTimedIcon from '@components/Icon/shipping-timed-icon.vue'
-import SubscriptionIcon from '@components/Icon/subscription-icon.vue'
-import CreditCardIcon from '@components/Icon/credit-card-icon'
-import HistoryIcon from '@components/Icon/history-icon'
-import MobileSubscriptionTemplate from '@components/mobile-subscription-template'
-import CrossCircleIcon from '@components/Icon/cross-circle-icon'
-import MobileFloatButtons from '@components/mobile-float-buttons'
+import MobileScreenDetails from '@components/mobile-screen-details'
+import MobileScreenAddressPayment from '@components/mobile-screen-address-payment'
 import TheHeader from '@components/the-header'
 import moment from 'moment'
-
 
 export default {
   components: {
     TheHeader,
-    FunctionalButtonBlock,
-    ShippingTimedIcon,
-    SubscriptionIcon,
-    CreditCardIcon,
-    HistoryIcon,
-    MobileSubscriptionTemplate,
-    CrossCircleIcon,
-    MobileFloatButtons,
+    MobileScreenDetails,
+    MobileScreenAddressPayment,
   },
 
-  data(){
-    return{
+  data() {
+    return {
       updating: false,
     }
   },
@@ -164,9 +67,14 @@ export default {
 
     ...mapState('orders', ['subscriptionOrders']),
 
-    ...mapGetters('activeSubscription', ['activeSubscription', 'activeSubscriptionNextDate']),
+    ...mapGetters('activeSubscription', [
+      'activeSubscription',
+      'activeSubscriptionNextDate',
+    ]),
 
-    isCancelledSubscriptionRoute(){
+    ...mapState('editMode', ['editNextOrder']),
+
+    isCancelledSubscriptionRoute() {
       return this.$route.query.route === 'cancelledSubscriptions'
     },
 
@@ -174,19 +82,36 @@ export default {
       return !this.isActive && this.isTrial
     },
 
+    nextShipDate() {
+      const { activeSubscription } = this
+      if (
+        !activeSubscription &&
+        activeSubscription.next &&
+        activeSubscription.next.date
+      )
+        return false
+      return moment(activeSubscription.next.date, 'YYYYMMDD').format('MMMM Do')
+    },
+
     isExpiredTrial() {
       const { activeSubscription } = this
-      return !activeSubscription.active && activeSubscription.cancellation_reason === 'Trial period has expired'
+      return (
+        !activeSubscription.active &&
+        activeSubscription.cancellation_reason === 'Trial period has expired'
+      )
     },
 
     isInactiveRegular() {
       const { activeSubscription } = this
-      return !activeSubscription.active && activeSubscription.cancellation_reason !== 'Trial period has expired'
+      return (
+        !activeSubscription.active &&
+        activeSubscription.cancellation_reason !== 'Trial period has expired'
+      )
     },
 
-    returnCancelledSubscriptionRoute(){
-      if(this.isCancelledSubscriptionRoute){
-        return {'route': 'cancelledSubscriptions'}
+    returnCancelledSubscriptionRoute() {
+      if (this.isCancelledSubscriptionRoute) {
+        return { route: 'cancelledSubscriptions' }
       }
       return {}
     },
@@ -194,47 +119,46 @@ export default {
     shipmentDate() {
       const { activeSubscriptionNextDate } = this
       if (!activeSubscriptionNextDate) return false
-      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format(
-        'MMM D'
-      )
+      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMM D')
     },
 
     isOriginalCharge() {
-      if(this.subscriptionOrders && this.subscriptionOrders[0]){
+      if (this.subscriptionOrders && this.subscriptionOrders[0]) {
         return !!this.subscriptionOrders[0].shopify_order_id
       }
       return ''
     },
 
-    pastShipmentText(){
-      if(this.deliveredDate){
+    pastShipmentText() {
+      if (this.deliveredDate) {
         return `<br/><span class="c-functionalButtonBlock__small-text">Last Shipment Delivered ${this.deliveredDate}</span>`
       }
       return ''
     },
 
-    deliveredDate(){
+    deliveredDate() {
       const { subscriptionOrders, isOriginalCharge } = this
       let fullFillmentText
       let date
 
-      if(subscriptionOrders.length > 0){
-        fullFillmentText = subscriptionOrders[0].fulfillment_status ? subscriptionOrders[0].fulfillment_status : subscriptionOrders[0].financial_status
+      if (subscriptionOrders.length > 0) {
+        fullFillmentText = subscriptionOrders[0].fulfillment_status
+          ? subscriptionOrders[0].fulfillment_status
+          : subscriptionOrders[0].financial_status
         date = isOriginalCharge
           ? moment(subscriptionOrders[0].created_at, 'YYYYMMDD').format('MMM D')
           : moment(subscriptionOrders[0].processed_at).format('MMM D')
       }
 
-      if(fullFillmentText && fullFillmentText.includes('_')){
-          fullFillmentText = fullFillmentText.split('_').join(' ')
+      if (fullFillmentText && fullFillmentText.includes('_')) {
+        fullFillmentText = fullFillmentText.split('_').join(' ')
       }
 
       return date || '---'
     },
   },
 
-
-  mounted(){
+  mounted() {
     this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
   },
 
@@ -243,7 +167,12 @@ export default {
 
     ...mapActions('orders', ['GET_SUBSCRIPTION_ORDERS']),
 
-    ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION', 'ACTIVATE_SUBSCRIPTION', 'GET_SUBSCRIPTIONS']),
+    ...mapActions('subscriptions', [
+      'UPDATE_SUBSCRIPTION',
+      'ACTIVATE_SUBSCRIPTION',
+      'GET_SUBSCRIPTIONS',
+    ]),
+    ...mapActions('editMode', ['setEditNextOrder']),
 
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
@@ -264,7 +193,7 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('handleReactivateSubscription error: ', e)
+        console.error('handleReactivateSubscription error: ', e)
       } finally {
         await this.GET_SUBSCRIPTIONS()
         // Set route getting new subscription as current route dynamically
@@ -274,7 +203,7 @@ export default {
     },
 
     async handleReactivateTrialAsSubscription() {
-      const { activeSubscription} = this
+      const { activeSubscription } = this
 
       let analyticsEventName = 'Upscribe Reactivate Trial as Subscription'
       let analyticsPayload = {
@@ -290,10 +219,26 @@ export default {
           payload: analyticsPayload,
         })
       } catch (e) {
-        console.log('handleReactivateTrialAsSubscription error: ', e)
+        console.error('handleReactivateTrialAsSubscription error: ', e)
       } finally {
         await this.GET_SUBSCRIPTIONS()
         this.updating = false
+      }
+    },
+    changeMode(goToNextorder) {
+      const { fullPath } = this.$route
+      const query = goToNextorder
+        ? { editNextOrder: true }
+        : { editNextOrder: '' }
+      this.$router.push({ path: fullPath, query })
+    },
+  },
+  watch: {
+    '$route.query.editNextOrder'(value) {
+      if (value) {
+        this.setEditNextOrder(true)
+      } else {
+        this.setEditNextOrder(false)
       }
     },
   },
@@ -302,7 +247,7 @@ export default {
 
 <style lang="scss">
 @import '@design/_colors';
-.c-subscriptionMobilePage__idText{
+.c-subscriptionMobilePage__idText {
   color: $color-blue-secondary;
   font-size: 14px;
   line-height: 18px;
@@ -311,25 +256,35 @@ export default {
   margin-bottom: 22px;
   letter-spacing: 0.2px;
 }
-
-
-.c-subscriptionMobilePage__toolLast{
-    margin-top: 24px;
+.c-mobileSubscriptionInfo {
+  text-align: center;
+  font-weight: normal;
+  line-height: 1.5em;
+  strong {
+    font-weight: bold;
+  }
+  a {
+    text-decoration: underline;
+    color: $color-primary;
+  }
 }
 
-.c-subscriptionMobilePage__reactiveBlock{
+.c-subscriptionMobilePage__toolLast {
+  margin-top: 24px;
+}
+
+.c-subscriptionMobilePage__reactiveBlock {
   margin-top: 16px;
   max-width: 400px;
   display: flex;
   justify-content: center;
 }
 
-.c-subscriptionMobilePage__button{
+.c-subscriptionMobilePage__button {
   background-color: $color-white;
   &:hover,
-  &:focus{
-    background-color:$color-white;
+  &:focus {
+    background-color: $color-white;
   }
 }
-
 </style>

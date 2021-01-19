@@ -22,7 +22,7 @@ const config = ['.env', `.${process.env.APP_ENV}.env`].reduce(
   { APP_ENV: process.env.APP_ENV }
 )
 
-console.log({ APP_ENV: config.APP_ENV, API: config.API })
+console.info({ APP_ENV: config.APP_ENV, API: config.API })
 
 module.exports = {
   mode: 'spa',
@@ -33,14 +33,31 @@ module.exports = {
     mode: 'hash',
   },
 
+  vue: {
+    config: {
+      productionTip: false,
+      devtools: true,
+    },
+  },
+
   head: {
     title: pkg.name,
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, maximum-scale=1',
+      },
       { hid: 'description', name: 'description', content: pkg.description },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
+      },
+    ],
   },
 
   loading: { color: '#fff' },
@@ -59,7 +76,17 @@ module.exports = {
     { src: '~/plugins/vueContentPlaceholders.js', mode: 'client' },
   ],
 
-  modules: ['@nuxtjs/dotenv', 'portal-vue/nuxt', 'nuxt-healthcheck'],
+  modules: [
+    '@nuxtjs/dotenv',
+    'portal-vue/nuxt',
+    'nuxt-healthcheck',
+    '@nuxtjs/toast',
+  ],
+
+  toast: {
+    position: 'top-center',
+    duration: '4000',
+  },
 
   healthcheck: {
     path: '/health-check',

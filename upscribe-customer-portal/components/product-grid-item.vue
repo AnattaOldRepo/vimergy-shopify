@@ -1,11 +1,13 @@
 <script>
-import { mapMutations, mapState,
-// mapGetters
+import {
+  mapMutations,
+  mapState,
+  // mapGetters
 } from 'vuex'
 import { windowSizes } from '@mixins/windowSizes'
 import DrawerProducts from '@components/drawer-products.vue'
 import VButton from '@components/v-button.vue'
-import PlusCircle from '@components/Icon/plus-cicrle'
+// import PlusCircle from '@components/Icon/plus-cicrle'
 import MinusIcon from '@components/Icon/minus-icon'
 import PlusIcon from '@components/Icon/plus-icon'
 import TrashIcon from '@components/Icon/trash-icon'
@@ -14,7 +16,7 @@ export default {
   components: {
     VButton,
     DrawerProducts,
-    PlusCircle,
+    // PlusCircle,
     MinusIcon,
     TrashIcon,
     PlusIcon,
@@ -43,14 +45,15 @@ export default {
     }
   },
 
-
   computed: {
     ...mapState('translations', ['atc']),
 
     ...mapState('shop', ['currencySymbol']),
 
-    disabled(){
-      if(this.status === 'updating') return true
+    ...mapState('editMode', ['editNextOrder']),
+
+    disabled() {
+      if (this.status === 'updating') return true
       return false
     },
   },
@@ -63,11 +66,11 @@ export default {
       this.drawerProductsOpen = true
     },
 
-    openQuantityControl(){
+    openQuantityControl() {
       this.quantityControlIsOpen = true
     },
 
-    closeQuantityControl(){
+    closeQuantityControl() {
       this.quantityControlIsOpen = false
     },
 
@@ -97,7 +100,6 @@ export default {
 
 <template>
   <div v-if="product && windowWidth >= 768" class="c-productGridItem">
-
     <!-- <span v-if="activeSubscriptionProduct">{{ activeSubscriptionProduct.quantity }}</span> -->
     <div v-if="product.image" class="c-productGridItem__imageWrap">
       <img
@@ -120,7 +122,7 @@ export default {
     >
 
     <v-button
-      class="c-productGridItem__button c-button--transparent"
+      class="c-productGridItem__button c-button--alt"
       size="small"
       :text="atc['buttons.addProductGridItem'] || 'Add'"
       @onClick="handleAddProduct"
@@ -138,7 +140,7 @@ export default {
 
   <!-- Mobile -->
 
-  <div v-else class="c-productGridItem" >
+  <div v-else class="c-productGridItem">
     <div v-if="product.image" class="c-productGridItem__imageWrap">
       <img
         class="c-productGridItem__image"
@@ -159,72 +161,78 @@ export default {
       >{{ currencySymbol }}{{ product.price }}</span
     >
 
-     <v-button
-        v-if="product.quantity && !isSwap"
-        class="c-productGridItem__button--secondary c-button--transparent c-productGridItem__buttonQuantity"
-        size="small"
-        :disabled="disabled"
-        @onClick="openQuantityControl"
-        >
-        {{ product.quantity }}
-     </v-button>
+    <v-button
+      v-if="product.quantity && !isSwap"
+      class="c-productGridItem__button--secondary c-button--alt c-productGridItem__buttonQuantity"
+      size="small"
+      :disabled="disabled"
+    >
+      {{ product.quantity }}
+    </v-button>
 
-     <v-button
-        v-else-if="!product.quantity && !isSwap"
-        class="c-productGridItem__button--secondary c-button--transparent"
-        size="small"
+    <v-button
+      v-if="!isSwap"
+      class="c-button--alt"
+      size="small"
+      @onClick="
+        $emit('handleAddProductVariantToSubscription', {
+          showVariantSelector: true,
+          product,
+          variantId: product.variants[0].id,
+        })
+      "
+    >
+      {{ atc['buttons.addProductGridItem'] || 'Add' }}
+    </v-button>
+
+    <v-button
+      v-else
+      class="c-button--alt c-productGridItem__buttonSwap"
+      size="small"
+      :disabled="disabled"
+      @onClick="$emit('handleOpenSwapModal', product)"
+    >
+      SWAP
+    </v-button>
+
+    <div
+      v-if="quantityControlIsOpen && product.quantity"
+      class="c-productGridItem__quantityControl"
+    >
+      <v-button
+        v-if="product.quantity > 1"
+        class="c-productGridItem__quantityBox"
+        aria-label="minus icon"
         :disabled="disabled"
-        @onClick="$emit('handleAddProductVariantToSubscription', product.variants[0].id, product, true)"
+        @onClick="quantityChange('decrease')"
       >
-       <plus-circle
-          width='24'
-          height='24'
-          fill-color='#A3B5BF'
-        />
+        <minus-icon />
       </v-button>
 
       <v-button
         v-else
-        class="c-button--transparent c-productGridItem__buttonSwap"
-        size="small"
+        class="c-productGridItem__quantityBox"
+        aria-label="trash icon"
         :disabled="disabled"
-        @onClick="$emit('handleOpenSwapModal', product)"
+        @onClick="quantityChange('decrease')"
       >
-        SWAP
+        <trash-icon />
       </v-button>
 
-      <div v-if="quantityControlIsOpen && product.quantity" class="c-productGridItem__quantityControl">
-        <v-button
-          v-if="product.quantity > 1"
-          class="c-productGridItem__quantityBox"
-          aria-label="minus icon"
-          :disabled="disabled"
-          @onClick="quantityChange('decrease')"
-          >
-          <minus-icon />
-        </v-button>
+      <span
+        class="c-productGridItem__quantityBox c-productGridItem__quantity"
+        >{{ product.quantity }}</span
+      >
 
-        <v-button
-          v-else
-          class="c-productGridItem__quantityBox"
-          aria-label="trash icon"
-          :disabled="disabled"
-          @onClick="quantityChange('decrease')"
-          >
-          <trash-icon/>
-        </v-button>
-
-        <span class="c-productGridItem__quantityBox c-productGridItem__quantity" >{{  product.quantity }}</span>
-
-        <v-button
-          class="c-productGridItem__quantityBox"
-          aria-label="plus icon"
-          :disabled="disabled"
-          @onClick="quantityChange('increase')"
-          >
-          <plus-icon />
-        </v-button>
-      </div>
+      <v-button
+        class="c-productGridItem__quantityBox"
+        aria-label="plus icon"
+        :disabled="disabled"
+        @onClick="quantityChange('increase')"
+      >
+        <plus-icon />
+      </v-button>
+    </div>
   </div>
 </template>
 
@@ -288,7 +296,7 @@ export default {
   font-weight: bold;
 }
 
-.c-productGridItem__button--secondary{
+.c-productGridItem__button--secondary {
   position: absolute;
   border: 0px;
   top: 0px;
@@ -298,7 +306,7 @@ export default {
   padding: 0px;
 }
 
-.c-productGridItem__buttonQuantity{
+.c-productGridItem__buttonQuantity {
   background-color: $color-black;
   color: $color-white;
   min-width: 24px;
@@ -306,13 +314,13 @@ export default {
   border-radius: 50%;
 
   &:hover,
-  &:focus{
+  &:focus {
     background-color: $color-black;
-    color: $color-white
+    color: $color-white;
   }
 }
 
-.c-productGridItem__quantityControl{
+.c-productGridItem__quantityControl {
   position: absolute;
   top: 0;
   z-index: 70;
@@ -324,7 +332,7 @@ export default {
   border-radius: 4px;
 }
 
-.c-productGridItem__quantityBox{
+.c-productGridItem__quantityBox {
   width: 48px;
   height: 100%;
   display: flex;
@@ -335,16 +343,16 @@ export default {
   border: 0px;
 
   &:hover,
-  &:focus{
+  &:focus {
     background-color: $color-white;
   }
 }
 
-.c-productGridItem__quantity{
+.c-productGridItem__quantity {
   font-weight: bold;
 }
 
-.c-productGridItem__buttonSwap{
+.c-productGridItem__buttonSwap {
   font-weight: bold;
   font-size: 12px;
   line-height: 16px;

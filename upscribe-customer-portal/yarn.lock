@@ -1244,6 +1244,13 @@
     consola "^2.10.1"
     dotenv "^8.1.0"
 
+"@nuxtjs/toast@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/toast/-/toast-3.3.1.tgz#ae489f4990b5da9f7ab90ea2dbfcf47900cb3ca2"
+  integrity sha512-b9JpyjSw5ZOyjskBvNc4NEebe0qxB6LivBlO84gHOnsaF23rLkJoBfVNDcXwGNDl7vm09yM4WqBGTkm/OQ0ZCQ==
+  dependencies:
+    vue-toasted "^1.1.28"
+
 "@nuxtjs/youch@^4.2.3":
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/@nuxtjs/youch/-/youch-4.2.3.tgz#36f8b22df5a0efaa81373109851e1d857aca6bed"
@@ -2122,6 +2129,10 @@ babel-messages@^6.23.0:
   resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-6.23.0.tgz#f3cdf4703858035b2a2951c6ec5edf6c62f2630e"
   dependencies:
     babel-runtime "^6.22.0"
+
+babel-plugin-add-module-exports@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-add-module-exports/-/babel-plugin-add-module-exports-0.2.1.tgz#9ae9a1f4a8dc67f0cdec4f4aeda1e43a5ff65e25"
 
 babel-plugin-dynamic-import-node@^2.2.0, babel-plugin-dynamic-import-node@^2.3.3:
   version "2.3.3"
@@ -12400,6 +12411,15 @@ vue-no-ssr@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/vue-no-ssr/-/vue-no-ssr-1.1.1.tgz#875f3be6fb0ae41568a837f3ac1a80eaa137b998"
 
+vue-pagination-2@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/vue-pagination-2/-/vue-pagination-2-3.0.6.tgz#f26d43504c70a09d23ce84e0f721f8126c8f6c76"
+  dependencies:
+    babel-plugin-add-module-exports "^0.2.1"
+    merge "^1.2.0"
+    vue ">=2.0.0"
+    vuex "^2.0.0"
+
 vue-pikaday@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/vue-pikaday/-/vue-pikaday-0.1.1.tgz#c5ca8c92745379b6ed3bc495b860c8148752aa7d"
@@ -12473,19 +12493,24 @@ vue-template-es2015-compiler@^1.6.0, vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
 
+vue-toasted@^1.1.28:
+  version "1.1.28"
+  resolved "https://registry.yarnpkg.com/vue-toasted/-/vue-toasted-1.1.28.tgz#dbabb83acc89f7a9e8765815e491d79f0dc65c26"
+  integrity sha512-UUzr5LX51UbbiROSGZ49GOgSzFxaMHK6L00JV8fir/CYNJCpIIvNZ5YmS4Qc8Y2+Z/4VVYRpeQL2UO0G800Raw==
+
 vue@2.6.10:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
+
+vue@>=2.0.0, vue@^2.6.12:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
 
 vue@^1.0.0:
   version "1.0.28"
   resolved "https://registry.yarnpkg.com/vue/-/vue-1.0.28.tgz#ed2ff07b200bde15c87a90ef8727ceea7d38567d"
   dependencies:
     envify "^3.4.0"
-
-vue@^2.6.12:
-  version "2.6.12"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
 
 vuelidate-error-extractor@^2.3.1:
   version "2.4.1"
@@ -12503,6 +12528,10 @@ vuex-persistedstate@^2.7.0:
   dependencies:
     deepmerge "^4.2.2"
     shvl "^2.0.0"
+
+vuex@^2.0.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-2.5.0.tgz#20f0265ade6c9a5ac6724a405d3ffdb4726c9741"
 
 vuex@^3.0.1, vuex@^3.5.1:
   version "3.5.1"

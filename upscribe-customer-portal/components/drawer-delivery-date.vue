@@ -37,17 +37,13 @@ export default {
     shipmentDate() {
       const { activeSubscriptionNextDate } = this
       if (!activeSubscriptionNextDate) return false
-      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format(
-        'MMM D'
-      )
+      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMM D')
     },
 
-    shipmentDateWithYear(){
+    shipmentDateWithYear() {
       const { activeSubscriptionNextDate } = this
       if (!activeSubscriptionNextDate) return false
-      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format(
-        'MMM D YYYY'
-      )
+      return moment(activeSubscriptionNextDate, 'YYYYMMDD').format('MMM D YYYY')
     },
 
     nextShipmentDates() {
@@ -104,7 +100,7 @@ export default {
         })
         this.drawerStatus = 'SUCCESS'
       } catch (e) {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.drawerStatus = { state: 'FAILURE', message: e.message }
       }
     },
@@ -115,12 +111,16 @@ export default {
 <template>
   <drawer-wrap :show="show" :status="drawerStatus" @close="$emit('close')">
     <div class="c-drawer c-drawerDeliveryDate">
-      <h2 class="c-drawer__title c-drawerDeliveryDate__title">{{ atc['portal.shipsOnDrawerTitle'] || 'Ships On' }} {{ shipmentDate ? shipmentDate : ''}}</h2>
+      <h2 class="c-drawer__title c-drawerDeliveryDate__title"
+        >{{ atc['portal.shipsOnDrawerTitle'] || 'Ships On' }}
+        {{ shipmentDate ? shipmentDate : '' }}</h2
+      >
 
       <div class="c-drawerDeliveryDate__intro">
-        <span class="c-drawerDeliveryDate__prompt"
-          >{{ atc['portal.shipsOnDrawerPrompt'] || 'Want to schedule a new shipment?' }}</span
-        >
+        <span class="c-drawerDeliveryDate__prompt">{{
+          atc['portal.shipsOnDrawerPrompt'] ||
+            'Want to schedule a new shipment?'
+        }}</span>
       </div>
 
       <no-ssr>
@@ -134,7 +134,9 @@ export default {
         v-if="nextShipmentDates && !editNextOrder"
         class="c-drawerNextShipments"
       >
-        <h3 class="c-drawerNextShipments__title">{{ atc['portal.shipsOnDrawerNextShipmentsLabel'] || 'Next Shipments' }}</h3>
+        <h3 class="c-drawerNextShipments__title">{{
+          atc['portal.shipsOnDrawerNextShipmentsLabel'] || 'Next Shipments'
+        }}</h3>
         <div
           v-for="(date, index) in nextShipmentDates"
           :key="index"
@@ -195,10 +197,10 @@ export default {
   font-size: 18px;
   line-height: 23px;
   color: #171725;
-  font-weight: normal
+  font-weight: normal;
 }
 
-.c-drawerNextShipments__contain{
+.c-drawerNextShipments__contain {
   display: flex;
 }
 </style>

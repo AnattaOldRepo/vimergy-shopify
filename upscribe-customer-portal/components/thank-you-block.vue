@@ -7,15 +7,27 @@
         </div>
 
         <h1 class="c-orderThankyou__title"
-          >{{ atc['labels.thankYou'] || 'Thank you' }} {{ customerName ? customerName : '' }}!</h1
+          >{{ atc['labels.thankYou'] || 'Thank you' }}
+          {{ customerName ? customerName : '' }}!</h1
         >
         <p class="c-orderThankyou__message">
-          {{ atc['portal.thankYouNewShipmentDate'] || 'Your new shipment date is' }} {{ nextShipDate(displayCharges[0]) }}
+          {{
+            atc['portal.thankYouNewShipmentDate'] || 'Your new shipment date is'
+          }}
+          {{ nextShipDate(displayCharges[0]) }}
         </p>
       </div>
 
-      <div v-for="displayCharge in displayCharges" :key="displayCharge.id" class="c-thankYouBlock__bottom">
-        <p class="c-orderThankyou__message">Subscription #{{ displayCharge.subscription_id}}</p>
+      <div
+        v-for="displayCharge in displayCharges"
+        :key="displayCharge.id"
+        class="c-thankYouBlock__bottom"
+      >
+        <p class="c-orderThankyou__message"
+          >{{ atc['labels.subscription'] || 'Subscription' }} #{{
+            displayCharge.subscription_id
+          }}</p
+        >
         <div class="c-thankYouBlock__items">
           <product-option
             v-for="item in displayCharge.items"
@@ -26,7 +38,10 @@
           />
         </div>
 
-        <div class="c-thankYouBlock__total c-tableContainer" style="display:none;">
+        <div
+          class="c-thankYouBlock__total c-tableContainer"
+          style="display:none;"
+        >
           <table class="c-table">
             <tbody>
               <tr>
@@ -34,7 +49,8 @@
                 <td></td>
                 <td></td>
                 <td class="has-text-centered"
-                  >{{ currencySymbol }}{{
+                  >{{ currencySymbol
+                  }}{{
                     parseFloat(displayCharge.total_line_items_price, 2)
                   }}</td
                 >
@@ -45,8 +61,8 @@
                   <span
                     v-if="
                       displayCharge &&
-                      displayCharge.shipping_lines &&
-                      displayCharge.shipping_lines[0].title
+                        displayCharge.shipping_lines &&
+                        displayCharge.shipping_lines[0].title
                     "
                     style="font-weight: normal"
                     >&nbsp;{{ displayCharge.shipping_lines[0].title }}</span
@@ -54,24 +70,31 @@
                 >
                 <td colspan="2" class="has-text-centered"></td>
                 <td class="has-text-centered"
-                  >{{ currencySymbol }}{{
+                  >{{ currencySymbol
+                  }}{{
                     parseFloat(displayCharge.shipping_lines[0].price, 2)
                   }}</td
                 >
               </tr>
 
-              <tr v-if="displayCharge.shopify_discount && displayCharge.discount_code">
+              <tr
+                v-if="
+                  displayCharge.shopify_discount && displayCharge.discount_code
+                "
+              >
                 <th
                   >{{ atc['labels.discount'] || 'Discount' }}
-                  <span
-                    style="font-weight: normal"
+                  <span style="font-weight: normal"
                     >&nbsp;{{ displayCharge.discount_code }}</span
                   ></th
                 >
                 <td colspan="2" class="has-text-centered"></td>
                 <td class="has-text-centered"
                   ><span
-                    >-{{ currencySymbol }}{{ parseFloat(displayCharge.shopify_discount).toFixed(2) }}</span
+                    >-{{ currencySymbol
+                    }}{{
+                      parseFloat(displayCharge.shopify_discount).toFixed(2)
+                    }}</span
                   ></td
                 >
               </tr>
@@ -82,7 +105,8 @@
                 <td></td>
 
                 <td class="has-text-centered"
-                  >{{ currencySymbol }}{{ parseFloat(displayCharge.total_tax, 2) }}</td
+                  >{{ currencySymbol
+                  }}{{ parseFloat(displayCharge.total_tax, 2) }}</td
                 >
               </tr>
 
@@ -92,7 +116,8 @@
                 <td></td>
 
                 <td class="has-text-centered"
-                  >{{ currencySymbol }}{{ parseFloat(displayCharge.total_price, 2) }}</td
+                  >{{ currencySymbol
+                  }}{{ parseFloat(displayCharge.total_price, 2) }}</td
                 >
               </tr>
             </tbody></table
@@ -100,7 +125,10 @@
         </div>
       </div>
 
-      <v-button class="c-button--auto" style="margin:20px auto" @onClick="viewUpcomingOrderDetails"
+      <v-button
+        class="c-button--auto"
+        style="margin:20px auto"
+        @onClick="viewUpcomingOrderDetails"
         >{{ atc['buttons.viewOrderDetails'] || 'View Order Details' }}</v-button
       >
     </div>
@@ -158,8 +186,7 @@ export default {
           // single put in array
           return [activeCharge]
         }
-      } else if (multipleOrderDisplay){
-        console.log('Mismatch between displayCharges and multipleOrderDisplay')
+      } else if (multipleOrderDisplay) {
         return [activeCharge.next]
       } else {
         return [activeCharge]
@@ -183,7 +210,9 @@ export default {
         finalLastName = last_name
       }
 
-      return (finalFirstName && finalLastName) ? `${finalFirstName} ${finalLastName}` : ''
+      return finalFirstName && finalLastName
+        ? `${finalFirstName} ${finalLastName}`
+        : ''
     },
   },
 
@@ -202,12 +231,9 @@ export default {
     },
 
     nextShipDate(charge) {
-      console.log('nextShipDate', {charge})
       if (charge && charge.date) {
-        return moment(charge.date, 'YYYYMMDD').format(
-        'MMMM Do, YYYY')
-      }
-      else {
+        return moment(charge.date, 'YYYYMMDD').format('MMMM Do, YYYY')
+      } else {
         return false
       }
     },

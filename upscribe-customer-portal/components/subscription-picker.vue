@@ -3,56 +3,30 @@
     v-if="subscriptions && !isEmptyObject(subscriptions) && windowWidth >= 768"
     class="c-subscriptionPicker__container"
   >
-  <div
+    <div
       class="c-subscriptionPicker o-container"
-      :class="{'c-subscriptionPicker--singleSub': Object.keys(editableSubscriptions).length === 1}">
+      :class="{
+        'c-subscriptionPicker--singleSub':
+          Object.keys(editableSubscriptions).length === 1,
+      }"
+    >
       <a
-        v-for="subscription in showingSubscriptions"
+        v-for="subscription in currentSubscriptions"
         :key="subscription.id"
-        :data-id = "subscription.id"
+        :data-id="subscription.id"
         class="c-subscriptionPicker__option"
         :class="{
           'c-subscriptionPicker__option--active':
-            subscription.id === activeSubscriptionId,
-            'c-subscriptionPicker__option--inactive': !subscription.active
+            subscription.id == activeSubscriptionId,
+          'c-subscriptionPicker__option--inactive': !subscription.active,
         }"
-        href=""
         @click.prevent="swapAndSetSubscription(subscription.id, false, false)"
       >
-        {{ atc['labels.subscription'] || 'Subscription' }} {{ subscription.id }} {{shipmentDate(subscription) && '-'}} {{ shipmentDate(subscription)}}
+        {{ atc['labels.subscription'] || 'Subscription' }}
+        {{ subscription.name || subscription.id }}
+        {{ shipmentDate(subscription) && '-' }}
+        {{ shipmentDate(subscription) }}
       </a>
-
-      <div v-if = "dropDownLength > 0" class="c-subscriptionPicker__dropdown-contain">
-        <button
-          class="c-subscriptionPicker__option c-subscriptionPicker__option--button"
-          @click = "toggleDropDown"
-          >
-          {{ dropDownLength }} More Subscriptions  <icon-chevron-right class="c-subscriptionPicker__chev"
-          :class = "{'c-subscriptionPicker__chev--down': !isToggling, 'c-subscriptionPicker__chev--up': isToggling}"/>
-        </button>
-
-        <div class = "c-subscriptionPicker__dropdown"
-            :class = "{'c-subscriptionPicker__dropdown--hidden': !isToggling, 'c-subscriptionPicker__dropdown--active': isToggling}"
-            >
-            <a
-              v-for="(subscription, index) in currentSubscriptions"
-              :key="subscription.id"
-              :data-id = "subscription.id"
-              :data-visible="subscriptionStart === index || subscriptionStart + 1 === index ? 'hidden' : 'visible'"
-              class="c-subscriptionPicker__option c-subscriptionPicker__dropdown--option"
-              :class="{
-                'c-subscriptionPicker__option--active':
-                  subscription.id === activeSubscriptionId,
-                  'c-subscriptionPicker__option--inactive': !subscription.active,
-                  'c-subscriptionPicker__option--hidden': subscriptionStart === index || subscriptionStart + 1 === index
-              }"
-              href=""
-              @click.prevent="swapAndSetSubscription(subscription.id, index, true)"
-            >
-              {{ atc['labels.subscription'] || 'Subscription'}} {{ subscription.id }}
-            </a>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -61,33 +35,44 @@
   <div v-else class="c-subscriptionPicker--mobile">
     <div class="c-subscriptionPicker--mobile-container">
       <nuxt-link
-        v-for="subscription in currentSubscriptions.slice().splice(0, mobileSubscriptionEnd)"
+        v-for="subscription in currentSubscriptions
+          .slice()
+          .splice(0, mobileSubscriptionEnd)"
         :key="subscription.id"
-        :data-id = "subscription.id"
+        :data-id="subscription.id"
         class="c-subscriptionPicker__option c-subscriptionPicker__option--mobile"
         :to="{
-              query: {
-                template: 'default',
-                ...currentRoute,
-                storeDomain,
-                customerId,
-              },
-          }"
+          query: {
+            template: 'default',
+            ...currentRoute,
+            storeDomain,
+            customerId,
+          },
+        }"
         @click.native.prevent="setActiveSubscriptionId(subscription.id)"
       >
-        {{ atc['labels.subscription'] || 'Subscription'}} {{ subscription.id }} <span>{{ shipmentDate(subscription)}}</span>
+        {{ atc['labels.subscription'] || 'Subscription' }}
+        {{ subscription.id }} <span>{{ shipmentDate(subscription) }}</span>
 
-        <icon-chevron-right class="c-subscriptionPicker__chev c-subscriptionPicker__chev--mobile"/>
+        <icon-chevron-right
+          class="c-subscriptionPicker__chev c-subscriptionPicker__chev--mobile"
+        />
       </nuxt-link>
     </div>
 
-    <div v-if = "!isMobileDropDownOpen && currentSubscriptions.length > mobileSubscriptionEnd" class = "c-subscriptionPicker--mobile-button-contain">
-        <v-button
-          class="c-subscriptionPicker__option c-subscriptionPicker__option--button c-subscriptionPicker__option--button-mobile"
-          @onClick="openMobileDropDown"
-          >
-          Show More
-        </v-button>
+    <div
+      v-if="
+        !isMobileDropDownOpen &&
+          currentSubscriptions.length > mobileSubscriptionEnd
+      "
+      class="c-subscriptionPicker--mobile-button-contain"
+    >
+      <v-button
+        class="c-subscriptionPicker__option c-subscriptionPicker__option--button c-subscriptionPicker__option--button-mobile"
+        @onClick="openMobileDropDown"
+      >
+        Show More
+      </v-button>
     </div>
   </div>
 </template>
@@ -100,22 +85,22 @@ import IconChevronRight from '@components/icon-chevron-right.vue'
 import VButton from '@components/v-button.vue'
 
 export default {
-  components:{
+  components: {
     IconChevronRight,
     VButton,
   },
 
   mixins: [windowSizes],
 
-  props:{
+  props: {
     query: {
       type: String,
       default: '',
     },
   },
 
-  data(){
-    return{
+  data() {
+    return {
       isToggling: false,
       subscriptionStart: 0,
       deleteCount: 2,
@@ -126,7 +111,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters('subscriptions', ['subscriptionActive', 'subscriptionInActive']),
+    ...mapGetters('subscriptions', [
+      'subscriptionActive',
+      'subscriptionInActive',
+    ]),
 
     ...mapState('translations', ['atc']),
 
@@ -160,22 +148,33 @@ export default {
       // return editables
     },
 
-    currentSubscriptions(){
+    currentSubscriptions() {
       const { subscriptionActive, subscriptionInActive } = this
-      return this.query === 'cancelledSubscriptions' ? subscriptionInActive : subscriptionActive
+      return this.query === 'cancelledSubscriptions'
+        ? subscriptionInActive
+        : subscriptionActive
     },
 
-    currentRoute(){
-      return this.query === 'cancelledSubscriptions' ? {route: 'cancelledSubscriptions'} : {}
+    currentRoute() {
+      return this.query === 'cancelledSubscriptions'
+        ? { route: 'cancelledSubscriptions' }
+        : {}
     },
 
-     showingSubscriptions(){
-       return this.currentSubscriptions.slice().splice(this.subscriptionStart, this.deleteCount)
-     },
+    showingSubscriptions() {
+      return this.currentSubscriptions
+        .slice()
+        .splice(this.subscriptionStart, this.deleteCount)
+    },
 
-     dropDownLength(){
-       return this.currentSubscriptions.length - (this.subscriptionStart === this.currentSubscriptions.length - 1 ? 1 : 2)
-     },
+    dropDownLength() {
+      return (
+        this.currentSubscriptions.length -
+        (this.subscriptionStart === this.currentSubscriptions.length - 1
+          ? 1
+          : 2)
+      )
+    },
   },
 
   watch: {
@@ -187,9 +186,17 @@ export default {
   },
 
   mounted() {
-    const { subscriptionActive, subscriptionInActive, activeSubscriptionId } = this
+    const {
+      subscriptionActive,
+      subscriptionInActive,
+      activeSubscriptionId,
+    } = this
 
-    if (((subscriptionActive && subscriptionActive.length) || (subscriptionInActive && subscriptionInActive.length)) && !activeSubscriptionId) {
+    if (
+      ((subscriptionActive && subscriptionActive.length) ||
+        (subscriptionInActive && subscriptionInActive.length)) &&
+      !activeSubscriptionId
+    ) {
       if (subscriptionActive && subscriptionActive.length) {
         this.setActiveSubscriptionId(subscriptionActive[0].id)
       } else {
@@ -205,46 +212,53 @@ export default {
 
     ...mapMutations('shippingMethods', ['clearShippingMethods']),
 
-    ...mapMutations('editMode', ['setEditNextOrder']),
+    ...mapActions('editMode', ['setEditNextOrder']),
 
     // reset settings when changing tabs to give fresh setup
     resetSubscriptionSettings() {
       this.clearShippingMethods()
-      this.setEditNextOrder(false)
+      if (!this.$route.query.editNextOrder) {
+        this.setEditNextOrder(false)
+      }
     },
 
-    toggleDropDown(){
+    toggleDropDown() {
       this.isToggling = !this.isToggling
     },
 
-    swapAndSetSubscription(subscriptionId, index, needToggled){
-      if(index || index === 0){
+    swapAndSetSubscription(subscriptionId, index, needToggled) {
+      if (index || index === 0) {
         this.subscriptionStart = index
       }
 
-      if(needToggled){
-        this.toggleDropDown()
-      }
-      this.setActiveSubscriptionId(subscriptionId)
+      this.$router.push({
+        name: 'index',
+        query: {
+          storeDomain: this.storeDomain,
+          customerId: this.customerId,
+          subscriptionId: subscriptionId,
+          ...(this.$route.query.editNextOrder
+            ? { editNextOrder: this.$route.query.editNextOrder }
+            : {}),
+        },
+      })
+      // this.setActiveSubscriptionId(subscriptionId)
       this.GET_SUBSCRIPTION_ORDERS(this.activeSubscription.shopify_order_id)
     },
 
-     openMobileDropDown(){
-       this.isMobileDropDownOpen = true
-       this.mobileSubscriptionEnd = this.currentSubscriptions.length
-     },
-
+    openMobileDropDown() {
+      this.isMobileDropDownOpen = true
+      this.mobileSubscriptionEnd = this.currentSubscriptions.length
+    },
 
     shipmentDate(subscription) {
       if (!subscription || !subscription.next || !subscription.next.date) return
       const date = subscription.next.date
 
-      if(!moment(date, 'MMMM-DD-YYYY').isValid()){
+      if (!moment(date, 'MMMM-DD-YYYY').isValid()) {
         return ''
       } else {
-        return moment(date, 'YYYYMMDD').format(
-          'MMM Do'
-        )
+        return moment(date, 'YYYYMMDD').format('MMM Do')
       }
     },
   },
@@ -254,31 +268,31 @@ export default {
 <style lang="scss">
 @import '@design';
 
-.c-subscriptionPicker__container{
+.c-subscriptionPicker__container {
   background-color: $color-white;
 }
 
-.c-subscriptionPicker--mobile{
+.c-subscriptionPicker--mobile {
   padding: 0 16px;
-  @media(min-width: 420px){
+  @media (min-width: 420px) {
     padding: 0;
   }
 }
 
 .c-subscriptionPicker {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
+  overflow-x: scroll;
   margin: 0 auto 0;
   border-top: 1px solid $color-gray-200;
   padding: 0px 20px;
-  @include bp(tablet){
+  @include bp(tablet) {
     padding: 0 32px;
   }
 
-  @include bp(desktop){
+  @include bp(desktop) {
+    height: 90px;
     padding: 0px;
+    justify-content: center;
   }
 
   &--singleSub {
@@ -287,9 +301,10 @@ export default {
 }
 
 .c-subscriptionPicker__option {
+  cursor: pointer;
   font-size: 14px;
-  line-height: 18px;
-  padding: 20px 0;
+  line-height: 65px;
+  padding: 20px 0 0px;
   text-decoration: none;
   border-bottom: 3px solid transparent;
   color: $color-black;
@@ -303,15 +318,15 @@ export default {
     @include border-focus;
   }
 
-  &--active{
-     font-weight: bold;
+  &--active {
+    font-weight: bold;
   }
 
-  &--hidden{
+  &--hidden {
     display: none;
   }
 
-  &--button{
+  &--button {
     margin-right: 0px;
     padding-right: 0px;
     cursor: pointer;
@@ -319,20 +334,20 @@ export default {
     border: none;
     border-bottom: 3px solid transparent;
 
-    &:hover{
+    &:hover {
       // border-bottom: 3px solid transparent;
-      border-bottom: 3px solid $color-blue-brand
+      border-bottom: 3px solid $color-blue-brand;
     }
   }
 }
 
-.c-subscriptionPicker__dropdown-contain{
+.c-subscriptionPicker__dropdown-contain {
   display: inline-block;
   position: relative;
   background-color: transparent;
 }
 
-.c-subscriptionPicker__dropdown{
+.c-subscriptionPicker__dropdown {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -341,48 +356,48 @@ export default {
   position: absolute;
   z-index: 100;
 
-  &--hidden{
+  &--hidden {
     z-index: -1;
     visibility: hidden;
   }
 
-  &--active{
+  &--active {
     z-index: 100;
     visibility: visible;
   }
 }
 
-.c-subscriptionPicker__dropdown--option{
+.c-subscriptionPicker__dropdown--option {
   margin-bottom: 10px;
   margin-right: 0;
   width: 100%;
 
-  &:last-child{
+  &:last-child {
     margin-bottom: 0px;
   }
 }
 
-.c-subscriptionPicker__chev{
+.c-subscriptionPicker__chev {
   width: 12px;
   height: 11px;
   margin-left: 2px;
 
-  &--up{
+  &--up {
     transform: rotate(-90deg);
   }
 
-  &--down{
+  &--down {
     transform: rotate(90deg);
   }
 }
 
-.c-subscriptionPicker--mobile-container{
+.c-subscriptionPicker--mobile-container {
   display: flex;
   flex-direction: column;
   margin-top: 30px;
 }
 
-.c-subscriptionPicker__option--mobile{
+.c-subscriptionPicker__option--mobile {
   text-align: left;
   width: 100%;
   margin: 0 auto;
@@ -395,31 +410,31 @@ export default {
   line-height: 21px;
   position: relative;
 
-  span{
+  span {
     font-weight: 400;
     color: $color-blue-secondary;
     margin-left: 5px;
   }
 
-  &:hover{
+  &:hover {
     border: 1px solid $color-blue-light-border;
   }
 }
 
-.c-subscriptionPicker__chev--mobile{
+.c-subscriptionPicker__chev--mobile {
   position: absolute;
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
-  fill: #A3B5BF;
+  fill: #a3b5bf;
 }
 
-.c-subscriptionPicker--mobile-button-contain{
+.c-subscriptionPicker--mobile-button-contain {
   margin: 24px auto 0;
   width: 100%;
 }
 
-.c-subscriptionPicker__option--button-mobile{
+.c-subscriptionPicker__option--button-mobile {
   width: 100%;
   background-color: $color-white;
   text-transform: uppercase;
@@ -427,7 +442,7 @@ export default {
   border: 1px solid $color-blue-light-border;
   font-weight: bold;
 
-  &:hover{
+  &:hover {
     background-color: $color-white;
   }
 }

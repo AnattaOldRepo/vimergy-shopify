@@ -16,11 +16,11 @@ export const mutations = {
     state.customer = payload
     state.paymentCustomers = payload.payment_customers
 
-
     if (payload.payment_customers && payload.payment_customers.length) {
       state.customerStripeId = payload.payment_customers[0].id
       state.customerStripe = payload.payment_customers[0]
-      state.customerDefaultPaymentId = payload.payment_customers[0].default_source
+      state.customerDefaultPaymentId =
+        payload.payment_customers[0].default_source
     }
 
     state.customerShopify = payload.shopify
@@ -38,15 +38,24 @@ export const mutations = {
 export const actions = {
   async GET_CUSTOMER({ rootState, commit }, payload) {
     const { storeDomain, customerId } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url: `/customer/${storeDomain}/${customerId}`,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           commit('SET_CUSTOMER', data)
           const payment_methods = data.payment_methods
+
+          // set addresses
+          commit('addresses/SET_ADDRESSES', data.shopify.addresses, {
+            root: true,
+          })
 
           // set cards in cards store
           commit('cards/SET_CARDS', payment_methods, { root: true })

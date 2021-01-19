@@ -2,12 +2,14 @@
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 import VButton from '@components/v-button.vue'
+import Checkbox from '@components/checkbox.vue'
 import CardItem from '@components/card-item.vue'
 
 export default {
   components: {
     VButton,
     CardItem,
+    Checkbox,
   },
   props: {
     show: {
@@ -18,16 +20,21 @@ export default {
   data: () => {
     return {
       drawerStatus: null,
+      applyToAllActiveSusbscriptions: false,
     }
   },
   computed: {
     ...mapState('translations', ['atc']),
+
+    ...mapState('customer', ['paymentCards', 'customerShopifyId']),
 
     ...mapState('cards', ['cards', 'newSwapCard']),
 
     ...mapGetters('cards', ['activeCard']),
 
     ...mapGetters('activeSubscription', ['activeTotalPrice']),
+
+    ...mapGetters('subscriptions', ['subscriptionActive']),
 
     ...mapState('editMode', ['editNextOrder']),
   },
@@ -39,7 +46,10 @@ export default {
     ...mapActions('subscriptions', [
       'UPDATE_SUBSCRIPTION',
       'UPDATE_NEXT_ORDER',
+      'GET_SUBSCRIPTIONS',
     ]),
+
+    ...mapActions('customer', ['GET_CUSTOMER']),
 
     async swapCards() {
       const { newSwapCard, editNextOrder, activeCard } = this
@@ -48,6 +58,7 @@ export default {
         requestPayload: {
           payment_method_id: newSwapCard.id,
         },
+        bulkUpdate: this.applyToAllActiveSusbscriptions,
       }
 
       let updateAction
@@ -67,7 +78,12 @@ export default {
 
       try {
         this.$emit('setDrawerStatus', 'PENDING')
+
         await updateAction
+
+        // this refreshes view
+        await this.GET_SUBSCRIPTIONS()
+        await this.GET_CUSTOMER(this.customerShopifyId)
 
         const newCard = this.activeCard
 
@@ -84,7 +100,7 @@ export default {
         this.setNewSwapCard(null)
         this.$emit('setMode', 'default')
       } catch (e) {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
       }
     },
@@ -94,10 +110,24 @@ export default {
 
 <template>
   <div class="c-drawerCards c-drawer">
-    <h2 class="c-drawer__title">{{ atc['portal.swapPaymentMethodsDrawerTitle'] || 'Payment Methods' }}</h2>
+    <h2 class="c-drawer__title">{{
+      atc['portal.swapPaymentMethodsDrawerTitle'] || 'Payment Methods'
+    }}</h2>
 
+    <checkbox
+      v-model="applyToAllActiveSusbscriptions"
+      :label="
+        atc['portal.applyToAllActiveSusbscriptions'] ||
+          'Apply to all active subscriptions'
+      "
+    />
     <div>
-      <p v-if="activeCard" class="c-drawer__subtitle" style="margin-top:20px;">{{ atc['portal.swapCurrentCardLabel'] || 'Current Card' }}</p>
+      <p
+        v-if="activeCard"
+        class="c-drawer__subtitle"
+        style="margin-top:20px;"
+        >{{ atc['portal.swapCurrentCardLabel'] || 'Current Card' }}</p
+      >
       <div v-if="activeCard" class="c-drawerCardSwap">
         <card-item
           :key="activeCard ? activeCard.id : 'swap'"
@@ -107,7 +137,9 @@ export default {
         />
       </div>
 
-      <p class="c-drawer__subtitle" style="margin-top:20px;">{{ atc['portal.swapSelectNewCardLavel'] || 'New Card' }}</p>
+      <p class="c-drawer__subtitle" style="margin-top:20px;">{{
+        atc['portal.swapSelectNewCardLavel'] || 'New Card'
+      }}</p>
       <div class="c-drawerCardList">
         <card-item
           :key="newSwapCard.id"
@@ -117,13 +149,14 @@ export default {
         />
       </div>
 
-      <p class="c-drawer__subtitle" style="margin-top:20px;"
-        >{{ atc['portal.swapPaymentMethodNote'] || 'Recurring subscription will move from current to new card.' }}</p
-      >
+      <p class="c-drawer__subtitle" style="margin-top:20px;">{{
+        atc['portal.swapPaymentMethodNote'] ||
+          'Recurring subscription will move from current to new card.'
+      }}</p>
 
-      <v-button class="c-form__submitButton" @onClick="swapCards"
-        >{{ atc['portal.moveToNewCardButton'] || 'Move to New Card' }}</v-button
-      >
+      <v-button class="c-form__submitButton" @onClick="swapCards">{{
+        atc['portal.moveToNewCardButton'] || 'Move to New Card'
+      }}</v-button>
 
       <v-button
         class="c-drawerCardSwap__cancelButton"
@@ -143,7 +176,16 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  width: 100%;
   background-color: $color-light;
+  .c-drawerCardSwap__item {
+    width: 100%;
+  }
+}
+.c-drawerCardList {
+  .c-drawerSwapList__item {
+    width: 100%;
+  }
 }
 
 .c-drawerCardSwap__cancelButton {

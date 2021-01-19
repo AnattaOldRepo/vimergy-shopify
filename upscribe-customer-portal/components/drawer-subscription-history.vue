@@ -4,7 +4,7 @@
     @close="$emit('close')"
   >
     <div class="c-drawerSubscriptionHistory c-drawer">
-      <h2 class="c-drawer__title">Subscription History</h2>
+      <h2 class="c-drawer__title">{{ atc['portal.subscriptionHistoryDrawerTitle'] || 'Subscription History' }}</h2>
 
       <div v-if="subscriptionOrders">
         <history-order
@@ -47,6 +47,8 @@ export default {
 
  computed: {
     ...mapState('orders', ['subscriptionOrders']),
+
+    ...mapState('translations', ['atc']),
   },
 }
 </script>

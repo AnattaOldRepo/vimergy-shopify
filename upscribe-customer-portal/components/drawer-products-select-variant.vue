@@ -97,7 +97,6 @@ export default {
     },
 
     handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-      console.log('handleNewCheckoutUpdateError: ', e)
       if (e && e.data && e.data.shipping_update_required) {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
@@ -105,13 +104,19 @@ export default {
         this.$emit('setMode', 'shipping-method-list')
         this.$emit('setDrawerStatus', false)
       } else {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
       }
     },
 
-    async handleAddProductVariantToSubscription(variantId) {
-      const { editNextOrder, activeSubscription, variantSelectProduct } = this
+    // addToNextOrder will over ride the editNextOrder condition
+
+    async handleAddProductVariantToSubscription({
+      variantId,
+      product,
+      addToNextOrder,
+    }) {
+      const { activeSubscription, variantSelectProduct } = this
 
       const { addPayload: nextAddItemPayload } = productChangeRequest({
         variantId,
@@ -141,7 +146,7 @@ export default {
 
       let analyticsEventName, handleNewCheckoutUpdatePayload
 
-      if (editNextOrder) {
+      if (addToNextOrder) {
         analyticsEventName = 'Upscribe Next Order Product Add'
 
         handleNewCheckoutUpdatePayload = [
@@ -162,7 +167,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product added on subscription.`,
+            `Product added on subscription.`
           ),
         ]
       }
@@ -209,7 +214,16 @@ export default {
         v-if="variantSelectProduct"
         :product="variantSelectProduct"
         :updating="updating"
-        :button-text="editNextOrder ? (atc['portal.addProductToNextOrder'] || 'Add to Next Shipment') : (atc['portal.addProductToSubscription'] || 'Add to Subscription')"
+        :button-text="
+          editNextOrder
+            ? atc['portal.addProductToNextOrder'] || 'Add to Next Shipment'
+            : atc['portal.addProductToSubscription'] || 'Add to Subscription'
+        "
+        :secondary-button-text="
+          !editNextOrder
+            ? atc['portal.addProductToNextOrder'] || 'Add to Next Shipment'
+            : atc['portal.addProductToSubscription'] || 'Add to Subscription'
+        "
         @addProductVariantToSubscription="handleAddProductVariantToSubscription"
         @setMode="handleSetMode"
       />

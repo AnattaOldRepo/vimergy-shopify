@@ -1,16 +1,18 @@
 <script>
 /* eslint-disable eqeqeq */
 
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import VButton from '@components/v-button.vue'
-
 import ProductVariantSelector from '@components/product-variant-selector.vue'
+import { windowSizes } from '@mixins/windowSizes'
 
 export default {
   components: {
     VButton,
     ProductVariantSelector,
   },
+
+  mixins: [windowSizes],
   props: {
     product: {
       type: Object,
@@ -19,6 +21,10 @@ export default {
     buttonText: {
       type: String,
       default: 'Add to Subscription',
+    },
+    secondaryButtonText: {
+      type: String,
+      default: 'Save by adding to subscription',
     },
     variantAction: {
       type: String,
@@ -45,7 +51,10 @@ export default {
 
     ...mapState('products', ['productImages']),
 
-    ...mapState('shop', ['currencySymbol', 'nextOrderProductsSubscriptionPricing']),
+    ...mapState('shop', [
+      'currencySymbol',
+      'nextOrderProductsSubscriptionPricing',
+    ]),
 
     ...mapState('editMode', ['editNextOrder']),
 
@@ -53,8 +62,8 @@ export default {
       const { product } = this
       let finalProps = {}
       if (product.metafields) {
-        product.metafields.forEach(metafield => {
-          if (metafield.namespace === 'sf_upscribe' ) {
+        product.metafields.forEach((metafield) => {
+          if (metafield.namespace === 'sf_upscribe') {
             finalProps[metafield.key] = metafield.value
           }
         })
@@ -75,7 +84,10 @@ export default {
 
     applicableVariantsArray() {
       const { productBuiltProperties } = this
-      if (productBuiltProperties && productBuiltProperties.applicable_variants) {
+      if (
+        productBuiltProperties &&
+        productBuiltProperties.applicable_variants
+      ) {
         return productBuiltProperties.applicable_variants.split(',')
       } else {
         return []
@@ -83,15 +95,29 @@ export default {
     },
 
     subscriptionDiscountAmount() {
-      const { product, productBuiltProperties, nextOrderProductsSubscriptionPricing, editNextOrder } = this
+      const {
+        product,
+        productBuiltProperties,
+        nextOrderProductsSubscriptionPricing,
+        editNextOrder,
+      } = this
 
       if (!nextOrderProductsSubscriptionPricing && editNextOrder) return false
 
       const productProperties = product.properties || productBuiltProperties
 
-      if (!product || !productProperties || (!productProperties['discount_amount'] && !productProperties['discount_amount'])) return false
+      if (
+        !product ||
+        !productProperties ||
+        (!productProperties['discount_amount'] &&
+          !productProperties['discount_amount'])
+      )
+        return false
 
-      return productProperties['Discount Amount'] || productProperties['discount_amount']
+      return (
+        productProperties['Discount Amount'] ||
+        productProperties['discount_amount']
+      )
     },
 
     subscriptionDiscountType() {
@@ -145,7 +171,14 @@ export default {
     },
 
     selectedVariant() {
-      const { variantsObj, selectedVariantId, unavailable, activeOption1, activeOption2, activeOption3 } = this
+      const {
+        variantsObj,
+        selectedVariantId,
+        unavailable,
+        activeOption1,
+        activeOption2,
+        activeOption3,
+      } = this
       if (unavailable) {
         // face variant to show unavailable
         return {
@@ -155,10 +188,24 @@ export default {
           option2: activeOption2,
           option3: activeOption3,
         }
-
       } else {
         return variantsObj[selectedVariantId]
       }
+    },
+
+    secondaryButtonTextWithPricing() {
+      if (this.windowWidth < 767) {
+        if (this.editNextOrder) {
+          return this.secondaryButtonText
+        }
+        return !this.editNextOrder && this.atc['portal.addProductToNextOrder']
+          ? this.atc['portal.addProductToNextOrder'].replace(
+              '{X}',
+              this.variantPrice
+            )
+          : `Add to next order only | ${this.currencySymbol} ${this.variantPrice}`
+      }
+      return this.secondaryButtonText
     },
 
     variantPrice() {
@@ -167,28 +214,44 @@ export default {
     },
 
     variantSubscriptionPrice() {
-      const { variantPrice, subscriptionDiscountAmount, subscriptionDiscountType } = this
-      if (!variantPrice || !subscriptionDiscountAmount ||  !subscriptionDiscountType) return false
+      const {
+        variantPrice,
+        subscriptionDiscountAmount,
+        subscriptionDiscountType,
+      } = this
+      if (
+        !variantPrice ||
+        !subscriptionDiscountAmount ||
+        !subscriptionDiscountType
+      )
+        return false
 
-      const discountAmount = this.subscriptionDiscountAmount.replace(/[^0-9.]/g,'')
+      const discountAmount = this.subscriptionDiscountAmount.replace(
+        /[^0-9.]/g,
+        ''
+      )
 
       let calcDiscountAmount = 0
 
-      if (subscriptionDiscountType === 'percent') { // percentage
-          calcDiscountAmount = (variantPrice * discountAmount) / 100
-
-      } else if (subscriptionDiscountType === 'fixed') { // fixed
-          calcDiscountAmount = discountAmount
-
+      if (subscriptionDiscountType === 'percent') {
+        // percentage
+        calcDiscountAmount = (variantPrice * discountAmount) / 100
+      } else if (subscriptionDiscountType === 'fixed') {
+        // fixed
+        calcDiscountAmount = discountAmount
       } else {
-          console.log('discount_amount should include % for "percentage" not for "fixed"')
+        console.error(
+          'discount_amount should include % for "percentage" not for "fixed"'
+        )
       }
       return (variantPrice - calcDiscountAmount).toFixed(2)
     },
 
     selectedVariantPrice() {
       const { variantSubscriptionPrice, variantPrice } = this
-      return variantSubscriptionPrice || variantPrice
+      return this.editNextOrder
+        ? variantPrice
+        : variantSubscriptionPrice || variantPrice
     },
 
     inStock() {
@@ -213,7 +276,6 @@ export default {
     },
   },
 
-
   mounted() {
     const { variantsObj } = this
 
@@ -223,13 +285,39 @@ export default {
   },
 
   methods: {
-    variantButtonAction() {
+    ...mapMutations('editMode', ['setEditNextOrder']),
+
+    subscriptionAction(addToNextOrder) {
       const { variantAction } = this
 
       if (variantAction === 'swap') {
-        this.$emit('swapProductVariant', {variantId: this.selectedVariantId, product: this.product})
+        this.$emit('swapProductVariant', {
+          variantId: this.selectedVariantId,
+          product: this.product,
+        })
       } else {
-        this.$emit('addProductVariantToSubscription', this.selectedVariantId, this.product)
+        this.$emit('addProductVariantToSubscription', {
+          variantId: this.selectedVariantId,
+          product: this.product,
+          addToNextOrder,
+        })
+      }
+    },
+
+    // button type button 1 and button 2
+    variantButtonAction(type) {
+      switch (type) {
+        case 1:
+          this.editNextOrder
+            ? this.subscriptionAction(true)
+            : this.subscriptionAction()
+
+          break
+        case 2:
+          this.editNextOrder
+            ? this.subscriptionAction()
+            : this.subscriptionAction(true)
+          break
       }
     },
 
@@ -262,29 +350,22 @@ export default {
         let match3 = true
 
         if (variant.option1) {
-          // console.log({ 'var1':variant.option1 , 'new1':checkOptions.option1})
           if (variant.option1 != checkOptions.option1) {
             match1 = false
           }
         }
 
         if (variant.option2) {
-          // console.log({ 'var2':variant.option2 , 'new2':checkOptions.option2})
-
           if (variant.option2 != checkOptions.option2) {
             match2 = false
           }
         }
 
         if (variant.option3) {
-          // console.log({ 'var3':variant.option3 , 'new3':checkOptions.option3})
-
           if (variant.option3 != checkOptions.option3) {
             match3 = false
           }
         }
-
-        // console.log({match1, match2, match3})
 
         if (match1 && match2 && match3) {
           matchingVariants.push(variant)
@@ -320,18 +401,34 @@ export default {
         product.title
       }}</h3>
 
-        <span v-if="subscriptionDiscountAmount && $route.query.template !== 'next-shipment'" class="c-variantSelectBlock__discountInfo">{{ atc['labels.autoRenew'] || 'Auto Renew' }} ({{ subscriptionDiscountAmount }})</span
-        >
+      <span
+        v-if="
+          subscriptionDiscountAmount &&
+            $route.query.template !== 'next-shipment' &&
+            !editNextOrder
+        "
+        class="c-variantSelectBlock__discountInfo"
+        >{{ atc['labels.autoRenew'] || 'Auto Renew' }} ({{
+          subscriptionDiscountAmount
+        }})</span
+      >
 
-      <span v-if="selectedVariant && selectedVariantPrice" class="c-variantSelectBlock__price"
+      <span
+        v-if="selectedVariant && selectedVariantPrice"
+        class="c-variantSelectBlock__price"
         >{{ currencySymbol }}{{ selectedVariantPrice }}</span
       >
 
-      <span v-else class="c-variantSelectBlock__price"
-        >{{ atc['labels.unavailable'] || 'Unavailable' }}</span>
+      <span v-else class="c-variantSelectBlock__price">{{
+        atc['labels.unavailable'] || 'Unavailable'
+      }}</span>
 
       <div
-        v-if="product && (product.options > 1 || (product.variants && product.variants.length > 1))"
+        v-if="
+          product &&
+            (product.options > 1 ||
+              (product.variants && product.variants.length > 1))
+        "
         class="c-variantSelectBlock__optionSelectors"
       >
         <product-variant-selector
@@ -346,14 +443,22 @@ export default {
 
     <v-button
       v-if="inStock"
-      class="c-variantSelectBlock__button c-variantSelectBlock__button--add"
-      size="small"
+      class="c-button c-variantSelectBlock__button--add"
+      size="large"
       :text="buttonText"
-      @onClick="variantButtonAction"
+      @onClick="variantButtonAction(1)"
     />
 
     <v-button
-      v-else
+      v-if="inStock && variantAction !== 'swap'"
+      size="large"
+      class="c-variantSelectBlock__button c-button c-button--alt c-variantSelectBlock__button--add u-mt-4"
+      :text="secondaryButtonTextWithPricing"
+      @onClick="variantButtonAction(2)"
+    />
+
+    <v-button
+      v-if="!inStock"
       class="c-variantSelectBlock__button c-variantSelectBlock__button--add"
       size="small"
       :text="atc['labels.soldOut'] || 'Sold Out'"
@@ -454,7 +559,6 @@ export default {
 }
 
 .c-variantSelectBlock__button {
-  width: auto;
   min-width: 94px;
   padding: 9px 0;
   margin-right: 10px;

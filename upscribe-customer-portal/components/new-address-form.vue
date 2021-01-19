@@ -137,34 +137,34 @@
 
         <div class="c-formGroupWrapper">
           <form-input
-            id="phone"
-            key="phone"
-            v-model="form.phone"
-            :class="{
-              'c-formGroup--half':
-                activePaymentType === 'braintree_card' || !activePaymentType,
-            }"
-            type="text"
-            :label="atc['forms.phoneLabel'] || 'Phone'"
-            :optional-label-text="
-              store.checkout_phone_number_required ? '' : '(Optional)'
-            "
-            name="phone"
-            :required="store.checkout_phone_number_required ? true : false"
-          />
-
-          <form-input
             v-if="
               formName == 'billing-address' &&
                 (activePaymentType === 'braintree_card' || !activePaymentType)
             "
+            id="phone"
+            key="phone"
+            v-model="form.phone"
+            :class="{ 'c-formGroup--half': requireBraintreeCvvValidation }"
+            type="text"
+            :label="atc['forms.phoneLabel'] || 'Phone'"
+            :optional-label-text="
+              store && store.checkout_phone_number_required ? '' : '(Optional)'
+            "
+            name="phone"
+            :required="
+              store && store.checkout_phone_number_required ? true : false
+            "
+          />
+
+          <form-input
+            v-if="requireBraintreeCvvValidation"
             id="cvv"
             key="cvv"
             v-model="form.cvv"
             class="c-formGroup--half"
             type="number"
             :label="atc['forms.cvvLabel'] || 'CVV'"
-            optional-label-text="(Optional)"
+            required
             name="cvv"
           />
         </div>
@@ -173,7 +173,7 @@
       </form>
     </form-wrapper>
 
-    <div class="c-form__submitBox">
+    <div class="c-form__submitBox u-mt-2">
       <div v-if="multiButton" class="c-form__submitBox--multiButtonWrap">
         <v-button
           class="c-form__submitButton c-button--auto c-button--link"
@@ -320,7 +320,7 @@ export default {
     }
   },
   validations() {
-    const { requiresProvince, store } = this
+    const { requiresProvince, requireBraintreeCvvValidation, store } = this
 
     const form = {
       firstName: { required },
@@ -339,8 +339,16 @@ export default {
       form.state = { required }
     }
 
-    if (store && store.checkout_phone_number_required) {
+    if (
+      store &&
+      store.checkout_phone_number_required &&
+      this.formName === 'billing-address'
+    ) {
       form.phone = { numeric, required }
+    }
+
+    if (requireBraintreeCvvValidation) {
+      form.cvv = { numeric, required }
     }
 
     return {
@@ -358,7 +366,17 @@ export default {
       shippingCountries: 'countries',
     }),
 
-    ...mapState('shop', ['store']),
+    ...mapState('shop', ['store', 'uiSettings']),
+
+    requireBraintreeCvvValidation() {
+      const { uiSettings, activePaymentType, formName } = this
+      return (
+        uiSettings &&
+        uiSettings.require_braintree_cvv_verification_for_updates &&
+        formName === 'billing-address' &&
+        activePaymentType === 'braintree_card'
+      )
+    },
 
     requiresProvince() {
       const { addressFields } = this
@@ -393,6 +411,9 @@ export default {
     countrySelectOptions() {
       const { formName, shippingCountries } = this
 
+      if (this.isEmptyObject(shippingCountries)) {
+        return []
+      }
       // use any country for billing or
       // use only shippable countries for shipping
       let countries =
@@ -401,7 +422,7 @@ export default {
           : shippingCountries
 
       if (!countries || this.isEmptyObject(countries)) {
-        console.log('no countrySelectOptions', console.log({ countries }))
+        console.error('no countrySelectOptions')
       }
 
       const countriesArray = Object.keys(countries).map((countryName) => {
@@ -526,7 +547,6 @@ export default {
       const { countryStates } = this
 
       if (!countryStates) {
-        console.log('no countryStatesOptions')
         return false
       }
 
@@ -573,7 +593,7 @@ export default {
         province: form.province ? form.province : form.state || '',
         state: form.state || '',
         country: form.country || '',
-        cvv: form.cvv || null,
+        cvv: form.cvv || undefined,
       }
 
       if (country && country.country && country.country.code) {
@@ -597,8 +617,10 @@ export default {
       }
     },
 
-    stateSelectOptions(val) {
-      // console.log('stateSelectOptions updated')
+    stateSelectOptions(val) {},
+
+    dataFill() {
+      this.fillFormWithDefaultData()
     },
 
     billingAddressDataFill: {
@@ -628,7 +650,6 @@ export default {
   // fill form data if already saved
   async mounted() {
     if (!this.countries || this.isEmptyObject(this.countries)) {
-      console.log('run GET_SHIPPING_ZONES')
       await this.GET_SHIPPING_ZONES()
     }
 
@@ -645,8 +666,6 @@ export default {
 
       if (dataFill && !this.isEmptyObject(preFilledData)) {
         let preFilledForm = Object.assign(this.form, preFilledData)
-
-        // console.log({ preFilledForm})
 
         this.form = {
           firstName: preFilledForm.first_name
@@ -669,7 +688,7 @@ export default {
           phone: preFilledForm.phone
             ? preFilledForm.phone.replace(/\D/g, '')
             : '',
-          cvv: null,
+          cvv: undefined,
         }
       } else {
         this.form = {
@@ -684,7 +703,7 @@ export default {
           state: '',
           zipcode: '',
           phone: '',
-          cvv: null,
+          cvv: undefined,
         }
       }
     },
@@ -704,7 +723,6 @@ export default {
       let preFilledData = {}
 
       if (processingForm) {
-        console.log('processing form - ignore data fill update')
         return
       }
       if (this.formName === 'billing-address') {
@@ -737,7 +755,7 @@ export default {
             ? preFilledForm.zipcode
             : preFilledForm.zip || '',
           phone: preFilledForm.phone || '',
-          cvv: null,
+          cvv: undefined,
         }
       } else {
         this.form = {
@@ -752,7 +770,7 @@ export default {
           state: '',
           zipcode: '',
           phone: '',
-          cvv: null,
+          cvv: undefined,
         }
       }
     },
@@ -853,7 +871,7 @@ export default {
       }
 
       if (!statePayload || !statePayload.name) {
-        console.log('handleState', statePayload)
+        console.error('handleState', statePayload)
       }
       this.form.state = statePayload.payload.name
       this.form.province = statePayload.payload.name
@@ -862,7 +880,8 @@ export default {
 
     handleCountrySelected(countryPayload) {
       if (!countryPayload || !countryPayload.name) {
-        return console.log('handleCountrySelected error: ', countryPayload)
+        console.error('handleCountrySelected error: ', countryPayload)
+        return
       }
 
       this.form.country = countryPayload.payload.name

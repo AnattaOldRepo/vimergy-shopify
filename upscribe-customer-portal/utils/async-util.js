@@ -20,7 +20,7 @@ const doAsync = (
       })
     })
     .catch((error) => {
-      console.log('error: ', error)
+      console.error('error: ', error)
       store.commit(mutationTypes.FAILURE, error)
     })
 }

@@ -16,7 +16,6 @@ export const getters = {
       : activeSubscription.payment_method_id
   },
   activeCard(state, getters, rootState, rootGetters) {
-
     const { activeCardId } = getters
 
     const { cards } = state
@@ -34,7 +33,7 @@ export const mutations = {
     if (cards) {
       state.cards = cards
     } else {
-      console.log('No cards available customer.')
+      console.error('No cards available customer.')
     }
   },
 
@@ -56,22 +55,25 @@ export const mutations = {
 
 export const actions = {
   async GET_CARDS({ rootState, commit, dispatch }, payload) {
-    const { storeDomain } = rootState.route
-    const { customerShopifyId } = rootState.customer
+    const { storeDomain, customerId } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     const lastItem = payload && payload.lastItem ? payload.lastItem : false
 
     let url = null
     if (lastItem) {
-      url = `/paymentmethods/${storeDomain}/${customerShopifyId}?last=${lastItem}`
+      url = `/paymentmethods/${storeDomain}/${customerId}?last=${lastItem}`
     } else {
-      url = `/paymentmethods/${storeDomain}/${customerShopifyId}`
+      url = `/paymentmethods/${storeDomain}/${customerId}`
     }
 
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((data) => {
           // if additional items
@@ -81,7 +83,6 @@ export const actions = {
               lastItem: data.last,
             })
           }
-
 
           commit('SET_CARDS', data.items)
 
@@ -93,22 +94,23 @@ export const actions = {
     })
   },
 
-  async CREATE_PAYMENT_METHOD({ rootState, commit, dispatch }, {paymentMethod, paymentType}) {
+  async CREATE_PAYMENT_METHOD(
+    { rootState, commit, dispatch },
+    { paymentMethod, paymentType }
+  ) {
     const { storeDomain } = rootState.route
     const { customerShopifyId } = rootState.customer
+    const { xUpscribeAccessToken } = rootState.auth
 
     if (!paymentType) {
-      console.log('paymentType required in CREATE_PAYMENT_METHOD')
       return
     }
 
     if (!customerShopifyId) {
-      console.log('no matching customerPaymentId')
       return
     }
 
     const url = `/paymentmethod/${storeDomain}/${customerShopifyId}?type=${paymentType}`
-
 
     return new Promise((resolve, reject) => {
       request({
@@ -117,6 +119,7 @@ export const actions = {
         data: JSON.stringify(paymentMethod),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((response) => {
@@ -139,36 +142,32 @@ export const actions = {
     { paymentMethodId, updatePayload, paymentCustomerId, paymentType }
   ) {
     const { storeDomain } = rootState.route
-
     const { paymentCustomers } = rootState.customer
-
-    console.log('updste_payment_method', { paymentMethodId, updatePayload, paymentType })
-
-    console.log({paymentCustomers})
+    const { xUpscribeAccessToken } = rootState.auth
 
     if (!paymentCustomers) {
-      console.log('paymentCustomers required')
+      console.error('paymentCustomers required')
       return
     }
 
     if (!paymentType) {
-      console.log('paymentType required in UPDATE_PAYMENT_METHOD')
+      console.error('paymentType required in UPDATE_PAYMENT_METHOD')
       return
     }
 
-    const newPaymentMethodGatewayType = paymentType.includes('stripe') ? 'stripe' : 'braintree'
-    console.log({newPaymentMethodGatewayType})
+    const newPaymentMethodGatewayType = paymentType.includes('stripe')
+      ? 'stripe'
+      : 'braintree'
 
     let customerPaymentId = false
 
-    paymentCustomers.forEach(paymentCustomer => {
+    paymentCustomers.forEach((paymentCustomer) => {
       if (paymentCustomer.type.includes(newPaymentMethodGatewayType)) {
         customerPaymentId = paymentCustomer.id
       }
     })
 
     if (!customerPaymentId) {
-      console.log('no matching customerPaymentId: ', {newPaymentMethodGatewayType}, )
       return
     }
 
@@ -181,6 +180,7 @@ export const actions = {
         data: JSON.stringify(updatePayload),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'x-upscribe-access-token': xUpscribeAccessToken,
         },
       })
         .then((data) => {
@@ -195,21 +195,26 @@ export const actions = {
     })
   },
 
-  async REMOVE_PAYMENT_METHOD({ rootState, commit, dispatch }, {paymentMethodId, paymentCustomerId}) {
+  async REMOVE_PAYMENT_METHOD(
+    { rootState, commit, dispatch },
+    { paymentMethodId, paymentCustomerId }
+  ) {
     const { storeDomain } = rootState.route
+    const { xUpscribeAccessToken } = rootState.auth
 
     if (!paymentCustomerId) {
-      console.log('no matching customerPaymentId')
       return
     }
 
     const url = `/paymentmethod/delete/${storeDomain}/${paymentCustomerId}/${paymentMethodId}`
 
-
     return new Promise((resolve, reject) => {
       request({
         method: 'get',
         url,
+        headers: {
+          'x-upscribe-access-token': xUpscribeAccessToken,
+        },
       })
         .then((response) => {
           commit('SET_CARDS', response.items)

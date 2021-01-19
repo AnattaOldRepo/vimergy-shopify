@@ -103,7 +103,6 @@ export default {
     },
 
     handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
-      console.log('handleNewCheckoutUpdateError: ', e)
       if (e && e.data && e.data.shipping_update_required) {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
@@ -111,7 +110,7 @@ export default {
         this.$emit('setMode', 'shipping-method-list')
         this.$emit('setDrawerStatus', false)
       } else {
-        console.log('subscription/UPDATE_SUBSCRIPTION error: ', e)
+        console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })
         // sometimes subscription gets updated but not reflected in ui
         if (e.message.includes('not found in subscription')) {
@@ -128,9 +127,6 @@ export default {
       const { editNextOrder, activeSubscription } = this
 
       const productToReplace = this.swapProduct
-
-      // console.log({productToReplace})
-      // console.log({product})
 
       const { addPayload: nextAddSwapItemPayload } = productChangeRequest({
         variantId,
@@ -161,9 +157,6 @@ export default {
         editNextOrder: false,
         subscription: activeSubscription,
       })
-
-      // console.log({nextAddSwapItemPayload, nextRemoveSwappedItemPayload})
-      // console.log({subscriptionAddSwapItemPayload, subscriptionRemoveSwappedItemPayload})
 
       // create next swap payload depending on the diff product upday payload options
       let nextItemPayload = []

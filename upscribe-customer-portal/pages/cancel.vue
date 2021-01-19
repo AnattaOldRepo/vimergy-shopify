@@ -12,7 +12,7 @@
       cancelSubscriptionPrompt
     }}</h2>
 
-  <div v-if="nestedCancellationReasonsEnabled" class="c-cancel__inner">
+    <div v-if="nestedCancellationReasonsEnabled" class="c-cancel__inner">
       <div v-if="useTheseReasons" style="width:100%">
         <cancel-subscription-options-ui
           :reasons="useTheseReasons"
@@ -26,17 +26,23 @@
           @setCancellationReason="setCancellationReason"
         />
 
-        <div class="c-cancel__comments c-cancel__field c-cancel__field--textArea">
-          <label
-            class="c-cancel__label c-cancel__label--textArea"
-          >Comments</label>
-          <textarea v-model="comments" type="textarea" class="c-cancel__textArea" rows="4"/>
+        <div
+          class="c-cancel__comments c-cancel__field c-cancel__field--textArea"
+        >
+          <label class="c-cancel__label c-cancel__label--textArea"
+            >Comments</label
+          >
+          <textarea
+            v-model="comments"
+            type="textarea"
+            class="c-cancel__textArea"
+            rows="4"
+          />
         </div>
       </div>
 
       <!-- <loading-block v-else /> -->
     </div>
-
 
     <!-- Old Cancellation Reasons Structure -->
 
@@ -106,7 +112,9 @@
       />
 
       <v-button
-        v-else-if="!nestedCancellationReasonsEnabled && activeSubscription.active"
+        v-else-if="
+          !nestedCancellationReasonsEnabled && activeSubscription.active
+        "
         :text="
           cancelSubscriptionUpdating
             ? atc['notices.cancellingNotice'] || 'Cancelling'
@@ -158,7 +166,6 @@ import { windowSizes } from '@mixins/windowSizes'
 
 import CancelSubscriptionOptionsUi from '@components/cancel-subscription-options-ui'
 
-
 export default {
   components: {
     VButton,
@@ -191,7 +198,12 @@ export default {
   },
   computed: {
     ...mapState('translations', ['atc']),
-    ...mapState('shop', ['shopData', 'cancellationReasons', 'nestedCancellationReasons', 'nestedCancellationReasonsEnabled']),
+    ...mapState('shop', [
+      'shopData',
+      'cancellationReasons',
+      'nestedCancellationReasons',
+      'nestedCancellationReasonsEnabled',
+    ]),
 
     ...mapGetters('activeSubscription', ['activeSubscription']),
 
@@ -203,9 +215,7 @@ export default {
           shopData.name
         )
       } else {
-        return `${
-          shopData.name
-        }’s priority is happy customers. Please tell us your
+        return `${shopData.name}’s priority is happy customers. Please tell us your
       reason for cancelling.`
       }
     },
@@ -249,25 +259,30 @@ export default {
         reasons: [],
         comment: comments || undefined,
       }
-      if (position1Id) payload.reasons.push({ reason_id: position1Id, position: 1})
-      if (position2Id) payload.reasons.push({ reason_id: position2Id, position: 2})
-      if (position3Id) payload.reasons.push({ reason_id: position3Id, position: 3})
+      if (position1Id)
+        payload.reasons.push({ reason_id: position1Id, position: 1 })
+      if (position2Id)
+        payload.reasons.push({ reason_id: position2Id, position: 2 })
+      if (position3Id)
+        payload.reasons.push({ reason_id: position3Id, position: 3 })
       return payload
     },
 
     useTheseReasons() {
-      const { cancellationReasons, nestedCancellationReasons, nestedCancellationReasonsEnabled } = this
-
-      console.log({nestedCancellationReasons})
+      const {
+        cancellationReasons,
+        nestedCancellationReasons,
+        nestedCancellationReasonsEnabled,
+      } = this
 
       if (nestedCancellationReasonsEnabled && nestedCancellationReasons) {
-        const customerPortalReasons = nestedCancellationReasons.filter(reason => {
-          return (reason.type === 'CUSTOMER PORTAL' && reason.active)
-        })
+        const customerPortalReasons = nestedCancellationReasons.filter(
+          (reason) => {
+            return reason.type === 'CUSTOMER PORTAL' && reason.active
+          }
+        )
         return customerPortalReasons
-      }
-
-      else {
+      } else {
         // old structure
         // fallback to default reasons if admin cancellation reasons not set
         return cancellationReasons
@@ -296,38 +311,37 @@ export default {
     setCancellationReason(payload) {
       if (!payload) return
 
-      const {reason, position} = payload
-      // console.log('setCancellationReason', {reason, position})
+      const { reason, position } = payload
 
       if (!reason || !position) {
-        console.log('reason or position not')
         return
       }
 
-      // console.log({reason, position})
-
-      // console.log('setPositionOne', {reason})
-      // this.positionOneReason = { ...reason }
-      // this.positionOneReasonId = reason.id
-
       this[`position${position}Id`] = reason.id
-      this[`position${position}`] = {...reason}
+      this[`position${position}`] = { ...reason }
     },
 
     async handleCancelSubscription() {
-      const { subscriptionId, newFinalReasonPayload, finalReasonPayload, nestedCancellationReasonsEnabled } = this
+      const {
+        subscriptionId,
+        newFinalReasonPayload,
+        finalReasonPayload,
+        nestedCancellationReasonsEnabled,
+      } = this
 
       let cancelPayload = {
         subscriptionId,
-        reason: nestedCancellationReasonsEnabled ? newFinalReasonPayload : finalReasonPayload,
+        reason: nestedCancellationReasonsEnabled
+          ? newFinalReasonPayload
+          : finalReasonPayload,
       }
 
       let analyticsEventName = 'Upscribe Subscription Cancel'
       let analyticsPayload = {
-        reason: nestedCancellationReasonsEnabled ? newFinalReasonPayload : finalReasonPayload,
+        reason: nestedCancellationReasonsEnabled
+          ? newFinalReasonPayload
+          : finalReasonPayload,
       }
-
-      console.log('clicked')
 
       this.cancelSubscriptionUpdating = true
       try {
@@ -339,7 +353,7 @@ export default {
         await this.GET_SUBSCRIPTIONS()
         this.$router.push({ name: 'all', query: { ...this.$route.query } })
       } catch (e) {
-        console.log('cancel subscription error: ', e)
+        console.error('cancel subscription error: ', e)
         this.triggerAnalyticsEvent({
           event: 'Upscribe Subscription Cancel Attempt',
           payload: analyticsPayload,
@@ -355,11 +369,11 @@ export default {
 
       let cancelPayload = {
         subscriptionId,
-        reason: { reason: finalReasonPayload},
+        reason: { reason: finalReasonPayload },
       }
       let analyticsEventName = 'Upscribe Subscription Cancel'
       let analyticsPayload = {
-        reason: { reason: finalReasonPayload},
+        reason: { reason: finalReasonPayload },
       }
 
       this.cancelSubscriptionUpdating = true
@@ -372,7 +386,7 @@ export default {
         await this.GET_SUBSCRIPTIONS()
         this.$router.push({ name: 'all', query: { ...this.$route.query } })
       } catch (e) {
-        console.log('e: ', e)
+        console.error('e: ', e)
         this.triggerAnalyticsEvent({
           event: 'Upscribe Subscription Cancel Attempt',
           payload: analyticsPayload,
@@ -546,8 +560,6 @@ export default {
     }
   }
 }
-
-
 
 .c-cancel {
   @include clearfix;

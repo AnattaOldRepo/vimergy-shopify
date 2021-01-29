@@ -113,9 +113,9 @@ export const actions = {
       params.collection_id = collection_id
     }
 
-    if (all || editNextOrder) {
+    /*if (all || editNextOrder) {
       params.all = true
-    }
+    }*/
 
     // if explicitly set
     if (limit) {
@@ -172,9 +172,9 @@ export const actions = {
         params.collection_id = defaultActiveCollection.id
       }
 
-      if (editNextOrder) {
+      /*if (editNextOrder) {
         params.all = true
-      }
+      }*/
     }
 
     return new Promise((resolve, reject) => {

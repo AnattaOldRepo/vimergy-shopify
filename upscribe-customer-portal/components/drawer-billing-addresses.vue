@@ -72,7 +72,7 @@ export default {
     deliveryEveryText() {
       const { activeSubscription } = this
       if (!activeSubscription) return false
-      return `${activeSubscription.interval}`
+      return activeSubscription.interval
     },
 
     intervalUnitDisplay() {
@@ -176,7 +176,7 @@ export default {
     },
 
     async updateBillingAddress(address) {
-      const { editNextOrder } = this
+      const { editNextOrder, atc } = this
       const updatePayload = {
         requestPayload: {
           billing_address: address,
@@ -211,6 +211,12 @@ export default {
         })
         await this.GET_SUBSCRIPTIONS()
         this.drawerStatus = 'SUCCESS'
+        if (!editNextOrder) {
+          this.$toast.info(
+            atc['portal.nextShipmentResetFromSubscriptionChange'] || 'Changing Subscription Settings resets your next shipment.',
+            { duration: 5000 }
+          )
+        }
       } catch (e) {
         console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.drawerStatus = { state: 'FAILURE', message: e.message }
@@ -268,7 +274,7 @@ export default {
       <checkbox
         v-if="initialAddressMatchStateSet"
         v-model="hasSameAddress"
-        label="Same as shipping address"
+        :label="atc['labels.sameAsShippingAddress'] || 'Same As Shipping Address'"
       />
 
       <new-address-form

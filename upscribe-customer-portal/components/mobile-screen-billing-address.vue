@@ -1,7 +1,9 @@
 <template>
   <div class="c-addressPayment__formattedComponent">
     <portal to="header">
-      <the-header middle-html="Edit Billing Address" mode="customized" />
+      <the-header
+      :middle-html="atc['portal.editBillingAddressDrawerTitle'] || 'Edit Billing Address'"
+      mode="customized" />
     </portal>
 
     <checkbox
@@ -133,8 +135,9 @@ export default {
     },
 
     async updateBillingAddress(address) {
-      const { editNextOrder } = this
-      this.setMessage('Updating new Billing Address')
+      const { editNextOrder, atc } = this
+      this.setMessage(atc['notices.updating'] || 'Updating')
+
       this.setStatus('updating')
       const updatePayload = {
         requestPayload: {
@@ -165,7 +168,8 @@ export default {
           payload: analyticsPayload,
         })
         await this.GET_SUBSCRIPTIONS()
-        this.setMessage('Saved new Billing Address')
+      this.setMessage(atc['notices.saved'] || 'Saved')
+
         this.setStatus('success')
       } catch (e) {
         console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)

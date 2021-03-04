@@ -1,15 +1,8 @@
 <template>
   <div v-if="activeSubscription">
-    <!-- <portal to="header">
-      <the-header
-        middle-html="Edit Subscription Details"
-        mode="backwardRoute"
-      />
-    </portal> -->
-
     <mobile-subscription-template
       v-if="!edit"
-      functional-block-title="Shipping"
+      :functional-block-title="atc['labels.shipping'] || 'Shipping'"
     >
       <div
         slot="functionality-block"

@@ -112,7 +112,7 @@
         <vue-checkbox
           style="margin-bottom:20px; margin-top: 12px;"
           name="accepts-marketing"
-          label="Make default payment method"
+          :label="atc['forms.cardMakeDefaultLabel'] || 'Make default payment method'"
           :checked="makeDefault"
           @input="handleMakeDefault"
         />
@@ -128,11 +128,11 @@
           type="submit"
           @onClick="submit"
         >
-          {{ formSubmitButtonText }}
+          {{ formSubmitButtonText || atc['buttons.submit'] || 'Submit'}}
         </v-button>
 
         <v-button class="c-form__submitButton c-button--link" @onClick="cancel">
-          {{ formCancelButtonText }}
+          {{ formCancelButtonText || atc['buttons.cancel'] || 'Cancel'}}
         </v-button>
       </div>
 
@@ -142,7 +142,7 @@
         type="submit"
         @onClick="submit"
       >
-        {{ formSubmitButtonText }}
+          {{ formSubmitButtonText || atc['buttons.submit'] || 'Submit'}}
       </v-button>
 
       <v-button
@@ -191,12 +191,12 @@ export default {
       default: false,
     },
     formSubmitButtonText: {
-      type: String,
-      default: 'Submit',
+      type: [String, Boolean],
+      default: false, // use translations if false
     },
     formCancelButtonText: {
-      type: String,
-      default: 'Cancel',
+      type: [String, Boolean],
+      default: false, // use translations if false
     },
     formName: {
       type: String,

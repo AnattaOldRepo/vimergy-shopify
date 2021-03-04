@@ -2,7 +2,7 @@
   <div class="c-addressPayment__formattedComponent">
     <portal to="header">
       <the-header
-        middle-html="Add Payment Methods"
+        :middle-html="atc['portal.addPaymentMethodsDrawerTitle'] || 'Add Payment Methods'"
         mode="customized"
         customized-func-text="Cancel"
         @headerAction="handleHeaderAction"

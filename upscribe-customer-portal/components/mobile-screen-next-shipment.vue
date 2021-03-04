@@ -6,7 +6,7 @@
 
     <mobile-subscription-template
       v-if="activeSubscription && !edit"
-      functional-block-title="Shipping"
+      :functional-block-title="atc['labels.shipping'] || 'Shipping'"
     >
       <div
         slot="functionality-block"

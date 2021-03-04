@@ -5,6 +5,7 @@
   min-height: calc(100% - 25px);
   padding-bottom: 20px;
   background-color: #f7f9fb;
+  border-left: 1px solid $color-border;
 
   @include bp(tablet) {
     padding-top: 75px;

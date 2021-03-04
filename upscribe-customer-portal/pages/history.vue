@@ -3,7 +3,7 @@
     <portal v-if="windowWidth < 768" to="header">
       <the-header
         mode="backwardRoute"
-        middle-html="Past Shipments"
+        :middle-html="atc['portal.orderHistoryTitle'] || 'Past Shipments'"
       />
     </portal>
 

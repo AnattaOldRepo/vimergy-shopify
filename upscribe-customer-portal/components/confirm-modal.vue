@@ -3,7 +3,7 @@
     <div class="c-confirmModal__intro">
       <h2 class="c-confirmModal__introTitle">{{ title }}</h2>
       <div class="c-confirmModal__buttonBox">
-        <v-button :text="confirmButton" size="small" auto @onClick="confirm" />
+        <v-button :text="confirmButton || atc['buttons.confirm'] || 'Confirm'" size="small" auto @onClick="confirm" />
 
         <v-button
           type="alt"
@@ -33,8 +33,8 @@ export default {
       default: false,
     },
     confirmButton: {
-      type: String,
-      default: 'Confirm',
+      type: [String, Boolean],
+      default: false, // use translation
     },
     denyButton: {
       type: [String, Boolean],

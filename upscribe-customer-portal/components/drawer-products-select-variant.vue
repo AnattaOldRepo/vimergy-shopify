@@ -116,7 +116,7 @@ export default {
       product,
       addToNextOrder,
     }) {
-      const { activeSubscription, variantSelectProduct } = this
+      const { activeSubscription, variantSelectProduct, atc } = this
 
       const { addPayload: nextAddItemPayload } = productChangeRequest({
         variantId,
@@ -146,6 +146,8 @@ export default {
 
       let analyticsEventName, handleNewCheckoutUpdatePayload
 
+      console.log({addToNextOrder})
+
       if (addToNextOrder) {
         analyticsEventName = 'Upscribe Next Order Product Add'
 
@@ -155,7 +157,7 @@ export default {
             nextOrderUpdatePayload,
             'subscriptions',
             'UPDATE_NEXT_ORDER',
-            `Product add to next order.`
+            atc['notices.productAddedToNextOrder'] || `Product added to next order`
           ),
         ]
       } else {
@@ -167,7 +169,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product added on subscription.`
+            atc['notices.productAddedToSubscription'] || `Product added to subscription`
           ),
         ]
       }
@@ -175,7 +177,17 @@ export default {
       this.$emit('setDrawerStatus', 'PENDING')
 
       // hande everything in handleNewCheckoutUpdate function
-      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+      try {
+        await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+        if (!addToNextOrder) {
+          this.$toast.info(
+            atc['portal.nextShipmentResetFromSubscriptionChange'] || 'Changing Subscription Settings resets your next shipment.',
+            { duration: 5000 }
+          )
+        }
+      } catch(e) {
+        console.error(e)
+      }
 
       this.$emit('setDrawerStatus', 'SUCCESS')
       this.$emit('setMode', 'edit')
@@ -216,13 +228,13 @@ export default {
         :updating="updating"
         :button-text="
           editNextOrder
-            ? atc['portal.addProductToNextOrder'] || 'Add to Next Shipment'
-            : atc['portal.addProductToSubscription'] || 'Add to Subscription'
+            ? atc['buttons.addProductToNextOrder'] || 'Add to Next Shipment'
+            : atc['buttons.addProductToSubscription'] || 'Add to Subscription'
         "
         :secondary-button-text="
           !editNextOrder
-            ? atc['portal.addProductToNextOrder'] || 'Add to Next Shipment'
-            : atc['portal.addProductToSubscription'] || 'Add to Subscription'
+            ? atc['buttons.addProductToNextOrder'] || 'Add to Next Shipment'
+            : atc['buttons.addProductToSubscription'] || 'Add to Subscription'
         "
         @addProductVariantToSubscription="handleAddProductVariantToSubscription"
         @setMode="handleSetMode"

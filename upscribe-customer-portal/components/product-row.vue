@@ -26,7 +26,7 @@
           {{ product.quantity > 1 ? ' X ' + product.quantity : '' }}
         </h4>
         <p class="c-product__variantDescription">{{ product.variant_title }}</p>
-        <p v-if="oneTimeProducts(product.id)" class="c-product__shipment">
+        <p v-if="oneTimeProduct(product)" class="c-product__shipment">
           Ships One-Time in Next Shipment Only
         </p>
         <p v-else class="c-product__shipment">
@@ -225,9 +225,22 @@ export default {
       }
     },
 
-    oneTimeProducts(id) {
-      const idArray = this.activeSubscription.items.map((item) => item.id)
-      return !idArray.includes(id)
+    oneTimeProduct(product) {
+      const variantIdArray = this.activeSubscription.items.map(
+        (item) => item.variant_id
+      )
+      if (!variantIdArray.includes(product.variant_id)) {
+        return true
+      }
+
+      const subscriptionProduct = this.activeSubscription.items.find(
+        (subscriptionProduct) =>
+          subscriptionProduct.variant_id === product.variant_id
+      )
+      if (subscriptionProduct.quantity !== product.quantity) {
+        return true
+      }
+      return false
     },
 
     closeModal() {
@@ -249,13 +262,13 @@ export default {
   align-items: center;
   justify-content: space-between;
   max-width: 400px;
+  min-height: 70px;
   padding: 8px 24px 8px 16px;
   margin: 0 auto;
+  margin-bottom: 15px;
   background-color: $color-white;
   border: 1px solid $color-blue-light-border;
   border-radius: 4px;
-  margin-bottom: 15px;
-  height: 70px;
 
   @media (min-width: 425px) {
     padding: 8px 16px 8px 16px;
@@ -267,22 +280,22 @@ export default {
     object-fit: cover;
   }
   .c-product__description {
-    padding: 0 10px;
     flex: 1;
+    padding: 0 10px;
     h4 {
       font-size: 16px;
       font-weight: 700;
     }
     .c-product__variantDescription {
+      margin: 0;
       font-size: 12px;
       font-weight: 500;
       color: $color-secondary;
-      margin: 0;
     }
     .c-product__shipment {
+      margin: 0;
       font-size: 12px;
       font-weight: 700;
-      margin: 0;
       color: $color-secondary;
     }
   }

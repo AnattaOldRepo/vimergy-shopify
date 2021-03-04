@@ -311,8 +311,8 @@ export const actions = {
         headers: { 'x-upscribe-access-token': xUpscribeAccessToken },
       })
         .then((response) => {
-          commit('SET_UPDATED_NEXT_ORDER', response)
-          commit('SET_UPDATED_SUBSCRIPTION_QUEUE', response)
+          // commit('SET_UPDATED_NEXT_ORDER', response)
+          // commit('SET_UPDATED_SUBSCRIPTION_QUEUE', response)
           dispatch(
             'upscribeAnalytics/triggerAnalyticsEvent',
             {
@@ -372,7 +372,7 @@ export const actions = {
     })
   },
 
-  async CANCEL_SUBSCRIPTION({ rootGetters, rootState, commit }, { reason }) {
+  async CANCEL_SUBSCRIPTION({ rootGetters, rootState, commit }, payload) {
     const activeSubscription =
       rootGetters['activeSubscription/activeSubscription']
     const { customerId, storeDomain } = rootState.route
@@ -383,7 +383,7 @@ export const actions = {
       request({
         method: 'post',
         url: `/subscription/cancel/${storeDomain}/${customerId}/${subscriptionId}`,
-        data: JSON.stringify({ reason }),
+        data: JSON.stringify(payload),
         headers: {
           'x-upscribe-access-token': xUpscribeAccessToken,
         },

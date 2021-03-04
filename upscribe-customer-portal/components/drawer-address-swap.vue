@@ -26,6 +26,8 @@ export default {
   computed: {
     ...mapState('translations', ['atc']),
 
+    ...mapState('editMode', ['editNextOrder']),
+
     ...mapState('addresses', ['addresses', 'newSwapAddress']),
 
     ...mapGetters('addresses', ['activeAddress']),
@@ -37,6 +39,7 @@ export default {
 
     ...mapActions('subscriptions', [
       'UPDATE_SUBSCRIPTION',
+      'UPDATE_NEXT_ORDER',
       'GET_SUBSCRIPTIONS',
     ]),
 
@@ -114,15 +117,39 @@ export default {
     //   this.$emit('setMode', 'swap')
     // },
     async swapAddress() {
-      const updatePayload = {
-        requestPayload: {
-          shipping_address: this.newSwapAddress,
-        },
-        bulkUpdate: this.applyToAllActiveSusbscriptions,
+      try {
+        const { editNextOrder, atc } = this
+        const updatePayload = {
+          requestPayload: {
+            shipping_address: this.newSwapAddress,
+          },
+          bulkUpdate: this.applyToAllActiveSusbscriptions,
+        }
+
+        if (editNextOrder) {
+          await this.UPDATE_NEXT_ORDER(updatePayload)
+        }
+
+        // determine if updating both of just one
+        else {
+          await this.UPDATE_SUBSCRIPTION(updatePayload)
+        }
+
+        await this.GET_SUBSCRIPTIONS()
+
+        if (!editNextOrder) {
+          this.$toast.info(
+            atc['portal.nextShipmentResetFromSubscriptionChange'] ||
+              'Changing Subscription Settings resets your next shipment.',
+            { duration: 5000 }
+          )
+        }
+
+        this.$emit('close')
+      } catch (e) {
+        this.$toast.error(e.message)
+        console.error(e)
       }
-      await this.UPDATE_SUBSCRIPTION(updatePayload)
-      await this.GET_SUBSCRIPTIONS()
-      this.$emit('close')
     },
   },
 }
@@ -134,10 +161,14 @@ export default {
       atc['portal.shippingAddressesDrawerTitle'] || 'Shipping Addresses'
     }}</h2>
 
-    <p class="c-drawer__subtitle c-drawer__subtitle--info">{{
-      atc['portal.shippingAddressesDrawerPrompt'] ||
-        "Add new or select existing address to transfer the current subscription's shipping address."
-    }}</p>
+    <p
+      v-if="$route.name !== 'address'"
+      class="c-drawer__subtitle c-drawer__subtitle--info"
+      >{{
+        atc['portal.shippingAddressesDrawerPrompt'] ||
+          "Add new or select existing address to transfer the current subscription's shipping address."
+      }}</p
+    >
 
     <checkbox
       v-model="applyToAllActiveSusbscriptions"
@@ -149,14 +180,14 @@ export default {
 
     <div v-if="addresses" class="c-drawer__inner">
       <div class="c-drawerAddressList">
-        <h4 class="u-ma-3">Current Address </h4>
+        <h4 class="u-ma-3">{{ atc['lables.currentAddress'] || 'Current Address' }}</h4>
         <address-item
           v-if="activeSubscription.shipping_address"
           :key="activeSubscription.shipping_address.id"
           :address="activeSubscription.shipping_address"
           class="c-drawerAddressList__item"
         />
-        <h4 class="u-ma-3">New Address </h4>
+        <h4 class="u-ma-3">{{ atc['lables.newAddress'] || 'New Address' }}</h4>
         <address-item
           v-if="newSwapAddress"
           :key="newSwapAddress.id"
@@ -180,8 +211,8 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  background-color: $color-light;
   margin-bottom: 40px;
+  background-color: $color-light;
 }
 
 .c-drawerAddressList__item {

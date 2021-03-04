@@ -16,6 +16,7 @@ export default {
     },
     subscriptionId: {
       type: Number,
+      required: true,
     },
   },
   data: () => {
@@ -35,13 +36,15 @@ export default {
     ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION']),
 
     async handleUpdateName(name) {
-      if (!name) return
+      const { subscriptionId } = this
+
+      if (!name || !subscriptionId) return
 
       const updatePayload = {
         requestPayload: {
           name,
         },
-        subscriptionId: this.subscriptionId,
+        subscriptionId,
       }
 
       this.drawerStatus = 'PENDING'
@@ -68,11 +71,11 @@ export default {
       <single-field-form
         class="c-formBlock--noPadding c-editSubscriptionName"
         :form-submit-button-text="
-          atc['portal.updateSubscriptionNameButton'] || 'Update Name'
+          atc['buttons.updateSubscriptionName'] || 'Update Name'
         "
         form-name="edit-subscription-name"
         :input-label="
-          atc['portal.subscriptionNameInputLabel'] || 'Subscription Name'
+          atc['labels.subscriptionName'] || 'Subscription Name'
         "
         @onSubmit="handleUpdateName"
       />

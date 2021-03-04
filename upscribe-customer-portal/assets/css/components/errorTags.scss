@@ -1,6 +1,5 @@
-
 .c-cardForm__invalidPaymentMethod {
-  padding: .5em .75em;
+  padding: 0.5em 0.75em;
   align-items: center;
   border-radius: 4px;
   font-size: 0.75rem;
@@ -14,6 +13,9 @@
 }
 
 .c-cardItem__voidWarning {
+  position: absolute;
+  left: 8px;
+  top: 8px;
   font-size: 12px;
   background-color: $color-warning;
   right: 8px;
@@ -29,10 +31,6 @@
   padding-left: 0.75em;
   padding-right: 0.75em;
   white-space: nowrap;
-
-  @include bp(tablet) {
-    position: absolute;
-  }
 }
 
 .c-cardTag__voidWarning {

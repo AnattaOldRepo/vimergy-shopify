@@ -10,8 +10,7 @@
         <times-icon />
       </span>
 
-      <h3
-        class="c-headlineBanner__announcement-text"
+      <h3 class="c-headlineBanner__announcement-text"
         v-html="atc['portal.notification'] || 'Notification Banner'"
       ></h3>
     </div>

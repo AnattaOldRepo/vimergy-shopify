@@ -34,7 +34,7 @@
         <div class="c-subscription__container">
           <div class="c-subscription__details">
             <div>
-              <h3 class="u-color--secondary u-mb-2">Subscription</h3>
+              <h3 class="u-color--secondary u-mb-2">{{ atc['labels.subscription'] || 'Subscription' }}</h3>
               <p class="u-color--secondary c-subscription__nameWrap">
                 <span class="c-subscription__name">{{
                   subscription.name
@@ -43,12 +43,7 @@
                   class="c-subscription__nameLink u-color--primary"
                   href=""
                   @click.prevent="editSubscriptionName(subscription.id)"
-                  >{{
-                    atc['portal.renameSubscriptionButton']
-                      ? atc['portal.renameSubscriptionButton']
-                      : 'Rename'
-                  }}</a
-                >
+                  >{{ atc['buttons.rename'] || 'Rename' }}</a>
               </p>
 
               <!-- Drawer Edit Subscription Name -->
@@ -61,23 +56,23 @@
               </portal>
             </div>
             <div>
-              <h3 class="u-color--secondary u-mb-2">Subscription ID</h3>
+              <h3 class="u-color--secondary u-mb-2">{{ atc['labels.subscriptionId'] || 'Subscription ID' }}</h3>
               <p class="u-color--secondary">{{ subscription.id }}</p>
             </div>
             <div>
-              <h3 class="u-color--secondary u-mb-2">Created At</h3>
+              <h3 class="u-color--secondary u-mb-2">{{ atc['labels.createdAt'] || 'Created At' }}</h3>
               <p class="u-color--secondary">{{
                 subscription.created_at | prettyDate
               }}</p>
             </div>
             <div>
-              <h3 class="u-color--secondary u-mb-2">Next Order</h3>
+              <h3 class="u-color--secondary u-mb-2">{{ atc['labels.nextOrder'] || 'Next Order' }}</h3>
               <p class="u-color--secondary">{{
                 subscription.next && subscription.next.date | prettyDate
               }}</p>
             </div>
             <div>
-              <h3 class="u-color--secondary u-mb-2">Order Total</h3>
+              <h3 class="u-color--secondary u-mb-2">{{ atc['labels.orderTotal'] || 'Order Total' }}</h3>
               <p class="u-color--secondary"
                 >{{ currencySymbol }} {{ subscription.total_price }}</p
               >
@@ -109,10 +104,12 @@
               <h4 class="u-color--secondary u-mb-2 u-font-bold">
                 {{ item.title }} - {{ item.variant_title }}
               </h4>
-              <p>Subscription: {{ item.quantity }}</p>
-              <p
-                >Ships every {{ subscription.interval }}
-                {{ subscription.period }}
+              <p>{{ atc['labels.subscription']}}: {{ item.quantity }}</p>
+              <p>
+                {{
+                  atc['portal.subscriptionSettingsDeliverEveryLabel'] || 'Ships every'
+                }}
+                {{ subscription.interval + ' ' + subscription.period }}
               </p>
             </div>
           </div>

@@ -16,7 +16,7 @@
     </div>
 
     <div v-else>
-      <p class="c-pastShipments__notFound">No past shipments Found</p>
+      <p class="c-pastShipments__notFound">{{ atc['notices.noPastShipmentsFound'] || 'No past shipments Found' }}</p>
     </div>
   </div>
 </template>

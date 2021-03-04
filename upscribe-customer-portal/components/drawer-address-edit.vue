@@ -42,7 +42,7 @@ export default {
     ...mapActions('customer', ['GET_CUSTOMER']),
 
     async updateAddress(address) {
-      const { activeEditAddress, editNextOrder } = this
+      const { activeEditAddress, editNextOrder, atc } = this
 
       this.$emit('setDrawerStatus', 'PENDING')
 
@@ -74,6 +74,11 @@ export default {
             }
             await this.UPDATE_SUBSCRIPTION(updatePayload)
           }
+
+          this.$toast.info(
+            atc['portal.nextShipmentResetFromSubscriptionChange'] || 'Changing Subscription Settings resets your next shipment.',
+            { duration: 5000 }
+          )
         }
         await this.GET_CUSTOMER()
         await this.GET_SUBSCRIPTIONS()

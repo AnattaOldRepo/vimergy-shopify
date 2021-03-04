@@ -133,11 +133,11 @@
           type="submit"
           @onClick="submit"
         >
-          {{ formSubmitButtonText }}
+          {{ formSubmitButtonText || atc['buttons.submit'] || 'Submit' }}
         </v-button>
 
         <v-button class="c-form__submitButton c-button--link" @onClick="cancel">
-          {{ formCancelButtonText }}
+          {{ formCancelButtonText || atc['buttons.cancel'] || 'Cancel' }}
         </v-button>
       </div>
 
@@ -147,7 +147,8 @@
         type="submit"
         @onClick="submit"
       >
-        {{ formSubmitButtonText }}
+          {{ formSubmitButtonText || atc['buttons.submit'] || 'Submit' }}
+
       </v-button>
 
       <form-submit-status
@@ -189,12 +190,12 @@ export default {
       default: false,
     },
     formSubmitButtonText: {
-      type: String,
-      default: 'Submit',
+      type: [String, Boolean],
+      default: false, // replaced by translation string
     },
     formCancelButtonText: {
-      type: String,
-      default: 'Cancel',
+      type: [String, Boolean],
+      default: false, // replaced by translation string
     },
     formName: {
       type: String,

@@ -49,12 +49,7 @@ export default {
     handleSelectAddress(addresses) {
       const { activeAddress } = this
 
-      if (
-        !addresses ||
-        !activeAddress ||
-        (!activeAddress.shipping_address &&
-          activeAddress.shipping_address.id !== addresses.id)
-      ) {
+      if (!addresses || !activeAddress || !activeAddress.shipping_address) {
         this.setNewSwapAddress(addresses)
         this.$emit('setMode', 'swap')
         return
@@ -123,7 +118,7 @@ export default {
       <v-button
         class="c-form__submitButton"
         @onClick="$emit('setMode', 'add')"
-        >{{ atc['portal.addAddressButton'] || 'Add Address' }}</v-button
+        >{{ atc['buttons.addAddress'] || 'Add Address' }}</v-button
       >
     </div>
   </div>
@@ -137,8 +132,8 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  background-color: $color-light;
   margin-bottom: 40px;
+  background-color: $color-light;
 }
 
 .c-drawerAddressList__item {

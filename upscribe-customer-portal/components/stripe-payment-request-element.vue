@@ -57,6 +57,8 @@ export default {
   computed: {
     ...mapState('shop', ['shopData']),
 
+    ...mapState('translations', ['atc']),
+
     ...mapGetters('activeSubscription', ['activeSubscription']),
 
     isPaymentRequestCountry() {
@@ -67,12 +69,12 @@ export default {
     },
 
     paymentRequestObject() {
-      const { shopData, activeSubscription } = this
+      const { shopData, activeSubscription, atc } = this
       return {
         country: shopData.country_code,
         currency: shopData.currency.toLowerCase(),
         total: {
-          label: 'Total',
+          label: atc['labels.total'] || 'Total',
           amount: Math.floor(activeSubscription.total_price * 100),
         },
         requestPayerName: true,

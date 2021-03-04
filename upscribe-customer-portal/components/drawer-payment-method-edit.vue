@@ -74,8 +74,8 @@ export default {
     ...mapGetters('subscriptions', ['subscriptionActive']),
 
     paymentRequestText() {
-      const { browser } = this
-      if (!browser) return 'Payment Request'
+      const { browser, atc } = this
+      if (!browser) return atc['labels.paymentRequest'] || 'Payment Request'
 
       const {
         // isFirefox,
@@ -91,7 +91,7 @@ export default {
       if (isSafari) return 'Apple Pay'
       if (isIE || isEdge) return 'Microsoft Pay'
 
-      return 'Payment Request'
+      return atc['labels.paymentRequest'] || 'Payment Request'
     },
 
     paymentTypes() {
@@ -300,10 +300,11 @@ export default {
     handleSubmitPaymentForm() {},
 
     createPaymentMethodHandler() {
+      const { atc } = this
       if (!this.activePaymentType) {
         this.placeOrderError = {
           status: 'ERROR',
-          message: 'Please select payment type',
+          message: atc['errors.selectPaymentType'] || 'Please select payment type',
         }
         return
       }
@@ -311,7 +312,7 @@ export default {
       if (!this.completeStripeCardInfo) {
         this.placeOrderError = {
           status: 'ERROR',
-          message: 'Please complete the payment form',
+          message: atc['errors.completePaymentForm'] || 'Please complete the payment form',
         }
         return
       } else {

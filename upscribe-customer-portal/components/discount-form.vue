@@ -8,7 +8,7 @@
           class="c-discountForm__input"
           name="discount"
           type="text"
-          :label="discountInputLabel"
+          :label="discountInputLabel || atc['labels.discountCode'] || 'Discount Code'"
           required
         />
       </form>
@@ -35,7 +35,7 @@
         type="submit"
         @onClick="submit"
       >
-        {{ formSubmitButtonText }}
+        {{ formSubmitButtonText || atc['buttons.submit'] || 'Submit' }}
       </v-button>
 
       <form-submit-status
@@ -55,6 +55,8 @@ import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 
+import { mapState } from 'vuex'
+
 Vue.use(Vuelidate)
 
 export default {
@@ -70,12 +72,12 @@ export default {
       default: false,
     },
     formSubmitButtonText: {
-      type: String,
-      default: 'Submit',
+      type: [String, Boolean],
+      default: false, // use translation
     },
     formCancelButtonText: {
-      type: String,
-      default: 'Cancel',
+      type: [String, Boolean],
+      default: false, // use translation
     },
     formName: {
       type: String,
@@ -86,8 +88,8 @@ export default {
       default: false,
     },
     discountInputLabel: {
-      type: String,
-      default: 'Discount Code',
+      type: [String, Boolean],
+      default: false, // use translation
     },
   },
 
@@ -105,6 +107,8 @@ export default {
   },
 
   computed: {
+    ...mapState('translations', ['atc']),
+
     formPayload() {
       return {
         discount: this.form.discount,

@@ -1,4 +1,5 @@
 <script>
+import { mapState } from 'vuex'
 // import VButton from '@components/v-button'
 export default {
   components: {
@@ -18,6 +19,9 @@ export default {
     return {
       quantityLocal: null,
     }
+  },
+  computed: {
+    ...mapState('translations', ['atc']),
   },
   watch: {
     quantity(newVal) {
@@ -49,11 +53,11 @@ export default {
       href=""
       class="is-info c-button c-drawerProductBlock__button c-button--alt bold c-button--small"
       @click.prevent="saveQuantity"
-      >Save QTY</a
+      >{{ atc['actions.saveActionText'] || 'Save' }}</a
     >
   </div>
 
-  <div v-else class="button is-loading control-is-updating">Updating</div>
+  <div v-else class="button is-loading control-is-updating">{{ atc['notices.updating'] || 'Updating' }}</div>
 </template>
 
 <style lang="scss">

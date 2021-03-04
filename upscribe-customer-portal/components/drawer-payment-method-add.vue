@@ -36,8 +36,7 @@ export default {
 
       stripePaymentRequestEnabled: false,
       processingRedirectPaymentVerification: false,
-      applyToAllActiveSusbscriptions: false,
-      // what
+      applyToAllActiveSubscriptions: false,
       updating: false,
     }
   },
@@ -58,8 +57,9 @@ export default {
     ...mapGetters('subscriptions', ['subscriptionActive']),
 
     paymentRequestText() {
-      const { browser } = this
-      if (!browser) return 'Payment Request'
+      const { browser, atc } = this
+      if (!browser) return atc['labels.paymentRequest'] || 'Payment Request'
+
 
       const {
         // isFirefox,
@@ -75,7 +75,8 @@ export default {
       if (isSafari) return 'Apple Pay'
       if (isIE || isEdge) return 'Microsoft Pay'
 
-      return 'Payment Request'
+      return atc['labels.paymentRequest'] || 'Payment Request'
+
     },
 
     paymentTypes() {
@@ -233,7 +234,7 @@ export default {
           requestPayload: {
             payment_method_id: newPaymentMethodId,
           },
-          bulkUpdate: this.applyToAllActiveSusbscriptions,
+          bulkUpdate: this.applyToAllActiveSubscriptions,
         }
 
         let updateAction
@@ -280,10 +281,12 @@ export default {
     handleSubmitPaymentForm() {},
 
     createPaymentMethodHandler() {
+      const { atc } = this
+
       if (!this.activePaymentType) {
         this.placeOrderError = {
           status: 'ERROR',
-          message: 'Please select payment type',
+          message: atc['errors.selectPaymentType'] || 'Please select payment type',
         }
         return
       }
@@ -291,7 +294,7 @@ export default {
       if (!this.completeStripeCardInfo) {
         this.placeOrderError = {
           status: 'ERROR',
-          message: 'Please complete the payment form',
+          message: atc['errors.completePaymentForm'] || 'Please complete the payment form',
         }
         return
       } else {
@@ -340,20 +343,20 @@ export default {
   <div class=" c-drawer">
     <div class="c-drawer__inner">
       <h2 class="c-drawer__title">{{
-        atc['portal.addCardDrawerTitle'] || 'Add Payment Method'
+        atc['portal.addPaymentMethodDrawerTitle'] || 'Add Payment Method'
       }}</h2>
 
       <checkbox
-        v-model="applyToAllActiveSusbscriptions"
+        v-model="applyToAllActiveSubscriptions"
         :label="
-          atc['portal.applyToAllActiveSusbscriptions'] ||
+          atc['portal.applyToAllActiveSubscriptions'] ||
             'Apply to all active subscriptions'
         "
       />
 
       <payment-methods-block
         :updating="updating"
-        :submit-button-text="atc['buttons.addCard'] || 'Add New Payment Method'"
+        :submit-button-text="atc['buttons.addNewPaymentMethod'] || 'Add New Payment Method'"
         @cancel="$emit('setMode', 'default')"
         @finalPaymentPayloadResponse="handleFinalPaymentPayloadResponse"
       />

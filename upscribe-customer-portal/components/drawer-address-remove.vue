@@ -60,7 +60,7 @@ export default {
   <div v-if="activeEditAddress" class="c-drawer">
     <div class="c-drawer__inner">
       <h2 class="c-drawer__title">{{
-        atc['removeAddressDrawerTitle'] || 'Remove Address'
+        atc['portal.removeAddressDrawerTitle'] || 'Remove Address'
       }}</h2>
 
       <p class="c-drawer__subtitle">{{

@@ -7,14 +7,14 @@
       <h2 class="c-mobileSubscriptionTemplate__productTitle"
         >{{
           editNextOrder
-            ? 'Products in your next order'
-            : 'Products in your subscription'
+            ? atc['labels.productsInYourNextOrder'] || 'Products in your next order'
+            : atc['labels.productsInYourSubscription'] || 'Products in your subscription'
         }}
         | {{ currencySymbol
         }}{{
           editNextOrder
-            ? activeSubscription.next.total_price
-            : activeSubscription.total_price
+            ? activeSubscription.next.total_price.toFixed(2)
+            : activeSubscription.total_price.toFixed(2)
         }}</h2
       >
       <product-row
@@ -85,7 +85,7 @@ export default {
 
     ...mapState('modalCalendarGlobal', ['isOpenModalCalendar']),
 
-    ...mapState('tranlations', ['atc']),
+    ...mapState('translations', ['atc']),
 
     ...mapState('editMode', ['editNextOrder']),
 

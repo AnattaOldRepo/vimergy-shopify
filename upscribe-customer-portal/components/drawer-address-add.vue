@@ -80,8 +80,8 @@ export default {
 
       <new-address-form
         class="c-formBlock c-addressForm"
-        form-submit-button-text="Add Address"
-        :form-name="atc['buttons.addNewAddress'] || 'update-address'"
+        :form-submit-button-text="atc['buttons.addAddress'] || 'Add Address'"
+        form-name="update-address"
         no-data-fill
         @onSubmit="addAddress"
       />

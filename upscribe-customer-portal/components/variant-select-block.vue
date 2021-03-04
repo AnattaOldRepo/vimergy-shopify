@@ -19,12 +19,12 @@ export default {
       required: true,
     },
     buttonText: {
-      type: String,
-      default: 'Add to Subscription',
+      type: [String, Boolean],
+      default: false, // add from translation
     },
     secondaryButtonText: {
-      type: String,
-      default: 'Save by adding to subscription',
+      type: [String, Boolean],
+      default: false, // add from translations
     },
     variantAction: {
       type: String,
@@ -178,11 +178,12 @@ export default {
         activeOption1,
         activeOption2,
         activeOption3,
+        atc,
       } = this
       if (unavailable) {
         // face variant to show unavailable
         return {
-          title: 'Unavailable',
+          title: atc['labels.unavailable'] || 'Unavailable',
           price: '',
           option1: activeOption1,
           option2: activeOption2,
@@ -194,18 +195,19 @@ export default {
     },
 
     secondaryButtonTextWithPricing() {
-      if (this.windowWidth < 767) {
-        if (this.editNextOrder) {
-          return this.secondaryButtonText
+      const { secondaryButtonText, windowWidth, editNextOrder, atc, currencySymbol, variantPrice } = this
+
+      const secondaryButtonTextDefault = secondaryButtonText || atc['buttons.saveByAddingToSubscription'] || 'Save by adding to subscription'
+
+      if (windowWidth < 767) {
+        if (editNextOrder) {
+          return secondaryButtonTextDefault
         }
-        return !this.editNextOrder && this.atc['portal.addProductToNextOrder']
-          ? this.atc['portal.addProductToNextOrder'].replace(
-              '{X}',
-              this.variantPrice
-            )
-          : `Add to next order only | ${this.currencySymbol} ${this.variantPrice}`
+        else {
+          return `${atc['buttons.addProductToNextOrderOnly'] || 'Add to next order only'} | ${currencySymbol} ${variantPrice}`
+        }
       }
-      return this.secondaryButtonText
+      return secondaryButtonTextDefault
     },
 
     variantPrice() {
@@ -445,7 +447,7 @@ export default {
       v-if="inStock"
       class="c-button c-variantSelectBlock__button--add"
       size="large"
-      :text="buttonText"
+      :text="buttonText ? buttonText : atc['buttons.addProductToSubscription'] || 'Add to Subscription'"
       @onClick="variantButtonAction(1)"
     />
 

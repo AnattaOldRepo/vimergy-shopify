@@ -40,6 +40,17 @@ export default {
   computed: {
     ...mapState('checkout', ['checkoutData', 'shopData']),
     ...mapState('payment', ['paymentType', 'paymentSource']),
+    ...mapState('translations', ['atc']),
+    stripeIbanConfirmation() {
+      const { atc, shopData } = this
+      return atc['notices.stripeIbanConfirmation'] ? atc['notices.stripeIbanConfirmation'].replace('<shop-name>', shopData.name) : `By providing your IBAN and confirming this payment, you are authorizing
+      ${shopData.name} and Stripe, our payment service provider, to send
+      instructions to your bank to debit your account and your bank to debit
+      your account in accordance with those instructions. You are entitled to a
+      refund from your bank under the terms and conditions of your agreement
+      with your bank. A refund must be claimed within 8 weeks starting from the
+      date on which your account was debited.`
+    },
   },
   mounted() {
     const vm = this
@@ -78,7 +89,7 @@ export default {
     createPaymentMethod() {
       const vm = this
       const { name, checkoutData } = this
-      const { currency, payment_due } = checkoutData
+      const { payment_due } = checkoutData
       const redirectUrl = window.location.href
 
       const idealSourceData = {
@@ -138,14 +149,8 @@ export default {
   <div v-if="error" id="sepa-error-message" class="c-paymentMethodErrors" role="alert">{{ error }}</div>
 
   <!-- Display mandate acceptance text. -->
-  <div id="mandate-acceptance" class="c-stripeInfo">
-    By providing your IBAN and confirming this payment, you are
-    authorizing {{ shopData.name }} and Stripe, our payment service
-    provider, to send instructions to your bank to debit your account and
-    your bank to debit your account in accordance with those instructions.
-    You are entitled to a refund from your bank under the terms and
-    conditions of your agreement with your bank. A refund must be claimed
-    within 8 weeks starting from the date on which your account was debited.
-  </div>
+    <div id="mandate-acceptance" class="c-stripeInfo">
+      {{ stripeIbanConfirmation }}
+    </div>
 </form>
 </template>

@@ -114,8 +114,8 @@ export default {
     ...mapState('activeSubscription', ['activeSubscription']),
 
     paymentRequestText() {
-      const { browser } = this
-      if (!browser) return 'Payment Request'
+      const { browser, atc } = this
+      if (!browser) return atc['labels.paymentRequest'] || 'Payment Request'
 
       const {
         // isFirefox,
@@ -131,7 +131,7 @@ export default {
       if (isSafari) return 'Apple Pay'
       if (isIE || isEdge) return 'Microsoft Pay'
 
-      return 'Payment Request'
+      return atc['labels.paymentRequest'] || 'Payment Request'
     },
 
     paymentTypes() {
@@ -271,13 +271,13 @@ export default {
     },
 
     async updatePaymentMethod(updatePaymentData, paymentType) {
-      const { customerShopifyId, editNextOrder } = this
+      const { customerShopifyId, editNextOrder, atc } = this
 
       const paymentMethodId = this.activeEditCard.id
       const paymentCustomerId = this.activeEditCard.payment_customer_id
       this.$emit('setDrawerStatus', 'PENDING')
 
-      this.setMessage('Updating Payment Method')
+      this.setMessage(atc['notices.updatingNotice'] || 'Updating')
       this.setStatus('updating')
 
       try {
@@ -316,7 +316,7 @@ export default {
           this.$emit('setDrawerStatus', 'SUCCESS')
           this.$emit('setMode', 'default')
 
-          this.setMessage('Updated Payment Method')
+          this.setMessage(atc['notices.updateSavedSuccessfullyNotice'] || 'Saved Successfully')
           this.setStatus('success')
           this.updating = false
 
@@ -351,10 +351,11 @@ export default {
     handleSubmitPaymentForm() {},
 
     createPaymentMethodHandler() {
+      const { atc } = this
       if (!this.activePaymentType) {
         this.placeOrderError = {
           status: 'ERROR',
-          message: 'Please select payment type',
+          message: atc['errors.selectPaymentType'] || 'Please select payment type',
         }
         return
       }
@@ -362,7 +363,7 @@ export default {
       if (!this.completeStripeCardInfo) {
         this.placeOrderError = {
           status: 'ERROR',
-          message: 'Please complete the payment form',
+          message: atc['errors.completePaymentForm'] || 'Please complete the payment form',
         }
         return
       } else {

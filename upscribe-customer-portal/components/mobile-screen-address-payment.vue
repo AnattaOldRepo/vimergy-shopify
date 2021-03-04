@@ -7,7 +7,7 @@
     <mobile-subscription-template
       v-if="activeSubscription && !isCancelledSubscriptionRoute"
       :has-product-row="false"
-      functional-block-title="Address and Payment"
+      :functional-block-title="atc['labels.addressAndPayment'] || 'Address and Payment'"
     >
       <div
         slot="functionality-block"
@@ -63,6 +63,9 @@
           :title="atc['portal.paymentMethodsDrawerTitle'] || 'Payment Methods'"
           :second-text="cardDisplay"
         >
+          <!-- eslint-disable vue/no-v-html -->
+          <div v-if="cardTopMessage" slot="top" class="c-functionalButtonBlock__icon" v-html="cardTopMessage"/>
+
           <span slot="icon" class="c-functionalButtonBlock__icon">
             <credit-card-icon />
           </span>
@@ -87,8 +90,10 @@
         <functional-button-block
           :display-only="true"
           header="Payment Method"
-          :second-text="cardDisplayCancelledRoute"
+          :second-text="cardDisplay"
         >
+          <div slot="top" class="c-functionalButtonBlock__icon" v-html="cardTopMessage" />
+
           <span slot="icon" class="c-functionalButtonBlock__icon">
             <credit-card-icon />
           </span>
@@ -97,7 +102,7 @@
         <!-- Cancelled Billing Block -->
         <functional-button-block
           :display-only="true"
-          header="Billing Address"
+          :header="atc['labels.billingAddress'] || 'Billing Address'"
           :second-text="formattedCancelledBillingAddress"
         >
         </functional-button-block>
@@ -204,10 +209,11 @@ export default {
     },
 
     formattedBillingAddress() {
+      const { atc } = this
       const address = this.activeBillingAddress
 
       if (isEqual(this.activeBillingAddress, this.activeShippingAddress)) {
-        return `<br/><span class="c-addressPayment__formatted">Same As Shipping Address</span>`
+        return `<br/><span class="c-addressPayment__formatted">${atc['labels.sameAsShippingAddress'] || 'Same As Shipping Address' }</span>`
       }
 
       if (!address || this.isEmptyObject(address)) {
@@ -232,6 +238,7 @@ export default {
     },
 
     formattedCancelledBillingAddress() {
+      const { atc } = this
       const address = this.activeBillingAddress
       let billingAddress
 
@@ -250,7 +257,7 @@ export default {
         string += address.zip ? `${address.zip} • ` : ''
         // string += address.country ? `${address.country} ` : ''
         billingAddress =
-          "<span class='c-addressPayment__formatted c-addressPayment__formatted--large black'>Same As Shipping Address</span>"
+          `<span class='c-addressPayment__formatted c-addressPayment__formatted--large black'>${atc['labels.sameAsShippingAddress'] || 'Same As Shipping Address' }</span>`
         return string.length >= 32
           ? billingAddress +
               `<br/><span class="c-addressPayment__formatted c-addressPayment__formatted--large">${string.slice(
@@ -274,8 +281,21 @@ export default {
       }
     },
 
+    cardTopMessage() {
+      const { activeCard, atc } = this
+      if (!activeCard) return false
+
+      const { status } = activeCard
+
+      if (status && status === 'invalid' || status === 'void') {
+        return `<div class="tag is-warning c-cardItem__voidWarning">${atc['errors.invalidPaymentMethodTag'] || 'Invalid Payment Method' }</div>`
+      } else {
+        return false
+      }
+    },
+
     cardDisplay() {
-      const { activeCard } = this
+      const { activeCard, atc } = this
       if (!activeCard) return false
 
       const {
@@ -285,37 +305,26 @@ export default {
         type,
         bank_code,
         zipcode,
+        email,
       } = activeCard
 
-      if (type === 'stripe_card') {
-        return `<br/><span class="c-addressPayment__formatted">CARD *${last4} ${exp_month}/${exp_year} ${
-          zipcode ? 'Zip: ' + zipcode : ''
-        }</span>`
+      let string = ''
+
+      if (type.includes('card')) {
+        return `*${last4} ${exp_month}/${exp_year} ${
+          zipcode ? '<br>' + zipcode : ''
+        }`
+      } else if (type === 'braintree_paypal') {
+
+        if (email) {
+          return atc['portal.paypalAccountEmailDisplay'].replace('<email>', email) || `Account Email: ${email}`
+        } else {
+          return atc['portal.paypalAccountEmailDisplayUnavailabe'] || `No email available for account`
+        }
       } else if (type === 'stripe_sepa_direct_debit') {
-        return `<br/><span class="c-addressPayment__formatted">Acct *${last4} / Bank ${bank_code}</span>`
-      } else {
-        return false
+        return atc['portal.sepaDebitInfoDisplay'].replace('<last4>', last4).replace('bank-code', bank_code) || `Acct *${last4} / Bank ${bank_code}`
       }
-    },
-
-    cardDisplayCancelledRoute() {
-      const { activeCard } = this
-      const card = activeCard
-
-      if (card.type.includes('card')) {
-        return `<span class="c-addressPayment__formatted--large black">CARD *${
-          card.last4
-        } ${card.exp_month}/${card.exp_year} ${
-          card.zipcode ? 'Zip: ' + card.zipcode : ''
-        }</span>`
-      } else if (card.type === 'braintree_paypal') {
-        return `<span class="c-addressPayment__formatted--large black">Account Email: ${card.email ||
-          'No email available for account'}</span>`
-      } else if (card.type === 'stripe_sepa_direct_debit') {
-        return `<span class="c-addressPayment__formatted--large black">Acct *${card.last4} / Bank ${card.bank_code}</span>`
-      } else {
-        return false
-      }
+      return string
     },
 
     isCancelledSubscriptionRoute() {

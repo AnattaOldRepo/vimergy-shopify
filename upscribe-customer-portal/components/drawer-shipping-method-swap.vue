@@ -111,7 +111,7 @@ export default {
     },
 
     async swapShippingMethods() {
-      const { newSwapShippingMethod, editNextOrder, activeSubscription } = this
+      const { newSwapShippingMethod, editNextOrder, activeSubscription, atc } = this
 
       const updatePayload = {
         requestPayload: {
@@ -164,6 +164,12 @@ export default {
           event: analyticsEventName,
           payload: analyticsPayload,
         })
+        if (!editNextOrder) {
+          this.$toast.info(
+            atc['portal.nextShipmentResetFromSubscriptionChange'] || 'Changing Subscription Settings resets your next shipment.',
+            { duration: 5000 }
+          )
+        }
       } catch (e) {
         console.error('swapShippingMethods error: ', e)
         this.$emit('setDrawerStatus', { state: 'FAILURE', message: e.message })

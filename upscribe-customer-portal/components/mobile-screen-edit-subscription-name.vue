@@ -15,11 +15,11 @@
         <single-field-form
           class="c-formBlock--noPadding c-discountForm"
           :form-submit-button-text="
-            atc['portal.updateSubscriptionNameButton'] || 'Update Name'
+            atc['buttons.updateSubscriptionName'] || 'Update Name'
           "
           form-name="edit-subscription-name"
           :input-label="
-            atc['portal.subscriptionNameInputLabel'] || 'Subscription Name'
+            atc['labels.subscriptionName'] || 'Subscription Name'
           "
           @onSubmit="handleUpdateName"
         />
@@ -58,7 +58,7 @@ export default {
     ...mapActions('subscriptions', ['UPDATE_SUBSCRIPTION']),
 
     async handleUpdateName(name) {
-      const { customerId, storeDomain } = this
+      const { customerId, storeDomain, atc } = this
 
       if (!name) return
 
@@ -68,7 +68,7 @@ export default {
         },
       }
 
-      this.setMessage('Updating subscription name')
+      this.setMessage(atc['notices.updateSavingNotice'] || 'Updating')
       this.setStatus('updating')
 
       try {
@@ -81,9 +81,8 @@ export default {
           },
         })
 
-        this.setMessage(
-          `Subscription name updated to ${updatePayload.requestPayload.name}`
-        )
+      this.setMessage(atc['notices.updateSavedSuccessfullyNotice'] || 'Saved Successfully')
+
         this.setStatus('success')
       } catch (e) {
         this.setMessage(e.message)

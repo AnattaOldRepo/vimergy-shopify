@@ -1,7 +1,7 @@
 <script>
 import { mapState } from 'vuex'
 import VButton from '@components/v-button.vue'
-import IconChevronRight from '@components/icon-chevron-right.vue'
+import IconChevronRight from '@components/Icon/icon-chevron-right.vue'
 import LogoutIcon from '@components/Icon/logout-icon.vue'
 import AccountIcon from '@components/Icon/account-icon.vue'
 import { windowSizes } from '@mixins/windowSizes'
@@ -234,7 +234,7 @@ export default {
               <h2 v-else-if="middleText" class='c-headerMobile__title' v-html="middleText">
               </h2>
 
-              <h2 v-else> Upscribe </h2>
+              <h2 v-else>Upscribe</h2>
           </div>
 
           <span

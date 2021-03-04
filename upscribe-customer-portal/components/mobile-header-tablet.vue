@@ -1,14 +1,14 @@
 <template>
-  <div class="c-headerTablet__inner">
-    <div class="c-headerTablet__inner-top">
-      <a class="c-headerTablet__backToAccount" :href="shopifyAccountUrl">
-        <icon-chevron-right
-          class="c-header__navLinkIcon c-header__navLinkIcon--backToAccount"
-        />
-        {{ atc['portal.headerBackToAccount'] || 'Back to account' }}
-      </a>
+	<div class="c-headerTablet__inner">
+		<div class="c-headerTablet__inner-top">
+			<a class="c-headerTablet__backToAccount" :href="shopifyAccountUrl">
+				<icon-chevron-right
+					class="c-header__navLinkIcon c-header__navLinkIcon--backToAccount"
+				/>
+				{{ atc['portal.headerBackToAccount'] || 'Back to account' }}
+			</a>
 
-      <!-- <a
+			<!-- <a
         class="c-headerTablet__navOpener"
         @click.prevent="mobileNavOpen = !mobileNavOpen"
         >{{ activePageName }}
@@ -17,22 +17,22 @@
           :class="{ 'c-headerTablet__navOpenerIcon--open': mobileNavOpen }"
         />
       </a> -->
-      <!--
+			<!--
       <div class="c-header__logo">
         <img :src="storeLogo" />
       </div> -->
-      <navigation-menu class="c-headerTablet__menu" />
+			<navigation-menu class="c-headerTablet__menu" />
 
-      <v-button
-        class="c-button--auto c-header__button c-button--transparent"
-        size="small"
-        @onClick="signOut"
-      >
-        {{ atc['portal.headerSignOut'] || 'Sign Out' }}
-      </v-button>
-    </div>
+			<v-button
+				class="c-button--auto c-header__button c-button--transparent"
+				size="small"
+				@onClick="signOut"
+			>
+				{{ atc['portal.headerSignOut'] || 'Sign Out' }}
+			</v-button>
+		</div>
 
-    <!-- <nav v-if="mobileNavOpen" class="c-headerTablet__nav">
+		<!-- <nav v-if="mobileNavOpen" class="c-headerTablet__nav">
       <nuxt-link
         class="c-headerTablet__navLink"
         :to="{
@@ -93,71 +93,71 @@
         >{{ atc['portal.cancelledSubscriptions'] || 'Cancelled Subscriptions' }}
       </nuxt-link>
     </nav> -->
-  </div>
+	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import IconChevronRight from '@components/icon-chevron-right.vue'
+import IconChevronRight from '@components/Icon/icon-chevron-right.vue'
 import VButton from '@components/v-button.vue'
 import NavigationMenu from '@components/global/navigation-menu.vue'
 
 export default {
-  components: {
-    IconChevronRight,
-    VButton,
-    NavigationMenu,
-  },
+	components: {
+		IconChevronRight,
+		VButton,
+		NavigationMenu,
+	},
 
-  data() {
-    return {
-      mobileNavOpen: false,
-    }
-  },
+	data() {
+		return {
+			mobileNavOpen: false,
+		}
+	},
 
-  computed: {
-    ...mapState('translations', ['atc']),
+	computed: {
+		...mapState('translations', ['atc']),
 
-    ...mapGetters('subscriptions', [
-      'subscriptionActive',
-      'subscriptionInActive',
-    ]),
+		...mapGetters('subscriptions', [
+			'subscriptionActive',
+			'subscriptionInActive',
+		]),
 
-    ...mapState('shop', ['shopData', 'storeLogo']),
+		...mapState('shop', ['shopData', 'storeLogo']),
 
-    ...mapState('route', ['storeDomain', 'customerId']),
+		...mapState('route', ['storeDomain', 'customerId']),
 
-    ...mapState('shop', ['shopData']),
+		...mapState('shop', ['shopData']),
 
-    shopifyAccountUrl() {
-      const { shopData } = this
-      if (!shopData) return
-      return `https://${shopData.domain}/account`
-    },
+		shopifyAccountUrl() {
+			const { shopData } = this
+			if (!shopData) return
+			return `https://${shopData.domain}/account`
+		},
 
-    activePageName() {
-      const { atc } = this
-      if (this.$route.name === 'history') {
-        return atc['portal.headerSubscriptionHistory'] || 'Subscription History'
-      } else {
-        if (this.$route.query.route === 'cancelledSubscriptions') {
-          return (
-            atc['portal.cancelledSubscriptions'] || 'Cancelled Subscriptions'
-          )
-        }
-        return atc['portal.headerYourSubscription'] || 'Your Subscriptions'
-      }
-    },
-  },
+		activePageName() {
+			const { atc } = this
+			if (this.$route.name === 'history') {
+				return atc['portal.headerSubscriptionHistory'] || 'Subscription History'
+			} else {
+				if (this.$route.query.route === 'cancelledSubscriptions') {
+					return (
+						atc['portal.cancelledSubscriptions'] || 'Cancelled Subscriptions'
+					)
+				}
+				return atc['portal.headerYourSubscription'] || 'Your Subscriptions'
+			}
+		},
+	},
 
-  mounted() {
-    this.mobileNavOpen = false
-  },
+	mounted() {
+		this.mobileNavOpen = false
+	},
 
-  methods: {
-    signOut() {
-      window.location = `https://${this.shopData.domain}/account/logout`
-    },
-  },
+	methods: {
+		signOut() {
+			window.location = `https://${this.shopData.domain}/account/logout`
+		},
+	},
 }
 </script>

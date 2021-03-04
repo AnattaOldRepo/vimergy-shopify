@@ -1,5 +1,6 @@
 <script>
 import braintree from 'braintree-web'
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -32,6 +33,10 @@ export default {
       braintreeLoaded: false,
     }
   },
+  computed: {
+    ...mapState('translations', ['atc']),
+
+  },
   mounted() {
     const { braintreeClientToken } = this
     this.authorization = braintreeClientToken
@@ -54,6 +59,7 @@ export default {
       // eslint-disable-next-line no-unused-vars
       let checkout
       const vm = this
+      const { atc } = this
       const authorization = this.authorization
 
       var form = this.$refs['active-payment-type-braintree-card']
@@ -78,19 +84,19 @@ export default {
             fields: {
               number: {
                 selector: '#braintree-card-number',
-                placeholder: 'Card number',
+                placeholder: atc['forms.cardNumberPlaceholder'] || 'Card number',
               },
               cvv: {
                 selector: '#braintree-card-cvv',
-                placeholder: 'CVC',
+                placeholder: atc['forms.cardCvcPlaceolder'] || 'CVC',
               },
               expirationDate: {
                 selector: '#braintree-card-expiration-date',
-                placeholder: 'MM / YY',
+                placeholder: atc['forms.cardExpirationMonthYearPlaceholder'] || 'MM / YY',
               },
               postalCode: {
                 selector: '#braintree-card-postal-code',
-                placeholder: 'ZIP',
+                placeholder: atc['forms.cardZipcodePlacehoder'] || 'Zipcode',
               },
             },
             styles: {

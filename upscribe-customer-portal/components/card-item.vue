@@ -44,32 +44,49 @@ export default {
     ...mapState('route', ['storeDomain', 'customerId']),
 
     paymentMethodName() {
-      const { card } = this
+      const { card, atc } = this
       if (card.type.includes('card')) {
         return card.name || card.brand
       } else if (card.type === 'stripe_sepa_direct_debit') {
-        return 'SEPA Direct Debit'
+        return atc['labels.sepaDirectDebit'] || 'SEPA Direct Debit'
       } else if (card.type === 'braintree_paypal') {
-        return 'PayPal'
+        return atc['labels.paypal'] || 'PayPal'
       } else {
         return false
       }
     },
 
     paymentMethodDetailText() {
-      const { card } = this
-      if (card.type.includes('card')) {
-        return `*${card.last4} ${card.exp_month}/${card.exp_year} ${
-          card.zipcode ? '<br>Zip: ' + card.zipcode : ''
+      const { card, atc } = this
+      if (!card) return false
+
+      const {
+        last4,
+        exp_month,
+        exp_year,
+        type,
+        bank_code,
+        zipcode,
+        email,
+      } = card
+
+      let string = ''
+
+      if (type.includes('card')) {
+        return `*${last4} ${exp_month}/${exp_year} ${
+          zipcode ? '<br>' + zipcode : ''
         }`
-      } else if (card.type === 'braintree_paypal') {
-        return `Account Email: ${card.email ||
-          'No email available for account'}`
-      } else if (card.type === 'stripe_sepa_direct_debit') {
-        return `Acct *${card.last4} / Bank ${card.bank_code}`
-      } else {
-        return false
+      } else if (type === 'braintree_paypal') {
+
+        if (email) {
+          return atc['portal.paypalAccountEmailDisplay'] ? atc['portal.paypalAccountEmailDisplay'].replace('<email>', email) : `Account Email: ${email}`
+        } else {
+          return atc['portal.paypalAccountEmailDisplayUnavailabe'] || `No email available for account`
+        }
+      } else if (type === 'stripe_sepa_direct_debit') {
+        return atc['portal.sepaDebitInfoDisplay'].replace('<last4>', last4).replace('bank-code', bank_code) || `Acct *${last4} / Bank ${bank_code}`
       }
+      return string
     },
 
     cardSvg() {
@@ -96,9 +113,11 @@ export default {
 <template>
   <div>
     <div v-if="card" class="c-cardItem">
-      <div class="c-cardItem__inner" @click="$emit('selectCard')">
+      <div class="c-cardItem__inner" :class="{'c-cardItem__inner--hasMessage': card.status === 'void' || card.status === 'invalid'}"
+        @click="$emit('selectCard')"
+      >
         <div
-          v-if="card.status === 'void'"
+          v-if="card.status === 'void' || card.status === 'invalid'"
           class="tag is-warning c-cardItem__voidWarning"
           >{{
             atc['errors.invalidPaymentMethodTag'] || 'Invalid Payment Method'
@@ -107,8 +126,10 @@ export default {
 
         <span v-if="noEdit" class="c-cardItem__lock"><lock-icon /></span>
 
-        <div class="c-cardItem__left">
-          <!-- eslint-disable-next-line vue/no-v-html -->
+        <div class="c-cardItem__left"
+          :class="{'c-cardItem__left--message': card.status === 'void' || card.status === 'invalid'}"
+        >
+          <!-- eslint-disable vue/no-v-html -->
           <div
             v-if="card.type.includes('card') && cardSvg"
             class="c-cardItem__cardIcon"
@@ -131,7 +152,10 @@ export default {
           </div>
         </div>
 
-        <div v-if="!noEdit" class="c-option__action">
+        <div v-if="!noEdit" class="c-option__action"
+          :class="{'c-option__action--message': card.status === 'void' || card.status === 'invalid'}"
+
+        >
           <div
             class="c-option__select"
             :class="{ 'c-option__select--picked': isSelected }"
@@ -177,7 +201,7 @@ export default {
             />
 
             <div
-              v-if="card.status === 'void'"
+              v-if="card.status === 'void' || card.status === 'invalid'"
               class="tag is-warning c-cardItem__voidWarning u-mt-1"
               >{{
                 atc['errors.invalidPaymentMethodTag'] ||
@@ -220,9 +244,9 @@ export default {
 }
 
 .c-cardItem__editText--mobile {
+  max-width: 200px;
   color: $color-text;
   text-align: left;
-  max-width: 200px;
 
   br {
     display: none;
@@ -232,17 +256,17 @@ export default {
 .c-cardItem__editIcon {
   width: 16px;
   height: 16px;
-  transition: all 0.2s ease;
   margin-right: 5px;
+  transition: all 0.2s ease;
 }
 
 .c-cardItem__editText {
   display: block;
+  margin-right: 8px;
   font-size: 14px;
   color: $color-blue-secondary;
   text-align: center;
   transition: all 0.2s ease;
-  margin-right: 8px;
 }
 
 .c-cardItem__editTextInner {
@@ -251,6 +275,8 @@ export default {
 
 .c-cardItem__inner {
   position: relative;
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   padding: 16px 18px 15px;
   font-size: 16px;
@@ -259,18 +285,25 @@ export default {
   background-color: $color-white;
   border: 1px solid $color-blue-light-border;
   border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
 
   &--updating {
     pointer-events: none;
   }
+
+  &--hasMessage {
+    padding-top: 40px;
+  }
+
   .c-option__action {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 25%;
 
-    justify-content: space-between;
+    &--message {
+      padding-top: 30px;
+    }
+
     .c-option__select {
       align-self: flex-end;
     }
@@ -278,11 +311,12 @@ export default {
       display: flex;
       justify-content: space-between;
       a {
-        text-decoration: underline;
         font-size: 14px;
+        text-decoration: underline;
+
         @include bp(mobile-large-max) {
-          font-size: 12px;
           margin-right: 5px;
+          font-size: 12px;
         }
       }
       .c-action__items--delete {
@@ -303,8 +337,8 @@ export default {
 .c-cardItem__name {
   display: block;
   margin-bottom: 4px;
-  text-transform: capitalize;
   color: $color-black;
+  text-transform: capitalize;
 }
 
 .c-cardItem__editText {
@@ -328,8 +362,8 @@ export default {
   margin-right: 10px;
   font-size: 11px;
   line-height: 15px;
-  text-decoration: none;
   color: $color-blue-brand;
+  text-decoration: none;
 }
 
 .c-cardItem__cardIcon {
@@ -341,8 +375,12 @@ export default {
 
 .c-cardItem__left {
   display: flex;
-  width: 75%;
   align-items: center;
+  width: 75%;
+
+  &--message {
+    padding-top: 30px;
+  }
 }
 
 .c-cardItem__lock {

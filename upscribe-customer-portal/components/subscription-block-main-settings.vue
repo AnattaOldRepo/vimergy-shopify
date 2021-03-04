@@ -242,7 +242,9 @@ export default {
     },
 
     async skipNextShipment() {
-      this.skipShipmentUpdate = 'Updating'
+      const { atc } = this
+      this.skipShipmentUpdate = atc['notices.updatingNotice'] || 'Updating'
+
       try {
         await this.SKIP_NEXT_SHIPMENT()
       } catch (e) {
@@ -253,18 +255,19 @@ export default {
     },
 
     async shipNow() {
+      const { atc } = this
       this.shipmentNowUpdate = 'Updating'
       try {
         const createdCharge = await this.SHIP_NOW()
+
         if (createdCharge.charge_error) {
           console.error({
             message: `Charge failed: ${createdCharge.charge_error}`,
           })
-          this.$toast.error(`Charge failed: ${createdCharge.charge_error}`)
+          this.$toast.error(`${atc['notices.chargeFailed'] || 'Charge failed'}: ${createdCharge.charge_error}`)
         } else {
-          this.$toast.success(`Your order has been created.`, {
-            duration: 5000,
-          })
+          this.$toast.success(atc['notices.chargeCreated'] || 'Charge Created', { duration: 5000})
+
           await this.GET_SUBSCRIPTIONS()
         }
       } catch (e) {

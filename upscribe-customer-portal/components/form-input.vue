@@ -102,7 +102,7 @@ import Vue from 'vue'
 import vSelect from 'vue-select'
 import FormGroup from '@components/form-group'
 import VueSelect from '@components/vue-select'
-import discountTagOutlineIcon from '@components/discount-tag-outline-icon'
+import discountTagOutlineIcon from '@components/Icon/discount-tag-outline-icon'
 
 Vue.component('v-select', vSelect)
 

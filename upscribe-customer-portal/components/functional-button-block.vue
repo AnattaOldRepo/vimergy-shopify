@@ -2,12 +2,16 @@
   <a
     v-if="internalLink"
     class="c-functionalButtonBlock"
+    :class="{'c-functionalButtonBlock--hasMessage': $slots['top']}"
     :to="internalLink"
     @click="scrollToTop"
   >
+    <slot class="c-functionalButtonBlock__top" name="top"></slot>
+
     <div class="c-functionalButtonBlock--left">
       <slot name="icon"></slot>
-      <!-- eslint-disable -->
+
+      <!-- eslint-disable vue/no-v-html -->
       <span class="c-functionalButtonBlock__title">
         {{ title }}
         <span
@@ -130,6 +134,7 @@ export default {
 }
 
 .c-functionalButtonBlock {
+  position: relative;
   padding: 17px 26px 17px 15px;
   max-width: 400px;
   background-color: $color-white;
@@ -142,6 +147,10 @@ export default {
   &:hover,
   &:focus {
     background-color: $color-white;
+  }
+
+  &--hasMessage {
+    padding-top: 40px;
   }
 }
 
@@ -160,6 +169,7 @@ export default {
 .c-functionalButtonBlock--left {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .c-functionalButtonBlock--right {

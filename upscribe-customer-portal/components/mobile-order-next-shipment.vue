@@ -12,7 +12,11 @@
     </portal>
 
     <p
-      v-if="activeSubscription.interval && activeSubscription.period"
+      v-if="
+        activeSubscription.interval &&
+          activeSubscription.period &&
+          subscriptionProducts.length
+      "
       class="c-drawer__subtitle u-mt-4"
       >{{
         atc['portal.editProductsDrawerInfoText'] || 'These products ship every'
@@ -276,9 +280,9 @@ export default {
     },
 
     orderStatus() {
-      const { activeSubscription, isOriginalCharge } = this
+      const { activeSubscription, isOriginalCharge, atc } = this
       if (isOriginalCharge) {
-        return 'Paid'
+        return atc['labels.paid'] || 'Paid'
       }
       return activeSubscription.fulfillment_status
         ? activeSubscription.fulfillment_status
@@ -375,21 +379,41 @@ export default {
     },
 
     oneTimeProducts() {
-      if (this.editNextOrder) {
-        const idArray = this.activeSubscription.items.map((item) => item.id)
-        return this.activeSubscription.next.items.filter(
-          (item) => !idArray.includes(item.id)
-        )
-      }
-      return []
+      let otp = []
+      const variantIdArray = this.activeSubscription.items.map(
+        (item) => item.variant_id
+      )
+      // if variant id does not match it is obviously a OTP
+      this.activeSubscription.next.items.forEach((item) => {
+        if (!variantIdArray.includes(item.variant_id)) {
+          otp.push(item)
+        } else {
+          const subscriptionProduct = this.activeSubscription.items.find(
+            (subscriptionProduct) =>
+              subscriptionProduct.variant_id === item.variant_id
+          )
+          if (subscriptionProduct.quantity !== item.quantity) {
+            otp.push(item)
+          }
+        }
+      })
+
+      return otp
     },
 
     subscriptionProducts() {
       if (this.editNextOrder) {
-        const idArray = this.activeSubscription.items.map((item) => item.id)
-        return this.activeSubscription.next.items.filter((item) =>
-          idArray.includes(item.id)
-        )
+        // shows only the products which are part of next items and are subscription without any change in quantity
+        let subscriptionItems = []
+        this.activeSubscription.items.forEach((item) => {
+          const otpProduct = this.activeSubscription.next.items.find(
+            (otp) => otp.variant_id === item.variant_id
+          )
+          if (otpProduct && otpProduct.quantity === item.quantity) {
+            subscriptionItems.push(item)
+          }
+        })
+        return subscriptionItems
       }
       return this.activeSubscription.items
     },
@@ -531,7 +555,7 @@ export default {
       product,
       addToNextOrder,
     }) {
-      const { activeSubscription, variantSelectProduct } = this
+      const { activeSubscription, variantSelectProduct, atc } = this
 
       const { addPayload: nextAddItemPayload } = productChangeRequest({
         variantId,
@@ -570,7 +594,7 @@ export default {
             nextOrderUpdatePayload,
             'subscriptions',
             'UPDATE_NEXT_ORDER',
-            `Product add to next order.`
+            atc['notices.productAddedToNextOrder'] || `Product added to next order`
           ),
         ]
       } else {
@@ -582,7 +606,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product added on subscription.`
+            atc['notices.productAddedToSubscription'] || `Product added to subscription`
           ),
         ]
       }
@@ -612,7 +636,7 @@ export default {
     async handleRemove(product) {
       if (this.updating) return
 
-      const { activeSubscription, activeQueue, editNextOrder } = this
+      const { activeSubscription, activeQueue, editNextOrder, atc } = this
 
       const itemCount = editNextOrder
         ? activeQueue.items.length
@@ -663,7 +687,7 @@ export default {
             nextOrderUpdatePayload,
             'subscriptions',
             'UPDATE_NEXT_ORDER',
-            `Product removed from next order.`
+            atc['notices.productRemovedFromNextOrder'] || `Product removed from next order.`
           ),
         ]
       } else {
@@ -675,7 +699,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product removed from subscription`
+            atc['notices.productRemovedFromSubscription'] || `Product removed from subscription`
           ),
         ]
       }
@@ -708,7 +732,7 @@ export default {
     async handleQuantityChangeManual({ quantity, id, product }) {
       if (parseInt(quantity) === 0) return this.handleRemove(product)
 
-      const { editNextOrder } = this
+      const { editNextOrder, atc } = this
 
       const finalPayload = {
         requestPayload: {
@@ -735,7 +759,7 @@ export default {
             finalPayload,
             'subscriptions',
             'UPDATE_NEXT_ORDER',
-            `Quantity updated to ${quantity} on next order.`
+            atc['notices.quantityUpdatedToXOnNextOrder'] ? atc['notices.quantityUpdatedToXOnNextOrder'].replace('<quantity>', quantity) : `Quantity updated to ${quantity} on next order.`
           ),
         ]
       } else {
@@ -748,7 +772,7 @@ export default {
             finalPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Quantity updated to ${quantity} on subscription.`
+            atc['notices.quantityUpdatedToXOnSubscription'] ? atc['notices.quantityUpdatedToXOnSubscription'].replace('<quantity>', quantity): `Quantity updated to ${quantity} on subscription.`
           ),
         ]
       }

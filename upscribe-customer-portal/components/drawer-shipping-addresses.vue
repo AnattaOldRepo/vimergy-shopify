@@ -163,7 +163,7 @@ export default {
 
       <new-address-form
         class="c-formBlock--noPadding c-shippingAddressForm"
-        :form-submit-button-text="atc['buttons.updateAddress'] || 'Add Address'"
+        :form-submit-button-text="atc['buttons.addAddress'] || 'Add Address'"
         form-name="shipping-address"
         :data-fill="activeShippingAddress"
         @onSubmit="updateShippingAddress"

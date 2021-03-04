@@ -51,12 +51,12 @@
       </div>
     </div>
     
-	<script>
+  <script>
       
       setInterval(function(){
-      	$(".product__description__property").each(function(index) {
+        $(".product__description__property").each(function(index) {
           if ( $(this).text().indexOf('kitsItem') > -1 ) { 
-          	$(this).parent().parent().hide(0);	
+            $(this).parent().parent().hide(0);  
           }
         });
       }, 500);
@@ -68,15 +68,21 @@ $(document).on('page:load', function() {
   if (Shopify.Checkout.step === "contact_information") {
     $('[data-drawer-toggle="[data-order-summary]"]').click();
   }
+  
 
-  $('.product__description__property').each(function() {
-    var prop = $(this).val()
-    if (prop.indexOf('Subscription')) {
-      // we're in an Upscribe checkout and somehow got to Shopify
-      // send them to the cart page to reattempt to direct to Upscribe checkout
-      window.location.href = "https://vimergy.com/cart"
-    }
-  })
+  
+  // only if we're not on the order confirmation tracking page - can be sent in order emails
+  // even if it was an Upscribe order
+  if (window.location.href.indexOf('/orders/') < 0) {
+    $('.product__description__property').each(function() {
+      var prop = $(this).val()
+      if (prop.indexOf('Subscription')) {
+        // we're in an Upscribe checkout and somehow got to Shopify
+        // send them to the cart page to reattempt to direct to Upscribe checkout
+        window.location.href = "https://vimergy.com/cart"
+      }
+    })
+  }
 });
 </script>
     {{ tracking_code }}
@@ -88,10 +94,10 @@ $(document).on('page:load', function() {
   .section__content{
       margin-bottom: 10px;
   }
-  .section.section--shipping-method:after {
-      content: "Ship dates above are only estimates, and not guaranteed.";
-      font-weight: bold;
-  }
+.section.section--shipping-method:after {
+    content: "Ship dates above are only estimates, and not guaranteed.";
+    font-weight: bold;
+}
 </style>
 <script>
   console.log("checkout");

@@ -18,17 +18,19 @@
     <!-- subscription info starts  -->
     <div class="u-mt-3 c-mobileSubscriptionInfo">
       <p v-if="editNextOrder">
-        You are <strong> editing your {{ nextShipDate }} order. </strong>
+        <strong>
+        {{ editingNextShipDateOnlyText }}</strong>
         <br />
-        To edit your Subscription only.
-        <a @click="changeMode(false)"><strong> CLICK HERE </strong></a>
+        {{ atc['portal.toEditFullSubscription'] || 'To edit your full subscription' }}
+        <a @click="changeMode(false)"><strong> {{ atc['buttons.clickHere'] || 'CLICK HERE' }}</strong></a>
       </p>
 
       <p v-else>
-        You are <strong> Editing your subscription</strong>
+        <strong> {{ atc['portal.editingFullSubscription'] || 'You are editing your full subscription' }}</strong>
         <br />
-        To edit your {{ nextShipDate }} order only .
-        <a @click="changeMode(true)"> <strong> CLICK HERE </strong></a>
+        {{ nextOrderOnlyText }}
+
+        <a @click="changeMode(true)"> <strong>{{ atc['buttons.clickHere'] || 'CLICK HERE' }}</strong></a>
       </p>
     </div>
 
@@ -74,6 +76,23 @@ export default {
 
     ...mapState('editMode', ['editNextOrder']),
 
+    editingNextShipDateOnlyText() {
+      const { atc, nextShipDate } = this
+
+      return atc['portal.editingNextShipDateOnly'] ? atc['portal.editingNextShipDateOnly'].replace('<next-ship-date>', nextShipDate) : `You are editing your ${nextShipDate} order`
+    },
+
+    nextOrderOnlyText() {
+      const { atc, nextShipDate } = this
+      return atc['portal.toEditNextOrderOnly'] ? atc['portal.toEditNextOrderOnly'].replace('<next-ship-date>', nextShipDate) : 'To edit your <next-ship-date> order only'.replace('<next-ship-date>', nextShipDate)
+    },
+
+    rderOnlyText() {
+      const { atc, nextShipDate } = this
+      return atc['portal.toEditNextOrderOnly'] ? atc['portal.toEditNextOrderOnly'].replace('<next-ship-date>', nextShipDate) : 'To edit your <next-ship-date> order only'.replace('<next-ship-date>', nextShipDate)
+    },
+
+
     isCancelledSubscriptionRoute() {
       return this.$route.query.route === 'cancelledSubscriptions'
     },
@@ -85,12 +104,14 @@ export default {
     nextShipDate() {
       const { activeSubscription } = this
       if (
-        !activeSubscription &&
+        activeSubscription &&
         activeSubscription.next &&
         activeSubscription.next.date
-      )
-        return false
-      return moment(activeSubscription.next.date, 'YYYYMMDD').format('MMMM Do')
+      ) {
+        return moment(activeSubscription.next.date, 'YYYYMMDD').format('MMMM Do')
+      }
+
+      return false
     },
 
     isExpiredTrial() {
@@ -130,8 +151,9 @@ export default {
     },
 
     pastShipmentText() {
+      const { atc } = this
       if (this.deliveredDate) {
-        return `<br/><span class="c-functionalButtonBlock__small-text">Last Shipment Delivered ${this.deliveredDate}</span>`
+        return `<br/><span class="c-functionalButtonBlock__small-text">${atc['portal.lastShipmentDelivered' || 'Last shipment delivered']} ${this.deliveredDate}</span>`
       }
       return ''
     },

@@ -56,10 +56,18 @@ export default {
     // DO NOT TRUST properties['Subscription']
     // check if products id exist in subscription.items
     isSubscriptionProduct() {
-      const subscriptionItemProducts = this.activeSubscription.items.map(
-        (item) => item.id
+      const product = this.activeSubscription.items.find(
+        (item) => this.product.id === item.id
       )
-      if (subscriptionItemProducts.includes(this.product.id)) {
+      if (product) {
+        return true
+      }
+
+      const otpProduct = this.activeSubscription.next.items.find(
+        (otp) => otp.variant_id === this.product.variant_id
+      )
+
+      if (otpProduct && otpProduct.quantity === this.product.quantity) {
         return true
       }
       return false
@@ -179,9 +187,9 @@ export default {
 }
 
 .c-productOption__info {
-  color: $color-text-light;
-  font-size: 11px;
   flex: 1;
+  font-size: 11px;
+  color: $color-text-light;
 }
 
 .c-productOption__title {

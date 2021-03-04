@@ -86,7 +86,7 @@ export default {
     },
 
     async handleSelectShippingMethod(shippingMethod) {
-      const { activeShippingMethod, selectDuringProductUpdate, savedProductUpdatePayload } = this
+      const { activeShippingMethod, selectDuringProductUpdate, savedProductUpdatePayload, atc } = this
 
       // no change if same reate
       if (activeShippingMethod.handle === shippingMethod.handle) {
@@ -104,7 +104,7 @@ export default {
 
           this.$emit('setDrawerStatus', {
             state: 'SUCCESS',
-            message: (savedProductUpdatePayload && savedProductUpdatePayload.successMessage) ? savedProductUpdatePayload.successMessage : 'Updated',
+            message: (savedProductUpdatePayload && savedProductUpdatePayload.successMessage) ? savedProductUpdatePayload.successMessage : atc['notices.updatedNotice'] || 'Updated',
           })
           this.$emit('setMode', 'edit')
           this.$emit('completedSavedUpdated')

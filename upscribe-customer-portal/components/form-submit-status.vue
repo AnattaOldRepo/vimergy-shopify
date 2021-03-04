@@ -1,99 +1,111 @@
 <script>
 /* eslint-disable vue/no-v-html */
 import { mapState } from 'vuex'
-import ErrorIcon from '@components/error-icon'
+import ErrorIcon from '@components/Icon/error-icon'
 
 export default {
-  components: {
-    ErrorIcon,
-  },
-  props: {
-    formSubmitStatus: {
-      type: [Object, Boolean, Error],
-      default: false,
-    },
-  },
-  computed:{
-    ...mapState('checkout', [
-      'secondary_text_color',
-    ]),
-  },
+	components: {
+		ErrorIcon,
+	},
+	props: {
+		formSubmitStatus: {
+			type: [Object, Boolean, Error],
+			default: false,
+		},
+	},
+	computed: {
+		...mapState('translations', ['atc']),
+	},
 }
 </script>
 
 <template>
-  <div
-    v-if="formSubmitStatus && !isEmptyObject(formSubmitStatus)"
-    class="c-formSubmitStatus"
-    :class="{
-      'c-formSubmitStatus--pending': formSubmitStatus.status === 'PENDING',
-      'c-formSubmitStatus--success': formSubmitStatus.status === 'SUCCESS',
-      'c-formSubmitStatus--error': formSubmitStatus.status === 'ERROR',
-    }"
-  >
-    <p v-if="formSubmitStatus.status === 'PENDING'"
-      class="c-formSubmitStatus__message"
-      :style="{color: secondary_text_color}"
-    >
-      <error-icon v-if="formSubmitStatus.status === 'ERROR'" class="c-formSubmitStatus__icon"/>
-      <span v-html="formSubmitStatus.message ? formSubmitStatus.message : 'Loading'"></span>
-    </p>
+	<div
+		v-if="formSubmitStatus && !isEmptyObject(formSubmitStatus)"
+		class="c-formSubmitStatus"
+		:class="{
+			'c-formSubmitStatus--pending': formSubmitStatus.status === 'PENDING',
+			'c-formSubmitStatus--success': formSubmitStatus.status === 'SUCCESS',
+			'c-formSubmitStatus--error': formSubmitStatus.status === 'ERROR',
+		}"
+	>
+		<p
+			v-if="formSubmitStatus.status === 'PENDING'"
+			class="c-formSubmitStatus__message"
+		>
+			<error-icon
+				v-if="formSubmitStatus.status === 'ERROR'"
+				class="c-formSubmitStatus__icon"
+			/>
+			<span
+				v-html="
+					formSubmitStatus.message
+						? formSubmitStatus.message
+						: act['notices.loadingNotice'] || 'Loading'
+				"
+			></span>
+		</p>
 
-    <p v-else-if="formSubmitStatus.status !== 'PENDING' && formSubmitStatus.message"
-      class="c-formSubmitStatus__message"
-    >
-      <error-icon v-if="formSubmitStatus.status === 'ERROR'" class="c-formSubmitStatus__icon"/>
-      <span v-html="formSubmitStatus.message"></span>
-    </p>
-
-  </div>
+		<p
+			v-else-if="
+				formSubmitStatus.status !== 'PENDING' && formSubmitStatus.message
+			"
+			class="c-formSubmitStatus__message"
+		>
+			<error-icon
+				v-if="formSubmitStatus.status === 'ERROR'"
+				class="c-formSubmitStatus__icon"
+			/>
+			<span v-html="formSubmitStatus.message"></span>
+		</p>
+	</div>
 </template>
 
 <style lang="scss">
 @import '@design';
 
 .c-formSubmitStatus {
-  padding: 12px;
-  color: black;
-  margin: 0 auto;
-  align-items: center;
-  text-align: center;
-  margin-top: 20px;
-  border-radius: 5px;
-  font-size: 14px;
+	align-items: center;
+	padding: 12px;
+	margin: 0 auto;
+	margin-top: 20px;
+	font-size: 14px;
+	color: black;
+	text-align: center;
+	border-radius: 5px;
 
-  &--pending {
-    color: $color-pending;
-    border-color: $color-pending;
+	&--pending {
+		color: $color-pending;
+		border-color: $color-pending;
 
-    // background-color: blue;
-  }
+		// background-color: blue;
+	}
 
-  &--success {
-    color: $color-success;
-    border-color: $color-success;
+	&--success {
+		color: $color-success;
+		border-color: $color-success;
 
-    // background-color: green;
-  }
+		// background-color: green;
+	}
 
-  &--error {
-    color: $color-error;
-    border-color: $color-error;
+	&--error {
+		color: $color-error;
+		border-color: $color-error;
 
-    // background-color: #e40000;
-  }
+		// background-color: #e40000;
+	}
 }
 
 .c-formSubmitStatus__icon {
-  margin-right: 6px;
+	margin-right: 6px;
 }
 
 .c-formSubmitStatus__message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  color: inherit;
-  line-height: 1.2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	line-height: 1.2;
+	color: inherit;
 }
 </style>

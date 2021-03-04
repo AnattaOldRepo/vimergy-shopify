@@ -34,6 +34,7 @@ export default {
     ...mapActions('cards', ['REMOVE_PAYMENT_METHOD']),
 
     async removePaymentMethod() {
+      const { atc } = this
       const paymentMethodId = this.activeEditCard.id
       const paymentType = this.activeEditCard.type
       const paymentCustomerId = this.activeEditCard.payment_customer_id
@@ -59,7 +60,7 @@ export default {
           payload: analyticsPayload,
         })
         if (this.windowWidth < 767) {
-          this.$toast.success('Removed the Payment Method successfully')
+          this.$toast.success(atc['notices.removedPaymentMethod'] || 'Removed payment method')
         }
       } catch (e) {
         if (this.windowWidth < 767) {

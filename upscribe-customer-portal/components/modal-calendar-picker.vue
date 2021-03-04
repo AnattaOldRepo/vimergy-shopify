@@ -76,7 +76,7 @@ export default {
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
     async handleChangeShipmentDate(unformattedNewDate) {
-      const { activeSubscriptionNextDate } = this
+      const { activeSubscriptionNextDate, atc } = this
       if (!activeSubscriptionNextDate) return false
       let currentDate = activeSubscriptionNextDate
 
@@ -92,7 +92,7 @@ export default {
       }
 
       this.status = 'updating'
-      this.statusText = 'Saving'
+      this.statusText = atc['notices.updateSavingNotice'] || 'Saving'
       try {
         await this.UPDATE_SUBSCRIPTION_QUEUE(requestPayload)
         this.triggerAnalyticsEvent({
@@ -100,7 +100,7 @@ export default {
           payload: analyticsPayload,
         })
         this.status = 'success'
-        this.statusText = 'saved successfully'
+        this.statusText = atc['notices.updateSavedSuccessfullyNotice'] || 'Saved Successfully'
       } catch (e) {
         console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
         this.status = 'rejected'

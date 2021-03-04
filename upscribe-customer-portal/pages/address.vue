@@ -6,7 +6,7 @@
     >
       {{ atc['portal.address'] || 'Addresses' }}
     </h1>
-    <h1 v-else class="c-all__title u-mt-3 u-ml-3">No Addresses Available</h1>
+    <h1 v-else class="c-all__title u-mt-3 u-ml-3">{{ atc['notices.noAddressesAvailable'] || 'No addresses available' }}</h1>
 
     <div class="u-mt-3">
       <div
@@ -37,7 +37,10 @@
           {{ address.address2 }}
         </p>
         <p> {{ address.city }}, {{ address.province_code }} </p>
-        <p> {{ address.country }}, {{ address.zip }} </p>
+        <p>
+          {{ address.country }}
+          <span v-show="address.zip">,{{ address.zip }}</span></p
+        >
       </div>
       <v-button
         class="c-address__addNewCTA"
@@ -124,15 +127,17 @@ export default {
 .c-address {
   .c-address__header {
     display: flex;
+
     @include bp(mobile-large-max) {
       display: block;
     }
     h2 {
-      color: $color-secondary;
       flex: 1;
+      color: $color-secondary;
     }
     .c-address__ctaContainer {
       display: flex;
+
       @include bp(mobile-large-max) {
         margin-top: 20px;
       }
@@ -146,13 +151,13 @@ export default {
     border-top: 1px solid $color-light;
   }
   p {
-    color: $color-secondary;
     margin: 5px;
+    color: $color-secondary;
   }
 }
 .c-address__addNewCTA {
   display: block;
-  margin: 30px auto;
   max-width: 300px;
+  margin: 30px auto;
 }
 </style>

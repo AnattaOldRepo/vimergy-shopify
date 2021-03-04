@@ -291,7 +291,7 @@ export default {
 }
 
 .c-subscription__outer {
-  background-color: #f5f5f5;
+  background-color: #f7f9fb;
 }
 .c-subscription__inner {
   @include clearfix;

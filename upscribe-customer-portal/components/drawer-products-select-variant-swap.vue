@@ -103,6 +103,7 @@ export default {
     },
 
     handleNewCheckoutUpdateError(e, handleNewCheckoutUpdatePayload) {
+      const { atc } = this
       if (e && e.data && e.data.shipping_update_required) {
         this.SET_SHIPPING_METHODS(e.data.rates)
         this.setSavedNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
@@ -116,7 +117,7 @@ export default {
         if (e.message.includes('not found in subscription')) {
           this.$emit('setDrawerStatus', {
             state: 'FAILURE',
-            message: 'Please refresh once',
+            message: atc['notices.pleaseRefreshThePage'] || 'Please refresh the page',
           })
         }
       }
@@ -124,7 +125,7 @@ export default {
 
     async handleSwapProductVariant({ variantId, product }) {
       if (this.updating) return
-      const { editNextOrder, activeSubscription } = this
+      const { editNextOrder, activeSubscription, atc } = this
 
       const productToReplace = this.swapProduct
 
@@ -221,7 +222,7 @@ export default {
             nextOrderUpdatePayload,
             'subscriptions',
             'UPDATE_NEXT_ORDER',
-            `Product swapped on next order.`
+            atc['notices.productSwappedOnNextOrder'] || `Product swapped on next order.`
           ),
         ]
       } else {
@@ -233,7 +234,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product swapped on subscription.`
+            atc['notices.productSwappedOnSubscription'] || `Product swapped on subscription.`
           ),
         ]
       }
@@ -241,7 +242,17 @@ export default {
       this.$emit('setDrawerStatus', 'PENDING')
 
       // hande everything in handleNewCheckoutUpdate function
-      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+      try {
+        await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+        if (!editNextOrder) {
+          this.$toast.info(
+            atc['portal.nextShipmentResetFromSubscriptionChange'] || 'Changing Subscription Settings resets your next shipment.',
+            { duration: 5000 }
+          )
+        }
+      } catch(e) {
+        console.error(e)
+      }
 
       this.$emit('setDrawerStatus', 'SUCCESS')
       this.$emit('setMode', 'edit')
@@ -279,7 +290,7 @@ export default {
       class="c-drawer__subtitle"
       >{{
         atc['portal.editProductsDrawerInfoText'] ||
-          'These product will ship every'
+          'These products will ship every'
       }}
       {{ activeSubscription.interval }} {{ intervalUnitDisplay }}</p
     >

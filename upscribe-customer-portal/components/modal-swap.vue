@@ -5,30 +5,30 @@ import VButton from '@components/v-button.vue'
 import DrawerProductBlock from '@components/drawer-product-block.vue'
 
 export default {
-	components: {
-		VariantSelectBlock,
-		VButton,
-		DrawerProductBlock,
-	},
-	props: {
-		updating: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	computed: {
-		...mapState('translations', ['atc']),
+  components: {
+    VariantSelectBlock,
+    VButton,
+    DrawerProductBlock,
+  },
+  props: {
+    updating: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    ...mapState('translations', ['atc']),
 
-		...mapGetters('activeSubscription', [
-			'activeSubscription',
-			'activeSubscriptionNextOrder',
-		]),
+    ...mapGetters('activeSubscription', [
+      'activeSubscription',
+      'activeSubscriptionNextOrder',
+    ]),
 
-		...mapState('products', ['products', 'productImages']),
+    ...mapState('products', ['products', 'productImages']),
 
-		...mapState('swapProduct', ['swapProduct']),
+    ...mapState('swapProduct', ['swapProduct']),
 
-		...mapState('variantSelectProduct', ['variantSelectProduct']),
+    ...mapState('variantSelectProduct', ['variantSelectProduct']),
 
     ...mapState('editMode', ['editNextOrder']),
 
@@ -62,74 +62,73 @@ export default {
       return displayUnit
     },
 
-		activeSubscriptionProducts() {
-			return this.activeSubscription.items
-		},
-	},
-	methods: {
-		...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
+    activeSubscriptionProducts() {
+      return this.activeSubscription.items
+    },
+  },
+  methods: {
+    ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
-		...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
+    ...mapMutations('subscriptions', ['setSavedProductUpdatePayload']),
 
     ...mapMutations('shippingMethods', ['SET_SHIPPING_METHODS']),
 
-    handleEmittingSwapProduct(payload){
+    handleEmittingSwapProduct(payload) {
       const { variantId, product } = payload
       this.$emit('handleSwapProductVariant', variantId, product)
     },
-	},
+  },
 }
 </script>
 
 <template>
-	<div class="c-modalSwwap">
-		<p class="c-drawer__subtitle">{{
-			atc['portal.selectVariantCurrentProductLabel'] || 'Current Product'
-		}}</p>
+  <div class="c-modalSwwap">
+    <p class="c-drawer__subtitle">{{
+      atc['portal.selectVariantCurrentProductLabel'] || 'Current Product'
+    }}</p>
 
-		<div class="c-modalSwap__options">
-			<drawer-product-block :product="swapProduct" existing-product />
-		</div>
+    <div class="c-modalSwap__options">
+      <drawer-product-block :product="swapProduct" existing-product />
+    </div>
 
-		<p class="c-drawer__subtitle">{{
-			atc['portal.selectVariantSwapProductLabel'] || 'Swap Product'
-		}}</p>
+    <p class="c-drawer__subtitle">{{
+      atc['portal.selectVariantSwapProductLabel'] || 'Swap Product'
+    }}</p>
 
-		<p
-			v-if="activeSubscription.interval && activeSubscription.period"
-			class="c-drawer__subtitle"
-			>{{
-				atc['portal.editProductsDrawerInfoText'] ||
-					'These product will ship every'
-			}}
-			{{ activeSubscription.interval }} {{ intervalUnitDisplay }}</p
-		>
+    <p
+      v-if="activeSubscription.interval && activeSubscription.period"
+      class="c-drawer__subtitle"
+      >{{
+        atc['portal.editProductsDrawerInfoText'] ||
+          'These products will ship every'
+      }}
+      {{ activeSubscription.interval }} {{ intervalUnitDisplay }}</p
+    >
 
-		<div class="c-modalSwap__options">
-			<variant-select-block
-				v-if="variantSelectProduct"
-				:product="variantSelectProduct"
-				:button-text="atc['buttons.swapProduct'] || 'Swap'"
-				variant-action="swap"
-				:updating="updating"
-				@swapProductVariant="handleEmittingSwapProduct"
-			/>
-		</div>
+    <div class="c-modalSwap__options">
+      <variant-select-block
+        v-if="variantSelectProduct"
+        :product="variantSelectProduct"
+        :button-text="atc['buttons.swapProduct'] || 'Swap'"
+        variant-action="swap"
+        :updating="updating"
+        @swapProductVariant="handleEmittingSwapProduct"
+      />
+    </div>
 
-		<div class="c-drawer__actionButtons">
-			<v-button
-				class="c-form__submitButton"
-				type="alt"
-				@onClick="$emit('handleCloseSwapModal')"
-				>{{ atc['buttons.cancel'] || 'Cancel' }}</v-button
-			>
-		</div>
-	</div>
+    <div class="c-drawer__actionButtons">
+      <v-button
+        class="c-form__submitButton"
+        type="alt"
+        @onClick="$emit('handleCloseSwapModal')"
+        >{{ atc['buttons.cancel'] || 'Cancel' }}</v-button
+      >
+    </div>
+  </div>
 </template>
 
-
 <style lang="scss">
-.c-modalSwap__options{
-  background-color: #F7F9FB;
+.c-modalSwap__options {
+  background-color: #f7f9fb;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div v-if="activeSubscription" class="c-subscriptionHeadline">
     <h2 v-if="activeSubscription.name" class="c-subscriptionHeadline__title"
-      ><strong>Subscription</strong>
+      ><strong>{{ atc['labels.subscription'] || 'Subscription' }}</strong>
       <span>{{ activeSubscription.name }}</span>
       <!-- <span>
         <a class="button is-info c-subscriptionName__edit"
@@ -31,7 +31,7 @@
         }"
       >
         {{
-          atc['labels.editSubscriptionDetailsEdit'] || 'Subscription Details'
+          atc['labels.editSubscriptionDetails'] || 'Subscription Details'
         }}
       </v-button>
 

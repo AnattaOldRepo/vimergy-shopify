@@ -127,15 +127,6 @@
       />
     </div>
 
-    <!-- Modal Portal Cancel Modal -->
-    <portal v-if="cancelModalOpen" to="modals">
-      <cancel-modal
-        :show="cancelModalOpen"
-        :reason="selectedReason"
-        @close="cancelModalOpen = false"
-      />
-    </portal>
-
     <!-- Drawer Portal Shipment Date-->
     <portal v-if="drawerDeliveryDateOpen" to="drawers">
       <drawer-delivery-date
@@ -160,7 +151,6 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import VButton from '@components/v-button.vue'
 import DrawerDeliveryDate from '@components/drawer-delivery-date.vue'
 import DrawerProducts from '@components/drawer-products.vue'
-import CancelModal from '@components/cancel-modal.vue'
 import TheHeader from '@components/the-header'
 import { windowSizes } from '@mixins/windowSizes'
 
@@ -172,7 +162,6 @@ export default {
     CancelSubscriptionOptionsUi,
     DrawerDeliveryDate,
     DrawerProducts,
-    CancelModal,
     TheHeader,
   },
 
@@ -183,7 +172,6 @@ export default {
       selectedReasonIndex: null,
       drawerDeliveryDateOpen: false,
       drawerProductsOpen: false,
-      cancelModalOpen: false,
       cancelSubscriptionUpdating: false,
       comments: '',
 
@@ -293,7 +281,7 @@ export default {
       let reason = this.selectedReason
 
       if (this.comments) {
-        reason += `. Comment: ${this.comments}`
+        reason += ` Comment: ${this.comments}`
       }
 
       return reason
@@ -323,17 +311,15 @@ export default {
 
     async handleCancelSubscription() {
       const {
-        subscriptionId,
         newFinalReasonPayload,
         finalReasonPayload,
         nestedCancellationReasonsEnabled,
       } = this
 
       let cancelPayload = {
-        subscriptionId,
-        reason: nestedCancellationReasonsEnabled
+        ...(nestedCancellationReasonsEnabled
           ? newFinalReasonPayload
-          : finalReasonPayload,
+          : finalReasonPayload),
       }
 
       let analyticsEventName = 'Upscribe Subscription Cancel'
@@ -365,15 +351,14 @@ export default {
     },
 
     async handleCancelSubscriptionOld() {
-      const { subscriptionId, finalReasonPayload } = this
+      const { finalReasonPayload } = this
 
       let cancelPayload = {
-        subscriptionId,
-        reason: { reason: finalReasonPayload },
+        reason: finalReasonPayload,
       }
       let analyticsEventName = 'Upscribe Subscription Cancel'
       let analyticsPayload = {
-        reason: { reason: finalReasonPayload },
+        reason: finalReasonPayload,
       }
 
       this.cancelSubscriptionUpdating = true
@@ -444,10 +429,10 @@ export default {
 
 .c-cancel__inner {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
   flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
   width: 100%;
   max-width: 527px;
   padding: 24px 20px 54px;
@@ -455,8 +440,8 @@ export default {
   background-color: $color-white;
 
   @include bp(tablet) {
-    margin: 0 auto 52px;
     padding: 54px 20px;
+    margin: 0 auto 52px;
   }
 }
 
@@ -486,9 +471,9 @@ export default {
 .c-cancel__listItemIcon {
   width: 20px;
   height: 20px;
-  border-radius: 50px;
   margin-right: 10px;
   border: 1px solid $color-black;
+  border-radius: 50px;
 }
 
 .c-cancel__listItemText {
@@ -514,9 +499,9 @@ export default {
   border-radius: 4px;
 }
 .c-cancel__label--textArea {
+  display: inline-block;
   margin-bottom: 5px;
   margin-left: 0;
-  display: inline-block;
   font-family: $font-primary-regular;
   font-size: 14px;
   color: $color-black;
@@ -527,8 +512,8 @@ export default {
   padding: 10px 12px 8px;
   font-family: $font-primary-regular;
   font-size: 14px;
-  border-radius: 4px;
   border: 1px solid;
+  border-radius: 4px;
   outline: none;
 }
 
@@ -542,7 +527,7 @@ export default {
 
   @include bp(tablet) {
     flex-direction: row;
-    margin-top: 0px;
+    margin-top: 0;
   }
 
   .c-button {
@@ -643,8 +628,8 @@ export default {
 
 .c-cancel__listItem__inner {
   display: flex;
-  padding-left: 30px;
   flex-direction: column;
+  padding-left: 30px;
 }
 
 .c-cancel__listItemLabel {
@@ -656,9 +641,9 @@ export default {
   min-width: 20px;
   height: 20px;
   min-height: 20px;
-  border-radius: 50px;
   margin-right: 10px;
   border: 1px solid $color-black;
+  border-radius: 50px;
 
   &--active {
     border: 5px solid $color-primary;
@@ -686,9 +671,9 @@ export default {
   border-radius: 4px;
 }
 .c-cancel__label--textArea {
+  display: inline-block;
   margin-bottom: 5px;
   margin-left: 0;
-  display: inline-block;
   font-family: $font-primary-regular;
   font-size: 14px;
   color: $color-black;
@@ -699,8 +684,8 @@ export default {
   padding: 10px 12px 8px;
   font-family: $font-primary-regular;
   font-size: 14px;
-  border-radius: 4px;
   border: 1px solid;
+  border-radius: 4px;
   outline: none;
 }
 

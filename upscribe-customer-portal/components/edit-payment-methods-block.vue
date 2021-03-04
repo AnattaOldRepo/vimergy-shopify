@@ -56,8 +56,8 @@ export default {
     },
 
     paymentRequestText() {
-      const { browser } = this
-      if (!browser) return 'Payment Request'
+      const { browser, atc } = this
+      if (!browser) return atc['labels.paymentRequest'] || 'Payment Request'
 
       const {
         // isFirefox,
@@ -73,7 +73,7 @@ export default {
       if (isSafari) return 'Apple Pay'
       if (isIE || isEdge) return 'Microsoft Pay'
 
-      return 'Payment Request'
+      return atc['labels.paymentRequest'] || 'Payment Request'
     },
 
     paymentTypes() {
@@ -194,7 +194,7 @@ export default {
             activeEditCard.status !== 'void'
         "
         class="c-formBlock c-cardForm"
-        form-submit-button-text="Update Payment Method"
+        :form-submit-button-text="atc['buttons.updatePaymentMethod'] || 'Update Payment Method'"
         form-name="update-card"
         update-card
         :payment-method-type="activePaymentType"

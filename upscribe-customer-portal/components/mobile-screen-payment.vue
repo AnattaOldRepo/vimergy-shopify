@@ -126,11 +126,13 @@ export default {
     },
 
     async removePaymentMethod(paymentMethodId, paymentType, paymentCustomerId) {
+      const { atc } = this
+
       let analyticsEventName = 'Upscribe Remove Card'
       let analyticsPayload = {
         card: this.activeEditCard,
       }
-      this.setMessage('Removing the Payment Method')
+      this.setMessage(atc['notices.updatingNotice'] || 'Updating')
       this.setStatus('updating')
 
       try {
@@ -144,7 +146,8 @@ export default {
           event: analyticsEventName,
           payload: analyticsPayload,
         })
-        this.$toast.success('Removed the Payment Method successfully')
+        this.$toast.success(atc['notices.removedPaymentMethod'] || 'Removed payment method')
+
         this.setStatus('success')
       } catch (e) {
         this.$toast.error(e.message)
@@ -154,8 +157,10 @@ export default {
     },
 
     async swapCards() {
-      const { newSwapCard, editNextOrder, activeCard } = this
-      this.setMessage('Swapping Payment Method')
+      const { newSwapCard, editNextOrder, activeCard, atc } = this
+
+      this.setMessage(atc['notices.updatingNotice'] || 'Updating')
+
       this.setStatus('updating')
       const updatePayload = {
         requestPayload: {
@@ -191,7 +196,8 @@ export default {
             newCard,
           },
         })
-        this.setMessage('Swapped Payment Method')
+        this.$toast.success(atc['notices.swappedPaymentMethod'] || 'Swapped payment method')
+
         this.setStatus('success')
         this.setNewSwapCard(null)
       } catch (e) {

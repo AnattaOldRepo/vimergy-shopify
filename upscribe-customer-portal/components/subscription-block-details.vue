@@ -85,7 +85,7 @@ export default {
     },
 
     paymentInfo() {
-      const { activeCard } = this
+      const { activeCard, atc } = this
       if (!activeCard) return false
 
       const {
@@ -95,20 +95,26 @@ export default {
         type,
         bank_code,
         zipcode,
+        email,
       } = activeCard
 
+      let string = ''
+
       if (type.includes('card')) {
-        return `CARD *${last4} ${exp_month}/${exp_year}<br> ${
-          zipcode ? 'Zip: ' + zipcode : ''
+        return `*${last4} ${exp_month}/${exp_year} ${
+          zipcode ? '<br>' + zipcode : ''
         }`
       } else if (type === 'braintree_paypal') {
-        return `Account Email: ${activeCard.email ||
-          'No email available for account'}`
+
+        if (email) {
+          return atc['portal.paypalAccountEmailDisplay'].replace('<email>', email) || `Account Email: ${email}`
+        } else {
+          return atc['portal.paypalAccountEmailDisplayUnavailabe'] || `No email available for account`
+        }
       } else if (type === 'stripe_sepa_direct_debit') {
-        return `Acct *${last4} / Bank ${bank_code}`
-      } else {
-        return false
+        return atc['portal.sepaDebitInfoDisplay'].replace('<last4>', last4).replace('bank-code', bank_code) || `Acct *${last4} / Bank ${bank_code}`
       }
+      return string
     },
   },
 
@@ -256,7 +262,7 @@ export default {
         <span class="c-portalBlockOption__text" v-html="paymentInfo" />
 
         <div
-          v-if="activeCard.status === 'void'"
+          v-if="activeCard.status === 'void' || activeCard.status === 'invalid'"
           class="c-cardTag__voidWarning u-mt-2"
           >{{
             atc['errors.invalidPaymentMethodTag'] || 'Invalid Payment Method'
@@ -289,7 +295,7 @@ export default {
 
     <div class="c-subscriptionBlock__button-contain">
       <v-button
-        v-if="!editNextOrder && activeSubscription.active"
+        v-if="activeSubscription.active"
         slot="button"
         class="c-subscriptionBlockDetails__button c-button--danger"
         :text="atc['buttons.cancelSubscription'] || 'Cancel Subscription'"
@@ -307,14 +313,14 @@ export default {
 }
 
 .c-subscriptionBlockDetails__button {
+  width: auto;
   padding: 12px 20px;
+  margin: 0 auto;
   font-size: 12px;
+  font-weight: bold;
   line-height: 16px;
   text-transform: uppercase;
-  font-weight: bold;
   letter-spacing: 0.8px;
-  width: auto;
-  margin: 0 auto;
 }
 
 .c-portalBlockOption__text {

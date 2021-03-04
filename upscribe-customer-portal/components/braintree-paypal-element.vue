@@ -2,7 +2,7 @@
 import braintree from 'braintree-web'
 import paypal from 'paypal-checkout'
 import { mapGetters, mapState } from 'vuex'
-import LoaderIcon from '@components/loader-icon'
+import LoaderIcon from '@components/Icon/loader-icon'
 
 export default {
   components: {
@@ -47,6 +47,8 @@ export default {
     ...mapState('shop', ['currency', 'store']),
 
     ...mapState('customer', ['customerShopify']),
+
+    ...mapState('translations', ['atc']),
 
     languageCode() {
       return this.customerShopify.preferred_language || false
@@ -105,6 +107,7 @@ export default {
         store,
         locale,
         braintree,
+        atc,
       } = this
 
       const sandboxMode = authorization.indexOf('sandbox') > -1
@@ -159,7 +162,7 @@ export default {
                   payment: function() {
                     return paypalCheckoutInstance.createPayment({
                       flow: 'vault',
-                      billingAgreementDescription: 'Your agreement description',
+                      billingAgreementDescription: atc['labels.paypalAgreementDescription'] || 'Your agreement description',
                       enableShippingAddress: true,
                       shippingAddressEditable: false,
 
@@ -294,22 +297,22 @@ export default {
 // }
 
 .c-braintreeErrors {
-  margin: 20px 0;
-  color: $color-error;
   padding: 20px;
+  margin: 20px 0;
+  line-height: 1.3;
+  color: $color-error;
   background-color: lighten($color-error, 55%);
   border-radius: 4px;
-  line-height: 1.3;
 }
 
 .c-braintreeInfo {
-  margin: 16px 0;
-  color: #171725;
   padding: 20px;
-  background-color: #eaf1f4;
-  border-radius: 4px;
+  margin: 16px 0;
   font-size: 14px;
   line-height: 18px;
+  color: #171725;
+  background-color: #eaf1f4;
+  border-radius: 4px;
 }
 
 .braintreeElement {
@@ -328,51 +331,50 @@ export default {
 }
 
 .c-braintreeFormLabel {
-  color: $color-text;
-  font-size: 13px;
   margin-bottom: 2px;
+  font-size: 13px;
+  color: $color-text;
 }
 
 .c-braintreeFormInput {
   &::placeholder {
-    color: #a3b5bf;
     font-size: 14px;
+    color: #a3b5bf;
   }
   &:focus {
-    outline: none;
     border-color: $color-border;
+    outline: none;
   }
 }
 
 .c-braintreeFormInput--select {
   .vs__dropdown-toggle {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 42px;
+    padding: 0 0 4px;
+    padding: 0 16px 0 4px;
+    font-size: 16px;
+    text-align: left;
+    white-space: normal;
+    white-space: nowrap;
+    cursor: pointer;
+    background: none;
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    outline: none;
+    outline: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    display: flex;
-    padding: 0 0 4px;
-    background: none;
-    border-radius: 4px;
-    white-space: normal;
-
-    font-size: 16px;
-    outline: none;
-    position: relative;
-    text-align: left;
-    width: 100%;
-    cursor: pointer;
-    height: 42px;
-    padding: 0 16px 0 4px;
-    border: 1px solid $color-border;
-    outline: none;
-    white-space: nowrap;
   }
 
   .vs__search {
     font-size: 14px;
     &::placeholder {
-      color: $color-border;
       font-size: 14px;
+      color: $color-border;
     }
   }
 }
@@ -381,10 +383,10 @@ export default {
 .braintreeElement {
   height: 40px;
   padding: 10px 12px;
-  border-radius: 4px;
-  border: 1px solid $color-border;
   font-size: 14px;
   background-color: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 4px;
 
   &::placeholder {
     color: $color-border;
@@ -392,8 +394,8 @@ export default {
 }
 
 .braintreeElement--focus {
-  outline: none;
   border-color: $color-black;
+  outline: none;
 }
 
 .braintreeElement--invalid {
@@ -407,15 +409,15 @@ export default {
 .c-braintreeFormSplitGroups {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-column-gap: 20px;
   grid-row-gap: 20px;
+  grid-column-gap: 20px;
   width: 100%;
 }
 
 .c-braintreeBankName {
-  color: $color-black;
-  font-size: 14px;
   margin-top: 4px;
+  font-size: 14px;
+  color: $color-black;
 }
 
 .c-braintreeIban {
@@ -429,15 +431,15 @@ export default {
 }
 
 .c-braintreeFormLabel {
-  color: $color-text;
-  font-size: 13px;
   margin-bottom: 2px;
+  font-size: 13px;
+  color: $color-text;
 }
 
 .c-braintreeFormInput {
   &:focus {
-    outline: none;
     border-color: $color-input-border;
+    outline: none;
   }
   &::placeholder {
     color: #a3b5bf;
@@ -447,21 +449,20 @@ export default {
 // input,
 .braintreeElement {
   height: 40px;
-  padding: 10px 12px;
-  border-radius: 4px;
-  border: 1px solid $color-input-border;
-  font-size: 14px;
-  background-color: $color-white;
-  color: #a3b5bf;
-
   height: 44px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #a3b5bf;
+  background-color: $color-white;
+  border: 1px solid $color-input-border;
   border-color: #eaf1f4;
+  border-radius: 4px;
 }
 
 input:focus,
 .braintreeElement--focus {
-  outline: none;
   border-color: $color-input-border;
+  outline: none;
 }
 
 .braintreeElement--invalid {

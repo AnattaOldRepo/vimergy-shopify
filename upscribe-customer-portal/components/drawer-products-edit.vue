@@ -69,15 +69,45 @@ export default {
       }
     },
 
+    // shows only the products which are part of next items and are subscription without any change in quantity
     subscriptionProducts() {
+      if (this.editNextOrder) {
+        let subscriptionItems = []
+        this.activeSubscription.items.forEach((item) => {
+          const otpProduct = this.activeSubscription.next.items.find(
+            (otp) => otp.variant_id === item.variant_id
+          )
+          if (otpProduct && otpProduct.quantity === item.quantity) {
+            subscriptionItems.push(item)
+          }
+        })
+        return subscriptionItems
+      }
       return this.activeSubscription.items
     },
 
     oneTimeProducts() {
-      const idArray = this.activeSubscription.items.map((item) => item.id)
-      return this.activeSubscription.next.items.filter(
-        (item) => !idArray.includes(item.id)
+      let otp = []
+      const variantIdArray = this.activeSubscription.items.map(
+        (item) => item.variant_id
       )
+
+      // if variant id does not match it is obviously a OTP
+      this.activeSubscription.next.items.forEach((item) => {
+        if (!variantIdArray.includes(item.variant_id)) {
+          otp.push(item)
+        } else {
+          const subscriptionProduct = this.activeSubscription.items.find(
+            (subscriptionProduct) =>
+              subscriptionProduct.variant_id === item.variant_id
+          )
+          if (subscriptionProduct.quantity !== item.quantity) {
+            otp.push(item)
+          }
+        }
+      })
+
+      return otp
     },
   },
   methods: {
@@ -138,7 +168,7 @@ export default {
     },
 
     async handleQuantityChangeManual({ quantity, id, product }) {
-      const { editNextOrder, activeSubscription } = this
+      const { editNextOrder, activeSubscription, atc } = this
 
       const { setQuantityPayload: nextItemPayload } = productChangeRequest({
         quantity,
@@ -193,7 +223,7 @@ export default {
             nextOrderUpdatePayload,
             'queues',
             'UPDATE_NEXT_ORDER',
-            `Quantity updated to ${quantity} on next order.`
+            atc['notices.quantityUpdatedToXOnNextOrder'] ? atc['notices.quantityUpdatedToXOnNextOrder'].replace('<quantity>', quantity) : `Quantity updated to ${quantity} on next order.`
           ),
         ]
       } else {
@@ -205,7 +235,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Quantity updated to ${quantity} on subscription.`
+            atc['notices.quantityUpdatedToXOnSubscription'] ? atc['notices.quantityUpdatedToXOnSubscription'].replace('<quantity>', quantity): `Quantity updated to ${quantity} on subscription.`
           ),
         ]
       }
@@ -213,7 +243,17 @@ export default {
       this.$emit('setDrawerStatus', 'PENDING')
 
       // hande everything in handleNewCheckoutUpdate function
-      await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+      try {
+        await this.handleNewCheckoutUpdate(handleNewCheckoutUpdatePayload)
+        if (!editNextOrder) {
+          this.$toast.info(
+            atc['portal.nextShipmentResetFromSubscriptionChange'] || 'Changing Subscription Settings resets your next shipment.',
+            { duration: 5000 }
+          )
+        }
+      } catch(e) {
+        console.error(e)
+      }
 
       this.triggerAnalyticsEvent({
         event: analyticsEventName,
@@ -227,7 +267,7 @@ export default {
     async handleQuantityChange({ type, id, quantity, variant_id, product }) {
       if (this.updating) return
 
-      const { editNextOrder, activeSubscription } = this
+      const { editNextOrder, activeSubscription, atc } = this
 
       const {
         increasePayload: nextIncreaseItemPayload,
@@ -286,7 +326,7 @@ export default {
             nextOrderUpdatePayload,
             'subscriptions',
             'UPDATE_NEXT_ORDER',
-            `Quantity updated to ${quantity} on next order.`
+            atc['notices.quantityUpdatedToXOnNextOrder'] ? atc['notices.quantityUpdatedToXOnNextOrder'].replace('<quantity>', quantity) : `Quantity updated to ${quantity} on next order.`
           ),
         ]
       } else {
@@ -298,7 +338,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Quantity updated to ${quantity} on subscription.`
+            atc['notices.quantityUpdatedToXOnSubscription'] ? atc['notices.quantityUpdatedToXOnSubscription'].replace('<quantity>', quantity): `Quantity updated to ${quantity} on subscription.`
           ),
         ]
       }
@@ -317,6 +357,7 @@ export default {
     },
 
     async handleRemove(product) {
+      const { atc } = this
       if (this.updating) return
 
       const { activeSubscription, activeQueue, editNextOrder } = this
@@ -370,7 +411,7 @@ export default {
             nextOrderUpdatePayload,
             'subscriptions',
             'UPDATE_NEXT_ORDER',
-            `Product removed from next order.`
+            atc['notices.productRemovedFromNextOrder'] || `Product removed from next order.`
           ),
         ]
       } else {
@@ -382,7 +423,7 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product removed from subscription`
+            atc['notices.productRemovedFromSubscription'] || `Product removed from subscription`
           ),
         ]
       }
@@ -407,7 +448,7 @@ export default {
       product,
       addToNextOrder,
     }) {
-      const { activeSubscription, variantSelectProduct } = this
+      const { activeSubscription, variantSelectProduct, atc } = this
 
       const { addPayload: nextAddItemPayload } = productChangeRequest({
         variantId,
@@ -446,7 +487,8 @@ export default {
             nextOrderUpdatePayload,
             'subscriptions',
             'UPDATE_NEXT_ORDER',
-            `Product add to next order.`
+            atc['notices.productAddedToSubscription'] || `Product added to subscription`
+
           ),
         ]
       } else {
@@ -458,7 +500,8 @@ export default {
             updateSubscriptionPayload,
             'subscriptions',
             'UPDATE_SUBSCRIPTION',
-            `Product added on subscription.`
+            atc['notices.productAddedToNextOrder'] || `Product added to next order`
+
           ),
         ]
       }
@@ -487,7 +530,11 @@ export default {
     }}</h2>
 
     <p
-      v-if="activeSubscription.interval && activeSubscription.period"
+      v-if="
+        activeSubscription.interval &&
+          activeSubscription.period &&
+          subscriptionProducts.length
+      "
       class="c-drawer__subtitle"
       >{{
         atc['portal.editProductsDrawerInfoText'] || 'These products ship every'

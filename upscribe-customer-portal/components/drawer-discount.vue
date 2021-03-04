@@ -61,13 +61,14 @@ export default {
     },
 
     discountText() {
+      const { atc } = this
       // if discount show discount
       const { discountCode, discountAmount, currencySymbol } = this
 
       if (discountCode && discountAmount) {
-        return `Active Discount: ${discountCode} (-${currencySymbol}${discountAmount})`
+        return `${atc['labels.activeDiscount'] || 'Active Discount'}: ${discountCode} (-${currencySymbol}${discountAmount})`
       } else {
-        return 'Add Discount'
+        return atc['buttons.addDiscount'] || 'Add Discount'
       }
     },
   },
@@ -120,7 +121,7 @@ export default {
     },
 
     async handleRemoveDiscount() {
-      const { activeSubscription } = this
+      const { activeSubscription, atc } = this
       this.drawerStatus = 'PENDING'
 
       let updatePayload = {
@@ -135,7 +136,7 @@ export default {
           updatePayload,
           'subscriptions',
           'UPDATE_NEXT_ORDER',
-          `Discount code removed from order.`
+          atc['notices.discountRemovedFromNextOrder'] || 'Discount removed from next order'
         ),
       ]
       let analyticsPayload = {
@@ -158,7 +159,7 @@ export default {
     },
 
     async handleDiscountSubmit(discount) {
-      const { discountCode } = this
+      const { atc } = this
 
       const updatePayload = {
         requestPayload: {
@@ -177,7 +178,7 @@ export default {
           updatePayload,
           'subscriptions',
           'UPDATE_NEXT_ORDER',
-          `Discount code ${discountCode} added to next order.`
+          atc['notices.discountAddedToNextOrder'] || 'Discount code added to next order'
         ),
       ]
 

@@ -101,11 +101,6 @@ export default {
       moreParams: {},
       searchTerm: null,
       searchIsLoading: false,
-      searchFields: [
-        { text: 'Product Title', value: 'title' },
-        { text: 'Product Id', value: 'id' },
-        { text: 'Product Handle', value: 'handle' },
-      ],
       savedRequest: null,
 
       savedSearchField: null,
@@ -120,6 +115,24 @@ export default {
     ...mapState('translations', ['atc']),
 
     ...mapState('editMode', ['editNextOrder']),
+
+    searchFields() {
+      const { atc } = this
+      return [
+        {
+          text: atc['labels.productTitle'] || 'Product Title',
+          value: 'title',
+        },
+        {
+          text: atc['labels.productId'] || 'Product Id',
+          value: 'id',
+        },
+        {
+          text: atc['labels.productHandle'] || 'Product Handle',
+          value: 'handle',
+        },
+      ]
+    },
 
     textsTranslations() {
       const { atc } = this

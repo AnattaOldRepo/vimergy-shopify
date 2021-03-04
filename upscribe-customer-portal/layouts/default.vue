@@ -14,8 +14,33 @@
         min-height="500px"
       />
 
+      <div v-else>
 
-      <nuxt v-else :key="activeLanguageCode" />
+        <div class="o-container c-portal__languagePickerWrap">
+          <language-picker
+            key="desktop"
+            class="c-languagePicker c-languagePicker--desktop"
+            :translation-list="translationList"
+            :translations="translations"
+            :active-language-code="activeLanguageCode"
+            :active-language-name="activeLanguageName"
+            :active-language-native-name="activeLanguageNativeName"
+          />
+        </div>
+
+        <nuxt :key="activeLanguageCode" />
+
+        <language-picker
+          key="mobile"
+          class="c-languagePicker c-languagePicker--mobile"
+          :translation-list="translationList"
+          :translations="translations"
+          :active-language-code="activeLanguageCode"
+          :active-language-name="activeLanguageName"
+          :active-language-native-name="activeLanguageNativeName"
+        />
+      </div>
+
     </div>
 
     <portal-target name="drawers" />
@@ -38,12 +63,12 @@ import { removeQueryParam } from '@utils/helpers'
 // import NavigationMobile from '@components/global/navigation-mobile'
 import { windowSizes } from '@mixins/windowSizes'
 import TheHeader from '@components/the-header.vue'
-// import LanguagePicker from '@components/language-picker.vue'
+import LanguagePicker from '@components/language-picker.vue'
 import LoadingBlock from '@components/loading-block.vue'
 
 export default {
   components: {
-    // LanguagePicker,
+    LanguagePicker,
     // NavigationMobile,
     LoadingBlock,
     TheHeader,
@@ -728,12 +753,37 @@ h2,
   }
 }
 
+.c-languagePicker {
+  &--desktop {
+    display: none
+  }
+
+  &--mobile {
+    display: block;
+    margin-left: 20px;
+  }
+
+  @include bp(tablet) {
+    right: 8px;
+    top: 20px;
+    &--desktop {
+      display: block
+    }
+
+    &--mobile {
+      display: none;
+    }
+  }
+}
+
 .c-portal__languagePickerWrap {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 36px 20px 0;
   width: 100%;
+  padding: 20px;
+  background-color: #f7f9fb;
 }
 
 .c-modalMobile__wrapper {
@@ -861,5 +911,9 @@ h2,
   font-weight: 500;
   color: $color-primary;
   text-align: center;
+}
+
+.toasted-container {
+  z-index: 9999999 !important;
 }
 </style>

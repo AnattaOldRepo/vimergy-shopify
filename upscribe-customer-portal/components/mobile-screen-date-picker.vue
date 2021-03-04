@@ -38,7 +38,8 @@ export default {
     ...mapActions('upscribeAnalytics', ['triggerAnalyticsEvent']),
 
     async handleChangeShipmentDate(unformattedNewDate) {
-      this.setMessage('Updating new Shipment Date')
+      const { atc } = this
+      this.setMessage(atc['notices.updating'] || 'Updating')
       this.setStatus('updating')
 
       const { activeSubscriptionNextDate } = this
@@ -62,7 +63,7 @@ export default {
           event: 'Upscribe Change Shipment Date',
           payload: analyticsPayload,
         })
-        this.setMessage('Saved new Shipment Date')
+        this.setMessage(atc['notices.saved'] || 'Saved')
         this.setStatus('success')
       } catch (e) {
         console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)

@@ -68,8 +68,25 @@ export default {
     },
 
     oneTimeProduct() {
-      const idArray = this.activeSubscription.items.map((item) => item.id)
-      return !idArray.includes(this.product.id)
+      const variantIdArray = this.activeSubscription.items.map(
+        (item) => item.variant_id
+      )
+      if (!variantIdArray.includes(this.product.variant_id)) {
+        return true
+      }
+      // if variant id does not match it is obviously a OTP
+      // for (let i = 0; i < this.activeSubscription.next.items.length; i++) {
+      // const item = this.activeSubscription.next.items[i]
+      const subscriptionProduct = this.activeSubscription.items.find(
+        (subscriptionProduct) =>
+          subscriptionProduct.variant_id === this.product.variant_id
+      )
+      if (subscriptionProduct.quantity !== this.product.quantity) {
+        return true
+      }
+
+      // }
+      return false
     },
 
     subscriptionDiscountAmount() {
@@ -131,14 +148,18 @@ export default {
     },
 
     subscribeAndSaveText() {
-      const discount = this.product.properties['Discount Amount']
+      const { atc, product } = this
+      const discount = product && product.properties && product.properties['Discount Amount']
+
       if (discount) {
-        if (this.atc['button.subscribeAndSave']) {
-          return this.atc['button.subscribeAndSave'].replace('{X}', discount)
+        if (atc['button.subscribeAndSave']) {
+          // used different format from all other translations for some reason ({X})?
+          // added fallback
+          return atc['button.subscribeAndSave'].replace('{X}', discount).replace('<discount>', discount)
         }
         return `Subscribe and save ${discount}`
       }
-      return 'Subscribe'
+      return atc['buttons.subscribe'] || 'Subscribe'
     },
 
     subscriptionDiscountType() {
@@ -327,7 +348,7 @@ export default {
           :class="{ 'control-is-updating': updating }"
           class="c-drawerProductBlock__button c-button--alt c-drawerProductBlock__button--add"
           size="small"
-          :text="atc['portal.addProductDrawer'] || 'Add & Subscribe'"
+          :text="atc['buttons.addProductDrawer'] || 'Add Product'"
           @click.native="$emit('variantSelectProduct', product)"
         />
       </div>
@@ -342,9 +363,9 @@ export default {
     </div>
 
     <v-button
-      v-if="editNextOrder && oneTimeProduct"
+      v-if="editNextOrder && oneTimeProduct && existingProduct"
       :class="{ 'control-is-updating': updating }"
-      class="c-button--alt c-drawerProductBlock__button--add u-mt-4"
+      class="c-drawerProductBlock__button c-button--alt c-drawerProductBlock__button--fullwidth u-mt-4"
       :text="subscribeAndSaveText"
       @click.native="
         $emit('subscribe', {
@@ -397,18 +418,19 @@ export default {
 .c-drawerProductblock__infoBlock {
   display: flex;
   flex-direction: column;
-  width: 100%;
   align-items: flex-start;
+  width: 100%;
 }
 
 .c-drawerProductblock__infoInner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
 .c-drawerProductBlock__title {
+  max-width: 160px;
   margin-bottom: 6px;
   font-family: $font-primary-medium;
   font-size: 16px;
@@ -416,7 +438,6 @@ export default {
   line-height: 21px;
   color: $color-black;
   text-align: left;
-  max-width: 160px;
 }
 
 .c-drawerProductBlock__discountInfo {
@@ -437,10 +458,10 @@ export default {
 }
 
 .c-drawerProductBlock__price {
+  margin-left: 10px;
   font-family: $font-primary-regular;
   font-size: 16px;
   color: $color-black;
-  margin-left: 10px;
 }
 
 .c-drawerProductBlock__bottom {
@@ -461,15 +482,18 @@ export default {
   min-width: 94px;
   padding: 12px 20px;
   margin-right: 10px;
+  font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  font-weight: bold;
   border-radius: 4px;
   &:last-of-type {
     margin-right: 0;
   }
   &--remove {
     min-width: 40px;
+  }
+  &--fullwidth {
+    width: 100%;
   }
 }
 

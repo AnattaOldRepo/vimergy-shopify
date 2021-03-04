@@ -11,7 +11,7 @@
           <icon-chevron-right
             class="c-headerMobile__navLink--white c-headerMobile__navLink--mobileIcon u-mr-3"
           />
-          Account
+          {{ atc['labels.account'] || 'Account' }}
         </a>
         <span
           class="c-headerMobile__logout-icon"
@@ -20,7 +20,7 @@
           tabindex="0"
           @click="signOut"
         >
-          Signout
+          {{ atc['portal.headerSignOut'] || 'Sign Out' }}
         </span>
       </div>
       <!-- <div class="c-headerLogo">
@@ -90,7 +90,7 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import VButton from '@components/v-button.vue'
-import IconChevronRight from '@components/icon-chevron-right.vue'
+import IconChevronRight from '@components/Icon/icon-chevron-right.vue'
 import NavigationMenu from '@components/global/navigation-menu.vue'
 
 export default {

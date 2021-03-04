@@ -75,6 +75,11 @@ export default {
   }
 }
 
+.c-subscriptionBlockOption__inner {
+  display: flex;
+  flex-direction: column;
+}
+
 .c-subscriptionBlockOption__title {
   margin-bottom: 4px;
   font-family: $font-primary-medium;

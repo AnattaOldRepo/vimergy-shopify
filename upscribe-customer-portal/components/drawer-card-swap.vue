@@ -52,7 +52,7 @@ export default {
     ...mapActions('customer', ['GET_CUSTOMER']),
 
     async swapCards() {
-      const { newSwapCard, editNextOrder, activeCard } = this
+      const { newSwapCard, editNextOrder, activeCard, atc } = this
 
       const updatePayload = {
         requestPayload: {
@@ -96,7 +96,12 @@ export default {
         })
 
         this.$emit('setDrawerStatus', 'SUCCESS')
-
+        if (!editNextOrder) {
+          this.$toast.info(
+            atc['portal.nextShipmentResetFromSubscriptionChange'] || 'Changing Subscription Settings resets your next shipment.',
+            { duration: 5000 }
+          )
+        }
         this.setNewSwapCard(null)
         this.$emit('setMode', 'default')
       } catch (e) {
@@ -138,7 +143,7 @@ export default {
       </div>
 
       <p class="c-drawer__subtitle" style="margin-top:20px;">{{
-        atc['portal.swapSelectNewCardLavel'] || 'New Card'
+        atc['portal.swapSelectNewCardLabel'] || 'New Card'
       }}</p>
       <div class="c-drawerCardList">
         <card-item
@@ -155,7 +160,7 @@ export default {
       }}</p>
 
       <v-button class="c-form__submitButton" @onClick="swapCards">{{
-        atc['portal.moveToNewCardButton'] || 'Move to New Card'
+        atc['buttons.moveToNewCard'] || 'Move to New Card'
       }}</v-button>
 
       <v-button

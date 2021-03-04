@@ -66,7 +66,7 @@
                   >{{ atc['labels.quantityShort'] || 'QTY' }}:
                   {{ item.quantity }}</span
                 >
-                <span class="is-faded" v-if="item.quantity > 1"
+                <span v-if="item.quantity > 1" class="is-faded"
                   >{{ currencySymbol }}{{ item.price }}</span
                 >
 
@@ -85,7 +85,7 @@
               >{{ atc['labels.quantityShort'] || 'QTY' }}:
               {{ item.quantity }}</span
             >
-            <span class="is-faded" v-if="item.quantity > 1"
+            <span v-if="item.quantity > 1" class="is-faded"
               >{{ currencySymbol }}{{ item.price }}</span
             >
             <span class="u-font-bold"
@@ -156,7 +156,7 @@
 <script>
 import moment from 'moment'
 import { windowSizes } from '@mixins/windowSizes'
-import IconChevronRight from '@components/icon-chevron-right.vue'
+import IconChevronRight from '@components/Icon/icon-chevron-right.vue'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
@@ -210,12 +210,12 @@ export default {
     },
 
     orderStatus() {
-      const { order, isOriginalCharge } = this
+      const { order, isOriginalCharge, atc } = this
       let fullFillmentText = order.fulfillment_status
         ? order.fulfillment_status
         : order.financial_status
       if (isOriginalCharge) {
-        return 'Paid'
+        return atc['labels.paid'] || 'Paid'
       }
 
       if (fullFillmentText && fullFillmentText.includes('_')) {
@@ -343,8 +343,8 @@ export default {
   border: 1px solid $color-blue-light-border;
 
   @include bp(tablet) {
-    border-radius: 5px;
     margin-bottom: 20px;
+    border-radius: 5px;
   }
 }
 
@@ -370,8 +370,8 @@ export default {
 .c-historyOrder__icon {
   width: 9px;
   height: 23px;
-  transform: rotate(90deg);
   fill: $color-blue-secondary;
+  transform: rotate(90deg);
 
   .is-open & {
     transform: rotate(270deg);
@@ -396,8 +396,8 @@ export default {
   margin-bottom: 13px;
   font-family: $font-primary-medium;
   font-size: 20px;
-  line-height: 26px;
   font-weight: bold;
+  line-height: 26px;
   text-transform: capitalize;
 }
 
@@ -471,9 +471,9 @@ export default {
 
 .c-historyOrder__lineItemContentBox {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  flex-direction: row;
   width: 100%;
 }
 
@@ -488,8 +488,8 @@ export default {
   margin-bottom: 3px;
   font-family: $font-primary-medium;
   font-size: 16px;
-  line-height: 21px;
   font-weight: 500;
+  line-height: 21px;
   color: $color-black;
 }
 
@@ -525,9 +525,9 @@ export default {
     align-self: flex-end;
     justify-content: space-between;
     width: 100%;
+    padding: 0 20px;
     margin-top: 18px;
     margin-right: 0;
-    padding: 0 20px;
 
     @include bp(tablet) {
       display: none;
@@ -538,8 +538,8 @@ export default {
   span {
     font-family: $font-primary-medium;
     font-size: 14px;
-    line-height: 18px;
     font-weight: 500;
+    line-height: 18px;
     color: $color-black;
 
     &.is-faded {
@@ -550,19 +550,19 @@ export default {
 }
 
 .c-historyOrder__pricingSection {
-  padding: 25px 18px 30px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-start;
+  padding: 25px 18px 30px;
 }
 
 .c-historyOrder__pricing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   max-width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 13px;
 
   @include bp(tablet) {
@@ -593,7 +593,7 @@ export default {
 }
 
 .c-historyOrder__headline-price {
-  color: $color-blue-secondary;
   margin-left: 12px;
+  color: $color-blue-secondary;
 }
 </style>

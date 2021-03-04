@@ -35,7 +35,7 @@
           :label="atc['forms.companyLabel'] || 'Company'"
           name="company"
           :input-middle="true"
-          optional-label-text="(Optional)"
+          :optional-label-text="atc['labels.optional'] || '(Optional)'"
         />
 
         <form-input
@@ -57,7 +57,7 @@
           type="text"
           :label="atc['forms.address2Label'] || 'Address 2'"
           :input-middle="true"
-          optional-label-text="(Optional)"
+          :optional-label-text="atc['labels.optional'] || '(Optional)'"
           name="address2"
         />
 
@@ -77,12 +77,13 @@
 
         <div class="c-formGroupWrapper">
           <form-input
+            v-if="requiresZip"
             id="zipcode"
             key="zipcode"
             v-model="form.zipcode"
             :class="{
-              'c-formGroup--third': requiresProvince,
-              'c-formGroup--half': !requiresProvince,
+              'c-formGroup--third': requiresProvince && requiresZip,
+              'c-formGroup--half': !requiresProvince || !requiresZip,
             }"
             type="text"
             :label="atc['forms.zipcodeLabel'] || 'Zip'"
@@ -96,8 +97,8 @@
             key="city"
             v-model="form.city"
             :class="{
-              'c-formGroup--third': requiresProvince,
-              'c-formGroup--half': !requiresProvince,
+              'c-formGroup--third': requiresProvince && requiresZip,
+              'c-formGroup--half': !requiresProvince || !requiresZip,
             }"
             type="text"
             :label="atc['forms.cityLabel'] || 'City'"
@@ -111,8 +112,12 @@
             id="state-no-select-options"
             key="state-no-select-options"
             v-model="form.province"
-            class="c-formGroup--third no-select-options"
+            class=" no-select-options"
             type="text"
+            :class="{
+              'c-formGroup--half': !requiresZip,
+              'c-formGroup--third': requiresZip,
+            }"
             :label="atc['forms.stateLabel'] || 'State'"
             name="state"
             :input-middle="true"
@@ -123,10 +128,14 @@
             v-if="stateSelectOptions && requiresProvince"
             id="state-select-options-test"
             key="state-select-options"
-            class="c-formGroup--third select-options testest"
+            class="select-options testest"
             :value="state"
             :label="atc['forms.stateLabel'] || 'State'"
             name="state"
+            :class="{
+              'c-formGroup--half': !requiresZip,
+              'c-formGroup--third': requiresZip,
+            }"
             :select-options="stateSelectOptions"
             :required="requiresProvince"
             :input-middle="true"
@@ -148,7 +157,7 @@
             type="text"
             :label="atc['forms.phoneLabel'] || 'Phone'"
             :optional-label-text="
-              store && store.checkout_phone_number_required ? '' : '(Optional)'
+              store && store.checkout_phone_number_required ? '' : `${atc['labels.optional'] || '(Optional)' }`
             "
             name="phone"
             :required="
@@ -331,12 +340,16 @@ export default {
       city: { required },
       country: { required },
       state: {},
-      zipcode: { required },
+      zipcode: {},
       phone: { numeric },
     }
 
     if (requiresProvince) {
       form.state = { required }
+    }
+
+    if (this.requiresZip) {
+      form.zipcode = { required }
     }
 
     if (
@@ -382,6 +395,10 @@ export default {
       const { addressFields } = this
       // if country shipping requires state option
       return addressFields.includes('province')
+    },
+
+    requiresZip() {
+      return this.addressFields.includes('zip')
     },
 
     shippingAddressFormSubmitStatus() {
@@ -535,12 +552,10 @@ export default {
 
     countryStates() {
       const { country } = this
-      let finalStates = []
 
       if (!country || !country.name) return false
 
-      finalStates = getCountryProvinces(country.name)
-      return finalStates
+      return getCountryProvinces(country.name).provinces
     },
 
     stateSelectOptions() {
@@ -550,12 +565,15 @@ export default {
         return false
       }
 
+      const codesMapping = getCountryProvinces(this.country.name).province_codes
+
       return countryStates.map((stateName) => {
         return {
           value: stateName,
           name: stateName,
           payload: {
             name: stateName,
+            code: codesMapping[stateName],
           },
         }
       })
@@ -571,9 +589,20 @@ export default {
         this.form.state &&
         countryStates.includes(name)
       ) {
-        return { name, value: name, state: { name } }
+        return {
+          name,
+          value: name,
+          state: {
+            name,
+            code: getCountryProvinces(this.country.name).province_codes[name],
+          },
+        }
       } else if (name) {
-        return { name, value: name }
+        return {
+          name,
+          value: name,
+          code: getCountryProvinces(this.country.name).province_codes[name],
+        }
       } else {
         return ''
       }
@@ -603,7 +632,6 @@ export default {
       if (state && state.state && state.state.code) {
         address.provinceCode = state.state.code
       }
-
       return address
     },
   },
@@ -907,7 +935,7 @@ export default {
         zip: address.zipcode,
         cvv: address.cvv,
 
-        province_code: address.province_code,
+        province_code: address.province_code || address.provinceCode,
         province: address.province,
         country: address.country,
         country_code: address.country_code,

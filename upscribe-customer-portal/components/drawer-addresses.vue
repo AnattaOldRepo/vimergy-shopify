@@ -113,7 +113,3 @@ export default {
     />
   </drawer-wrap>
 </template>
-
-<style lang="scss">
-@import '@design';
-</style>

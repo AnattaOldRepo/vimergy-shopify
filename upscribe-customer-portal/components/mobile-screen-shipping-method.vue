@@ -14,7 +14,7 @@
       :is-selected="activeShippingMethod === each.handle"
       :index="index"
       class="c-drawerShippingMethodList__item"
-      previous-middle-text="Edit Subscription Details"
+      :previous-middle-text="atc['labels.editSubscriptionDetails'] || 'Edit Subscription Details'"
       @selectShippingMethod="handleSelectShippingMethod(each)"
     />
   </div>
@@ -86,7 +86,7 @@ export default {
     ]),
 
     async handleSelectShippingMethod(shippingMethod) {
-      const { activeShippingMethod, selectDuringProductUpdate } = this
+      const { activeShippingMethod, selectDuringProductUpdate, atc } = this
 
       // no change if same reate
       if (activeShippingMethod.handle === shippingMethod.handle) {
@@ -100,7 +100,7 @@ export default {
 
         try {
           this.COMPLETE_SAVED_NEW_CHECKOUT_UPDATE(shippingMethod)
-          this.setMessage('Saved new Shipping Method')
+          this.setMessage(atc['notices.updateSavedSuccessfullyNotice'] || 'Saved Successfully')
           this.setStatus('success')
           this.triggerAnalyticsEvent({
             event: 'Upscribe Subscription Update Shipping Method',

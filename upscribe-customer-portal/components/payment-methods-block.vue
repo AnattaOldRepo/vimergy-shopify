@@ -72,8 +72,8 @@ export default {
     },
 
     paymentRequestText() {
-      const { browser } = this
-      if (!browser) return 'Payment Request'
+      const { browser, atc} = this
+      if (!browser) return atc['labels.paymentRequest'] || 'Payment Request'
 
       const {
         // isFirefox,
@@ -89,7 +89,7 @@ export default {
       if (isSafari) return 'Apple Pay'
       if (isIE || isEdge) return 'Microsoft Pay'
 
-      return 'Payment Request'
+      return atc['labels.paymentRequest'] || 'Payment Request'
     },
 
     paymentTypes() {
@@ -227,12 +227,12 @@ export default {
     handleSubmitPaymentForm() {},
 
     createPaymentMethodHandler() {
-      const { activePaymentType } = this
+      const { activePaymentType, atc } = this
 
       if (!activePaymentType) {
         this.placeOrderError = {
           status: 'ERROR',
-          message: 'Please select payment type',
+          message: atc['errors.selectPaymentType'] || 'Please select payment type',
         }
         return
       }
@@ -243,7 +243,7 @@ export default {
       ) {
         this.placeOrderError = {
           status: 'ERROR',
-          message: 'Please complete the payment form',
+          message: atc['errors.completePaymentForm'] || 'Please complete the payment form',
         }
         return
       } else {
@@ -568,7 +568,7 @@ export default {
       >
         <edit-card-form
           class="c-formBlock c-cardForm"
-          form-submit-button-text="Update Payment Method"
+          :form-submit-button-text="atc['buttons.updatePaymentMethod'] || 'Update Payment Method'"
           form-name="update-card"
           update-card
           :payment-method-type="activePaymentType"
@@ -638,7 +638,7 @@ export default {
       <vue-checkbox
         style="margin-top:20px; margin-top: 20px"
         name="accepts-marketing"
-        label="Make default payment method"
+        :label="atc['forms.cardMakeDefaultLabel'] || 'Make default payment method'"
         :checked="makeDefault"
         @input="handleMakeDefault"
       />

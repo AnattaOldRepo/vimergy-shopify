@@ -80,8 +80,8 @@ export default {
     ...mapGetters('subscriptions', ['subscriptionActive']),
 
     paymentRequestText() {
-      const { browser } = this
-      if (!browser) return 'Payment Request'
+      const { browser, atc } = this
+      if (!browser) return atc['labels.paymentRequest'] || 'Payment Request'
 
       const {
         // isFirefox,
@@ -97,7 +97,7 @@ export default {
       if (isSafari) return 'Apple Pay'
       if (isIE || isEdge) return 'Microsoft Pay'
 
-      return 'Payment Request'
+      return atc['labels.paymentRequest'] || 'Payment Request'
     },
 
     paymentTypes() {

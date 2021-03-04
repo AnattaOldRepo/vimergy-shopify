@@ -70,11 +70,23 @@ export default {
   computed: {
     ...mapState('checkout', ['checkoutData', 'shopData']),
     ...mapState('payment', ['paymentType', 'paymentSource']),
+    ...mapState('translations', ['atc']),
 
     sofortCountryCode() {
       return this.sofortCountry && this.sofortCountry.code
         ? this.sofortCountry.code
         : false
+    },
+
+    stripeIbanConfirmation() {
+      const { atc, shopData } = this
+      return atc['notices.stripeIbanConfirmation'] ? atc['notices.stripeIbanConfirmation'].replace('<shop-name>', shopData.name) : `By providing your IBAN and confirming this payment, you are authorizing
+      ${shopData.name} and Stripe, our payment service provider, to send
+      instructions to your bank to debit your account and your bank to debit
+      your account in accordance with those instructions. You are entitled to a
+      refund from your bank under the terms and conditions of your agreement
+      with your bank. A refund must be claimed within 8 weeks starting from the
+      date on which your account was debited.`
     },
   },
   mounted() {
@@ -179,7 +191,7 @@ export default {
         <input
           v-model="name"
           class="c-stripeFormInput--text"
-          placeholder="Full Name"
+          :placeholder="atc['forms.fullNameLabel'] || 'Full Name'"
           required
           @change="handleChange"
         />
@@ -196,7 +208,7 @@ export default {
           class="c-stripeFormInput--select"
           :options="sofortCountryCodeOptions"
           :clearable="false"
-          placeholder="Country"
+          :placeholder="atc['forms.countryLabel'] || 'Country'"
           @search:focus="inputFocused = true"
           @search:blur="inputFocused = false"
           @input="handleChange"
@@ -215,17 +227,7 @@ export default {
 
     <!-- Display mandate acceptance text. -->
     <div id="mandate-acceptance" class="c-stripeInfo">
-      By providing your IBAN and confirming this payment, you are authorizing
-      {{ shopData.name }} and Stripe, our payment service provider, to send
-      instructions to your bank to debit your account and your bank to debit
-      your account in accordance with those instructions. You are entitled to a
-      refund from your bank under the terms and conditions of your agreement
-      with your bank. A refund must be claimed within 8 weeks starting from the
-      date on which your account was debited.
+      {{ stripeIbanConfirmation}}
     </div>
   </form>
 </template>
-
-<style lang="scss" scoped>
-@import '@design';
-</style>

@@ -27,7 +27,10 @@ console.info({ APP_ENV: config.APP_ENV, API: config.API })
 module.exports = {
   mode: 'spa',
 
-  env: config,
+  env: {
+    ...config,
+    VERSION: JSON.stringify(require('./package.json').version),
+  },
 
   router: {
     mode: 'hash',
@@ -74,6 +77,7 @@ module.exports = {
     { src: '~plugins/formValidation.js', mode: 'client' },
     { src: '~plugins/vueJsToggleButton', mode: 'client' },
     { src: '~/plugins/vueContentPlaceholders.js', mode: 'client' },
+    { src: '~/plugins/util.js', mode: 'client' },
   ],
 
   modules: [

@@ -121,13 +121,13 @@ export default {
 
     discountText() {
       // if discount show discount
-      const { activeQueue, discountAmount, currencySymbol } = this
+      const { activeQueue, discountAmount, currencySymbol, atc } = this
       const { discount_code } = activeQueue
 
       if (discount_code && discountAmount) {
         return `${discount_code} (-${currencySymbol}${discountAmount})`
       } else {
-        return 'Add Discount'
+        return atc['buttons.addDiscount'] || 'Add Discount'
       }
     },
   },
@@ -166,7 +166,9 @@ export default {
     },
 
     async skipNextShipment() {
-      this.skipShipmentUpdate = 'Updating'
+      const { atc } = this
+      this.skipShipmentUpdate = atc['notices.updatingNotice'] || 'Updating'
+
       try {
         await this.SKIP_NEXT_SHIPMENT()
       } catch (e) {
@@ -177,16 +179,19 @@ export default {
     },
 
     async shipNow() {
-      this.shipmentNowUpdate = 'Updating'
+      const { atc } = this
+      this.shipmentNowUpdate = atc['notices.updatingNotice'] || 'Updating'
+
       try {
         const createdCharge = await this.SHIP_NOW()
         if (createdCharge.charge_error) {
           console.error({
             message: `Charge failed: ${createdCharge.charge_error}`,
           })
-          this.$toast.error(`Charge failed: ${createdCharge.charge_error}`)
+          this.$toast.error(`${atc['notices.chargeFailed'] || 'Charge failed'}: ${createdCharge.charge_error}`)
         } else {
-          this.$toast.success(`Order created.`)
+          this.$toast.success(atc['notices.chargeCreated'] || 'Charge Created', { duration: 5000})
+
           await this.GET_SUBSCRIPTIONS()
         }
       } catch (e) {
@@ -198,7 +203,9 @@ export default {
     },
 
     async shipTomorrow() {
-      this.shipmentNowUpdate = 'Updating'
+      const { atc } = this
+      this.shipmentNowUpdate = atc['notices.updatingNotice'] || 'Updating'
+
       try {
         await this.SHIP_TOMORROW()
       } catch (e) {
@@ -212,11 +219,9 @@ export default {
 </script>
 
 <template>
-  <subscription-block key="next" title="Your Next Order Settings">
-    <!-- <button @click.prevent="skipNextShipment">{{ skippingShipment ? 'Skipping' : 'Skip' }}</button>
-
-  <button @click.prevent="shipTomorrow">{{ shipTomorrowUpdating ? 'Updating' : 'Ship Tomorrow' }}</button> -->
-
+  <subscription-block key="next"
+  :title="atc['portal.subscriptionSettingsNextOrderTitle'] || 'Your Next Order Settings'"
+>
     <subscription-block-option-wrap
       v-if="activeSubscriptionNextDate"
       custom-class-for-icon="c-subscriptionBlockOptionWrap__icon--floatTop"
@@ -296,7 +301,7 @@ export default {
     <subscription-block-option-wrap @onClick="drawerProductsOpen = true">
       <subscription-block-option
         v-if="activeSubscriptionProducts"
-        :title="atc['subscriptionSettingsProductsLabel'] || 'Products'"
+        :title="atc['portal.subscriptionSettingsProductsLabel'] || 'Products'"
       >
         <product-option
           v-for="(product, index) in activeSubscriptionProducts"

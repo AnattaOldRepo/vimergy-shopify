@@ -3,7 +3,8 @@
     <portal to="header">
       <the-header
         :middle-html="
-          mode === 'add' ? 'Add Shipping Address' : 'Edit Shipping Address'
+          mode === 'add' ? 'Add Shipping Address' : atc['portal.editShippingAddressDrawerTitle'] ||
+            'Edit Shipping Address'
         "
         mode="customized"
       />
@@ -34,7 +35,7 @@
         class="c-form__submitButton c-button--primary c-form__fullWidth c-button--large"
         type="primary"
         @onClick="mode = 'add'"
-        >{{ atc['portal.addAddressButton'] || 'Add New Address' }}</v-button
+        >{{ atc['buttons.addNewAddress'] || 'Add New Address' }}</v-button
       >
     </div>
     <!-- listing ends -->
@@ -73,7 +74,7 @@
         v-if="activeEditAddress"
         ref="edit-shipping-address-form"
         class="c-formBlock--noPadding c-shippingAddressForm"
-        :form-submit-button-text="atc['buttons.updateAddress'] || 'Add Address'"
+        :form-submit-button-text="atc['buttons.addAddress'] || 'Add Address'"
         form-name="shipping-address"
         :data-fill="activeEditAddress"
         @onSubmit="updateShippingAddress"
@@ -82,7 +83,7 @@
         v-else
         ref="edit-shipping-address-form"
         class="c-formBlock--noPadding c-shippingAddressForm"
-        :form-submit-button-text="atc['buttons.updateAddress'] || 'Add Address'"
+        :form-submit-button-text="atc['buttons.addAddress'] || 'Add Address'"
         form-name="shipping-address"
         :data-fill="activeShippingAddress"
         @onSubmit="updateShippingAddress"
@@ -94,7 +95,7 @@
     <div v-if="mode === 'add'">
       <new-address-form
         class="c-formBlock c-addressForm"
-        form-submit-button-text="Add Address"
+        :form-submit-button-text="atc['buttons.addAddress'] || 'Add Address'"
         form-name="update-address"
         no-data-fill
         @onSubmit="addAddress"
@@ -185,8 +186,8 @@ export default {
     },
 
     async updateShippingAddress(address) {
-      const { editNextOrder } = this
-      this.setMessage('Updating new Shipping Address')
+      const { editNextOrder, atc } = this
+      this.setMessage(atc['notices.updateSavedSuccessfullyNotice'] || 'Saved Successfully')
       this.setStatus('updating')
       const updatePayload = {
         requestPayload: {
@@ -219,7 +220,8 @@ export default {
         })
 
         await this.GET_SUBSCRIPTIONS()
-        this.setMessage('Saved new Shipping Address')
+        this.setMessage(atc['notices.updateSavedSuccessfullyNotice'] || 'Saved Successfully')
+
         this.setStatus('success')
       } catch (e) {
         console.error('subscription/UPDATE_SUBSCRIPTION error: ', e)
